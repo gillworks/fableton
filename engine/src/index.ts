@@ -69,3 +69,10 @@ export {
   type WorldSimOptions,
 } from './sim/worldSim.js';
 export { startSimServer, type SimServer } from './sim/server.js';
+export {
+  AdminConfigSchema,
+  startWorldApi,
+  type AdminConfig,
+  type WorldApi,
+  type WorldApiDeps,
+} from './api/worldApi.js';

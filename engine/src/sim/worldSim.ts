@@ -101,6 +101,17 @@ export class WorldSim {
     };
   }
 
+  /**
+   * Hot-swap an NPC's behavior tree (the L1 seam — world-api calls this).
+   * Takes effect on the next tick, no restart. Returns false if unknown.
+   */
+  updateBehavior(npcId: string, behavior: import('../schemas/behavior.js').BehaviorNode): boolean {
+    const runtime = this.#runtimes.find((r) => r.state.id === npcId);
+    if (!runtime) return false;
+    runtime.replaceTree(behavior);
+    return true;
+  }
+
   /** Advance one tick; returns the compact delta to broadcast. */
   tick(): Delta {
     this.#tick += 1;

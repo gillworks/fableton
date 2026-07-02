@@ -9,3 +9,7 @@ Start here: [ADR-0001 Charter schema](../docs/adr/0001-charter-schema.md). Deter
 Run the sample world headless: `pnpm sim` → WebSocket on `:8090`. Clients get a full `snapshot` on connect, then `delta` messages at 2 Hz (engine tick rate; within the 1–5 Hz broadcast band). The sim core is pure — state is a function of world data + tick count; wall time only schedules ticks.
 
 **Per-tick byte budget** (held by tests in `src/sim/worldSim.test.ts`): a serialized delta is ≤ **64 bytes envelope + 120 bytes per changed NPC**. Deltas are sparse — only NPCs that changed this tick appear, with only their changed fields — so a world where everyone is holding still broadcasts ~30 bytes. Sample world (3 NPCs): ≤ 424 bytes/tick worst case.
+
+## world-api
+
+`pnpm serve` runs sim (`ws://:8090`) + REST api (`http://:8091`) in one process over the sample world. Routes: `GET /api/world` (metadata + live clock), `GET /api/npcs`, `GET /api/npcs/:id` (lore: identity, story, relationships), `GET /api/chronicle` (the decision log's ring buffer), `GET|PUT /api/admin/config` (audit slider + escalation cap — stored for Phase B). `POST /api/npcs/:id/behavior` is the **L1 seam**: a new behavior tree is validated against the NPC schema (labeled nodes enforced) and the world gate (refs must resolve), then hot-swapped into the live sim — no restart.

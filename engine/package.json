@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "validate": "tsx src/validate/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world && tsx src/validate/checkRegistry.ts --charter ../charters/_template/charter.yaml --registry ../assets/registry.json",
-    "sim": "tsx src/sim/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world"
+    "sim": "tsx src/sim/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world",
+    "serve": "tsx src/api/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world"
   },
   "dependencies": {
     "ws": "^8.21.0",
