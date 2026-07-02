@@ -56,3 +56,5 @@ export {
   type NpcRelationship,
 } from './schemas/npc.js';
 export { validateWorld, type Violation, type WorldDocs } from './validate/validateWorld.js';
+export { deriveSeed, mulberry32, pick, randInt, type Rng } from './generate/rng.js';
+export { generateWorld, type GeneratedWorld } from './generate/generateWorld.js';
