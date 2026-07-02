@@ -45,7 +45,7 @@ Strategic direction runs rarely on the strongest model; operational work runs co
 
 Each world has a public URL where it runs live in the browser:
 
-- **One client, three camera modes**: explore (drag/zoom/orbit — the public default), walk (later), director (cinematic auto-cam; the `streamer` service is this client headless).
+- **One client (Three.js — see [ADR-0002](adr/0002-client-rendering-stack.md)), three camera modes**: explore (drag/zoom/orbit — the public default), walk (later), director (cinematic auto-cam; the `streamer` service is this client headless).
 - **Static geometry** streams as cached chunks; **dynamic state** (NPC transforms, activity, clock, events) arrives over the `world-sim` WebSocket. Slow ticks + interpolation ⇒ thousands of concurrent viewers per instance.
 - **Click-to-inspect**: raycast pick → panel with name, portrait, story, relationships (lore via `world-api`) + current activity read from live behavior-tree state. This is why every tree node must carry a diegetic label.
 - **The studio, visible in-world** (Phase B/C): regions under generation render as construction sites; clicking one links to the open PR, the agent working it, CI status.
