@@ -33,8 +33,18 @@ laws:                                 # what is TRUE here — agents and sim bot
   - seasons pass; nobody dies — retired stories can only be forgotten, which is worse  # EXAMPLE
   - breaking type is rare, costly, and the engine of drama                        # EXAMPLE
 
-aesthetic:
+aesthetic:                            # theme tokens skin the whole client — see docs/design.md
+  theme: warm storybook               # EXAMPLE — one-phrase mood the theme derives from
   palette: [warm parchment, moss, honey, dusk blue]     # EXAMPLE
+  typography:                         # display face + mono face (docs/adr/0003)
+    display: Alegreya                 # EXAMPLE
+    mono: IBM Plex Mono               # EXAMPLE
+  accent: amber                       # EXAMPLE — active phase pill, activity dots, highlights
+  day_phases:                         # exactly 4; phase changes relight, never relayout
+    - first light                     # EXAMPLE
+    - high sun                        # EXAMPLE
+    - lamplighting                    # EXAMPLE
+    - hush                            # EXAMPLE
   architecture: >-                                      # EXAMPLE
     buildings drawn by someone describing them from memory — chunky low-poly,
     storybook-illustration silhouettes
