@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: Apache-2.0
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      # World-data validation gate — hardened by the "CI validation gate" issue.
+      # This job is the standard: schema-valid, refs resolve, navmesh connects, perf budget holds.
+      - run: pnpm validate

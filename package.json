@@ -1,0 +1,14 @@
+{
+  "name": "fableton",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "test": "pnpm -r --if-present run test",
+    "validate": "pnpm -r --if-present run validate"
+  }
+}
