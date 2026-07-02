@@ -6,6 +6,7 @@
 // record: prompt, every god response, every validation round).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { charterGate, loadRegistry } from './charterGate.js';
 import { FoundingSessionError, foundingSession, type TranscriptEntry } from './foundingSession.js';
@@ -27,6 +28,18 @@ const prompt = values.prompt.startsWith('@')
 const outDir = values.out;
 
 const repoRoot = new URL('../../', import.meta.url);
+
+// Bring-your-own-keys: load the repo-root .env if present (copy
+// .env.example). Real environment variables take precedence.
+try {
+  process.loadEnvFile(fileURLToPath(new URL('.env', repoRoot)));
+} catch {
+  // no .env — keys may come from the environment directly
+}
+// An unfilled `ANTHROPIC_API_KEY=` line would otherwise become an empty
+// string, which the SDK treats as a real (broken) credential.
+if (process.env['ANTHROPIC_API_KEY'] === '') delete process.env['ANTHROPIC_API_KEY'];
+
 const templateYaml = readFileSync(new URL('charters/_template/charter.yaml', repoRoot), 'utf8');
 const registry = loadRegistry(readFileSync(new URL('assets/registry.json', repoRoot), 'utf8'));
 const model = process.env['GOD_MODEL'] ?? DEFAULT_GOD_MODEL;
