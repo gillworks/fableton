@@ -1,6 +1,6 @@
 # ADR-0001: Charter schema
 
-**Status:** Proposed (sprint 1 — the keystone issue)
+**Status:** Accepted (implemented in `@fableton/engine`; open questions resolved below)
 **Date:** 2026-07-02
 
 ## Context
@@ -40,8 +40,10 @@ Top-level sections (see [`charters/_template/charter.yaml`](../../charters/_temp
 
 `@fableton/engine` exports `CharterSchema`, `parseCharter()` (YAML in, typed object out), `migrateCharter()`, plus the divine-artifact schemas. Fixture tests: valid/invalid charters, round-trip, migration from `schema_version: 0`.
 
-## Open questions (resolve in the sprint-1 PR)
+## Resolutions (sprint-1 PR)
 
-1. Authoring format: YAML-first (recommended — comments matter for a template people fork) compiled to canonical JSON, or JSON5?
-2. Which `aesthetic.never` / `taboos` entries are machine-enforceable in the CI gate vs. prompt-level guidance only? Mark each entry accordingly (`enforced: gate | prompt`).
-3. Seed format: single integer vs. named sub-seeds per generation subsystem (terrain, layout, props)?
+1. **Authoring format: YAML-first.** Charters are authored as YAML (comments matter for a template people fork); `parseCharter()` parses via the `yaml` package and the canonical wire/storage form is the parsed JSON. No JSON5.
+2. **Enforceability is marked per rule.** Every `aesthetic.never` and `taboos` entry is `{ rule, enforced: gate | prompt }`. `gate` = machine-checked by the CI validation gate (matched against asset-registry tags — wired up in the CI-gate issue); `prompt` = carried as law in every agent's context and caught by the taste audit. Migration from v0 defaults every entry to `prompt`; gate enforcement is opt-in per rule.
+3. **Seed: single integer root seed** (uint32, so every PRNG implementation agrees on range) — shareable like a map seed. Generation subsystems (terrain, layout, props) derive named sub-seeds from it deterministically; sub-seeds are never authored.
+
+`schema_version: 1` is the first schema-governed version; `migrateCharter()` migrates v0 (the pre-v1 draft template) forward. Charter immutability is governance (constitutional acts), not schema — the schema validates shape, the workflow enforces law.

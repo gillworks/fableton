@@ -1,0 +1,62 @@
+# SPDX-License-Identifier: Apache-2.0
+# A valid schema_version 1 charter that is NOT the template — proves the
+# schema isn't coupled to the flagship's values.
+schema_version: 1
+
+identity:
+  name: Cindervault
+  premise: The city that banked the last fire.
+  seed: 4294967295
+
+tone:
+  register: forge-dark, proud, quietly desperate
+  pillars:
+    - heat is wealth and wealth is rationed
+    - every guild remembers the cold
+
+laws:
+  - fire cannot be created, only lent, spent, or banked
+  - debts of heat outlive their debtors
+
+aesthetic:
+  theme: forge-dark vaultpunk
+  palette: [soot black, ember orange, brass, slag grey]
+  typography:
+    display: Zilla Slab
+    mono: IBM Plex Mono
+  accent: ember
+  day_phases:
+    - ashdawn
+    - forge-day
+    - smelt-dusk
+    - banked
+  architecture: massive vault-brick and riveted brass, chimneys like cathedral spires
+  never:
+    - rule: open flame outdoors
+      enforced: prompt
+    - rule: modern technology
+      enforced: gate
+
+inhabitants:
+  kinds: smiths, stokers, heat-brokers, vault-clerks
+  factions: furnace guilds ranked by the age of their coals
+  naming: trade-names hyphenated with furnace-names
+
+generation:
+  scale: city-quarter
+  region_cadence: weekly
+  caps:
+    max_regions: 12
+    chunk_poly_budget: 150000
+    chunk_drawcall_budget: 120
+
+taboos:
+  - rule: no cold played for laughs — the cold is the antagonist
+    enforced: prompt
+
+prime_directives:
+  - scarcity must always be legible
+  - every ember on screen is accounted for
+
+amendments:
+  rule: constitutional acts only — the god proposes, the founder ratifies, in public

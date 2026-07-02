@@ -1,0 +1,51 @@
+# SPDX-License-Identifier: Apache-2.0
+# Invalid: day_phases must be exactly 4 (this has 3).
+schema_version: 1
+
+identity:
+  name: Broken
+  premise: A world with a short day.
+  seed: 1
+
+tone:
+  register: flat
+  pillars: [one]
+
+laws:
+  - nothing works
+
+aesthetic:
+  theme: broken
+  palette: [grey]
+  typography:
+    display: Alegreya
+    mono: IBM Plex Mono
+  accent: grey
+  day_phases: [dawn, noon, night]
+  architecture: rubble
+  never:
+    - rule: anything
+      enforced: prompt
+
+inhabitants:
+  kinds: nobody
+  factions: none
+  naming: none
+
+generation:
+  scale: village
+  region_cadence: weekly
+  caps:
+    max_regions: 1
+    chunk_poly_budget: 1000
+    chunk_drawcall_budget: 10
+
+taboos:
+  - rule: everything
+    enforced: prompt
+
+prime_directives:
+  - none
+
+amendments:
+  rule: none

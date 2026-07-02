@@ -1,0 +1,52 @@
+# SPDX-License-Identifier: Apache-2.0
+# Invalid: enforced must be gate | prompt.
+schema_version: 1
+
+identity:
+  name: Vague
+  premise: A world with unenforceable law.
+  seed: 3
+
+tone:
+  register: hand-wavy
+  pillars: [maybe]
+
+laws:
+  - rules are suggestions
+
+aesthetic:
+  theme: fuzzy
+  palette: [beige]
+  typography:
+    display: Alegreya
+    mono: IBM Plex Mono
+  accent: beige
+  day_phases: [a, b, c, d]
+  architecture: approximate
+  never:
+    - rule: anything
+      enforced: vibes
+  # ^ invalid channel
+
+inhabitants:
+  kinds: nobody
+  factions: none
+  naming: none
+
+generation:
+  scale: village
+  region_cadence: weekly
+  caps:
+    max_regions: 1
+    chunk_poly_budget: 1000
+    chunk_drawcall_budget: 10
+
+taboos:
+  - rule: everything
+    enforced: prompt
+
+prime_directives:
+  - none
+
+amendments:
+  rule: none

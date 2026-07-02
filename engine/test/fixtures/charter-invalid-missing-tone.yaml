@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: Apache-2.0
+# Invalid: the tone section is missing entirely.
+schema_version: 1
+
+identity:
+  name: Toneless
+  premise: A world nobody set the mood for.
+  seed: 2
+
+laws:
+  - silence
+
+aesthetic:
+  theme: blank
+  palette: [white]
+  typography:
+    display: Alegreya
+    mono: IBM Plex Mono
+  accent: white
+  day_phases: [a, b, c, d]
+  architecture: unadorned
+  never:
+    - rule: anything
+      enforced: prompt
+
+inhabitants:
+  kinds: nobody
+  factions: none
+  naming: none
+
+generation:
+  scale: village
+  region_cadence: weekly
+  caps:
+    max_regions: 1
+    chunk_poly_budget: 1000
+    chunk_drawcall_budget: 10
+
+taboos:
+  - rule: everything
+    enforced: prompt
+
+prime_directives:
+  - none
+
+amendments:
+  rule: none
