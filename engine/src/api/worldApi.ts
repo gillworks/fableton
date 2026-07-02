@@ -149,6 +149,8 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         identity: npc.identity,
         relationships: npc.relationships,
         lore: npc.lore,
+        // The tree's own name — the inspect panel's footer line.
+        tree: npc.behavior.label,
       });
     }
     if (npcMatch && npcMatch[2] && req.method === 'POST') {
