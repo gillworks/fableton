@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..800;1,400..700&amp;family=Zilla+Slab:ital,wght@0,400;0,500;0,600;1,400&amp;family=Jost:wght@300;400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#eeeae1;font-family:system-ui,sans-serif}
+@keyframes ftnPulse{0%,100%{opacity:1}50%{opacity:.35}}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}
+.dv-opts{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;max-width:2100px}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 system-ui,sans-serif;color:rgba(0,0,0,.55)}
+.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-next{margin:22px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}
+</style>
+</helmet>
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">One engine, three charters — art direction + explore client</span></div>
+
+<div style="max-width:860px;background:#f7f3e8;border:1px solid rgba(0,0,0,.09);border-radius:8px;padding:18px 22px;margin:0 0 26px;font:12.5px/1.65 system-ui,sans-serif;color:#3c3628">
+<div style="font:600 10px ui-monospace,Menlo,monospace;letter-spacing:1.5px;color:rgba(0,0,0,.45);margin-bottom:8px">CONTEXT &amp; DESIGN REASONING</div>
+<div>Grounded in the repo's charter template + architecture docs. Each world is a <strong>living diorama</strong> — same engine chrome (clock, chronicle ticker, inspect panel, time control), different charter skin, proving the divergence acceptance test visually. UI is <strong>hybrid</strong>: quiet dark-glass chrome; diegetic, charter-styled panels. Legibility is <strong>discoverable</strong>: behavior-tree labels appear when you click a resident; the studio surfaces as a construction site you can click (<a class="dv-oid" href="#1a">1a</a>). Scenes tick at ~2.6s like the real world-sim (slow deltas, client interpolation). <strong>Try:</strong> drag to orbit · click a resident · change the hour · in <a class="dv-oid" href="#1a">1a</a>, click the sign in the dirt.</div>
+</div>
+
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a" data-screen-label="1a Fableton explore">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Flagship charter — FABLETON · warm storybook · Alegreya + Plex Mono</div>
+<div class="dv-card">
+<div style="position:relative;width:980px;height:560px;overflow:hidden;background:#2a2f4a;cursor:grab;touch-action:none" onPointerDown="{{ fS.down }}" onPointerMove="{{ dragMove }}" onPointerUp="{{ dragEnd }}" onPointerLeave="{{ dragEnd }}">
+<div style="{{ fS.sky }}"></div>
+<div style="{{ fS.glowOv }}"></div>
+<div style="position:absolute;left:50%;top:76%;width:680px;height:150px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(8,8,18,.42),rgba(0,0,0,0) 70%);filter:blur(12px)"></div>
+<div style="{{ fS.world }}">
+<div style="{{ fS.ground }}"></div>
+<sc-for list="{{ fS.flats }}" as="fl" hint-placeholder-count="4"><div style="{{ fl.style }}"></div></sc-for>
+<sc-for list="{{ fS.faces }}" as="fa" hint-placeholder-count="12"><div style="{{ fa.style }}"><sc-for list="{{ fa.wins }}" as="w" hint-placeholder-count="0"><div style="{{ w.style }}"></div></sc-for></div></sc-for>
+<sc-for list="{{ fS.bills }}" as="b" hint-placeholder-count="6"><div style="{{ b.style }}"><sc-for list="{{ b.parts }}" as="p" hint-placeholder-count="2"><div style="{{ p.style }}" onClick="{{ b.onClick }}">{{ p.txt }}</div></sc-for></div></sc-for>
+<sc-for list="{{ fS.npcs }}" as="n" hint-placeholder-count="4"><div style="{{ n.style }}"><sc-for list="{{ n.parts }}" as="p" hint-placeholder-count="3"><div style="{{ p.style }}" onClick="{{ n.onClick }}">{{ p.txt }}</div></sc-for></div></sc-for>
+</div>
+<div style="{{ fS.fog }}"></div>
+<div style="position:absolute;left:0;top:0;right:0;height:120px;background:linear-gradient(rgba(16,13,20,.44),rgba(16,13,20,0));pointer-events:none"></div>
+<div style="position:absolute;left:0;bottom:0;right:0;height:70px;background:linear-gradient(rgba(16,13,20,0),rgba(16,13,20,.5));pointer-events:none"></div>
+<div style="position:absolute;left:16px;top:14px;pointer-events:none">
+<div style="font-family:'Alegreya',serif;font-weight:800;font-size:21px;letter-spacing:3px;color:#f7ecd4;text-shadow:0 1px 8px rgba(10,8,4,.5)">FABLETON</div>
+<div style="font-family:'Alegreya',serif;font-style:italic;font-size:12.5px;color:rgba(247,236,212,.85);margin-top:2px">The town where fables retired.</div>
+<div style="display:inline-flex;gap:6px;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.6px;color:rgba(247,236,212,.6)"><span style="padding:3px 7px;border:1px solid rgba(247,236,212,.25);border-radius:4px">CHARTER V1</span><span style="padding:3px 7px;border:1px solid rgba(247,236,212,.25);border-radius:4px">SEED 20260702</span></div>
+</div>
+<div style="position:absolute;right:16px;top:14px;display:flex;flex-direction:column;align-items:flex-end;gap:7px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;color:#f7ecd4;background:rgba(24,20,14,.5);backdrop-filter:blur(6px);padding:6px 10px;border-radius:6px;border:1px solid rgba(247,236,212,.14)">{{ fS.clock }}</div>
+<div style="display:flex;gap:2px;background:rgba(24,20,14,.5);backdrop-filter:blur(6px);padding:3px;border-radius:7px;border:1px solid rgba(247,236,212,.14)"><sc-for list="{{ fS.timeBtns }}" as="tb" hint-placeholder-count="4"><div style="{{ tb.style }}" onClick="{{ tb.onClick }}">{{ tb.label }}</div></sc-for></div>
+</div>
+<div style="position:absolute;left:16px;bottom:12px;right:290px;display:flex;align-items:center;gap:10px;pointer-events:none;overflow:hidden">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1.5px;color:rgba(247,236,212,.55);flex:none">CHRONICLE</span>
+<span style="font-family:'Alegreya',serif;font-style:italic;font-size:12.5px;color:rgba(247,236,212,.92);text-shadow:0 1px 6px rgba(10,8,4,.6);white-space:nowrap">{{ fS.ticker }}</span>
+</div>
+<sc-if value="{{ fS.hasPanel }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;right:12px;top:12px;width:256px;background:#f6ebcf;border:1px solid #d8c495;border-radius:10px;box-shadow:0 18px 44px rgba(20,14,5,.5);padding:15px 15px 11px;color:#3a3022;font-family:'Alegreya',serif">
+<div style="position:absolute;right:8px;top:6px;font-size:12px;color:#9a8a62;cursor:pointer;padding:4px" onClick="{{ fS.panel.close }}">✕</div>
+<div style="display:flex;gap:10px;align-items:center">
+<div style="width:38px;height:38px;flex:none;border-radius:50%;background:#8a5f7d;color:#f6ebcf;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;border:2px solid #d8c495">{{ fS.panel.init }}</div>
+<div><div style="font-weight:700;font-size:16px;line-height:1.15">{{ fS.panel.name }}</div><div style="font-style:italic;font-size:11.5px;color:#7a6b4a">{{ fS.panel.ep }}</div></div>
+</div>
+<div style="font-size:12.5px;line-height:1.5;margin-top:10px">{{ fS.panel.story }}</div>
+<div style="margin-top:10px;background:#2b2416;border-radius:6px;padding:7px 9px;display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;flex:none;border-radius:50%;background:#e8b45e;animation:ftnPulse 2s infinite"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#f2e3bc">{{ fS.panel.act }}</span></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.2px;color:#9a8a62;margin:11px 0 5px">RELATIONSHIPS</div>
+<sc-for list="{{ fS.panel.rels }}" as="r" hint-placeholder-count="2"><div style="font-size:12px;padding:4px 0;border-top:1px solid #e5d7ae"><span style="font-weight:700">{{ r.n }}</span> — <span style="font-style:italic;color:#6a5c3e">{{ r.t }}</span></div></sc-for>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:9px;border-top:1px solid #e5d7ae;padding-top:7px">{{ fS.panel.meta }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ fS.hasCard }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:14px;bottom:44px;width:296px;background:#211b12;color:#efe3c6;border:1px solid #6a5836;border-radius:10px;padding:13px 14px;font-family:'IBM Plex Mono',monospace;box-shadow:0 18px 44px rgba(0,0,0,.5)">
+<div style="position:absolute;right:8px;top:7px;font-size:11px;color:#9a8a62;cursor:pointer;padding:3px" onClick="{{ fS.cardClose }}">✕</div>
+<div style="font-size:8px;letter-spacing:1.5px;color:#9a8a62">STUDIO · REGION UNDER CONSTRUCTION</div>
+<div style="font-family:'Alegreya',serif;font-weight:700;font-size:18px;margin-top:5px">The North Orchard</div>
+<div style="font-size:9.5px;color:#c9b98e;margin-top:2px">Steward Rowan · world-designer</div>
+<div style="font-family:'Alegreya',serif;font-style:italic;font-size:12px;line-height:1.45;color:#e5d6ae;margin-top:8px">"Forty-one trees, one crooked fence, and a rumor. Merging when the gate passes."</div>
+<div style="display:flex;gap:5px;margin-top:10px;font-size:8.5px"><span style="padding:3px 7px;border:1px solid #6a5836;border-radius:4px">PR #142</span><span style="padding:3px 7px;border:1px solid #4a6a3f;border-radius:4px;color:#a8d68a">CI ✓ GREEN</span><span style="padding:3px 7px;border:1px solid #6a5836;border-radius:4px">41 FILES</span></div>
+<div style="font-size:9.5px;color:#e8b45e;margin-top:10px;cursor:pointer">watch the merge →</div>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1b" data-screen-label="1b Cindervault explore">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Divergence charter — CINDERVAULT · forge-dark · Zilla Slab</div>
+<div class="dv-card">
+<div style="position:relative;width:980px;height:560px;overflow:hidden;background:#0d0a0c;cursor:grab;touch-action:none" onPointerDown="{{ cS.down }}" onPointerMove="{{ dragMove }}" onPointerUp="{{ dragEnd }}" onPointerLeave="{{ dragEnd }}">
+<div style="{{ cS.sky }}"></div>
+<div style="{{ cS.glowOv }}"></div>
+<div style="position:absolute;left:50%;top:76%;width:680px;height:150px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(0,0,0,.5),rgba(0,0,0,0) 70%);filter:blur(12px)"></div>
+<div style="{{ cS.world }}">
+<div style="{{ cS.ground }}"></div>
+<sc-for list="{{ cS.flats }}" as="fl" hint-placeholder-count="3"><div style="{{ fl.style }}"></div></sc-for>
+<sc-for list="{{ cS.faces }}" as="fa" hint-placeholder-count="12"><div style="{{ fa.style }}"><sc-for list="{{ fa.wins }}" as="w" hint-placeholder-count="0"><div style="{{ w.style }}"></div></sc-for></div></sc-for>
+<sc-for list="{{ cS.bills }}" as="b" hint-placeholder-count="4"><div style="{{ b.style }}"><sc-for list="{{ b.parts }}" as="p" hint-placeholder-count="2"><div style="{{ p.style }}" onClick="{{ b.onClick }}">{{ p.txt }}</div></sc-for></div></sc-for>
+<sc-for list="{{ cS.npcs }}" as="n" hint-placeholder-count="3"><div style="{{ n.style }}"><sc-for list="{{ n.parts }}" as="p" hint-placeholder-count="3"><div style="{{ p.style }}" onClick="{{ n.onClick }}">{{ p.txt }}</div></sc-for></div></sc-for>
+</div>
+<div style="{{ cS.fog }}"></div>
+<div style="position:absolute;left:0;top:0;right:0;height:120px;background:linear-gradient(rgba(8,5,7,.5),rgba(8,5,7,0));pointer-events:none"></div>
+<div style="position:absolute;left:0;bottom:0;right:0;height:70px;background:linear-gradient(rgba(8,5,7,0),rgba(8,5,7,.55));pointer-events:none"></div>
+<div style="position:absolute;left:16px;top:14px;pointer-events:none">
+<div style="font-family:'Zilla Slab',serif;font-weight:600;font-size:19px;letter-spacing:6px;color:#f2e3d3;text-shadow:0 1px 8px rgba(0,0,0,.6)">CINDERVAULT</div>
+<div style="font-family:'Zilla Slab',serif;font-style:italic;font-size:12px;color:rgba(242,227,211,.8);margin-top:2px">The city that banked the last fire.</div>
+<div style="display:inline-flex;gap:6px;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.6px;color:rgba(242,227,211,.55)"><span style="padding:3px 7px;border:1px solid rgba(242,227,211,.22);border-radius:2px">CHARTER V1</span><span style="padding:3px 7px;border:1px solid rgba(242,227,211,.22);border-radius:2px">SEED 88041219</span></div>
+</div>
+<div style="position:absolute;right:16px;top:14px;display:flex;flex-direction:column;align-items:flex-end;gap:7px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;color:#f2e3d3;background:rgba(10,7,8,.55);backdrop-filter:blur(6px);padding:6px 10px;border-radius:3px;border:1px solid rgba(242,227,211,.14)">{{ cS.clock }}</div>
+<div style="display:flex;gap:2px;background:rgba(10,7,8,.55);backdrop-filter:blur(6px);padding:3px;border-radius:4px;border:1px solid rgba(242,227,211,.14)"><sc-for list="{{ cS.timeBtns }}" as="tb" hint-placeholder-count="4"><div style="{{ tb.style }}" onClick="{{ tb.onClick }}">{{ tb.label }}</div></sc-for></div>
+</div>
+<div style="position:absolute;left:16px;bottom:12px;right:290px;display:flex;align-items:center;gap:10px;pointer-events:none;overflow:hidden">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1.5px;color:rgba(242,227,211,.5);flex:none">CHRONICLE</span>
+<span style="font-family:'Zilla Slab',serif;font-style:italic;font-size:12.5px;color:rgba(242,227,211,.9);white-space:nowrap">{{ cS.ticker }}</span>
+</div>
+<sc-if value="{{ cS.hasPanel }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;right:12px;top:12px;width:256px;background:rgba(22,15,16,.95);border:1px solid #4a352a;border-radius:4px;box-shadow:0 18px 44px rgba(0,0,0,.6);padding:15px 15px 11px;color:#e8dccd;font-family:'Zilla Slab',serif">
+<div style="position:absolute;right:8px;top:6px;font-size:12px;color:#8a6a52;cursor:pointer;padding:4px" onClick="{{ cS.panel.close }}">✕</div>
+<div style="display:flex;gap:10px;align-items:center">
+<div style="width:38px;height:38px;flex:none;border-radius:3px;background:#5a3423;color:#ffb066;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:600;border:1px solid #8a5433">{{ cS.panel.init }}</div>
+<div><div style="font-weight:600;font-size:15.5px;line-height:1.15">{{ cS.panel.name }}</div><div style="font-style:italic;font-size:11.5px;color:#b09478">{{ cS.panel.ep }}</div></div>
+</div>
+<div style="font-size:12.5px;line-height:1.5;margin-top:10px">{{ cS.panel.story }}</div>
+<div style="margin-top:10px;background:#000;border-radius:3px;padding:7px 9px;display:flex;align-items:center;gap:7px;border:1px solid #3a241c"><span style="width:6px;height:6px;flex:none;border-radius:50%;background:#ff8c42;animation:ftnPulse 2s infinite"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#ffc79a">{{ cS.panel.act }}</span></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.2px;color:#8a6a52;margin:11px 0 5px">RELATIONSHIPS</div>
+<sc-for list="{{ cS.panel.rels }}" as="r" hint-placeholder-count="2"><div style="font-size:12px;padding:4px 0;border-top:1px solid #3a2a22"><span style="font-weight:600">{{ r.n }}</span> — <span style="font-style:italic;color:#b09478">{{ r.t }}</span></div></sc-for>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#7a5f4c;margin-top:9px;border-top:1px solid #3a2a22;padding-top:7px">{{ cS.panel.meta }}</div>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1c" data-screen-label="1c Skeinsea explore">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Divergence charter — SKEINSEA · mist-pale · Jost</div>
+<div class="dv-card">
+<div style="position:relative;width:980px;height:560px;overflow:hidden;background:#c8d2d0;cursor:grab;touch-action:none" onPointerDown="{{ sS.down }}" onPointerMove="{{ dragMove }}" onPointerUp="{{ dragEnd }}" onPointerLeave="{{ dragEnd }}">
+<div style="{{ sS.sky }}"></div>
+<div style="{{ sS.glowOv }}"></div>
+<div style="{{ sS.world }}">
+<div style="{{ sS.ground }}"></div>
+<sc-for list="{{ sS.flats }}" as="fl" hint-placeholder-count="3"><div style="{{ fl.style }}"></div></sc-for>
+<sc-for list="{{ sS.faces }}" as="fa" hint-placeholder-count="12"><div style="{{ fa.style }}"><sc-for list="{{ fa.wins }}" as="w" hint-placeholder-count="0"><div style="{{ w.style }}"></div></sc-for></div></sc-for>
+<sc-for list="{{ sS.bills }}" as="b" hint-placeholder-count="4"><div style="{{ b.style }}"><sc-for list="{{ b.parts }}" as="p" hint-placeholder-count="2"><div style="{{ p.style }}" onClick="{{ b.onClick }}">{{ p.txt }}</div></sc-for></div></sc-for>
+<sc-for list="{{ sS.npcs }}" as="n" hint-placeholder-count="3"><div style="{{ n.style }}"><sc-for list="{{ n.parts }}" as="p" hint-placeholder-count="3"><div style="{{ p.style }}" onClick="{{ n.onClick }}">{{ p.txt }}</div></sc-for></div></sc-for>
+</div>
+<div style="{{ sS.fog }}"></div>
+<div style="position:absolute;left:16px;top:14px;pointer-events:none">
+<div style="font-family:'Jost',sans-serif;font-weight:300;font-size:19px;letter-spacing:9px;color:{{ sS.uiFg }}">SKEINSEA</div>
+<div style="font-family:'Jost',sans-serif;font-weight:400;font-size:11.5px;letter-spacing:1px;color:{{ sS.uiDim }};margin-top:3px">The archipelago where the fog remembers.</div>
+<div style="display:inline-flex;gap:6px;margin-top:9px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.6px;color:{{ sS.uiDim }}"><span style="padding:3px 7px;border:1px solid {{ sS.uiLine }};border-radius:10px">CHARTER V1</span><span style="padding:3px 7px;border:1px solid {{ sS.uiLine }};border-radius:10px">SEED 19170303</span></div>
+</div>
+<div style="position:absolute;right:16px;top:14px;display:flex;flex-direction:column;align-items:flex-end;gap:7px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.5px;color:{{ sS.uiFg }};background:{{ sS.uiChip }};backdrop-filter:blur(8px);padding:6px 10px;border-radius:12px;border:1px solid {{ sS.uiLine }}">{{ sS.clock }}</div>
+<div style="display:flex;gap:2px;background:{{ sS.uiChip }};backdrop-filter:blur(8px);padding:3px;border-radius:13px;border:1px solid {{ sS.uiLine }}"><sc-for list="{{ sS.timeBtns }}" as="tb" hint-placeholder-count="4"><div style="{{ tb.style }}" onClick="{{ tb.onClick }}">{{ tb.label }}</div></sc-for></div>
+</div>
+<div style="position:absolute;left:16px;bottom:12px;right:290px;display:flex;align-items:center;gap:10px;pointer-events:none;overflow:hidden">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1.5px;color:{{ sS.uiDim }};flex:none">CHRONICLE</span>
+<span style="font-family:'Jost',sans-serif;font-weight:400;font-size:12px;letter-spacing:.4px;color:{{ sS.uiFg }};white-space:nowrap">{{ sS.ticker }}</span>
+</div>
+<sc-if value="{{ sS.hasPanel }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;right:12px;top:12px;width:256px;background:rgba(246,247,243,.93);backdrop-filter:blur(8px);border:1px solid #b9c4be;border-radius:14px;box-shadow:0 18px 44px rgba(30,44,44,.3);padding:15px 15px 11px;color:#33403d;font-family:'Jost',sans-serif">
+<div style="position:absolute;right:10px;top:8px;font-size:12px;color:#8a9a92;cursor:pointer;padding:4px" onClick="{{ sS.panel.close }}">✕</div>
+<div style="display:flex;gap:10px;align-items:center">
+<div style="width:38px;height:38px;flex:none;border-radius:50%;background:#5c7a74;color:#f2f4ee;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:500">{{ sS.panel.init }}</div>
+<div><div style="font-weight:500;font-size:15px;line-height:1.15;letter-spacing:.3px">{{ sS.panel.name }}</div><div style="font-size:11px;color:#71827c;letter-spacing:.3px">{{ sS.panel.ep }}</div></div>
+</div>
+<div style="font-size:12px;line-height:1.55;margin-top:10px;font-weight:400">{{ sS.panel.story }}</div>
+<div style="margin-top:10px;background:#2c3835;border-radius:9px;padding:7px 9px;display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;flex:none;border-radius:50%;background:#c9ae6f;animation:ftnPulse 2s infinite"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#e8e2cc">{{ sS.panel.act }}</span></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.2px;color:#8a9a92;margin:11px 0 5px">RELATIONSHIPS</div>
+<sc-for list="{{ sS.panel.rels }}" as="r" hint-placeholder-count="2"><div style="font-size:11.5px;padding:4px 0;border-top:1px solid #d5ddd7"><span style="font-weight:500">{{ r.n }}</span> — <span style="color:#71827c">{{ r.t }}</span></div></sc-for>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#9aa8a0;margin-top:9px;border-top:1px solid #d5ddd7;padding-top:7px">{{ sS.panel.meta }}</div>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1d" data-screen-label="1d World hub landing">
+<div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>World hub landing page — flagship charter skin</div>
+<div class="dv-card" style="width:900px;background:#f7f0dd">
+<div style="padding:22px 34px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e0d3ac">
+<div style="font-family:'Alegreya',serif;font-weight:800;font-size:17px;letter-spacing:4px;color:#33291c">FABLETON</div>
+<div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#7a6b4a">
+<span style="display:flex;align-items:center;gap:6px;background:#efe5c6;border:1px solid #dcCC9e;border-radius:20px;padding:5px 11px;color:#4a3f28"><span style="width:7px;height:7px;border-radius:50%;background:#5f8a4a;animation:ftnPulse 2s infinite"></span>LIVE · DAY 213, LAMPLIGHTING</span>
+<span>312 WATCHING</span>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 300px;gap:36px;padding:44px 34px 38px">
+<div>
+<div style="font-family:'Alegreya',serif;font-weight:800;font-size:52px;line-height:1.04;color:#2c2315;text-wrap:balance">The town where fables retired.</div>
+<div style="font-family:'Alegreya',serif;font-size:16px;line-height:1.55;color:#5c4f36;margin-top:16px;max-width:420px">A world founded by charter and grown in public by an autonomous studio. Every resident is a story that ended; every change to the world is a pull request.</div>
+<div style="display:flex;gap:12px;margin-top:26px;align-items:center">
+<div style="background:#d99a3e;color:#2c2315;font-family:'Alegreya',serif;font-weight:700;font-size:15px;padding:13px 24px;border-radius:8px;cursor:pointer;box-shadow:0 2px 0 #b07a2a">Enter the world</div>
+<div style="font-family:'Alegreya',serif;font-weight:600;font-size:14px;color:#8a6b34;cursor:pointer">Read the Chronicle →</div>
+</div>
+<div style="margin-top:34px;height:150px;border-radius:10px;background:repeating-linear-gradient(45deg,#ede2c0 0 12px,#f2e9cd 12px 24px);border:1px solid #e0d3ac;display:flex;align-items:center;justify-content:center">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:1px;color:#9a8a62">[ LIVE EXPLORE VIEW — SEE <a class="dv-oid" href="#1a" style="background:none;padding:0;color:#8a6b34">1a</a> · DRAG / ZOOM / ORBIT ]</span>
+</div>
+</div>
+<div style="background:#f2e8ca;border:1px solid #e0d3ac;border-radius:10px;padding:20px 20px 16px;align-self:start">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:#9a8a62">THE CHARTER</div>
+<div style="font-family:'Alegreya',serif;font-style:italic;font-size:13.5px;line-height:1.5;color:#4a3f28;margin-top:9px">"Stories are physics: a resident's original tale constrains what they can do."</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:#9a8a62;margin-top:16px">PALETTE</div>
+<div style="display:flex;gap:7px;margin-top:8px">
+<div style="width:26px;height:26px;border-radius:6px;background:#ead9b8;border:1px solid rgba(0,0,0,.12)"></div>
+<div style="width:26px;height:26px;border-radius:6px;background:#5f7350"></div>
+<div style="width:26px;height:26px;border-radius:6px;background:#d99a3e"></div>
+<div style="width:26px;height:26px;border-radius:6px;background:#56618f"></div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#9a8a62;margin-top:5px">parchment · moss · honey · dusk blue</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:#9a8a62;margin-top:16px">NEVER</div>
+<div style="font-family:'Alegreya',serif;font-size:12px;line-height:1.7;color:#6a5c3e;margin-top:6px">gore · modern technology · non-diegetic signage · photorealism</div>
+</div>
+</div>
+<div style="padding:0 34px 30px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:#9a8a62;margin-bottom:12px">TODAY IN FABLETON</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+<div style="background:#fbf6e8;border:1px solid #e5dab6;border-radius:8px;padding:14px 16px"><div style="font-family:'Alegreya',serif;font-size:13px;line-height:1.5;color:#4a3f28;font-style:italic">"Let the orchard keep its crooked rows; straight lines are for worlds that never dream."</div><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:9px">DECREE VII · FABLE</div></div>
+<div style="background:#fbf6e8;border:1px solid #e5dab6;border-radius:8px;padding:14px 16px"><div style="font-family:'Alegreya',serif;font-size:13px;line-height:1.5;color:#4a3f28">The North Orchard grows. Forty-one trees, one crooked fence, and a rumor.</div><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:9px">MERGE · PR #142 · CI ✓</div></div>
+<div style="background:#fbf6e8;border:1px solid #e5dab6;border-radius:8px;padding:14px 16px"><div style="font-family:'Alegreya',serif;font-size:13px;line-height:1.5;color:#4a3f28">Marigold Crumb and Quill are feuding again. The Chronicle is delighted.</div><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:9px">DAY 213 · CHRONICLE</div></div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:16px;border-top:1px solid #e0d3ac">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#8a7a52">THE STUDIO IS AT WORK — 3 STEWARDS · 1 REGION UNDER CONSTRUCTION · LAST MERGE 12 MIN AGO</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#8a6b34;cursor:pointer">WATCH →</div>
+</div>
+</div>
+<div style="padding:14px 34px;background:#efe5c6;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.8px;color:#9a8a62;display:flex;gap:18px">
+<span>ENGINE V1</span><span>CHARTER V1 · SEED 20260702</span><span>APACHE-2.0 · OPEN SOURCE</span><span>EVERY CHANGE IS A PR</span>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1e" data-screen-label="1e Chronicle reader">
+<div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Chronicle reader — decrees, merges, amendments in Fable's voice</div>
+<div class="dv-card" style="width:760px;background:#f5ecd2">
+<div style="padding:34px 40px 20px;border-bottom:1px solid #e0d0a4">
+<div style="font-family:'Alegreya',serif;font-weight:800;font-size:34px;color:#33291a">The Chronicle</div>
+<div style="font-family:'Alegreya',serif;font-style:italic;font-size:14px;color:#7a6842;margin-top:3px">of Fableton — as kept by Fable, god of this world</div>
+<div style="display:flex;gap:6px;margin-top:18px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.8px">
+<span style="padding:5px 12px;border-radius:14px;background:#33291a;color:#f5ecd2">ALL</span>
+<span style="padding:5px 12px;border-radius:14px;border:1px solid #cdbc8e;color:#7a6842">DECREES</span>
+<span style="padding:5px 12px;border-radius:14px;border:1px solid #cdbc8e;color:#7a6842">AMENDMENTS</span>
+<span style="padding:5px 12px;border-radius:14px;border:1px solid #cdbc8e;color:#7a6842">MERGES</span>
+</div>
+</div>
+<div style="padding:10px 40px 30px">
+<div style="padding:20px 0 18px;border-bottom:1px solid #e5d7ac">
+<div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#a89468"><span>DAY 213 · LAMPLIGHTING</span><span style="padding:2px 7px;border-radius:3px;background:#8a2f2a;color:#f5ecd2;letter-spacing:1.5px">DECREE</span></div>
+<div style="display:flex;gap:14px;margin-top:12px;align-items:flex-start">
+<div style="width:20px;height:20px;flex:none;border-radius:50%;background:#8a2f2a;box-shadow:inset 0 0 0 3px #a84a40;margin-top:3px"></div>
+<div style="font-family:'Alegreya',serif;font-style:italic;font-size:17px;line-height:1.5;color:#3a2f1c">"Let the orchard keep its crooked rows; straight lines are for worlds that never dream. So it is written."</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:10px;padding-left:34px">decrees/007.md · append-only · spoken in public session</div>
+</div>
+<div style="padding:18px 0;border-bottom:1px solid #e5d7ac">
+<div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#a89468"><span>DAY 213 · HIGH SUN</span><span style="padding:2px 7px;border-radius:3px;background:#4a6a3f;color:#f5ecd2;letter-spacing:1.5px">MERGE</span></div>
+<div style="font-family:'Alegreya',serif;font-size:14.5px;line-height:1.6;color:#3a2f1c;margin-top:9px">The North Orchard grows. Steward Rowan planted forty-one trees and one crooked fence; the crows have opinions, and Quill has filed them all as grievances.</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:8px">PR #142 · CI green · taste-audit: sampled ✓ · 41 files</div>
+</div>
+<div style="padding:18px 0;border-bottom:1px solid #e5d7ac">
+<div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#a89468"><span>DAY 212 · HUSH</span><span style="padding:2px 7px;border-radius:3px;background:#a87d2a;color:#f5ecd2;letter-spacing:1.5px">AMENDMENT</span></div>
+<div style="font-family:'Alegreya',serif;font-size:14.5px;line-height:1.6;color:#3a2f1c;margin-top:9px">By constitutional act, the never-list gains a line: <span style="font-style:italic">nothing that reads as advertisement.</span> The god proposed; the founder ratified; the town noticed nothing, which was the point.</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:8px">amendment 002 · charter §aesthetic · ratified in public</div>
+</div>
+<div style="padding:18px 0;border-bottom:1px solid #e5d7ac">
+<div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#a89468"><span>DAY 212 · LAMPLIGHTING</span><span style="padding:2px 7px;border-radius:3px;border:1px solid #cdbc8e;color:#7a6842;letter-spacing:1.5px">CHRONICLE</span></div>
+<div style="font-family:'Alegreya',serif;font-size:14.5px;line-height:1.6;color:#3a2f1c;margin-top:9px">Marigold Crumb left a day-old tart on the sill, which Quill interpreted as both apology and challenge. The feud continues. The bakery smells of cinnamon and diplomacy.</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:8px">chronicle/day-212.md · written by Fable</div>
+</div>
+<div style="padding:18px 0">
+<div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#a89468"><span>DAY 211 · FIRST LIGHT</span><span style="padding:2px 7px;border-radius:3px;background:#4a6a3f;color:#f5ecd2;letter-spacing:1.5px">MERGE</span></div>
+<div style="font-family:'Alegreya',serif;font-size:14.5px;line-height:1.6;color:#3a2f1c;margin-top:9px">Tobias Axehand's woodpile is now, officially, load-bearing lore. A shed was added to hold the wood nobody ordered. He has already filled it.</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#b0a077;margin-top:8px">PR #139 · CI green · navmesh connectivity ✓</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "push <a class="dv-oid" href="#1a">1a</a> darker and mistier" · "give <a class="dv-oid" href="#1b">1b</a> its own hub page" · "walk-mode mockup inside <a class="dv-oid" href="#1a">1a</a>" · "new directions for the inspect panel"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;labelsAlwaysOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Simulation&quot;},&quot;tickSeconds&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:2.6,&quot;min&quot;:1,&quot;max&quot;:6,&quot;step&quot;:0.2,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Simulation&quot;}}">
+class Component extends DCLogic {
+  state = { step: 0, rot: { f: 0, c: 0, s: 0 }, time: { f: 'dusk', c: 'dusk', s: 'dawn' }, sel: { f: null, c: null, s: null }, card: false, drag: null };
+
+  componentDidMount() {
+    const ms = Math.max(0.8, this.props.tickSeconds ?? 2.6) * 1000;
+    this._iv = setInterval(() => this.setState(s => ({ step: s.step + 1 })), ms);
+  }
+  componentWillUnmount() { clearInterval(this._iv); }
+
+  hx(h) { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+  hex(r, g, b) { return '#' + [r, g, b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join(''); }
+  shade(h, f) { const [r, g, b] = this.hx(h); return this.hex(r * f, g * f, b * f); }
+  mix(a, b, t) { const A = this.hx(a), B = this.hx(b); return this.hex(A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t, A[2] + (B[2] - A[2]) * t); }
+
+  LIGHTS() {
+    return {
+      f: {
+        dawn:  { sky: 'linear-gradient(180deg,#7f88b0 0%,#e3af88 62%,#f6dcb2 100%)', tint: '#f2c896', ta: .16, lit: { top: 1.03, s: .85, e: .68 }, gA: '#84956b', gB: '#697c52', shadow: 'rgba(70,60,100,.3)', glow: false, fogOp: .1, fogC: 'rgba(240,225,200,.8)', glowOv: 'radial-gradient(55% 42% at 50% 60%, rgba(255,200,140,.22), rgba(0,0,0,0) 70%)' },
+        day:   { sky: 'linear-gradient(180deg,#b7d3e0 0%,#dfe3c9 70%,#efe7cd 100%)', tint: '#fff6dd', ta: .07, lit: { top: 1.06, s: .88, e: .7 }, gA: '#7d9367', gB: '#65794f', shadow: 'rgba(55,65,45,.28)', glow: false, fogOp: 0, fogC: 'rgba(255,255,255,0)', glowOv: 'none' },
+        dusk:  { sky: 'linear-gradient(180deg,#39406e 0%,#a95e47 55%,#eec288 100%)', tint: '#d98a5c', ta: .26, lit: { top: .96, s: .8, e: .62 }, gA: '#71805a', gB: '#576444', shadow: 'rgba(45,35,75,.38)', glow: true, fogOp: .08, fogC: 'rgba(90,70,110,.7)', glowOv: 'radial-gradient(60% 45% at 50% 62%, rgba(255,150,80,.28), rgba(0,0,0,0) 70%)' },
+        night: { sky: 'linear-gradient(180deg,#12162b 0%,#232a4d 72%,#333a5e 100%)', tint: '#3d4470', ta: .42, lit: { top: .62, s: .52, e: .44 }, gA: '#4a5642', gB: '#38422f', shadow: 'rgba(8,10,26,.5)', glow: true, fogOp: .16, fogC: 'rgba(25,30,60,.85)', glowOv: 'none' }
+      },
+      c: {
+        dawn:  { sky: 'linear-gradient(180deg,#241d22 0%,#6e3f30 62%,#c07a4a 100%)', tint: '#c07a4a', ta: .2, lit: { top: .9, s: .72, e: .56 }, gA: '#332c28', gB: '#241f1c', shadow: 'rgba(0,0,0,.42)', glow: true, fogOp: .12, fogC: 'rgba(60,35,25,.8)', glowOv: 'radial-gradient(55% 40% at 50% 64%, rgba(255,130,60,.26), rgba(0,0,0,0) 70%)' },
+        day:   { sky: 'linear-gradient(180deg,#4a4140 0%,#7a5f4c 70%,#96755a 100%)', tint: '#a88a6a', ta: .14, lit: { top: 1.0, s: .82, e: .64 }, gA: '#3a332e', gB: '#2a2521', shadow: 'rgba(10,8,6,.4)', glow: false, fogOp: .14, fogC: 'rgba(120,95,70,.6)', glowOv: 'none' },
+        dusk:  { sky: 'linear-gradient(180deg,#1c1316 0%,#7e3a26 55%,#e08344 100%)', tint: '#d06a35', ta: .26, lit: { top: .88, s: .7, e: .54 }, gA: '#332a25', gB: '#231d19', shadow: 'rgba(0,0,0,.45)', glow: true, fogOp: .1, fogC: 'rgba(80,40,25,.7)', glowOv: 'radial-gradient(60% 45% at 50% 62%, rgba(255,120,50,.32), rgba(0,0,0,0) 70%)' },
+        night: { sky: 'linear-gradient(180deg,#0b090d 0%,#181114 75%,#241318 100%)', tint: '#4a2e26', ta: .4, lit: { top: .5, s: .42, e: .36 }, gA: '#26211e', gB: '#191512', shadow: 'rgba(0,0,0,.55)', glow: true, fogOp: .12, fogC: 'rgba(30,15,12,.85)', glowOv: 'radial-gradient(60% 40% at 50% 66%, rgba(255,100,40,.16), rgba(0,0,0,0) 70%)' }
+      },
+      s: {
+        dawn:  { sky: 'linear-gradient(180deg,#c9d3d1 0%,#e9e2d3 100%)', tint: '#e3d9c2', ta: .18, lit: { top: 1.02, s: .86, e: .7 }, gA: '#93aaa4', gB: '#7c968f', shadow: 'rgba(60,80,80,.22)', glow: false, fogOp: .38, fogC: 'rgba(226,231,226,.95)', glowOv: 'none', ui: { fg: '#2f3b39', dim: 'rgba(47,59,57,.62)', chip: 'rgba(244,246,242,.55)', line: 'rgba(47,59,57,.2)' } },
+        day:   { sky: 'linear-gradient(180deg,#bcd2d2 0%,#eef0e4 100%)', tint: '#f2f2e0', ta: .1, lit: { top: 1.06, s: .9, e: .72 }, gA: '#8fa8a2', gB: '#78928c', shadow: 'rgba(55,75,75,.24)', glow: false, fogOp: .16, fogC: 'rgba(235,240,235,.9)', glowOv: 'none', ui: { fg: '#2f3b39', dim: 'rgba(47,59,57,.62)', chip: 'rgba(244,246,242,.55)', line: 'rgba(47,59,57,.2)' } },
+        dusk:  { sky: 'linear-gradient(180deg,#7e88a0 0%,#c8b49a 100%)', tint: '#b09a86', ta: .24, lit: { top: .92, s: .76, e: .6 }, gA: '#7a908f', gB: '#64807e', shadow: 'rgba(40,50,70,.3)', glow: true, fogOp: .3, fogC: 'rgba(190,185,175,.85)', glowOv: 'radial-gradient(55% 40% at 50% 58%, rgba(230,190,140,.2), rgba(0,0,0,0) 70%)', ui: { fg: '#f2f0e8', dim: 'rgba(242,240,232,.7)', chip: 'rgba(50,58,66,.4)', line: 'rgba(242,240,232,.25)' } },
+        night: { sky: 'linear-gradient(180deg,#1f262e 0%,#37414c 100%)', tint: '#31404a', ta: .44, lit: { top: .6, s: .5, e: .42 }, gA: '#41565a', gB: '#31444a', shadow: 'rgba(5,10,15,.5)', glow: true, fogOp: .42, fogC: 'rgba(38,50,58,.9)', glowOv: 'none', ui: { fg: '#e8ece6', dim: 'rgba(232,236,230,.65)', chip: 'rgba(20,28,32,.45)', line: 'rgba(232,236,230,.22)' } }
+      }
+    };
+  }
+
+  TIMES() {
+    return {
+      f: [['dawn', 'first light'], ['day', 'high sun'], ['dusk', 'lamplighting'], ['night', 'hush']],
+      c: [['dawn', 'ashdawn'], ['day', 'forge-day'], ['dusk', 'smelt-dusk'], ['night', 'banked']],
+      s: [['dawn', 'morning tide'], ['day', 'high glass'], ['dusk', 'gloaming'], ['night', 'bell-dark']]
+    };
+  }
+
+  NPCS() {
+    return {
+      f: [
+        { k: 'marigold', off: 0, kind: 'person', z: 0, name: 'Marigold Crumb', ep: 'the witch, gone respectable', robe: '#7a4f6d', head: '#e8c9a8', hat: '#4a3560', acc: '#e8b45e',
+          wp: [[-120, 20], [-60, 58], [-140, 86], [-190, 40]],
+          acts: ['proofing the morning loaves', 'arguing sweetly with the sourdough', 'dusting flour from the ledger', 'setting out day-olds for the crows'],
+          story: 'Her tale ended with "and she was never seen again." She was seen again the following Tuesday, buying the bakery. The town has agreed not to mention it.',
+          rels: [['Quill', 'rival — the pastry thefts, ongoing'], ['Tobias Axehand', 'owes her a roof repair, three winters unpaid']],
+          meta: 'lore/marigold-crumb.json · tree: baker.morning' },
+        { k: 'tobias', off: 1, kind: 'person', z: 0, name: 'Tobias Axehand', ep: 'woodcutter, retired (allegedly)', robe: '#5c6b45', head: '#d9b48f', hat: '#3f4a30', acc: '#e8b45e',
+          wp: [[-250, 150], [-195, 195], [-280, 225]],
+          acts: ['stacking wood nobody ordered', 'sharpening the axe he swore he hung up', 'telling the pond about the wolf again'],
+          story: 'The woodcutter whose story needed exactly one heroic swing. He got it. Nothing since has required an axe, which he finds quietly unbearable.',
+          rels: [['Marigold Crumb', 'promised her a roof repair, three winters ago'], ['the pond', 'a good listener']],
+          meta: 'lore/tobias-axehand.json · tree: woodcutter.idle' },
+        { k: 'quill', off: 2, kind: 'crow', z: 0, name: 'Quill', ep: 'a talking crow, formerly an omen', robe: '#241f22', head: '#241f22', acc: '#e8b45e',
+          wp: [[20, 10], [-40, -30], [60, -60], [-10, 40]],
+          acts: ['casing the bakery window', 'delivering gossip, third-hand', 'ominous circling (out of habit)'],
+          story: 'Formerly an omen. The prophecy came true, which put him out of work. He freelances now — gossip, mostly, and the occasional tart.',
+          rels: [['Marigold Crumb', 'victim, patron, nemesis'], ['the Chronicle', 'unpaid contributor']],
+          meta: 'lore/quill.json · tree: crow.mischief' },
+        { k: 'petra', off: 3, kind: 'person', z: 0, name: 'Petra Thimble', ep: 'seamstress to endings', robe: '#a3653f', head: '#e3c2a0', hat: '#7a4a2a', acc: '#e8b45e',
+          wp: [[30, 110], [90, 150], [-10, 165]],
+          acts: ['hemming a happily-ever-after', 'unpicking a moral that frayed', 'measuring an ending for the miller'],
+          story: 'Every ending arrives in town a little loose at the seams. Petra takes them in. She has never once asked what happens next; that would be unprofessional.',
+          rels: [['the Story Hall', 'keeps her patterns in the archive'], ['Marigold Crumb', 'trades hems for seedcake']],
+          meta: 'lore/petra-thimble.json · tree: seamstress.day' }
+      ],
+      c: [
+        { k: 'halda', off: 0, kind: 'person', z: 26, name: 'Halda Nine-Coals', ep: 'forgemistress of the third furnace', robe: '#8a4a2e', head: '#d9a684', hat: '#3a2a20', acc: '#ff8c42',
+          wp: [[-160, 30], [-90, 90], [-200, 120]],
+          acts: ['banking the third furnace', 'counting embers into the vault', 'reading the mountain\u2019s mood'],
+          story: 'She holds the ledger of every ember the city owns. Nine coals are hers by right of the old bargain; she has spent none of them, and the mountain knows it.',
+          rels: [['Brother Ash', 'theological disagreements, weekly'], ['the Vault', 'keyholder, one of three']],
+          meta: 'lore/halda-nine-coals.json · tree: forge.day' },
+        { k: 'ash', off: 1, kind: 'person', z: 0, name: 'Brother Ash', ep: 'monk of the cooling beds', robe: '#4a443e', head: '#c9a684', hat: '#332e2a', acc: '#ff8c42',
+          wp: [[-60, 235], [30, 258], [-140, 262]],
+          acts: ['raking the cooling beds', 'listening for the mountain\u2019s pulse', 'sweeping soot into sermon-lines'],
+          story: 'His order believes the mountain is not dormant but meditating, and that the city\u2019s job is to keep the noise down. He rakes accordingly.',
+          rels: [['Halda Nine-Coals', 'respects her; disputes her arithmetic'], ['the mountain', 'congregation of one']],
+          meta: 'lore/brother-ash.json · tree: monk.observance' },
+        { k: 'tick', off: 2, kind: 'person', z: 54, name: 'Tick', ep: 'brass automaton, wound weekly', robe: '#8a6a38', head: '#c9964b', hat: '#6a5028', acc: '#ff8c42',
+          wp: [[40, -100], [120, -60], [60, -20]],
+          acts: ['polishing its own escapement', 'carrying slag, contentedly', 'standing very still (scheduled)'],
+          story: 'Built to carry slag; kept because it hums while it works. Tick\u2019s winding key is a civic honor, rotated among the smith-clans every festival.',
+          rels: [['the smith-clans', 'shared custody of the key'], ['Brother Ash', 'considers Tick excellent evidence']],
+          meta: 'lore/tick.json · tree: automaton.rounds' }
+      ],
+      s: [
+        { k: 'iris', off: 0, kind: 'person', z: 22, name: 'Bell-Iris', ep: 'ferrywoman of the near mist', robe: '#4a6470', head: '#e3d3ba', hat: '#33454e', acc: '#c9ae6f',
+          wp: [[-180, 0], [-120, 40], [-205, 60]],
+          acts: ['poling the mist-ferry', 'counting bells only she hears', 'tying knots that remember names'],
+          story: 'She ferries between islands that are not always there. Payment is a name, spoken once; she ties each one into a knot and the fog keeps the rest.',
+          rels: [['Nan Skein', 'buys her fog-thread by the fathom'], ['the tide', 'an arrangement, not a friendship']],
+          meta: 'lore/bell-iris.json · tree: ferry.crossing' },
+        { k: 'pike', off: 1, kind: 'cloud', z: 20, name: 'Cormorant Pike', ep: 'a retired storm, now very small', robe: '#9aa4ac', head: '#9aa4ac', acc: '#c9ae6f',
+          wp: [[150, 110], [190, 145], [130, 150]],
+          acts: ['raining, politely, on his own garden', 'grumbling at one nautical mile', 'practicing a very small thunder'],
+          story: 'He sank the fleet he was written to sink, and retired at the height of his powers. Now he keeps to his island and rains only where invited.',
+          rels: [['Bell-Iris', 'she ferried him here; he owes her weather'], ['the Drowned Parish', 'prefers not to discuss it']],
+          meta: 'lore/cormorant-pike.json · tree: storm.retirement' },
+        { k: 'nan', off: 2, kind: 'person', z: 22, name: 'Nan Skein', ep: 'net-mender of the far stair', robe: '#71827c', head: '#e0cdb0', hat: '#5a6a64', acc: '#c9ae6f',
+          wp: [[80, -160], [140, -190], [95, -125]],
+          acts: ['mending nets with fog-thread', 'naming knots after grudges', 'trading rumors with the tide'],
+          story: 'Her nets catch what the fog means to return: bells, buttons, the occasional apology. She mends, sorts, and sends things back where they were missed.',
+          rels: [['Bell-Iris', 'supplier and co-conspirator'], ['the fog', 'professional courtesy']],
+          meta: 'lore/nan-skein.json · tree: mender.tideworks' }
+      ]
+    };
+  }
+
+  TICKERS() {
+    return {
+      f: ['Fable wrote: let the orchard keep its crooked rows — Decree VII', 'Merged: the North Orchard grows (PR #142, CI green)', 'Marigold Crumb and Quill are feuding again; the Chronicle is delighted', 'Season of Long Shadows, day 213 — three stewards at work'],
+      c: ['Fable wrote: the mountain sleeps; let no one sell its dreams — Decree III', 'Merged: the Terrace of Nine Coals, retiled (PR #88)', 'Tick has been polishing itself for four hours; the monks approve', 'Ember ledger reconciled — the vault holds'],
+      s: ['Fable wrote: what the fog returns, return to the fog — Decree XII', 'Merged: a new boardwalk to the Drowned Parish (PR #205)', 'The tide brought back a bell today; nobody claimed it', 'Bell-Iris reports the far islands are back, mostly']
+    };
+  }
+
+  CLOCKS() { return { f: 'DAY 213', c: 'DAY 467', s: 'DAY 129' }; }
+
+  wins(list, L) {
+    return (list || []).map((wn, i) => ({
+      k: 'w' + i,
+      style: {
+        position: 'absolute', left: wn.u + 'px', top: wn.t + 'px', width: wn.w + 'px', height: wn.h + 'px',
+        borderRadius: wn.r || '2px',
+        background: wn.bg || (L.glow ? '#ffd98a' : 'rgba(43,34,26,.5)'),
+        boxShadow: wn.sh || (wn.bg ? 'none' : (L.glow ? '0 0 10px 3px rgba(255,200,110,.5)' : 'none'))
+      }
+    }));
+  }
+
+  box(faces, L, x, y, w, d, h, cl, o) {
+    o = o || {};
+    const z = o.z0 || 0;
+    const col = f => this.mix(this.shade(cl, f), L.tint, L.ta);
+    const frame = o.frame;
+    const fb = frame ? { background: 'rgba(238,222,190,.1)', border: '2px solid ' + this.mix('#b98d4f', L.tint, L.ta), boxSizing: 'border-box' } : {};
+    faces.push({ k: 'f' + faces.length, wins: [], style: { position: 'absolute', left: x + 'px', top: y + 'px', width: w + 'px', height: d + 'px', transform: 'translateZ(' + (z + h) + 'px)', background: col(L.lit.top), ...fb, ...(o.top || {}) } });
+    faces.push({ k: 'f' + faces.length, wins: this.wins(o.winS, L), style: { position: 'absolute', left: x + 'px', top: (y + d) + 'px', width: w + 'px', height: h + 'px', transformOrigin: 'top left', transform: 'translateZ(' + z + 'px) rotateX(90deg)', background: col(L.lit.s), ...fb, ...(o.south || {}) } });
+    faces.push({ k: 'f' + faces.length, wins: this.wins(o.winE, L), style: { position: 'absolute', left: (x + w) + 'px', top: y + 'px', width: h + 'px', height: d + 'px', transformOrigin: 'top left', transform: 'translateZ(' + z + 'px) rotateY(-90deg)', background: col(L.lit.e), ...fb, ...(o.east || {}) } });
+  }
+
+  bldg(faces, flats, L, x, y, w, d, h, wall, roof, o) {
+    o = o || {};
+    flats.push({ k: 'sh' + flats.length, style: { position: 'absolute', left: (x - 14) + 'px', top: (y - 14) + 'px', width: (w + 40) + 'px', height: (d + 40) + 'px', transform: 'translateZ(' + ((o.z0 || 0) + .4) + 'px)', borderRadius: '50%', background: 'radial-gradient(ellipse,' + L.shadow + ',rgba(0,0,0,0) 70%)' } });
+    this.box(faces, L, x, y, w, d, h, wall, { z0: o.z0 || 0, winS: o.winS, winE: o.winE });
+    const ov = o.ov == null ? 7 : o.ov, rh = o.rh == null ? 9 : o.rh;
+    this.box(faces, L, x - ov, y - ov, w + 2 * ov, d + 2 * ov, rh, roof, { z0: (o.z0 || 0) + h });
+    if (o.ridge) this.box(faces, L, x + w * .18, y + d * .18, w * .64, d * .64, rh, roof, { z0: (o.z0 || 0) + h + rh });
+  }
+
+  flat(flats, L, x, y, w, h, bg, o) {
+    o = o || {};
+    flats.push({ k: 'fl' + flats.length, style: { position: 'absolute', left: x + 'px', top: y + 'px', width: w + 'px', height: h + 'px', transform: 'translateZ(' + (o.z == null ? .6 : o.z) + 'px)' + (o.rot ? ' rotateZ(' + o.rot + 'deg)' : ''), background: bg, borderRadius: o.r || '50%', ...(o.extra || {}) } });
+  }
+
+  bill(x, y, z, rot, parts, onClick) {
+    return { k: 'bl' + x + '_' + y, onClick, parts, style: { position: 'absolute', left: 0, top: 0, width: 0, height: 0, transformStyle: 'preserve-3d', transform: 'translate3d(' + x + 'px,' + y + 'px,' + z + 'px) rotateZ(' + (-(45 + rot)) + 'deg) rotateX(-55deg)' } };
+  }
+
+  tree(L, x, y, rot, c1, c2, sc) {
+    sc = sc || 1;
+    const t = c => this.mix(c, L.tint, L.ta);
+    const P = [];
+    P.push({ k: 'p0', txt: '', style: { position: 'absolute', left: (-11 * sc) + 'px', top: (-4 * sc) + 'px', width: (22 * sc) + 'px', height: (8 * sc) + 'px', borderRadius: '50%', background: L.shadow, filter: 'blur(2px)' } });
+    P.push({ k: 'p1', txt: '', style: { position: 'absolute', left: (-3.5 * sc) + 'px', top: (-18 * sc) + 'px', width: (7 * sc) + 'px', height: (19 * sc) + 'px', background: t('#7a5a3c'), borderRadius: '2px' } });
+    P.push({ k: 'p2', txt: '', style: { position: 'absolute', left: (-17 * sc) + 'px', top: (-50 * sc) + 'px', width: (34 * sc) + 'px', height: (38 * sc) + 'px', background: t(c1), borderRadius: '46% 54% 48% 52%', boxShadow: 'inset ' + (-6 * sc) + 'px ' + (-5 * sc) + 'px 0 rgba(0,0,0,.15)' } });
+    P.push({ k: 'p3', txt: '', style: { position: 'absolute', left: (-9 * sc) + 'px', top: (-58 * sc) + 'px', width: (20 * sc) + 'px', height: (18 * sc) + 'px', background: t(c2), borderRadius: '50% 50% 46% 54%' } });
+    return this.bill(x, y, 0, rot, P);
+  }
+
+  lamp(L, x, y, z, rot, glowC) {
+    const P = [];
+    P.push({ k: 'p0', txt: '', style: { position: 'absolute', left: '-1.5px', top: '-26px', width: '3px', height: '27px', background: this.mix('#4a4038', L.tint, L.ta), borderRadius: '2px' } });
+    P.push({ k: 'p1', txt: '', style: { position: 'absolute', left: '-4px', top: '-33px', width: '8px', height: '8px', borderRadius: '50%', background: L.glow ? glowC : this.mix('#8a8074', L.tint, L.ta), boxShadow: L.glow ? '0 0 14px 5px ' + glowC.replace(')', ',.45)').replace('rgb', 'rgba') : 'none' } });
+    return this.bill(x, y, z, rot, P);
+  }
+
+  npcBill(worldK, d, rot, dragging) {
+    const step = this.state.step;
+    const wp = d.wp[(step + d.off) % d.wp.length];
+    const sel = this.state.sel[worldK] === d.k;
+    const showL = (this.props.labelsAlwaysOn ?? false) || sel;
+    const act = d.acts[Math.floor(step / 3 + d.off) % d.acts.length];
+    const parts = [];
+    const P = (st, txt) => parts.push({ k: 'p' + parts.length, style: st, txt: txt || '' });
+    P({ position: 'absolute', left: '-11px', top: '-5px', width: '22px', height: '8px', borderRadius: '50%', background: 'rgba(10,10,15,.3)', filter: 'blur(1px)' });
+    if (d.kind === 'crow') {
+      P({ position: 'absolute', left: '-8px', top: '-13px', width: '15px', height: '10px', background: '#241f22', borderRadius: '50% 60% 45% 55%' });
+      P({ position: 'absolute', left: '2px', top: '-18px', width: '8px', height: '8px', background: '#241f22', borderRadius: '50%' });
+      P({ position: 'absolute', left: '9px', top: '-15px', width: '5px', height: '3px', background: '#c98a3a', borderRadius: '0 50% 50% 0' });
+      P({ position: 'absolute', left: '-12px', top: '-11px', width: '7px', height: '4px', background: '#241f22', borderRadius: '50% 0 50% 50%' });
+    } else if (d.kind === 'cloud') {
+      P({ position: 'absolute', left: '-16px', top: '-32px', width: '32px', height: '16px', background: '#9aa4ac', borderRadius: '50%', boxShadow: '7px 4px 0 #8a949c, -7px 4px 0 #8a949c' });
+      P({ position: 'absolute', left: '-8px', top: '-13px', width: '2px', height: '9px', background: 'rgba(130,160,180,.8)', borderRadius: '2px' });
+      P({ position: 'absolute', left: '0px', top: '-11px', width: '2px', height: '8px', background: 'rgba(130,160,180,.8)', borderRadius: '2px' });
+      P({ position: 'absolute', left: '7px', top: '-13px', width: '2px', height: '9px', background: 'rgba(130,160,180,.8)', borderRadius: '2px' });
+    } else {
+      P({ position: 'absolute', left: '-9px', top: '-30px', width: '18px', height: '27px', background: d.robe, borderRadius: '8px 8px 5px 5px', boxShadow: 'inset -4px -3px 0 rgba(0,0,0,.18)' });
+      P({ position: 'absolute', left: '-6.5px', top: '-41px', width: '13px', height: '13px', background: d.head, borderRadius: '50%' });
+      if (d.hat) P({ position: 'absolute', left: '-8.5px', top: '-46px', width: '17px', height: '8px', background: d.hat, borderRadius: '50% 50% 40% 40%' });
+    }
+    if (sel) P({ position: 'absolute', left: '-16px', top: '-10px', width: '32px', height: '15px', border: '2px solid ' + d.acc, borderRadius: '50%', boxSizing: 'border-box' });
+    if (showL) P({ position: 'absolute', left: '0', top: d.kind === 'crow' ? '-36px' : (d.kind === 'cloud' ? '-52px' : '-62px'), transform: 'translateX(-50%)', whiteSpace: 'nowrap', fontFamily: '"IBM Plex Mono",monospace', fontSize: '9px', padding: '3px 7px', borderRadius: '4px', background: 'rgba(18,16,12,.8)', color: '#f2e8d2', letterSpacing: '.2px' }, act);
+    P({ position: 'absolute', left: '-17px', top: '-56px', width: '34px', height: '60px', cursor: 'pointer', background: 'rgba(0,0,0,0)' });
+    return {
+      k: d.k, parts,
+      onClick: () => this.setState(s => ({ sel: { ...s.sel, [worldK]: s.sel[worldK] === d.k ? null : d.k } })),
+      style: { position: 'absolute', left: 0, top: 0, width: 0, height: 0, transformStyle: 'preserve-3d', transform: 'translate3d(' + wp[0] + 'px,' + wp[1] + 'px,' + (d.z || 0) + 'px) rotateZ(' + (-(45 + rot)) + 'deg) rotateX(-55deg)', transition: dragging ? 'none' : 'transform 2.3s linear' }
+    };
+  }
+
+  fableGeo(L, rot) {
+    const faces = [], flats = [], bills = [];
+    const t = c => this.mix(c, L.tint, L.ta);
+    this.flat(flats, L, -100, -65, 210, 175, 'radial-gradient(ellipse,' + t('#c4ae86') + ',' + t('#b6a078') + ')');
+    this.flat(flats, L, -195, -14, 115, 20, t('#bda87e'), { r: '10px' });
+    this.flat(flats, L, 28, -160, 20, 110, t('#bda87e'), { r: '10px' });
+    this.flat(flats, L, -20, 98, 20, 85, t('#bda87e'), { r: '10px' });
+    this.flat(flats, L, 95, 15, 125, 20, t('#bda87e'), { r: '10px' });
+    this.flat(flats, L, -335, 145, 125, 88, 'radial-gradient(ellipse,' + t('#8fb3b8') + ',' + t('#6d949c') + ')');
+    this.flat(flats, L, 115, 168, 165, 125, t('#9a8564'), { r: '42% 50% 46% 54%' });
+    this.bldg(faces, flats, L, -205, -62, 110, 85, 52, '#e0b264', '#a8683f', { ridge: 1, winS: [{ u: 16, t: 18, w: 13, h: 13 }, { u: 78, t: 18, w: 13, h: 13 }, { u: 44, t: 0, w: 20, h: 28, bg: this.shade('#5a4432', L.lit.s), r: '0 0 7px 7px' }] });
+    this.bldg(faces, flats, L, 58, -242, 95, 95, 80, '#cfc4a8', '#56618f', { rh: 12, ov: 8, ridge: 1, winS: [{ u: 38, t: 52, w: 16, h: 16, r: '50%' }] });
+    this.bldg(faces, flats, L, -72, 108, 152, 102, 60, '#ead9b8', '#5f7350', { ridge: 1, winS: [{ u: 18, t: 22, w: 14, h: 16 }, { u: 120, t: 22, w: 14, h: 16 }, { u: 64, t: 0, w: 24, h: 32, bg: this.shade('#4a3c2c', L.lit.s), r: '0 0 9px 9px' }] });
+    this.bldg(faces, flats, L, 148, 40, 82, 70, 40, '#d9c39a', '#a8683f', { winS: [{ u: 14, t: 12, w: 12, h: 12 }] });
+    this.bldg(faces, flats, L, -295, 55, 76, 64, 38, '#e3cfa8', '#5f7350', { winS: [{ u: 12, t: 11, w: 11, h: 11 }] });
+    this.bldg(faces, flats, L, 205, -125, 78, 62, 42, '#d5b98e', '#56618f', { winS: [{ u: 13, t: 13, w: 12, h: 12 }] });
+    this.bldg(faces, flats, L, -255, -212, 72, 60, 36, '#e0c9a2', '#a8683f', { winS: [{ u: 12, t: 11, w: 11, h: 11 }] });
+    this.box(faces, L, -22, -22, 32, 32, 18, '#b8b0a0');
+    this.box(faces, L, -28, -28, 44, 44, 8, '#8a5a3a', { z0: 30 });
+    this.box(faces, L, 150, 198, 95, 70, 34, '#c9b184', { frame: 1 });
+    const trees = [[-320, -120, '#5c7a4a', '#7d9a5f', 1.1], [-338, -18, '#6d8a53', '#86a468', .9], [285, 115, '#5c7a4a', '#7d9a5f', 1], [312, 30, '#6d8a53', '#86a468', .85], [255, 205, '#5c7a4a', '#7d9a5f', .95], [-160, 255, '#6d8a53', '#86a468', 1.05], [55, 262, '#5c7a4a', '#7d9a5f', .8], [-90, -270, '#6d8a53', '#86a468', 1]];
+    trees.forEach(tr => bills.push(this.tree(L, tr[0], tr[1], rot, tr[2], tr[3], tr[4])));
+    bills.push(this.lamp(L, -70, -30, 0, rot, 'rgb(255,205,120)'));
+    bills.push(this.lamp(L, 75, 55, 0, rot, 'rgb(255,205,120)'));
+    const craneP = [
+      { k: 'p0', txt: '', style: { position: 'absolute', left: '-2px', top: '-72px', width: '5px', height: '73px', background: '#8a6b42', borderRadius: '2px' } },
+      { k: 'p1', txt: '', style: { position: 'absolute', left: '-2px', top: '-72px', width: '48px', height: '5px', background: '#8a6b42', borderRadius: '2px' } },
+      { k: 'p2', txt: '', style: { position: 'absolute', left: '40px', top: '-67px', width: '2px', height: '28px', background: '#3a3025' } },
+      { k: 'p3', txt: '', style: { position: 'absolute', left: '34px', top: '-39px', width: '13px', height: '11px', background: '#c98a4a', borderRadius: '2px' } }
+    ];
+    bills.push(this.bill(255, 230, 0, rot, craneP));
+    const signP = [
+      { k: 'p0', txt: '', style: { position: 'absolute', left: '-1.5px', top: '-20px', width: '4px', height: '21px', background: '#6a5432' } },
+      { k: 'p1', txt: 'UNDER CONSTRUCTION — PR #142', style: { position: 'absolute', left: '-52px', top: '-48px', width: '104px', padding: '5px 4px', background: '#2c2618', color: '#f0dfb2', fontFamily: '"IBM Plex Mono",monospace', fontSize: '8px', letterSpacing: '.4px', textAlign: 'center', lineHeight: '1.35', border: '1px solid #b98d4f', borderRadius: '4px', cursor: 'pointer' } }
+    ];
+    bills.push(this.bill(160, 190, 0, rot, signP, () => this.setState({ card: true })));
+    return { faces, flats, bills, ground: { position: 'absolute', left: '-430px', top: '-430px', width: '860px', height: '860px', borderRadius: '44% 40% 46% 42%', background: 'radial-gradient(closest-side at 46% 42%,' + this.mix(L.gA, L.tint, L.ta * .7) + ',' + this.mix(L.gB, L.tint, L.ta * .7) + ' 96%)', boxShadow: '0 0 0 6px rgba(0,0,0,.08)' } };
+  }
+
+  cinderGeo(L, rot) {
+    const faces = [], flats = [], bills = [];
+    this.flat(flats, L, -320, 150, 580, 24, 'linear-gradient(90deg,#ff8a3e,#d84f22 55%,#ff7a2e)', { r: '12px', z: 1, extra: { boxShadow: '0 0 32px 9px rgba(255,110,40,.4)' } });
+    this.flat(flats, L, -180, 200, 60, 30, this.mix('#3a332c', L.tint, L.ta), { r: '50%' });
+    this.flat(flats, L, 240, 120, 50, 26, this.mix('#3a332c', L.tint, L.ta), { r: '50%' });
+    this.box(faces, L, -280, -60, 320, 280, 26, '#332b27');
+    this.box(faces, L, -60, -200, 280, 240, 54, '#3a3029');
+    this.box(faces, L, 80, -340, 260, 190, 150, '#241f1d', { winS: [{ u: 102, t: 22, w: 56, h: 56, bg: '#a87f42', r: '50%', sh: 'inset 0 0 0 7px #6a4f2a, 0 0 26px rgba(255,150,60,.3)' }, { u: 124, t: 40, w: 12, h: 20, bg: '#3a2c22', r: '2px' }] });
+    this.box(faces, L, -56, -66, 46, 20, 42, '#2e2724');
+    this.box(faces, L, -110, -50, 50, 22, 16, '#2e2724');
+    this.bldg(faces, flats, L, -240, -20, 140, 100, 58, '#43362f', '#241d1a', { ov: 6, rh: 8, z0: 26, winS: [{ u: 54, t: 0, w: 34, h: 30, bg: '#ff8a3e', sh: '0 0 24px 7px rgba(255,120,40,.55)', r: '3px 3px 0 0' }, { u: 14, t: 30, w: 12, h: 10 }, { u: 116, t: 30, w: 12, h: 10 }] });
+    this.bldg(faces, flats, L, 0, -160, 120, 90, 52, '#3b3230', '#1f1a18', { ov: 6, rh: 8, z0: 54, winS: [{ u: 16, t: 16, w: 12, h: 14 }, { u: 92, t: 16, w: 12, h: 14 }] });
+    this.box(faces, L, 22, -148, 16, 16, 88, '#2c2522', { z0: 54 });
+    this.box(faces, L, 86, -150, 15, 15, 72, '#2c2522', { z0: 54 });
+    this.bldg(faces, flats, L, -180, 190, 78, 62, 38, '#3a2f2b', '#1f1a18', { winS: [{ u: 14, t: 10, w: 12, h: 12, bg: L.glow ? '#ff9a4e' : undefined, sh: L.glow ? '0 0 10px 3px rgba(255,130,50,.5)' : undefined }] });
+    this.bldg(faces, flats, L, -60, 218, 70, 58, 34, '#43362f', '#241d1a', { winS: [{ u: 12, t: 9, w: 11, h: 11 }] });
+    this.bldg(faces, flats, L, 218, 60, 82, 66, 44, '#3a2f2b', '#1f1a18', { winS: [{ u: 15, t: 12, w: 12, h: 12 }] });
+    const orb = (x, y, z, s) => bills.push(this.bill(x, y, z, rot, [{ k: 'p0', txt: '', style: { position: 'absolute', left: (-s / 2) + 'px', top: (-s - 2) + 'px', width: s + 'px', height: s + 'px', borderRadius: '50%', background: '#ffb066', boxShadow: '0 0 18px 8px rgba(255,120,40,.5)' } }]));
+    orb(30, -140, 142, 9);
+    orb(93, -143, 126, 8);
+    orb(-168, 40, 84, 7);
+    const brazier = (x, y, z) => {
+      const P = [
+        { k: 'p0', txt: '', style: { position: 'absolute', left: '-2px', top: '-20px', width: '4px', height: '21px', background: '#3a322c' } },
+        { k: 'p1', txt: '', style: { position: 'absolute', left: '-6px', top: '-27px', width: '12px', height: '8px', background: '#4a3e34', borderRadius: '2px 2px 6px 6px' } },
+        { k: 'p2', txt: '', style: { position: 'absolute', left: '-4px', top: '-33px', width: '8px', height: '8px', borderRadius: '50%', background: '#ff9a4e', boxShadow: '0 0 14px 6px rgba(255,120,40,.45)' } }
+      ];
+      bills.push(this.bill(x, y, z, rot, P));
+    };
+    brazier(-90, 130, 26); brazier(60, 90, 0); brazier(140, -40, 54);
+    return { faces, flats, bills, ground: { position: 'absolute', left: '-430px', top: '-430px', width: '860px', height: '860px', borderRadius: '38% 52% 40% 48%', background: 'radial-gradient(closest-side at 50% 45%,' + this.mix(L.gA, L.tint, L.ta * .7) + ',' + this.mix(L.gB, L.tint, L.ta * .7) + ' 96%)', boxShadow: '0 0 0 6px rgba(0,0,0,.2)' } };
+  }
+
+  skeinGeo(L, rot) {
+    const faces = [], flats = [], bills = [];
+    const streaks = [[-300, 60, 180, 7], [-120, -120, 150, 6], [180, 180, 160, 7], [230, -60, 130, 6], [-260, 220, 140, 6]];
+    streaks.forEach((s, i) => this.flat(flats, L, s[0], s[1], s[2], s[3], 'rgba(255,255,255,.16)', { r: '4px', z: .5, rot: i % 2 ? -18 : 12 }));
+    this.box(faces, L, -250, -60, 200, 170, 22, '#84887c');
+    this.box(faces, L, 40, -220, 150, 130, 22, '#84887c');
+    this.box(faces, L, 110, 80, 115, 95, 20, '#7e8177');
+    this.bldg(faces, flats, L, -225, -35, 78, 62, 38, '#d8d5c8', '#5c6b5e', { z0: 22, winS: [{ u: 14, t: 11, w: 11, h: 12 }] });
+    this.bldg(faces, flats, L, -130, 20, 64, 56, 32, '#cfccbe', '#5c6b5e', { z0: 22, winS: [{ u: 11, t: 9, w: 10, h: 11 }] });
+    this.bldg(faces, flats, L, 55, -200, 66, 56, 34, '#d8d5c8', '#5c6b5e', { z0: 22, winS: [{ u: 12, t: 10, w: 10, h: 11 }] });
+    this.box(faces, L, 128, -190, 30, 30, 92, '#c9c6b8', { z0: 22, winS: [{ u: 8, t: 62, w: 14, h: 20, bg: '#2e2a26', r: '7px 7px 0 0' }, { u: 12, t: 68, w: 7, h: 7, bg: '#b39a6b', r: '50%', sh: L.glow ? '0 0 10px 3px rgba(200,170,100,.5)' : 'none' }] });
+    this.box(faces, L, 121, -197, 44, 44, 10, '#5c6b5e', { z0: 114 });
+    this.bldg(faces, flats, L, 135, 100, 68, 58, 34, '#d5d2c4', '#5c6b5e', { z0: 20, winS: [{ u: 12, t: 10, w: 10, h: 11 }] });
+    this.box(faces, L, -48, -30, 92, 16, 5, '#9a8a6a', { z0: 13 });
+    this.box(faces, L, 44, -142, 16, 118, 5, '#9a8a6a', { z0: 13 });
+    this.box(faces, L, 60, 30, 16, 56, 5, '#9a8a6a', { z0: 13 });
+    this.box(faces, L, 76, 70, 40, 16, 5, '#9a8a6a', { z0: 13 });
+    this.bldg(faces, flats, L, -100, 150, 70, 58, 32, '#d8d5c8', '#5c6b5e', { z0: 16, ov: 6 });
+    this.box(faces, L, -96, 154, 4, 4, 16, '#6a5a44');
+    this.box(faces, L, -38, 154, 4, 4, 16, '#6a5a44');
+    this.box(faces, L, -96, 200, 4, 4, 16, '#6a5a44');
+    this.box(faces, L, -38, 200, 4, 4, 16, '#6a5a44');
+    const buoy = (x, y) => bills.push(this.bill(x, y, 0, rot, [
+      { k: 'p0', txt: '', style: { position: 'absolute', left: '-5px', top: '-12px', width: '10px', height: '12px', background: '#b3543f', borderRadius: '50% 50% 30% 30%' } },
+      { k: 'p1', txt: '', style: { position: 'absolute', left: '-1.5px', top: '-17px', width: '3px', height: '6px', background: '#4a4640' } }
+    ]));
+    buoy(-40, 120); buoy(250, -140); buoy(-190, -160); buoy(60, 220);
+    bills.push(this.lamp(L, -170, -48, 22, rot, 'rgb(201,174,111)'));
+    bills.push(this.lamp(L, 70, -155, 22, rot, 'rgb(201,174,111)'));
+    bills.push(this.lamp(L, 150, 92, 20, rot, 'rgb(201,174,111)'));
+    return { faces, flats, bills, ground: { position: 'absolute', left: '-450px', top: '-450px', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(closest-side at 48% 45%,' + this.mix(L.gA, L.tint, L.ta * .7) + ',' + this.mix(L.gB, L.tint, L.ta * .7) + ' 96%)', boxShadow: '0 0 0 8px rgba(255,255,255,.08)' } };
+  }
+
+  down(k) {
+    return e => {
+      this._drag = { k, x0: e.clientX, base: this.state.rot[k] };
+      this.setState({ drag: k });
+    };
+  }
+
+  panelFor(worldK) {
+    const selK = this.state.sel[worldK];
+    if (!selK) return null;
+    const d = this.NPCS()[worldK].find(x => x.k === selK);
+    if (!d) return null;
+    const act = d.acts[Math.floor(this.state.step / 3 + d.off) % d.acts.length];
+    return {
+      init: d.name[0], name: d.name, ep: d.ep, story: d.story, act,
+      rels: d.rels.map((r, i) => ({ k: 'r' + i, n: r[0], t: r[1] })),
+      meta: d.meta,
+      close: () => this.setState(s => ({ sel: { ...s.sel, [worldK]: null } }))
+    };
+  }
+
+  scene(k, chrome) {
+    const time = this.state.time[k];
+    const L = this.LIGHTS()[k][time];
+    const rot = this.state.rot[k];
+    const dragging = this.state.drag === k;
+    const geo = k === 'f' ? this.fableGeo(L, rot) : (k === 'c' ? this.cinderGeo(L, rot) : this.skeinGeo(L, rot));
+    const npcs = this.NPCS()[k].map(d => this.npcBill(k, d, rot, dragging));
+    const times = this.TIMES()[k];
+    const timeBtns = times.map(([key, label]) => ({
+      k: key, label,
+      onClick: () => this.setState(s => ({ time: { ...s.time, [k]: key } })),
+      style: {
+        fontFamily: '"IBM Plex Mono",monospace', fontSize: '8.5px', letterSpacing: '.4px', padding: '5px 8px', cursor: 'pointer', userSelect: 'none', borderRadius: chrome.btnR, transition: 'background .2s,color .2s',
+        background: key === time ? chrome.acc : 'transparent',
+        color: key === time ? '#221808' : chrome.dim,
+        fontWeight: key === time ? 500 : 400
+      }
+    }));
+    const lines = this.TICKERS()[k];
+    const panel = this.panelFor(k);
+    const label = (times.find(x => x[0] === time) || times[0])[1];
+    const sc = k === 'f' ? .88 : (k === 'c' ? .9 : .85);
+    const out = {
+      down: this.down(k),
+      world: { position: 'absolute', left: '50%', top: '54%', width: 0, height: 0, transformStyle: 'preserve-3d', transform: 'scale(' + sc + ') rotateX(55deg) rotateZ(' + (45 + rot) + 'deg)' },
+      ground: geo.ground,
+      sky: { position: 'absolute', inset: 0, background: L.sky },
+      glowOv: { position: 'absolute', inset: 0, background: L.glowOv, pointerEvents: 'none' },
+      fog: { position: 'absolute', inset: 0, pointerEvents: 'none', opacity: L.fogOp, background: 'linear-gradient(180deg,' + L.fogC + ' 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,0) 58%,' + L.fogC + ' 100%)' },
+      faces: geo.faces, flats: geo.flats, bills: geo.bills, npcs, timeBtns,
+      clock: this.CLOCKS()[k] + ' · ' + label.toUpperCase(),
+      ticker: lines[Math.floor(this.state.step / 2) % lines.length],
+      hasPanel: !!panel, panel: panel || {},
+      hasCard: k === 'f' && this.state.card,
+      cardClose: () => this.setState({ card: false })
+    };
+    if (L.ui) { out.uiFg = L.ui.fg; out.uiDim = L.ui.dim; out.uiChip = L.ui.chip; out.uiLine = L.ui.line; }
+    return out;
+  }
+
+  renderVals() {
+    return {
+      fS: this.scene('f', { acc: '#e8b45e', dim: 'rgba(247,236,212,.6)', btnR: '5px' }),
+      cS: this.scene('c', { acc: '#ff8c42', dim: 'rgba(242,227,211,.55)', btnR: '2px' }),
+      sS: this.scene('s', { acc: '#c9ae6f', dim: 'rgba(150,160,155,.9)', btnR: '10px' }),
+      dragMove: e => {
+        const d = this._drag;
+        if (!d) return;
+        const nr = Math.max(-24, Math.min(24, d.base + (e.clientX - d.x0) * 0.09));
+        this.setState(s => ({ rot: { ...s.rot, [d.k]: nr } }));
+      },
+      dragEnd: () => { if (this._drag) { this._drag = null; this.setState({ drag: null }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

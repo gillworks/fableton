@@ -1,6 +1,6 @@
 # Design language — charter-themed dioramas
 
-Canonical mockups: **"Fableton Worlds.dc.html"** in the [Claude Design project](https://claude.ai/design/p/2f373659-85a5-43c5-882d-453cef794ee6?file=Fableton+Worlds.dc.html) (export lands in `docs/design/` when synced). Decision record: [ADR-0003](adr/0003-design-language.md). Concepts approved 2026-07-02 across three worlds — Fableton (warm storybook), Cindervault (forge-dark), Skeinsea (mist-pale) — same grammar, radically different skins. That is the point: **the UI theme is charter data.**
+Canonical mockups: [`design/Fableton Worlds.dc.html`](design/Fableton%20Worlds.dc.html) (open in a browser — pixel reference for all three worlds; source project on [Claude Design](https://claude.ai/design/p/2f373659-85a5-43c5-882d-453cef794ee6?file=Fableton+Worlds.dc.html)). Decision record: [ADR-0003](adr/0003-design-language.md). Concepts approved 2026-07-02 across three worlds — Fableton (warm storybook), Cindervault (forge-dark), Skeinsea (mist-pale) — same grammar, radically different skins. That is the point: **the UI theme is charter data.**
 
 ## The split (mirrors the engine/world split)
 
