@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# Caddy plays exactly the role vite's dev config mirrors (client/vite.config.ts):
+# client bundle + /world chunk JSON + /assets kit, proxying /api and /sim.
+:80 {
+	handle /api/* {
+		reverse_proxy world:8091
+	}
+	handle /sim* {
+		reverse_proxy world:8090
+	}
+	handle_path /world/* {
+		root * /world
+		file_server
+	}
+	handle /assets/* {
+		root * /srv
+		file_server
+	}
+	handle {
+		root * /srv/dist
+		try_files {path} /index.html
+		file_server
+	}
+}
