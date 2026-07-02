@@ -27,12 +27,24 @@ Pre-v1. See [docs/v1.md](docs/v1.md) for the scope cut and definition of done, a
 | [`client/`](client/) | Three.js browser client (explore / walk / director cameras) |
 | [`studio/`](studio/) | The agent studio (Phase B) — the pantheon that grows worlds |
 | [`charters/`](charters/) | Charter template + example charters |
+| [`assets/`](assets/) | Licensed low-poly kit + the asset registry ([docs/assets.md](docs/assets.md)) |
 | [`deploy/`](deploy/) | One-command Docker Compose install |
 | [`docs/`](docs/) | Specs and ADRs |
 
 ## Quickstart
 
 Coming with v1: `docker compose up` + a charter file → an explorable world at localhost. The acceptance bar is a fresh machine to a living world in under 15 minutes.
+
+Working on the engine today (Node ≥ 20, pnpm):
+
+```sh
+pnpm install
+pnpm typecheck && pnpm test   # CI's first two gates
+pnpm validate                 # the world-data gate: sample world + asset registry
+
+# Found a world of your own (bring your own key: cp .env.example .env, fill it in)
+cd studio && pnpm found --prompt "<one-paragraph premise>" --out ../charters/<name>
+```
 
 ## License
 
