@@ -58,6 +58,12 @@ async function testInstall() {
       try {
         const [page, manifest] = await Promise.all([fetch(base), fetch(`${base}/world/manifest.json`)]);
         if (page.ok && manifest.ok) {
+          // "Explorable" means the client actually boots: its bundle must
+          // resolve too (a route collision once served 200 HTML + 404 JS).
+          const html = await page.text();
+          const src = /src="([^"]+\.js)"/.exec(html)?.[1];
+          const bundle = src ? await fetch(`${base}${src}`) : { ok: false };
+          if (!bundle.ok) throw new Error(`client bundle ${src ?? '(none)'} unreachable`);
           const doc = await manifest.json();
           const elapsed = ((Date.now() - started) / 1000).toFixed(0);
           return record(name, 'PASS', `world "${doc.world}" explorable in ${elapsed}s (budget 900s)`);

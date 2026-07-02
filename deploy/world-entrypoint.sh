@@ -16,7 +16,9 @@ if [ ! -f "/app/$CHARTER" ]; then
 fi
 
 if [ ! -f "$WORLD/manifest.json" ]; then
-  if [ "$CHARTER" = "charters/_template/charter.yaml" ]; then
+  # The flagship (and the template, which shares its identity) boots the
+  # hand-authored starter world — residents included.
+  if [ "$CHARTER" = "charters/_template/charter.yaml" ] || [ "$CHARTER" = "charters/fableton/charter.yaml" ]; then
     echo "founding the flagship from its hand-authored starter world"
     cp -R /app/engine/test/fixtures/sample-world/. "$WORLD/"
   else

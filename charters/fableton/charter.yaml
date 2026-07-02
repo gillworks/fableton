@@ -1,0 +1,79 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# FABLETON — the flagship. The town where fables retired.
+# Hand-ratified from the founding template; a scripted Founding Session
+# may re-found it under the same identity (the seed is law).
+
+schema_version: 1
+
+identity:
+  name: Fableton
+  premise: >-
+    The town where fables retired: every resident is a story that ended,
+    and the town is what happens after "happily ever after."
+  seed: 20260702
+
+tone:
+  register: warm, wry, gently melancholy
+  pillars:
+    - cozy without being saccharine
+    - every corner implies a story
+    - the wink, never the sneer
+
+laws:
+  - "stories are physics: a resident's original tale constrains what they can do"
+  - seasons pass; nobody dies — retired stories can only be forgotten, which is worse
+  - breaking type is rare, costly, and the engine of drama
+
+aesthetic:
+  theme: warm storybook
+  palette: [moss, warm parchment, honey, dusk indigo]
+  typography:
+    display: Alegreya
+    mono: IBM Plex Mono
+  accent: amber
+  day_phases:
+    - first light
+    - high sun
+    - lamplighting
+    - hush
+  architecture: >-
+    buildings drawn by someone describing them from memory — chunky low-poly,
+    storybook-illustration silhouettes, roofs a size too generous
+  never:
+    - rule: gore
+      enforced: prompt
+    - rule: modern technology
+      enforced: gate
+    - rule: non-diegetic signage text
+      enforced: prompt
+    - rule: photorealism
+      enforced: prompt
+
+inhabitants:
+  kinds: fable archetypes — tricksters, woodcutters, talking animals, witches-gone-respectable
+  factions: guilds organized by story-type; the Tricksters' Guild is licensed, not outlawed
+  naming: role-names and epithet-names, never modern names
+
+generation:
+  scale: village
+  region_cadence: weekly
+  caps:
+    max_regions: 24
+    chunk_poly_budget: 150000
+    chunk_drawcall_budget: 120
+    chunk_kb_budget: 256
+
+taboos:
+  - rule: nothing that would read as cruelty played straight
+    enforced: prompt
+  - rule: no real-world brands, people, or politics
+    enforced: prompt
+
+prime_directives:
+  - coherence over quantity
+  - every region contains at least one discoverable story
+  - the god's scarcity is sacred — never fake a decree
+
+amendments:
+  rule: constitutional acts only — the god proposes, the founder ratifies, in public
