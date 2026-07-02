@@ -9,6 +9,7 @@
   "scripts": {
     "typecheck": "pnpm -r --if-present run typecheck",
     "test": "pnpm -r --if-present run test",
-    "validate": "pnpm -r --if-present run validate"
+    "validate": "pnpm -r --if-present run validate",
+    "accept": "node acceptance/run.mjs"
   }
 }
