@@ -24,7 +24,7 @@ import type { SimState } from '../core/interpolator.js';
 import { ChunkStreamer } from '../core/streamer.js';
 import { phaseLighting, type WorldTheme } from '../core/theme.js';
 import { fetchChunk, type WorldBundle } from '../core/loadWorld.js';
-import type { Chunk, WorldInfo, WorldManifest } from '../core/types.js';
+import type { Chunk } from '../core/types.js';
 
 export interface WorldSceneProps {
   bundle: WorldBundle;
@@ -32,12 +32,13 @@ export interface WorldSceneProps {
   sim: SimState;
   theme: WorldTheme;
   phaseIndex: number;
+  onSelect: (npcId: string) => void;
 }
 
 const damp = (from: number, to: number, dt: number): number =>
   from + (to - from) * Math.min(1, dt * 3);
 
-export function WorldScene({ bundle, pieces, sim, theme, phaseIndex }: WorldSceneProps): ReactElement {
+export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect }: WorldSceneProps): ReactElement {
   const worldRef = useRef<Group>(new Group());
   const chunkGroups = useRef(new Map<string, Group>());
   const streamer = useMemo(() => {
@@ -93,7 +94,7 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex }: WorldScen
         <meshLambertMaterial color={new Color(theme.paletteHex[1] ?? theme.paletteHex[0]).multiplyScalar(0.55)} />
       </mesh>
       <primitive object={worldRef.current} />
-      <Npcs sim={sim} manifest={bundle.manifest} info={bundle.info} theme={theme} />
+      <Npcs sim={sim} theme={theme} onSelect={onSelect} />
       <OrbitControls
         target={[coin.center[0], 0.5, coin.center[1]]}
         enableDamping
@@ -107,10 +108,18 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex }: WorldScen
   );
 }
 
-function Npcs({ sim, theme }: { sim: SimState; manifest: WorldManifest; info: WorldInfo; theme: WorldTheme }): ReactElement {
+function Npcs({ sim, theme, onSelect }: { sim: SimState; theme: WorldTheme; onSelect: (id: string) => void }): ReactElement {
   const [ids, setIds] = useState<string[]>([]);
   const [activities, setActivities] = useState<Record<string, string>>({});
+  const [hovered, setHovered] = useState<string | null>(null);
   const meshes = useRef(new Map<string, Mesh>());
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto';
+    return () => {
+      document.body.style.cursor = 'auto';
+    };
+  }, [hovered]);
 
   useEffect(() => {
     sim.onActivity((npc, activity) => {
@@ -143,6 +152,15 @@ function Npcs({ sim, theme }: { sim: SimState; manifest: WorldManifest; info: Wo
             }}
             geometry={geometry}
             castShadow
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(id);
+            }}
+            onPointerOver={(e) => {
+              e.stopPropagation();
+              setHovered(id);
+            }}
+            onPointerOut={() => setHovered((h) => (h === id ? null : h))}
           >
             <meshLambertMaterial color={colorFor(id)} />
             <mesh geometry={hatGeometry} position={[0, 0.62, 0]}>

@@ -10,6 +10,8 @@ Rendering-critical logic lives in plain TS under [`src/core/`](src/core/) — ch
 
 The UI theme is charter data: palette/accent/typography arrive from `/api/world` and map through the engine's canonical name→color hash (`@fableton/engine/color`). Phase changes relight (sun, gradient, fog) — never relayout.
 
+Click an NPC to open the **inspect panel** (docs/design.md anatomy): lore from `/api/npcs/:id`, the activity pill fed live by the sim stream. Parchment-cream in every world — the panel is the reader's lamplight.
+
 ## Dev
 
 ```sh

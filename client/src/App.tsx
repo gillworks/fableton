@@ -11,6 +11,7 @@ import type { AssetPiece } from './core/chunkMeshes.js';
 import { SimState, connectSim } from './core/interpolator.js';
 import { loadWorld, type WorldBundle } from './core/loadWorld.js';
 import { deriveTheme, phaseLighting } from './core/theme.js';
+import { InspectPanel } from './scene/InspectPanel.js';
 import { WorldScene } from './scene/WorldScene.js';
 
 export function App(): ReactElement {
@@ -18,6 +19,7 @@ export function App(): ReactElement {
   const [pieces, setPieces] = useState<Map<string, AssetPiece[]> | null>(null);
   const [phase, setPhase] = useState(0);
   const [failure, setFailure] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
   const sim = useMemo(() => new SimState(), []);
 
   useEffect(() => {
@@ -71,9 +73,20 @@ export function App(): ReactElement {
         shadows
         gl={{ alpha: true, antialias: true }}
         camera={{ position: eye, fov: 42 }}
+        onPointerMissed={() => setSelected(null)}
       >
-        <WorldScene bundle={bundle} pieces={pieces} sim={sim} theme={theme} phaseIndex={phase} />
+        <WorldScene
+          bundle={bundle}
+          pieces={pieces}
+          sim={sim}
+          theme={theme}
+          phaseIndex={phase}
+          onSelect={setSelected}
+        />
       </Canvas>
+      {selected && (
+        <InspectPanel npcId={selected} sim={sim} theme={theme} onClose={() => setSelected(null)} />
+      )}
     </div>
   );
 }
