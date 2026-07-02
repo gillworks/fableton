@@ -9,20 +9,17 @@
 # Engine-canon (do NOT define here): every world has a god named Fable that
 # speaks through the Chronicle. Those mechanics belong to the engine.
 #
-# Schema: CharterSchema in @fableton/engine (docs/adr/0001-charter-schema.md).
-# Authored as YAML (comments survive forking); the engine parses it to
-# canonical JSON via parseCharter().
+# Schema: docs/adr/0001-charter-schema.md (schema_version 0 = pre-v1 draft;
+# expect migration when ADR-0001 lands).
 
-schema_version: 1
+schema_version: 0
 
 identity:
   name: Fableton                      # EXAMPLE — your world's name
   premise: >-                         # EXAMPLE — one line, the whole world in a sentence
     The town where fables retired: every resident is a story that ended,
     and the town is what happens after "happily ever after."
-  seed: 20260702                      # fixes the structural bones (terrain, layout);
-                                      # one integer 0..2^32-1 — subsystems derive their
-                                      # own sub-seeds from it, never author them
+  seed: 20260702                      # fixes the structural bones (terrain, layout)
 
 tone:
   register: warm, wry, gently melancholy          # EXAMPLE
@@ -51,19 +48,11 @@ aesthetic:                            # theme tokens skin the whole client — s
   architecture: >-                                      # EXAMPLE
     buildings drawn by someone describing them from memory — chunky low-poly,
     storybook-illustration silhouettes
-  never:                              # the hard never-list, each marked with its channel:
-                                      #   enforced: gate   — machine-checked by CI (matched
-                                      #                      against asset-registry tags)
-                                      #   enforced: prompt — law in every agent's context,
-                                      #                      caught by the taste audit
-    - rule: gore
-      enforced: prompt
-    - rule: modern technology
-      enforced: gate
-    - rule: non-diegetic signage text
-      enforced: prompt
-    - rule: photorealism
-      enforced: prompt
+  never:                              # the hard never-list; CI enforces what it can
+    - gore
+    - modern technology
+    - non-diegetic signage text
+    - photorealism
 
 inhabitants:
   kinds: fable archetypes — tricksters, woodcutters, talking animals, witches-gone-respectable  # EXAMPLE
@@ -78,11 +67,9 @@ generation:                           # read by the deterministic generator
     chunk_poly_budget: 150000
     chunk_drawcall_budget: 120
 
-taboos:                               # hard guardrails; same enforced: gate|prompt marking as aesthetic.never
-  - rule: nothing that would read as cruelty played straight   # EXAMPLE
-    enforced: prompt
-  - rule: no real-world brands, people, or politics            # EXAMPLE
-    enforced: prompt
+taboos:                               # hard guardrails; violating these fails the gate or the audit
+  - nothing that would read as cruelty played straight   # EXAMPLE
+  - no real-world brands, people, or politics            # EXAMPLE
 
 prime_directives:                     # what the studio optimizes for in THIS world
   - coherence over quantity                                        # EXAMPLE
