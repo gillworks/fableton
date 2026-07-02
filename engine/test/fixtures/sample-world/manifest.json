@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "world": "Fableton",
+  "seed": 20260702,
+  "chunks": [
+    { "id": "town-square", "path": "chunks/town-square.json", "origin": [0, 0], "adjacent": ["orchard-row", "mill-lane"] },
+    { "id": "orchard-row", "path": "chunks/orchard-row.json", "origin": [16, 0], "adjacent": ["town-square"] },
+    { "id": "mill-lane", "path": "chunks/mill-lane.json", "origin": [-16, 0], "adjacent": ["town-square"] }
+  ]
+}

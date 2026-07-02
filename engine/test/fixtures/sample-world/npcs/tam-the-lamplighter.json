@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "tam-the-lamplighter",
+  "identity": {
+    "name": "Tam",
+    "kind": "woodcutter's-son-turned-lamplighter",
+    "story": "His tale ended one line before the ever after; he lights the lamps so nobody else's ending gets lost in the dark."
+  },
+  "lore": ["the-unfinished-line"],
+  "relationships": [
+    { "to": "greta-the-baker", "kind": "first customer, every morning" }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "a lamplighter's day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "sequence",
+          "label": "morning rounds",
+          "children": [
+            { "type": "move", "label": "crossing to the bakery", "to": "bakery-door" },
+            { "type": "interact", "label": "buying the first loaf", "with": "bakery-oven", "duration_s": 20 }
+          ]
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": { "type": "idle", "label": "dozing on the well's rim", "duration_s": 180 }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "sequence",
+          "label": "the lighting of the lamps",
+          "children": [
+            { "type": "move", "label": "walking his lamp route", "to": "lamp-corner" },
+            { "type": "interact", "label": "lighting the square lamp", "with": "lamp-post", "duration_s": 15 }
+          ]
+        }
+      },
+      {
+        "phase": "hush",
+        "child": { "type": "idle", "label": "watching over the lit square", "duration_s": 240 }
+      }
+    ]
+  }
+}

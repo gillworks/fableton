@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "orchard-row",
+  "terrain": {
+    "biome": "orchard",
+    "grid_size": 3,
+    "heights": [0.1, 0.3, 0.5, 0, 0.2, 0.4, 0, 0.1, 0.3]
+  },
+  "palette": ["#7a8c5a", "#9db36b", "#c9973f", "#e8d8b8"],
+  "props": [
+    { "asset": "apple-tree", "position": [5, 0.2, 5] },
+    { "asset": "apple-tree", "position": [10, 0.3, 6], "rotation_y": 0.7854, "scale": 0.9 },
+    { "asset": "apple-tree", "position": [7, 0.2, 11], "rotation_y": 2.3562 }
+  ],
+  "nav": {
+    "nodes": [
+      { "id": "orchard-path", "position": [8, 0.2, 8] },
+      { "id": "old-apple", "position": [5, 0.2, 5] },
+      { "id": "west-gate", "position": [1, 0.1, 8] }
+    ],
+    "edges": [
+      ["orchard-path", "old-apple"],
+      ["orchard-path", "west-gate"]
+    ],
+    "portals": [{ "node": "west-gate", "to_chunk": "town-square" }]
+  },
+  "npcs": ["reynard-the-retired"],
+  "lore": []
+}

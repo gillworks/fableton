@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "reynard-the-retired",
+  "identity": {
+    "name": "Reynard",
+    "kind": "trickster-fox, retired",
+    "story": "Talked his way out of every story he was ever in; now he owns an orchard and insists the apples are honestly come by."
+  },
+  "lore": ["the-last-clever-bargain"],
+  "relationships": [
+    { "to": "greta-the-baker", "kind": "owes her a tab and a story" }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "a fox's retirement",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": { "type": "idle", "label": "napping under the old apple", "duration_s": 200 }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "tending the orchard, allegedly",
+          "children": [
+            { "type": "move", "label": "sauntering down the rows", "to": "orchard-path" },
+            { "type": "interact", "label": "counting apples he did not steal", "with": "apple-tree", "duration_s": 90 }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "sequence",
+          "label": "the evening visit",
+          "children": [
+            { "type": "move", "label": "slipping toward the square", "to": "west-gate" },
+            { "type": "idle", "label": "composing an excuse for Greta", "duration_s": 45 }
+          ]
+        }
+      },
+      {
+        "phase": "hush",
+        "child": { "type": "idle", "label": "sleeping with one eye open", "duration_s": 240 }
+      }
+    ]
+  }
+}
