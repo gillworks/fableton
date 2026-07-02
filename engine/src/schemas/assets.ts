@@ -18,6 +18,9 @@ export const AssetRegistryEntrySchema = z.strictObject({
   id: idSlug,
   name: nonEmpty,
   path: nonEmpty,
+  // Triangle count of the mesh; the CI gate sums placements against
+  // charter generation.caps.chunk_poly_budget.
+  poly_count: z.number().int().positive(),
   tags: z.array(nonEmpty),
   license: AssetLicenseSchema,
 });

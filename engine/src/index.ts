@@ -55,3 +55,4 @@ export {
   type Npc,
   type NpcRelationship,
 } from './schemas/npc.js';
+export { validateWorld, type Violation, type WorldDocs } from './validate/validateWorld.js';

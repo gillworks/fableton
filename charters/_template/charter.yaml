@@ -77,6 +77,7 @@ generation:                           # read by the deterministic generator
     max_regions: 24
     chunk_poly_budget: 150000
     chunk_drawcall_budget: 120
+    chunk_kb_budget: 256              # serialized chunk JSON, KiB (chunks are CDN-cached)
 
 taboos:                               # hard guardrails; same enforced: gate|prompt marking as aesthetic.never
   - rule: nothing that would read as cruelty played straight   # EXAMPLE

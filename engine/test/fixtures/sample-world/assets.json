@@ -5,43 +5,90 @@
       "id": "cottage-a",
       "name": "Cottage A",
       "path": "assets/kits/kenney-fantasy-town/cottage-a.glb",
-      "tags": ["building", "storybook"],
-      "license": { "id": "CC0-1.0", "source": "Kenney Fantasy Town Kit", "attribution": "Kenney.nl" }
+      "poly_count": 320,
+      "tags": [
+        "building",
+        "storybook"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Fantasy Town Kit",
+        "attribution": "Kenney.nl"
+      }
     },
     {
       "id": "bakery-oven",
       "name": "Bakery oven",
       "path": "assets/kits/kenney-fantasy-town/oven.glb",
-      "tags": ["building", "hearth"],
-      "license": { "id": "CC0-1.0", "source": "Kenney Fantasy Town Kit", "attribution": "Kenney.nl" }
+      "poly_count": 180,
+      "tags": [
+        "building",
+        "hearth"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Fantasy Town Kit",
+        "attribution": "Kenney.nl"
+      }
     },
     {
       "id": "well",
       "name": "Village well",
       "path": "assets/kits/kenney-fantasy-town/well.glb",
-      "tags": ["landmark"],
-      "license": { "id": "CC0-1.0", "source": "Kenney Fantasy Town Kit", "attribution": "Kenney.nl" }
+      "poly_count": 150,
+      "tags": [
+        "landmark"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Fantasy Town Kit",
+        "attribution": "Kenney.nl"
+      }
     },
     {
       "id": "lamp-post",
       "name": "Lamp post",
       "path": "assets/kits/kenney-fantasy-town/lamp-post.glb",
-      "tags": ["light", "street"],
-      "license": { "id": "CC0-1.0", "source": "Kenney Fantasy Town Kit", "attribution": "Kenney.nl" }
+      "poly_count": 90,
+      "tags": [
+        "light",
+        "street"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Fantasy Town Kit",
+        "attribution": "Kenney.nl"
+      }
     },
     {
       "id": "apple-tree",
       "name": "Old apple tree",
       "path": "assets/kits/kenney-nature/apple-tree.glb",
-      "tags": ["tree", "orchard"],
-      "license": { "id": "CC0-1.0", "source": "Kenney Nature Kit", "attribution": "Kenney.nl" }
+      "poly_count": 240,
+      "tags": [
+        "tree",
+        "orchard"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Nature Kit",
+        "attribution": "Kenney.nl"
+      }
     },
     {
       "id": "windmill",
       "name": "Windmill",
       "path": "assets/kits/kenney-fantasy-town/windmill.glb",
-      "tags": ["building", "landmark"],
-      "license": { "id": "CC0-1.0", "source": "Kenney Fantasy Town Kit", "attribution": "Kenney.nl" }
+      "poly_count": 600,
+      "tags": [
+        "building",
+        "landmark"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Fantasy Town Kit",
+        "attribution": "Kenney.nl"
+      }
     }
   ]
 }
