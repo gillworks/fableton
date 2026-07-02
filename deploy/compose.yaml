@@ -1,0 +1,57 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# One command founds a world: `docker compose up` (from this directory)
+# → explorable at http://localhost:${FABLETON_PORT:-8080}.
+#
+# world runs sim + api in one process — they share the live WorldSim so
+# behavior-tree updates hot-swap (the L1 seam); they split into separate
+# services when Phase B gives them separate lifecycles. postgres carries
+# world-state/chronicle/queue from Phase B on; nothing consumes it in v1
+# but the stack ships with it per deploy/README.md — swap in a managed
+# provider by setting DATABASE_URL (the in-stack one can be ignored or
+# stopped; nothing depends on it).
+name: fableton
+services:
+  world:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      target: world
+    environment:
+      FABLETON_CHARTER: ${FABLETON_CHARTER:-charters/_template/charter.yaml}
+      DATABASE_URL: ${DATABASE_URL:-postgres://fableton:${POSTGRES_PASSWORD:-fableton}@postgres:5432/fableton}
+    volumes:
+      - world-data:/world
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: fableton
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fableton}
+      POSTGRES_DB: fableton
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U fableton']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  caddy:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      target: static
+    ports:
+      - '${FABLETON_PORT:-8080}:80'
+    volumes:
+      - world-data:/world:ro
+    depends_on:
+      - world
+    restart: unless-stopped
+
+volumes:
+  world-data:
+  pg-data:

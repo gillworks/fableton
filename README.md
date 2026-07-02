@@ -33,7 +33,11 @@ Pre-v1. See [docs/v1.md](docs/v1.md) for the scope cut and definition of done, a
 
 ## Quickstart
 
-Coming with v1: `docker compose up` + a charter file → an explorable world at localhost. The acceptance bar is a fresh machine to a living world in under 15 minutes.
+```sh
+cd deploy && docker compose up -d   # → explorable world at http://localhost:8080
+```
+
+A charter file + one command → a living world ([deploy/README.md](deploy/README.md)). Swap `FABLETON_CHARTER` to found a different one.
 
 Working on the engine today (Node ≥ 20, pnpm):
 
