@@ -58,3 +58,14 @@ export {
 export { validateWorld, type Violation, type WorldDocs } from './validate/validateWorld.js';
 export { deriveSeed, mulberry32, pick, randInt, type Rng } from './generate/rng.js';
 export { generateWorld, type GeneratedWorld } from './generate/generateWorld.js';
+export { TICK_HZ, clockAt, type ClockState } from './sim/clock.js';
+export { NpcRuntime, type NpcState } from './sim/npcRuntime.js';
+export {
+  WorldSim,
+  type Delta,
+  type NpcDelta,
+  type SimEvent,
+  type Snapshot,
+  type WorldSimOptions,
+} from './sim/worldSim.js';
+export { startSimServer, type SimServer } from './sim/server.js';
