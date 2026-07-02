@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "engine-serve",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "engine", "serve"],
+      "port": 8091
+    },
+    {
+      "name": "client",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "client", "dev"],
+      "port": 8080
+    }
+  ]
+}

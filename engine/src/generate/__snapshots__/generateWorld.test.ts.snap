@@ -99,7 +99,7 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
   ],
   "props": [
     {
-      "asset": "windmill",
+      "asset": "tree-high-round",
       "position": [
         4.257,
         0,
@@ -109,7 +109,7 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
       "scale": 1.075
     },
     {
-      "asset": "well",
+      "asset": "lantern",
       "position": [
         8.13,
         0,
@@ -119,7 +119,7 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
       "scale": 1.003
     },
     {
-      "asset": "apple-tree",
+      "asset": "tree-crooked",
       "position": [
         6.69,
         0,
@@ -129,7 +129,7 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
       "scale": 1.085
     },
     {
-      "asset": "lamp-post",
+      "asset": "tree",
       "position": [
         7.231,
         0,
@@ -139,7 +139,7 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
       "scale": 0.998
     },
     {
-      "asset": "cottage-a",
+      "asset": "cart",
       "position": [
         4.867,
         0,
@@ -149,7 +149,7 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
       "scale": 0.943
     },
     {
-      "asset": "cottage-a",
+      "asset": "cart",
       "position": [
         4.909,
         0,
@@ -159,7 +159,7 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
       "scale": 0.923
     },
     {
-      "asset": "cottage-a",
+      "asset": "cart",
       "position": [
         5.573,
         0,

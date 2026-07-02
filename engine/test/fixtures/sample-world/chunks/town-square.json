@@ -4,34 +4,138 @@
   "terrain": {
     "biome": "village-green",
     "grid_size": 3,
-    "heights": [0, 0, 0, 0, 0.2, 0, 0, 0, 0.1]
+    "heights": [
+      0,
+      0,
+      0,
+      0,
+      0.2,
+      0,
+      0,
+      0,
+      0.1
+    ]
   },
-  "palette": ["#e8d8b8", "#7a8c5a", "#c9973f", "#4a5d7a"],
+  "palette": [
+    "#e8d8b8",
+    "#7a8c5a",
+    "#c9973f",
+    "#4a5d7a"
+  ],
   "props": [
-    { "asset": "well", "position": [8, 0.2, 8] },
-    { "asset": "bakery-oven", "position": [3, 0, 4], "rotation_y": 1.5708 },
-    { "asset": "cottage-a", "position": [12, 0, 3], "rotation_y": 3.1416, "scale": 1.1 },
-    { "asset": "lamp-post", "position": [7, 0, 10] }
+    {
+      "asset": "fountain-round",
+      "position": [
+        8,
+        0.2,
+        8
+      ]
+    },
+    {
+      "asset": "stall-red",
+      "position": [
+        3,
+        0,
+        4
+      ],
+      "rotation_y": 1.5708
+    },
+    {
+      "asset": "cart",
+      "position": [
+        12,
+        0,
+        3
+      ],
+      "rotation_y": 3.1416,
+      "scale": 1.1
+    },
+    {
+      "asset": "lantern",
+      "position": [
+        7,
+        0,
+        10
+      ]
+    }
   ],
   "nav": {
     "nodes": [
-      { "id": "square-center", "position": [8, 0.2, 8] },
-      { "id": "bakery-door", "position": [4, 0, 4] },
-      { "id": "lamp-corner", "position": [7, 0, 10] },
-      { "id": "east-gate", "position": [15, 0, 8] },
-      { "id": "west-gate", "position": [1, 0, 8] }
+      {
+        "id": "square-center",
+        "position": [
+          8,
+          0.2,
+          8
+        ]
+      },
+      {
+        "id": "bakery-door",
+        "position": [
+          4,
+          0,
+          4
+        ]
+      },
+      {
+        "id": "lamp-corner",
+        "position": [
+          7,
+          0,
+          10
+        ]
+      },
+      {
+        "id": "east-gate",
+        "position": [
+          15,
+          0,
+          8
+        ]
+      },
+      {
+        "id": "west-gate",
+        "position": [
+          1,
+          0,
+          8
+        ]
+      }
     ],
     "edges": [
-      ["square-center", "bakery-door"],
-      ["square-center", "lamp-corner"],
-      ["square-center", "east-gate"],
-      ["square-center", "west-gate"]
+      [
+        "square-center",
+        "bakery-door"
+      ],
+      [
+        "square-center",
+        "lamp-corner"
+      ],
+      [
+        "square-center",
+        "east-gate"
+      ],
+      [
+        "square-center",
+        "west-gate"
+      ]
     ],
     "portals": [
-      { "node": "east-gate", "to_chunk": "orchard-row" },
-      { "node": "west-gate", "to_chunk": "mill-lane" }
+      {
+        "node": "east-gate",
+        "to_chunk": "orchard-row"
+      },
+      {
+        "node": "west-gate",
+        "to_chunk": "mill-lane"
+      }
     ]
   },
-  "npcs": ["greta-the-baker", "tam-the-lamplighter"],
-  "lore": ["the-founding-of-the-square"]
+  "npcs": [
+    "greta-the-baker",
+    "tam-the-lamplighter"
+  ],
+  "lore": [
+    "the-founding-of-the-square"
+  ]
 }

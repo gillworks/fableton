@@ -121,6 +121,14 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         premise: deps.charter.identity.premise,
         seed: deps.charter.identity.seed,
         phases: deps.charter.aesthetic.day_phases,
+        // Charter theme tokens (docs/design.md): the client derives its
+        // atmosphere, accent, and type from these — never from constants.
+        theme: {
+          theme: deps.charter.aesthetic.theme,
+          palette: deps.charter.aesthetic.palette,
+          accent: deps.charter.aesthetic.accent,
+          typography: deps.charter.aesthetic.typography,
+        },
         chunks: deps.manifest.chunks.length,
         npcs: npcs.size,
         clock,

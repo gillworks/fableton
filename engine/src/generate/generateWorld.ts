@@ -9,6 +9,7 @@
 // The engine fixes the grammar (grid layout, walk-graph shape, biome
 // vocabulary); the charter varies the parameters (seed, scale, caps,
 // palette). No world is named here (CLAUDE.md invariant 5).
+import { colorFor } from '../color.js';
 import type { AssetRegistry } from '../schemas/assets.js';
 import type { Charter } from '../schemas/charter.js';
 import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
@@ -33,31 +34,6 @@ const SCALE_CHUNKS: Record<string, number> = {
 const DEFAULT_CHUNKS = 5;
 
 const round3 = (x: number): number => Math.round(x * 1000) / 1000;
-
-// Charter palettes are evocative names ("warm parchment"), chunk palettes
-// are hex. Derive a stable color per name: hash → hue, fixed sat/light
-// bands, so the same name is the same color in every world and run.
-function colorFor(name: string): string {
-  const h = deriveSeed(0, name);
-  const hue = h % 360;
-  const sat = 30 + ((h >>> 9) % 30);
-  const light = 40 + ((h >>> 17) % 25);
-  return hslToHex(hue, sat, light);
-}
-
-function hslToHex(h: number, s: number, l: number): string {
-  const sn = s / 100;
-  const ln = l / 100;
-  const a = sn * Math.min(ln, 1 - ln);
-  const f = (n: number): string => {
-    const k = (n + h / 30) % 12;
-    const c = ln - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)));
-    return Math.round(c * 255)
-      .toString(16)
-      .padStart(2, '0');
-  };
-  return `#${f(0)}${f(8)}${f(4)}`;
-}
 
 interface Cell {
   gx: number;
