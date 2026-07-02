@@ -22,13 +22,13 @@
           "label": "opening the bakery",
           "children": [
             { "type": "move", "label": "walking to the oven", "to": "bakery-door" },
-            { "type": "interact", "label": "kneading dough", "with": "bakery-oven", "duration_s": 90 }
+            { "type": "interact", "label": "kneading dough", "with": "stall-red", "duration_s": 90 }
           ]
         }
       },
       {
         "phase": "high sun",
-        "child": { "type": "interact", "label": "selling loaves at the door", "with": "bakery-oven", "duration_s": 120 }
+        "child": { "type": "interact", "label": "selling loaves at the door", "with": "stall-red", "duration_s": 120 }
       },
       {
         "phase": "lamplighting",
@@ -37,7 +37,7 @@
           "label": "closing up",
           "children": [
             { "type": "move", "label": "strolling to the well", "to": "square-center" },
-            { "type": "interact", "label": "trading gossip at the well", "with": "well", "duration_s": 60 }
+            { "type": "interact", "label": "trading gossip at the well", "with": "fountain-round", "duration_s": 60 }
           ]
         }
       },

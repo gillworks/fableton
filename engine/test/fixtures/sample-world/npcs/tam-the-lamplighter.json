@@ -21,7 +21,7 @@
           "label": "morning rounds",
           "children": [
             { "type": "move", "label": "crossing to the bakery", "to": "bakery-door" },
-            { "type": "interact", "label": "buying the first loaf", "with": "bakery-oven", "duration_s": 20 }
+            { "type": "interact", "label": "buying the first loaf", "with": "stall-red", "duration_s": 20 }
           ]
         }
       },
@@ -36,7 +36,7 @@
           "label": "the lighting of the lamps",
           "children": [
             { "type": "move", "label": "walking his lamp route", "to": "lamp-corner" },
-            { "type": "interact", "label": "lighting the square lamp", "with": "lamp-post", "duration_s": 15 }
+            { "type": "interact", "label": "lighting the square lamp", "with": "lantern", "duration_s": 15 }
           ]
         }
       },

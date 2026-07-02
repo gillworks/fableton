@@ -17,7 +17,7 @@ describe('ChunkSchema', () => {
   it('accepts a valid chunk and fills placement defaults', () => {
     const chunk = validChunk();
     expect(chunk.id).toBe('town-square');
-    expect(chunk.props[0]).toMatchObject({ asset: 'well', rotation_y: 0, scale: 1 });
+    expect(chunk.props[0]).toMatchObject({ asset: 'fountain-round', rotation_y: 0, scale: 1 });
   });
 
   it('round-trips: parse → serialize → parse is identity', () => {

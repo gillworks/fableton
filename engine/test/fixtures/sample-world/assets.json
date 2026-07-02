@@ -2,92 +2,124 @@
   "schema_version": 1,
   "assets": [
     {
-      "id": "cottage-a",
-      "name": "Cottage A",
-      "path": "assets/kits/kenney-fantasy-town/cottage-a.glb",
-      "poly_count": 320,
+      "id": "cart",
+      "name": "Cart",
+      "path": "assets/kits/kenney-fantasy-town/cart.glb",
+      "poly_count": 608,
       "tags": [
-        "building",
-        "storybook"
+        "cart",
+        "market"
       ],
       "license": {
         "id": "CC0-1.0",
-        "source": "Kenney Fantasy Town Kit",
-        "attribution": "Kenney.nl"
+        "source": "Kenney Fantasy Town Kit 2.0 \u2014 https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
+        "attribution": "Kenney (www.kenney.nl)"
       }
     },
     {
-      "id": "bakery-oven",
-      "name": "Bakery oven",
-      "path": "assets/kits/kenney-fantasy-town/oven.glb",
-      "poly_count": 180,
+      "id": "fountain-round",
+      "name": "Round fountain",
+      "path": "assets/kits/kenney-fantasy-town/fountain-round.glb",
+      "poly_count": 1002,
       "tags": [
-        "building",
-        "hearth"
+        "fountain",
+        "landmark",
+        "water"
       ],
       "license": {
         "id": "CC0-1.0",
-        "source": "Kenney Fantasy Town Kit",
-        "attribution": "Kenney.nl"
+        "source": "Kenney Fantasy Town Kit 2.0 \u2014 https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
+        "attribution": "Kenney (www.kenney.nl)"
       }
     },
     {
-      "id": "well",
-      "name": "Village well",
-      "path": "assets/kits/kenney-fantasy-town/well.glb",
-      "poly_count": 150,
-      "tags": [
-        "landmark"
-      ],
-      "license": {
-        "id": "CC0-1.0",
-        "source": "Kenney Fantasy Town Kit",
-        "attribution": "Kenney.nl"
-      }
-    },
-    {
-      "id": "lamp-post",
-      "name": "Lamp post",
-      "path": "assets/kits/kenney-fantasy-town/lamp-post.glb",
-      "poly_count": 90,
+      "id": "lantern",
+      "name": "Lantern",
+      "path": "assets/kits/kenney-fantasy-town/lantern.glb",
+      "poly_count": 158,
       "tags": [
         "light",
         "street"
       ],
       "license": {
         "id": "CC0-1.0",
-        "source": "Kenney Fantasy Town Kit",
-        "attribution": "Kenney.nl"
+        "source": "Kenney Fantasy Town Kit 2.0 \u2014 https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
+        "attribution": "Kenney (www.kenney.nl)"
       }
     },
     {
-      "id": "apple-tree",
-      "name": "Old apple tree",
-      "path": "assets/kits/kenney-nature/apple-tree.glb",
-      "poly_count": 240,
+      "id": "stall-red",
+      "name": "Market stall (red)",
+      "path": "assets/kits/kenney-fantasy-town/stall-red.glb",
+      "poly_count": 270,
       "tags": [
-        "tree",
-        "orchard"
+        "stall",
+        "market"
       ],
       "license": {
         "id": "CC0-1.0",
-        "source": "Kenney Nature Kit",
-        "attribution": "Kenney.nl"
+        "source": "Kenney Fantasy Town Kit 2.0 \u2014 https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
+        "attribution": "Kenney (www.kenney.nl)"
+      }
+    },
+    {
+      "id": "tree",
+      "name": "Tree",
+      "path": "assets/kits/kenney-fantasy-town/tree.glb",
+      "poly_count": 168,
+      "tags": [
+        "tree",
+        "nature"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Fantasy Town Kit 2.0 \u2014 https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
+        "attribution": "Kenney (www.kenney.nl)"
+      }
+    },
+    {
+      "id": "tree-crooked",
+      "name": "Crooked tree",
+      "path": "assets/kits/kenney-fantasy-town/tree-crooked.glb",
+      "poly_count": 178,
+      "tags": [
+        "tree",
+        "nature"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Fantasy Town Kit 2.0 \u2014 https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
+        "attribution": "Kenney (www.kenney.nl)"
+      }
+    },
+    {
+      "id": "tree-high-round",
+      "name": "Tall round tree",
+      "path": "assets/kits/kenney-fantasy-town/tree-high-round.glb",
+      "poly_count": 126,
+      "tags": [
+        "tree",
+        "nature"
+      ],
+      "license": {
+        "id": "CC0-1.0",
+        "source": "Kenney Fantasy Town Kit 2.0 \u2014 https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
+        "attribution": "Kenney (www.kenney.nl)"
       }
     },
     {
       "id": "windmill",
       "name": "Windmill",
       "path": "assets/kits/kenney-fantasy-town/windmill.glb",
-      "poly_count": 600,
+      "poly_count": 732,
       "tags": [
         "building",
         "landmark"
       ],
       "license": {
         "id": "CC0-1.0",
-        "source": "Kenney Fantasy Town Kit",
-        "attribution": "Kenney.nl"
+        "source": "Kenney Fantasy Town Kit 2.0 \u2014 https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
+        "attribution": "Kenney (www.kenney.nl)"
       }
     }
   ]

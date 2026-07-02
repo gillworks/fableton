@@ -25,7 +25,7 @@
           "label": "tending the orchard, allegedly",
           "children": [
             { "type": "move", "label": "sauntering down the rows", "to": "orchard-path" },
-            { "type": "interact", "label": "counting apples he did not steal", "with": "apple-tree", "duration_s": 90 }
+            { "type": "interact", "label": "counting apples he did not steal", "with": "tree", "duration_s": 90 }
           ]
         }
       },
