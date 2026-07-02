@@ -22,7 +22,7 @@ Read [docs/v1.md](docs/v1.md) (scope + definition of done) and [docs/architectur
 - Branch names: `<issue-number>-short-slug`. Conventional commit messages (`feat:`, `fix:`, `chore:`, `docs:`).
 - **SPDX header on every source file:** `// SPDX-License-Identifier: Apache-2.0` (YAML/shell: `#` form).
 - PRs are small and single-purpose. The PR description states what changed and how it was verified — paste test output, don't assert.
-- **Review routing:** schema or architecture changes require the executive producer's review. Mechanical/scaffold changes auto-merge on green CI.
+- **Review routing:** schema or architecture changes require the executive producer's review — such issues/PRs carry the **`needs-ep-review`** label (apply it yourself when your change qualifies; inherit it from the issue you're working). Mechanical/scaffold changes auto-merge on green CI. The label is convention, not machinery — never merge a labeled PR without EP approval, even on green CI.
 - CI (`pnpm typecheck && pnpm test && pnpm validate`) must pass. The validation gate is the standard — if the gate is wrong, fix the gate via an issue, don't route around it.
 
 ## Testing
