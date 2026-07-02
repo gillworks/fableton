@@ -71,23 +71,70 @@ function layoutCells(rng: Rng, count: number): Cell[] {
 
 const chunkId = (c: Cell): string => `chunk-${c.gx}-${c.gz}`;
 
+// World-space value noise on a shared integer lattice: adjacent chunks
+// sample identical heights along shared edges, so the terrain is seamless
+// by construction. Deterministic — the lattice hashes the charter seed.
+function makeHeightField(seed: number): (wx: number, wz: number) => number {
+  const lattice = (ix: number, iz: number): number =>
+    mulberry32(deriveSeed(seed, `h:${ix}:${iz}`))();
+  const fade = (t: number): number => t * t * (3 - 2 * t);
+  const octave = (wx: number, wz: number, cell: number): number => {
+    const gx = Math.floor(wx / cell);
+    const gz = Math.floor(wz / cell);
+    const fx = fade(wx / cell - gx);
+    const fz = fade(wz / cell - gz);
+    const a = lattice(gx, gz);
+    const b = lattice(gx + 1, gz);
+    const c = lattice(gx, gz + 1);
+    const d = lattice(gx + 1, gz + 1);
+    return a + (b - a) * fx + (c - a) * fz + (a - b - c + d) * fx * fz;
+  };
+  return (wx, wz) => octave(wx, wz, 40) * 1.1 + octave(wx, wz, 9) * 0.45;
+}
+
+// Exact height on the rendered mesh: bilinear over the chunk's height
+// grid, so props and nav nodes sit on the surface the client draws.
+function heightOnMesh(heights: number[], lx: number, lz: number): number {
+  const cell = CHUNK_SIZE / (GRID_SIZE - 1);
+  const cx = Math.min(GRID_SIZE - 2, Math.max(0, Math.floor(lx / cell)));
+  const cz = Math.min(GRID_SIZE - 2, Math.max(0, Math.floor(lz / cell)));
+  const fx = lx / cell - cx;
+  const fz = lz / cell - cz;
+  const at = (x: number, z: number): number => heights[z * GRID_SIZE + x]!;
+  const a = at(cx, cz);
+  const b = at(cx + 1, cz);
+  const c = at(cx, cz + 1);
+  const d = at(cx + 1, cz + 1);
+  return round3(a + (b - a) * fx + (c - a) * fz + (a - b - c + d) * fx * fz);
+}
+
 function generateChunk(
   cell: Cell,
   neighbours: { id: string; dir: Cell }[],
   charter: Charter,
   registry: AssetRegistry,
+  heightField: (wx: number, wz: number) => number,
 ): Chunk {
   const id = chunkId(cell);
   const rng = mulberry32(deriveSeed(charter.identity.seed, `chunk:${id}`));
   const caps = charter.generation.caps;
+  const [ox, oz] = [cell.gx * CHUNK_SIZE, cell.gz * CHUNK_SIZE];
 
-  // Terrain: gentle value noise around a per-chunk base elevation.
-  const base = rng() * 1.5;
+  // Terrain: the world-space height field sampled at vertex coordinates,
+  // row-major (z rows, x fastest — the client's PlaneGeometry order).
   const heights: number[] = [];
-  for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-    heights.push(round3(base + rng() * 0.6));
+  const step = CHUNK_SIZE / (GRID_SIZE - 1);
+  for (let z = 0; z < GRID_SIZE; z++) {
+    for (let x = 0; x < GRID_SIZE; x++) {
+      heights.push(round3(heightField(ox + x * step, oz + z * step)));
+    }
   }
   const terrainPolys = 2 * (GRID_SIZE - 1) ** 2;
+  const grounded = (lx: number, lz: number): [number, number, number] => [
+    round3(lx),
+    heightOnMesh(heights, lx, lz),
+    round3(lz),
+  ];
 
   // Props: fill toward an ambient density, respecting the charter caps.
   const assets = registry.assets;
@@ -101,7 +148,7 @@ function generateChunk(
     polys += asset.poly_count;
     props.push({
       asset: asset.id,
-      position: [round3(2 + rng() * (CHUNK_SIZE - 4)), 0, round3(2 + rng() * (CHUNK_SIZE - 4))],
+      position: grounded(2 + rng() * (CHUNK_SIZE - 4), 2 + rng() * (CHUNK_SIZE - 4)),
       rotation_y: round3(rng() * Math.PI * 2),
       scale: round3(0.9 + rng() * 0.2),
     });
@@ -113,8 +160,8 @@ function generateChunk(
   // gate + portal, so portals are reciprocal by construction.
   const mid = CHUNK_SIZE / 2;
   const nodes: Chunk['nav']['nodes'] = [
-    { id: 'heart', position: [mid, 0, mid] },
-    { id: 'wander', position: [round3(3 + rng() * (CHUNK_SIZE - 6)), 0, round3(3 + rng() * (CHUNK_SIZE - 6))] },
+    { id: 'heart', position: grounded(mid, mid) },
+    { id: 'wander', position: grounded(3 + rng() * (CHUNK_SIZE - 6), 3 + rng() * (CHUNK_SIZE - 6)) },
   ];
   const edges: Chunk['nav']['edges'] = [['heart', 'wander']];
   const portals: Chunk['nav']['portals'] = [];
@@ -122,7 +169,7 @@ function generateChunk(
     const gate = `gate-${n.id}`;
     nodes.push({
       id: gate,
-      position: [mid + n.dir.gx * (mid - 1), 0, mid + n.dir.gz * (mid - 1)],
+      position: grounded(mid + n.dir.gx * (mid - 1), mid + n.dir.gz * (mid - 1)),
     });
     edges.push(['heart', gate]);
     portals.push({ node: gate, to_chunk: n.id });
@@ -160,7 +207,10 @@ export function generateWorld(charter: Charter, registry: AssetRegistry): Genera
       return other ? [{ id: chunkId(other), dir }] : [];
     });
 
-  const chunks = cells.map((cell) => generateChunk(cell, neighboursOf(cell), charter, registry));
+  const heightField = makeHeightField(charter.identity.seed);
+  const chunks = cells.map((cell) =>
+    generateChunk(cell, neighboursOf(cell), charter, registry, heightField),
+  );
 
   const manifest = WorldManifestSchema.parse({
     schema_version: 1,
