@@ -64,6 +64,12 @@ export class NpcRuntime {
     };
   }
 
+  /** Hot-swap the tree (the L1 seam): re-plans on the next step, position kept. */
+  replaceTree(behavior: BehaviorNode): void {
+    this.#npc = { ...this.#npc, behavior };
+    this.#phase = ''; // forces re-resolution against the current phase
+  }
+
   #enterLeaf(): void {
     const leaf = this.#leaves[this.#cursor];
     if (!leaf) return;
