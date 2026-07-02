@@ -8,7 +8,8 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "validate": "tsx src/validate/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world"
   },
   "dependencies": {
     "yaml": "^2.9.0",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.0",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
   }

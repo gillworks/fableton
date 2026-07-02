@@ -55,6 +55,10 @@ export const CharterSchema = z.strictObject({
       max_regions: z.number().int().positive(),
       chunk_poly_budget: z.number().int().positive(),
       chunk_drawcall_budget: z.number().int().positive(),
+      // Serialized chunk JSON cap in KiB — chunks are CDN-cached statics,
+      // so size is a perf budget like polys (docs/v1.md). Defaulted so
+      // charters authored before the gate landed still parse.
+      chunk_kb_budget: z.number().int().positive().default(256),
     }),
   }),
   taboos: z.array(EnforcedRuleSchema).min(1),
