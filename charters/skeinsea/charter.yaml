@@ -1,0 +1,77 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# SKEINSEA — divergence charter two (docs/design.md, ADR-0003).
+# The archipelago where the fog remembers: mist-pale, tidal, bell-quiet.
+
+schema_version: 1
+
+identity:
+  name: Skeinsea
+  premise: The archipelago where the fog remembers.
+  seed: 40417707
+
+tone:
+  register: mist-pale, hushed, patiently curious
+  pillars:
+    - the sea gives things back, eventually, changed
+    - quiet is a kind of weather
+    - every bell has a name and a reason
+
+laws:
+  - "the fog keeps what it takes: anything lost returns on a later tide, remembered wrong"
+  - no islet is ever quite where the charts last put it
+  - a named bell must be answered when it rings
+
+aesthetic:
+  theme: mist-pale
+  palette: [glass-green sea, pale stone, slate sage, cream sky]
+  typography:
+    display: Jost
+    mono: IBM Plex Mono
+  accent: tide gold
+  day_phases:
+    - morning tide
+    - high glass
+    - gloaming
+    - bell-dark
+  architecture: >-
+    low pale-stone cottages hunched against wind; slate-sage roofs pinned
+    with buoy-floats; walkways of grey plank strung islet to islet; every
+    door faces away from the open sea
+  never:
+    - rule: storms as spectacle — weather here is patient, never theatrical
+      enforced: prompt
+    - rule: modern technology
+      enforced: gate
+    - rule: drowning depicted — the sea keeps, it does not kill
+      enforced: prompt
+    - rule: photorealism
+      enforced: prompt
+
+inhabitants:
+  kinds: net-menders, bell-keepers, tide-readers, ferry-folk, collectors of returned things
+  factions: bell-parishes — one per named bell; allegiance follows earshot, not birth
+  naming: weather-names and net-names — Haar, Slackwater Meg, Ninth-Bell Odd
+
+generation:
+  scale: hamlet
+  region_cadence: weekly
+  caps:
+    max_regions: 9
+    chunk_poly_budget: 150000
+    chunk_drawcall_budget: 120
+    chunk_kb_budget: 256
+
+taboos:
+  - rule: nothing returned by the fog may be used as a weapon
+    enforced: prompt
+  - rule: no real-world brands, people, or politics
+    enforced: prompt
+
+prime_directives:
+  - stillness must stay interesting — wonder over incident
+  - what the fog returns must always be slightly, meaningfully wrong
+  - the bells are sacred; their names are never invented casually
+
+amendments:
+  rule: constitutional acts only — the god proposes, the founder ratifies, in public

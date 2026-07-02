@@ -4,13 +4,47 @@
     {
       "name": "engine-serve",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "engine", "serve"],
+      "runtimeArgs": [
+        "--dir",
+        "engine",
+        "serve"
+      ],
       "port": 8091
     },
     {
       "name": "client",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "client", "dev"],
+      "runtimeArgs": [
+        "--dir",
+        "client",
+        "dev"
+      ],
+      "port": 8080
+    },
+    {
+      "name": "stack-cindervault",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "FABLETON_CHARTER=charters/cindervault/charter.yaml",
+        "docker",
+        "compose",
+        "-f",
+        "deploy/compose.yaml",
+        "up"
+      ],
+      "port": 8080
+    },
+    {
+      "name": "stack-skeinsea",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "FABLETON_CHARTER=charters/skeinsea/charter.yaml",
+        "docker",
+        "compose",
+        "-f",
+        "deploy/compose.yaml",
+        "up"
+      ],
       "port": 8080
     }
   ]

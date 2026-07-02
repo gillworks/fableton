@@ -35,6 +35,8 @@ function statics(routes: Record<string, string>): Plugin {
 }
 
 export default defineConfig({
+  // The kit owns /assets/* (deploy contract) — vite's bundle lives at /bundle.
+  build: { assetsDir: 'bundle' },
   plugins: [
     react(),
     statics({

@@ -92,10 +92,10 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
     ]
   },
   "palette": [
-    "#bc80a4",
-    "#4a5b96",
-    "#6f9339",
-    "#d39d6f"
+    "#e7dcc6",
+    "#5a8344",
+    "#e6a937",
+    "#272d4f"
   ],
   "props": [
     {

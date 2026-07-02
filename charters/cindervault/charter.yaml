@@ -1,0 +1,77 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# CINDERVAULT — divergence charter one (docs/design.md, ADR-0003).
+# The city that banked the last fire: forge-dark, proud, quietly desperate.
+
+schema_version: 1
+
+identity:
+  name: Cindervault
+  premise: The city that banked the last fire.
+  seed: 18890321
+
+tone:
+  register: forge-dark, proud, quietly desperate
+  pillars:
+    - heat is wealth and wealth is rationed
+    - every guild remembers the cold
+    - grandeur built over a countdown
+
+laws:
+  - fire cannot be created, only lent, spent, or banked
+  - debts of heat outlive their debtors and pass to their guilds
+  - "the Vault's ledger is truth: what it says burned, burned"
+
+aesthetic:
+  theme: forge-dark
+  palette: [ash umber, soot black, ember orange, banked coal]
+  typography:
+    display: Zilla Slab
+    mono: IBM Plex Mono
+  accent: ember orange
+  day_phases:
+    - ashdawn
+    - forge-day
+    - smelt-dusk
+    - banked
+  architecture: >-
+    massive vault-brick and riveted brass; chimneys like cathedral spires;
+    lava-glow channels instead of gutters; nothing decorative that cannot
+    also hold heat
+  never:
+    - rule: open flame outdoors
+      enforced: prompt
+    - rule: modern technology
+      enforced: gate
+    - rule: daylight cheerfulness — the sky earns its warmth from the city, not the sun
+      enforced: prompt
+    - rule: photorealism
+      enforced: prompt
+
+inhabitants:
+  kinds: smiths, stokers, heat-brokers, vault-clerks, ash-sweeps who hear the coals
+  factions: furnace guilds ranked by the age of their coals; the Cold Quarter has no guild and no debt
+  naming: trade-names hyphenated with furnace-names — Brann-of-the-Third-Hearth, Ledger-Ash
+
+generation:
+  scale: city
+  region_cadence: weekly
+  caps:
+    max_regions: 12
+    chunk_poly_budget: 150000
+    chunk_drawcall_budget: 120
+    chunk_kb_budget: 256
+
+taboos:
+  - rule: no cold played for laughs — the cold is the antagonist
+    enforced: prompt
+  - rule: no real-world brands, people, or politics
+    enforced: prompt
+
+prime_directives:
+  - scarcity must always be legible — every ember on screen is accounted for
+  - grandeur and dread in the same frame
+  - the ledger never lies, even when everyone wishes it would
+
+amendments:
+  rule: constitutional acts only — the god proposes, the founder ratifies, in public
