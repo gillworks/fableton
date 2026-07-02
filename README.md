@@ -41,6 +41,7 @@ Working on the engine today (Node ≥ 20, pnpm):
 pnpm install
 pnpm typecheck && pnpm test   # CI's first two gates
 pnpm validate                 # the world-data gate: sample world + asset registry
+pnpm accept                   # the v1 definition-of-done harness (docs/v1.md)
 
 # Found a world of your own (bring your own key: cp .env.example .env, fill it in)
 cd studio && pnpm found --prompt "<one-paragraph premise>" --out ../charters/<name>
