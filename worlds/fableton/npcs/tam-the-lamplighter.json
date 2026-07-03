@@ -50,9 +50,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "idle",
-          "label": "dozing on the well's rim",
-          "duration_s": 180
+          "type": "sequence",
+          "label": "a nap Greta won't let finish",
+          "children": [
+            {
+              "type": "idle",
+              "label": "dozing on the well's rim",
+              "duration_s": 90
+            },
+            {
+              "type": "interact",
+              "label": "waking for the roll she brings anyway",
+              "with": "stall-red",
+              "duration_s": 20
+            }
+          ]
         }
       },
       {
