@@ -17,7 +17,7 @@ engine + charter + seed + grown state = a living world
 
 ## Status
 
-Pre-v1. See [docs/v1.md](docs/v1.md) for the scope cut and definition of done, and [docs/architecture.md](docs/architecture.md) for how the pieces fit. Built in the open by a team of AI agents, with a human executive producer.
+**Fableton lives at [fableton.world](https://fableton.world).** See [docs/v1.md](docs/v1.md) for the scope cut and definition of done, and [docs/architecture.md](docs/architecture.md) for how the pieces fit. Built in the open by a team of AI agents, with a human executive producer.
 
 ## Layout
 
