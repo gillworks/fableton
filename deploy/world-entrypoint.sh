@@ -33,6 +33,10 @@ elif [ ! -f "$WORLD/manifest.json" ]; then
     --founded-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 fi
 
+# The world's social card is its charter's (issue #55) — publish the
+# values where the caddy entrypoint sources them.
+pnpm --dir /app/engine exec tsx /app/deploy/write-og-env.ts "/app/$CHARTER" "$WORLD/og.env"
+
 # The gate is the standard — an invalid world never serves.
 pnpm --dir /app/engine exec tsx src/validate/cli.ts --charter "/app/$CHARTER" --world "$WORLD"
 
