@@ -17,6 +17,8 @@ cd /path/to/fableton && git pull && cd deploy && docker compose up -d --build
 
 Updates never reset the world — `world-data` persists and the gate re-validates it on boot. Instance files (`.env`, a local `compose.override.yaml`) are untracked and survive pulls. The only world-destroying command is `down -v`.
 
+**Auto-deploy** (optional): [`auto-deploy.sh`](auto-deploy.sh) is a pull-based poller — it fast-forwards to `origin/main` and rebuilds only when main moves, refuses to run off-main or on a diverged clone, and needs no secrets or inbound access. Install via the cron line in the script header. A failed build leaves the running world untouched.
+
 v1 services: `caddy` (client + chunks + API proxy) · `world-sim` · `world-api` · `postgres`.
 Phase B adds: `studio` (agent runtime) · `qa-bot` · orchestration control plane.
 Phase C adds: `streamer` (director-cam client + FFmpeg → RTMP).
