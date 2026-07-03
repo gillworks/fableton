@@ -40,11 +40,21 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "ringing in the lamplighting, softly",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the bell answers the lamp",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the square",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "ringing the bell the moment his lamp catches",
+              "with": "lantern",
+              "duration_s": 15
+            }
+          ]
         }
       },
       {
