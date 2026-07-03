@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "kind": "master-plan",
+  "world": "Fableton",
+  "revision": 1,
+  "issued": "2026-07-03T05:56:36Z",
+  "horizon": "Season of Introductions — the town learns it is a town",
+  "goals": [
+    "Honor the Law of Ties: no new resident without at least one grounded tie to a living neighbor (Decree 1)",
+    "Give the square a heartbeat: one shared, visible ritual in each day phase",
+    "One discoverable arc per region — orchard, well, and square — legible from inspect panels alone",
+    "The Chronicle speaks daily, in the town's voice, never mechanically (Decree 2)",
+    "Only after the above feel true: grow by one small place that has a reason to exist"
+  ]
+}
