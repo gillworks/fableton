@@ -14,6 +14,8 @@ const TYPES: Record<string, string> = {
   '.glb': 'model/gltf-binary',
   '.txt': 'text/plain',
   '.png': 'image/png',
+  '.woff2': 'font/woff2',
+  '.css': 'text/css',
 };
 
 function statics(routes: Record<string, string>): Plugin {

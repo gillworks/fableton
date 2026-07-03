@@ -29,3 +29,16 @@ A curated 20-prop subset lives at [`assets/kits/kenney-fantasy-town/`](../assets
 1. Drop the GLB under `assets/kits/<kit>/` with the kit's license text alongside.
 2. Add a registry entry with measured `poly_count` and full license provenance.
 3. `pnpm validate` must stay green — it checks the registry parses, every path resolves, and generator output built from this registry passes the world gate.
+
+## Fonts
+
+The charter display faces are vendored at [`assets/fonts/`](../assets/fonts/) as latin woff2 subsets (~200 KB total), each family with its SIL OFL license text alongside — same zero-external-dependency reasoning as the kit: worlds render their designed typography offline, no font CDN.
+
+| Family | Used by | License |
+|---|---|---|
+| Alegreya | Fableton (display) | OFL — `assets/fonts/alegreya/OFL.txt` |
+| Zilla Slab | Cindervault (display) | OFL — `assets/fonts/zilla-slab/OFL.txt` |
+| Jost | Skeinsea (display) | OFL — `assets/fonts/jost/OFL.txt` |
+| IBM Plex Mono | all worlds (mono) | OFL — `assets/fonts/ibm-plex-mono/OFL.txt` |
+
+`assets/fonts/fonts.css` declares every vendored face; the client links it and browsers fetch only the families the active charter's theme names. Adding a face for a new charter: vendor the woff2 + OFL.txt, append the `@font-face` rules.
