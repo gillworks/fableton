@@ -51,6 +51,10 @@ export const CharterSchema = z.strictObject({
   generation: z.strictObject({
     scale: nonEmpty,
     region_cadence: nonEmpty,
+    // How many real hours one world day lasts — the founder-tunable time
+    // scale (issue #57). Default 6: the town ages 4 days per real day.
+    // Defaulted so charters authored before the param existed still parse.
+    day_length_hours: z.number().positive().finite().default(6),
     caps: z.strictObject({
       max_regions: z.number().int().positive(),
       chunk_poly_budget: z.number().int().positive(),

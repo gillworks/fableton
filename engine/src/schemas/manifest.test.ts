@@ -48,4 +48,20 @@ describe('WorldManifestSchema', () => {
       WorldManifestSchema.parse({ ...manifest, chunks: [...manifest.chunks, manifest.chunks[0]!] }),
     ).toThrow(/duplicate chunk id/);
   });
+
+  it('carries founded_at when present and round-trips it', () => {
+    const stamped = WorldManifestSchema.parse(
+      Object.assign({}, load(), { founded_at: '2026-07-03T02:00:53Z' }),
+    );
+    expect(stamped.founded_at).toBe('2026-07-03T02:00:53Z');
+    expect(WorldManifestSchema.parse(JSON.parse(JSON.stringify(stamped)))).toEqual(stamped);
+    // Pre-#57 manifests (no stamp) still parse, just without a clock anchor.
+    expect(validManifest().founded_at).toBeUndefined();
+  });
+
+  it('rejects a founded_at that is not an ISO datetime', () => {
+    expect(() =>
+      WorldManifestSchema.parse(Object.assign({}, load(), { founded_at: 'yesterday' })),
+    ).toThrow(/founded_at/);
+  });
 });

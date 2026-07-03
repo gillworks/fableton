@@ -29,6 +29,14 @@ describe('generateWorld', () => {
     expect(generateWorld(fableton, registry)).toEqual(generateWorld(fableton, registry));
   });
 
+  it('stamps founded_at only as an input — never from the wall clock', () => {
+    const founded = generateWorld(fableton, registry, { foundedAt: '2026-07-03T02:00:53Z' });
+    expect(founded.manifest.founded_at).toBe('2026-07-03T02:00:53Z');
+    // Same inputs ⇒ same bytes; omitting the stamp omits the field.
+    expect(founded).toEqual(generateWorld(fableton, registry, { foundedAt: '2026-07-03T02:00:53Z' }));
+    expect(generateWorld(fableton, registry).manifest.founded_at).toBeUndefined();
+  });
+
   it('a different seed ⇒ a different layout', () => {
     const reseeded: Charter = {
       ...fableton,

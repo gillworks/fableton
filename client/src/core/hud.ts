@@ -19,7 +19,14 @@ export const hudInk = (backdropHex: string): 'ink' | 'paper' =>
   luminanceOf(backdropHex) > 0.55 ? 'ink' : 'paper';
 
 /** Day number, 1-based: the sim clock is a pure function of tick. */
-export const dayOf = (tick: number): number => Math.floor(tick / TICKS_PER_DAY) + 1;
+export const dayOf = (tick: number, ticksPerDay: number = TICKS_PER_DAY): number =>
+  Math.floor(tick / ticksPerDay) + 1;
+
+/** "20 MIN" under two hours, "6 HR" from there — the pace chip's unit. */
+export const paceLabel = (secondsPerDay: number): string => {
+  const minutes = Math.round(secondsPerDay / 60);
+  return minutes >= 120 ? `${Math.round(minutes / 60)} HR` : `${minutes} MIN`;
+};
 
 export interface ChronicleEntry {
   tick: number;

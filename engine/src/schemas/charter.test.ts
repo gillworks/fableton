@@ -48,4 +48,20 @@ describe('CharterSchema', () => {
       ).toThrow();
     }
   });
+
+  it('defaults day_length_hours to 6 and accepts a founder-tuned value', () => {
+    expect(validCharter().generation.day_length_hours).toBe(6);
+    const charter = validCharter();
+    const tuned = CharterSchema.parse({
+      ...charter,
+      generation: { ...charter.generation, day_length_hours: 24 },
+    });
+    expect(tuned.generation.day_length_hours).toBe(24);
+    expect(() =>
+      CharterSchema.parse({
+        ...charter,
+        generation: { ...charter.generation, day_length_hours: 0 },
+      }),
+    ).toThrow(/day_length_hours/);
+  });
 });

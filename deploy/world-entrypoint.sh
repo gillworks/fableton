@@ -28,7 +28,9 @@ if [ -d "/app/worlds/$NAME" ]; then
   cp -R "/app/worlds/$NAME/." "$WORLD/"
 elif [ ! -f "$WORLD/manifest.json" ]; then
   echo "founding a new world from $CHARTER"
-  pnpm --dir /app/engine exec tsx src/generate/cli.ts --charter "/app/$CHARTER" --out "$WORLD"
+  # First boot IS the founding — stamp it so the clock survives redeploys.
+  pnpm --dir /app/engine exec tsx src/generate/cli.ts --charter "/app/$CHARTER" --out "$WORLD" \
+    --founded-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 fi
 
 # The gate is the standard — an invalid world never serves.
