@@ -112,8 +112,10 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
         target={[coin.center[0], 0.5, coin.center[1]]}
         enableDamping
         dampingFactor={0.08}
-        minDistance={10}
-        maxDistance={70}
+        minDistance={6}
+        // Zoom out far enough to frame the whole diorama, however big
+        // the world grows.
+        maxDistance={Math.max(70, Math.max(coin.rx, coin.rz) * 2.6)}
         maxPolarAngle={1.32}
         makeDefault
       />
