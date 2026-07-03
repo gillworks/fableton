@@ -224,3 +224,41 @@ describe('hud clock math', () => {
     expect(paceLabel(6 * 3600)).toBe('6 HR');
   });
 });
+
+describe('chronicle lineage (issue #59)', () => {
+  const md = `# The Chronicle of Fableton
+One line per day, the town seen from above. Newest last.
+
+The town woke to find it had always had neighbors. (PR #48)
+COUNCIL — Two laws now stand. (PR #49)
+
+Vesper packed her polishing rags and walked to where the lamp is lit.
+`;
+
+  it('parseChronicle: heading block dropped, entries chronological, blanks skipped', async () => {
+    const { parseChronicle } = await import('./hud.js');
+    const entries = parseChronicle(md);
+    expect(entries).toHaveLength(3);
+    expect(entries[0]).toContain('had always had neighbors');
+    expect(entries.at(-1)).toBe('Vesper packed her polishing rags and walked to where the lamp is lit.');
+  });
+
+  it('parseChronicle: a file with no blank line yields every non-heading line', async () => {
+    const { parseChronicle } = await import('./hud.js');
+    expect(parseChronicle('# Title\nonly entry')).toEqual(['only entry']);
+  });
+
+  it('chronicleSegments: PR refs become links only when the repo is known', async () => {
+    const { chronicleSegments } = await import('./hud.js');
+    const entry = 'Two tales met. (PR #49) And parted. (PR #53)';
+    const segs = chronicleSegments(entry, 'https://github.com/gillworks/fableton/');
+    expect(segs).toEqual([
+      { text: 'Two tales met. ' },
+      { text: '(PR #49)', href: 'https://github.com/gillworks/fableton/pull/49' },
+      { text: ' And parted. ' },
+      { text: '(PR #53)', href: 'https://github.com/gillworks/fableton/pull/53' },
+    ]);
+    expect(chronicleSegments(entry)).toEqual([{ text: entry }]);
+    expect(chronicleSegments('a quiet day', 'https://x.test')).toEqual([{ text: 'a quiet day' }]);
+  });
+});

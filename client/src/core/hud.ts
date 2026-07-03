@@ -33,6 +33,73 @@ export interface ChronicleEntry {
   entry: string;
 }
 
+/**
+ * Parse worlds/<w>/chronicle.md — the town's written history (issue #59).
+ * Contract: `#` heading lines and everything up to the first blank line
+ * are the header block; every non-empty line after it is one entry,
+ * chronological (the file says "Newest last"). A file with no blank line
+ * yields every non-heading line.
+ */
+export function parseChronicle(md: string): string[] {
+  const lines = md.split('\n');
+  const firstBlank = lines.findIndex((l) => l.trim() === '');
+  const body = firstBlank === -1 ? lines : lines.slice(firstBlank + 1);
+  return body.map((l) => l.trim()).filter((l) => l.length > 0 && !l.startsWith('#'));
+}
+
+/** One rendered piece of a chronicle entry: plain text, or a PR link. */
+export type ChronicleSegment = { text: string } | { text: string; href: string };
+
+/**
+ * Split an entry around its `(PR #N)` references so the lineage view can
+ * render them as links (the studio-visible-in-world pattern). Without a
+ * repo URL the whole entry is one plain segment.
+ */
+export function chronicleSegments(entry: string, repoUrl?: string): ChronicleSegment[] {
+  if (!repoUrl) return [{ text: entry }];
+  const segments: ChronicleSegment[] = [];
+  const pattern = /\(PR #(\d+)\)/g;
+  let cursor = 0;
+  for (let m = pattern.exec(entry); m !== null; m = pattern.exec(entry)) {
+    if (m.index > cursor) segments.push({ text: entry.slice(cursor, m.index) });
+    segments.push({ text: m[0], href: `${repoUrl.replace(/\/$/, '')}/pull/${m[1]}` });
+    cursor = m.index + m[0].length;
+  }
+  if (cursor < entry.length) segments.push({ text: entry.slice(cursor) });
+  return segments;
+}
+
+/**
+ * Poll the written chronicle (a static beside the world data; caddy and
+ * vite both serve it at /world/chronicle.md). `null` means the world has
+ * no chronicle yet — callers fall back to the live sim ticker.
+ */
+export function pollChronicleFile(
+  onEntries: (entries: string[] | null) => void,
+  intervalMs = 15000,
+): () => void {
+  let stopped = false;
+  const read = async (): Promise<void> => {
+    try {
+      const res = await fetch('/world/chronicle.md', { cache: 'no-store' });
+      if (stopped) return;
+      // The dev server answers missing statics with the SPA page — only
+      // an actual markdown body counts as a chronicle.
+      const isHtml = (res.headers.get('content-type') ?? '').includes('text/html');
+      onEntries(res.ok && !isHtml ? parseChronicle(await res.text()) : null);
+    } catch {
+      // a missing chronicle is a young world, not a client error
+      if (!stopped) onEntries(null);
+    }
+  };
+  void read();
+  const interval = setInterval(() => void read(), intervalMs);
+  return () => {
+    stopped = true;
+    clearInterval(interval);
+  };
+}
+
 /** Poll the chronicle (world-api owns its voice); returns a disposer. */
 export function pollChronicle(
   onLatest: (entry: ChronicleEntry | null) => void,

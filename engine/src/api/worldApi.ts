@@ -121,6 +121,10 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         premise: deps.charter.identity.premise,
         seed: deps.charter.identity.seed,
         charter_version: deps.charter.schema_version,
+        // Where this world's studio works — the client renders chronicle
+        // PR references as links to it (issue #59). Instance config, not
+        // charter data; absent means plain text.
+        ...(process.env['FABLETON_REPO_URL'] && { repo_url: process.env['FABLETON_REPO_URL'] }),
         // Studio construction sites (Phase B populates this; the client
         // renders markers for whatever appears here).
         construction: [],

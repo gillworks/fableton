@@ -5,10 +5,11 @@
 // bottom chronicle bar. Every color, face, and phase name arrives from
 // the parsed charter via theme tokens — zero world constants.
 import { useEffect, useState, type CSSProperties, type ReactElement } from 'react';
-import { dayOf, hudInk, paceLabel, pollChronicle, type ChronicleEntry } from '../core/hud.js';
+import { dayOf, hudInk, paceLabel, pollChronicle, pollChronicleFile, type ChronicleEntry } from '../core/hud.js';
 import { TICKS_PER_DAY } from '../core/types.js';
 import type { WorldTheme } from '../core/theme.js';
 import type { WorldInfo } from '../core/types.js';
+import { ChroniclePanel } from './ChroniclePanel.js';
 
 export interface HudProps {
   info: WorldInfo;
@@ -28,7 +29,10 @@ const PAPER = 'rgba(246, 239, 224, 0.92)';
 
 export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onSelectPhase }: HudProps): ReactElement {
   const [latest, setLatest] = useState<ChronicleEntry | null>(null);
+  const [chronicle, setChronicle] = useState<string[] | null>(null);
+  const [lineageOpen, setLineageOpen] = useState(false);
   useEffect(() => pollChronicle(setLatest), []);
+  useEffect(() => pollChronicleFile(setChronicle), []);
 
   // The day length is the charter's, not the engine's: the API's pace is
   // authoritative, the constant is only a pre-#57 fallback.
@@ -133,8 +137,13 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
         </div>
       </div>
 
-      {/* Bottom: the chronicle bar, in the world's voice */}
+      {/* Bottom: the chronicle bar — the newest line of the town's
+          written history (issue #59); the live sim ticker stands in for
+          worlds too young to have one. Click opens the lineage. */}
       <div
+        onClick={() => chronicle && chronicle.length > 0 && setLineageOpen((v) => !v)}
+        role={chronicle && chronicle.length > 0 ? 'button' : undefined}
+        title={chronicle && chronicle.length > 0 ? 'read the whole chronicle' : undefined}
         style={{
           position: 'fixed',
           left: 0,
@@ -146,13 +155,27 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
           padding: '10px 24px 12px',
           background: 'linear-gradient(transparent, rgba(12, 10, 8, 0.55))',
           color: PAPER,
+          cursor: chronicle && chronicle.length > 0 ? 'pointer' : 'default',
         }}
       >
         <span style={{ fontFamily: mono, fontSize: 10, letterSpacing: 3, opacity: 0.6 }}>CHRONICLE</span>
         <span style={{ fontFamily: display, fontStyle: 'italic', fontSize: 14, opacity: 0.92 }}>
-          {latest ? latest.entry : 'the world holds its breath…'}
+          {chronicle?.at(-1) ?? latest?.entry ?? 'the world holds its breath…'}
         </span>
+        {chronicle && chronicle.length > 0 && (
+          <span style={{ fontFamily: mono, fontSize: 9.5, letterSpacing: 1, opacity: 0.5 }}>
+            {lineageOpen ? 'CLOSE' : `READ ALL ${chronicle.length}`}
+          </span>
+        )}
       </div>
+      {lineageOpen && chronicle && chronicle.length > 0 && (
+        <ChroniclePanel
+          entries={chronicle}
+          theme={theme}
+          {...(info.repo_url ? { repoUrl: info.repo_url } : {})}
+          onClose={() => setLineageOpen(false)}
+        />
+      )}
     </>
   );
 }
