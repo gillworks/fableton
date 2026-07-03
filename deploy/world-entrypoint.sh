@@ -15,20 +15,20 @@ if [ ! -f "/app/$CHARTER" ]; then
   exit 1
 fi
 
-if [ ! -f "$WORLD/manifest.json" ]; then
-  # A charter with a committed starter world (worlds/<name>/) boots it —
-  # residents included; the flagship's lives with the engine fixtures.
-  NAME=$(basename "$(dirname "$CHARTER")")
-  if [ "$CHARTER" = "charters/_template/charter.yaml" ]; then
-    echo "founding the flagship from its starter town"
-    cp -R /app/worlds/fableton/. "$WORLD/"
-  elif [ -d "/app/worlds/$NAME" ]; then
-    echo "founding $NAME from its hand-authored starter world"
-    cp -R "/app/worlds/$NAME/." "$WORLD/"
-  else
-    echo "founding a new world from $CHARTER"
-    pnpm --dir /app/engine exec tsx src/generate/cli.ts --charter "/app/$CHARTER" --out "$WORLD"
-  fi
+# Phase B: for worlds committed to the repo (worlds/<name>/), the REPO is the
+# source of truth — the studio grows the world through merged PRs, auto-deploy
+# rebuilds, and every boot re-syncs the volume from the repo. This holds until
+# runtime mutation exists (live behavior-tree hot-swaps that must persist);
+# at that point sync becomes a merge, not a wipe.
+NAME=$(basename "$(dirname "$CHARTER")")
+[ "$CHARTER" = "charters/_template/charter.yaml" ] && NAME=fableton
+if [ -d "/app/worlds/$NAME" ]; then
+  echo "syncing $NAME from the world repo (repo is source of truth)"
+  rm -rf "$WORLD"/* 2>/dev/null || true
+  cp -R "/app/worlds/$NAME/." "$WORLD/"
+elif [ ! -f "$WORLD/manifest.json" ]; then
+  echo "founding a new world from $CHARTER"
+  pnpm --dir /app/engine exec tsx src/generate/cli.ts --charter "/app/$CHARTER" --out "$WORLD"
 fi
 
 # The gate is the standard — an invalid world never serves.

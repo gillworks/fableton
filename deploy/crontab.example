@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+# Fableton instance crontab — install with: crontab deploy/crontab.example
+# (merges: keep the auto-deploy line if already installed)
+#
+# Prerequisites for the studio lines (studio/README.md § Runtime):
+#   - Claude Code on the host, authenticated: `claude setup-token`
+#   - gh authenticated with a repo-scoped token
+#   - studio working clone at /opt/fableton-studio (never the deploy clone)
+
+# Engine auto-deploy: track origin/main, rebuild when it moves
+*/2 * * * * flock -n /run/fableton-deploy.lock /opt/fableton/deploy/auto-deploy.sh >> /var/log/fableton-deploy.log 2>&1
+
+# The pantheon (UTC): steward every 4h · sprite at 08:30/18:30 · council at 09:00
+0 */4 * * * flock -n /run/fableton-steward.lock /opt/fableton-studio/studio/bin/run.sh steward >> /var/log/fableton-studio.log 2>&1
+30 8,18 * * * flock -n /run/fableton-qa.lock /opt/fableton-studio/studio/bin/run.sh qa >> /var/log/fableton-studio.log 2>&1
+0 9 * * * flock -n /run/fableton-council.lock /opt/fableton-studio/studio/bin/run.sh council >> /var/log/fableton-studio.log 2>&1
