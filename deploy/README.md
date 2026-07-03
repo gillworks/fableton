@@ -19,6 +19,8 @@ Updates never reset the world — `world-data` persists and the gate re-validate
 
 **Auto-deploy** (optional): [`auto-deploy.sh`](auto-deploy.sh) is a pull-based poller — it fast-forwards to `origin/main` and rebuilds only when main moves, refuses to run off-main or on a diverged clone, and needs no secrets or inbound access. Install via the cron line in the script header. A failed build leaves the running world untouched.
 
+**Engine updates ≠ world updates.** Auto-deploy ships *code*; a founded world keeps its own state by design. Changes to a *starter world* (`worlds/<name>/`, fixtures) only apply at founding — a running world receives new content through the studio pipeline (Phase B), not through git. Pre-agents, the way to adopt a new starter is to re-found: `docker compose down -v && docker compose up -d` — acceptable only while the world has no grown state worth keeping.
+
 v1 services: `caddy` (client + chunks + API proxy) · `world-sim` · `world-api` · `postgres`.
 Phase B adds: `studio` (agent runtime) · `qa-bot` · orchestration control plane.
 Phase C adds: `streamer` (director-cam client + FFmpeg → RTMP).
