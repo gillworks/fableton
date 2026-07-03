@@ -6,6 +6,7 @@
 // activity; the inspect panel and the deltas read it verbatim.
 import type { BehaviorNode } from '../schemas/behavior.js';
 import type { Chunk } from '../schemas/chunk.js';
+import { deriveSeed } from '../generate/rng.js';
 import type { Npc } from '../schemas/npc.js';
 import { TICK_DT } from './clock.js';
 
@@ -49,10 +50,21 @@ export class NpcRuntime {
   #leaves: Leaf[] = [];
   #cursor = 0;
   #holdTicks = 0;
+  // Personal standing spot: a deterministic offset around any move
+  // target, so two NPCs sharing a destination stand beside each other
+  // instead of inside each other.
+  #offset: [number, number];
 
   constructor(npc: Npc, chunk: Chunk, origin: [number, number]) {
     this.#npc = npc;
     this.#origin = origin;
+    const hash = deriveSeed(0, npc.id);
+    const angle = ((hash % 360) * Math.PI) / 180;
+    const radius = 0.5 + ((hash >>> 9) % 40) / 100;
+    this.#offset = [
+      Math.round(Math.cos(angle) * radius * 100) / 100,
+      Math.round(Math.sin(angle) * radius * 100) / 100,
+    ];
     this.#navNodes = new Map(chunk.nav.nodes.map((n) => [n.id, n.position]));
     const start = chunk.nav.nodes[0]!.position;
     this.state = {
@@ -106,7 +118,11 @@ export class NpcRuntime {
         this.#advance(); // gate-validated worlds never hit this
         return this.state;
       }
-      const [tx, ty, tz] = [this.#origin[0] + target[0], target[1], this.#origin[1] + target[2]];
+      const [tx, ty, tz] = [
+        this.#origin[0] + target[0] + this.#offset[0],
+        target[1],
+        this.#origin[1] + target[2] + this.#offset[1],
+      ];
       const [dx, dy, dz] = [tx - this.state.pos[0], ty - this.state.pos[1], tz - this.state.pos[2]];
       const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
       const stepLen = WALK_SPEED * TICK_DT;

@@ -46,12 +46,20 @@ export interface ThemeTokens {
   typography: { display: string; mono: string };
 }
 
+export interface ConstructionSite {
+  chunk: string;
+  pr: number;
+  url?: string;
+}
+
 export interface WorldInfo {
   world: string;
   premise: string;
   seed: number;
+  charter_version?: number;
+  construction?: ConstructionSite[];
   phases: string[];
-  theme: ThemeTokens;
+  theme?: Partial<ThemeTokens>;
   chunks: number;
   npcs: number;
   clock: { tick: number; phase: string; timeOfDay: number };
@@ -84,3 +92,8 @@ export type SimMessage = SimSnapshot | SimDelta;
 
 /** Engine grammar: world units per chunk side (matches the generator). */
 export const CHUNK_SIZE = 16;
+
+/** Engine grammar: sim clock shape (matches engine/src/sim/clock.ts). */
+export const TICKS_PER_PHASE = 600;
+export const PHASES_PER_DAY = 4;
+export const TICKS_PER_DAY = TICKS_PER_PHASE * PHASES_PER_DAY;
