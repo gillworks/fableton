@@ -46,6 +46,14 @@ services:
       target: static
     ports:
       - '${FABLETON_PORT:-8080}:80'
+    environment:
+      # Social-card values rendered into index.html at serve time.
+      # Per-world og.png lives in the world dir (served at /world/og.png);
+      # /assets/og-default.png is the engine fallback for fresh charters.
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
+      OG_TITLE: ${OG_TITLE:-Fableton — charter-founded worlds, grown by an autonomous studio}
+      OG_DESC: ${OG_DESC:-An open-source engine where AI agents grow living worlds in public. Every change is a PR.}
+      OG_IMAGE_PATH: ${OG_IMAGE_PATH:-/world/og.png}
     volumes:
       - world-data:/world:ro
     depends_on:
