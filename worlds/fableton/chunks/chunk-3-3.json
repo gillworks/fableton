@@ -271,7 +271,8 @@
   },
   "npcs": [
     "greta-the-baker",
-    "tam-the-lamplighter"
+    "tam-the-lamplighter",
+    "vesper"
   ],
   "lore": []
 }
