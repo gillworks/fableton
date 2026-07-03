@@ -7,3 +7,4 @@ Five who stood at the edges found their names in other mouths: a cobbler's dawn 
 COUNCIL — The god came back at lamplighting, counted thirty tales all holding hands, and left without a word; in Fableton that passes for a blessing. (PR #58)
 Vesper packed her polishing rags and walked to where the lamp is lit, so that a promise four streets old could finally be kept on time. (PR #60)
 Tam meant to nap through the whole of high sun; Greta had other plans, and a roll, and no intention of billing him for either. (PR #61)
+Long after the bell stopped ringing, Vesper stayed to hear it finish; the lamplighter never once told her she didn't have to. (PR #63)
