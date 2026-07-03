@@ -7,7 +7,16 @@
     "story": "Told the truth to a queen for years and survived it. Freelances now: honest opinions, gently phrased."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "ferrous-the-constant",
+      "kind": "tells him yes, phrased gently, and means it"
+    },
+    {
+      "to": "needle",
+      "kind": "they fact-check each other's compliments"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Mirabel Glass's unhurried day",

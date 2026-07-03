@@ -7,7 +7,16 @@
     "story": "Could talk all along. Mostly chooses not to; the things people say when they think you cannot answer."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "pip-halfpenny",
+      "kind": "could confirm everything; declines"
+    },
+    {
+      "to": "bo-brindleson",
+      "kind": "herds the three regrets, wordlessly, no charge"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Brindle's unhurried day",

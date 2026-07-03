@@ -7,7 +7,12 @@
     "story": "Keeps the town's thorns civic-minded. A hedge that blocks a path answers to her."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "fable-jack",
+      "kind": "keeps his license number written on a thorn"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Bramble Rose's unhurried day",

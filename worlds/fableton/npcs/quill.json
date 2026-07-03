@@ -7,7 +7,12 @@
     "story": "Retired from gold on medical advice. The eggs are just eggs and she has never been happier."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "winsome",
+      "kind": "asks her to return the coins people still throw at her"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Quill's unhurried day",

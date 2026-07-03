@@ -7,7 +7,12 @@
     "story": "Buys spent candles and swears the last inch burns truest. The lamplighter saves him stubs."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "tam-the-lamplighter",
+      "kind": "swears Tam's stubs burn truest"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Ember Wick's unhurried day",

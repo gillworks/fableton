@@ -7,7 +7,12 @@
     "story": "Grew around a castle for a hundred years. Prunes himself now, out of respect for the neighbors."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "fable-jack",
+      "kind": "passes inspection out of spite"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Old Thorn's unhurried day",

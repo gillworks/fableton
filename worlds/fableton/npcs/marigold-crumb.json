@@ -7,7 +7,16 @@
     "story": "Walked out of the witch's oven and into a long, careful life. She and Greta do not discuss it. They play cards."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "greta-the-baker",
+      "kind": "wins at cards, never at forgetting"
+    },
+    {
+      "to": "goodwife-crumb",
+      "kind": "followed her breadcrumbs out of the dark, once"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Marigold Crumb's unhurried day",

@@ -7,7 +7,12 @@
     "story": "Escaped a nursery story with most of his springs. Winds himself now, thank you."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "the-lesser-piper",
+      "kind": "files a complaint every time the piper practices"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Tick's unhurried day",

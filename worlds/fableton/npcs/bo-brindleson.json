@@ -7,7 +7,12 @@
     "story": "Down to three sheep, all named after regrets. They keep each other honest."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "brindle",
+      "kind": "pays him in silence, which suits them both"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Bo Brindleson's unhurried day",

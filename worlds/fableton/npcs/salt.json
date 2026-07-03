@@ -7,7 +7,12 @@
     "story": "Told her father the truth and was banished for it. Runs the seasoning stall; everything she touches tastes right."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "stilts",
+      "kind": "seasons every dish he serves"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Salt's unhurried day",

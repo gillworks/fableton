@@ -7,7 +7,16 @@
     "story": "Nobody believed him then, so now he verifies everything twice. The chronicle's most exhausting fact-checker."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "widow-hood",
+      "kind": "the one report he never doubted"
+    },
+    {
+      "to": "brindle",
+      "kind": "his only unverifiable source"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Pip Halfpenny's unhurried day",

@@ -7,7 +7,12 @@
     "story": "Swept the famous hearth before the famous girl. Kept the other slipper. Tells nobody which foot."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "dame-spindle",
+      "kind": "they trade lock recommendations and reveal nothing"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Granny Ash's unhurried day",
