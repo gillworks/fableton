@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "marigold-crumb",
+  "identity": {
+    "name": "Marigold Crumb",
+    "kind": "gingerbread survivor",
+    "story": "Walked out of the witch's oven and into a long, careful life. She and Greta do not discuss it. They play cards."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Marigold Crumb's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "walking the long way past the bakery",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "tending her unsweetened garden",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "playing cards against Greta, evenly",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "sleeping with the window cracked",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

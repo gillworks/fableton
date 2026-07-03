@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "pip-halfpenny",
+  "identity": {
+    "name": "Pip Halfpenny",
+    "kind": "the boy who cried wolf, retired",
+    "story": "Nobody believed him then, so now he verifies everything twice. The chronicle's most exhausting fact-checker."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Pip Halfpenny's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "rehearsing truer alarms",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "cross-checking the morning gossip",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "asking the lamps if they saw it too",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "listening for wolves out of habit",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

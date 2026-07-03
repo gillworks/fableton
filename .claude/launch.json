@@ -7,14 +7,22 @@
       "runtimeArgs": [
         "--dir",
         "engine",
-        "serve"
+        "exec",
+        "tsx",
+        "src/api/cli.ts",
+        "--charter",
+        "../charters/fableton/charter.yaml",
+        "--world",
+        "../worlds/fableton"
       ],
       "port": 8091
     },
     {
       "name": "client",
-      "runtimeExecutable": "pnpm",
+      "runtimeExecutable": "env",
       "runtimeArgs": [
+        "FABLETON_WORLD=worlds/fableton",
+        "pnpm",
         "--dir",
         "client",
         "dev"
@@ -40,6 +48,17 @@
       "runtimeArgs": [
         "FABLETON_CHARTER=charters/skeinsea/charter.yaml",
         "docker",
+        "compose",
+        "-f",
+        "deploy/compose.yaml",
+        "up"
+      ],
+      "port": 8080
+    },
+    {
+      "name": "stack",
+      "runtimeExecutable": "docker",
+      "runtimeArgs": [
         "compose",
         "-f",
         "deploy/compose.yaml",

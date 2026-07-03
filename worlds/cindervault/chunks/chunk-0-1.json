@@ -116,7 +116,7 @@
       "scale": 0.917
     },
     {
-      "asset": "rock-small",
+      "asset": "rock-large",
       "position": [
         3.111,
         0.663,
@@ -126,7 +126,7 @@
       "scale": 1.046
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         8.919,
         0.435,
@@ -146,7 +146,7 @@
       "scale": 1.091
     },
     {
-      "asset": "stall",
+      "asset": "rock-wide",
       "position": [
         12.101,
         0.496,
@@ -154,6 +154,23 @@
       ],
       "rotation_y": 1.378,
       "scale": 1.018
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        3.655,
+        0.579,
+        2.667
+      ],
+      "rotation_y": 1.563,
+      "width": 3.702,
+      "depth": 3.399,
+      "height": 2.748,
+      "wall_color": "#c89c79",
+      "roof_color": "#372f2a",
+      "windows": 2,
+      "chimney": false
     }
   ],
   "nav": {

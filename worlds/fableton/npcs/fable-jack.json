@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "fable-jack",
+  "identity": {
+    "name": "Fable Jack",
+    "kind": "beanstalk arborist",
+    "story": "Grows them short and legal now. Inspects any vine over knee height with a licensed axe."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Fable Jack's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "measuring the morning growth",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "inspecting vines for ambition",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "pruning anything with clouds in mind",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "sleeping with the axe registered",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

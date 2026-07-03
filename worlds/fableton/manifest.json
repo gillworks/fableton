@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "world": "Fableton",
+  "seed": 20260702,
+  "chunks": [
+    {
+      "id": "chunk-0-3",
+      "path": "chunks/chunk-0-3.json",
+      "origin": [
+        0,
+        48
+      ],
+      "adjacent": [
+        "chunk-1-3"
+      ]
+    },
+    {
+      "id": "chunk-1-3",
+      "path": "chunks/chunk-1-3.json",
+      "origin": [
+        16,
+        48
+      ],
+      "adjacent": [
+        "chunk-0-3",
+        "chunk-1-4",
+        "chunk-2-3"
+      ]
+    },
+    {
+      "id": "chunk-1-4",
+      "path": "chunks/chunk-1-4.json",
+      "origin": [
+        16,
+        64
+      ],
+      "adjacent": [
+        "chunk-1-3",
+        "chunk-2-4"
+      ]
+    },
+    {
+      "id": "chunk-2-3",
+      "path": "chunks/chunk-2-3.json",
+      "origin": [
+        32,
+        48
+      ],
+      "adjacent": [
+        "chunk-1-3",
+        "chunk-2-4",
+        "chunk-3-3"
+      ]
+    },
+    {
+      "id": "chunk-2-4",
+      "path": "chunks/chunk-2-4.json",
+      "origin": [
+        32,
+        64
+      ],
+      "adjacent": [
+        "chunk-1-4",
+        "chunk-2-3",
+        "chunk-3-4"
+      ]
+    },
+    {
+      "id": "chunk-3-0",
+      "path": "chunks/chunk-3-0.json",
+      "origin": [
+        48,
+        0
+      ],
+      "adjacent": [
+        "chunk-3-1"
+      ]
+    },
+    {
+      "id": "chunk-3-1",
+      "path": "chunks/chunk-3-1.json",
+      "origin": [
+        48,
+        16
+      ],
+      "adjacent": [
+        "chunk-3-0",
+        "chunk-3-2",
+        "chunk-4-1"
+      ]
+    },
+    {
+      "id": "chunk-3-2",
+      "path": "chunks/chunk-3-2.json",
+      "origin": [
+        48,
+        32
+      ],
+      "adjacent": [
+        "chunk-3-1",
+        "chunk-3-3",
+        "chunk-4-2"
+      ]
+    },
+    {
+      "id": "chunk-3-3",
+      "path": "chunks/chunk-3-3.json",
+      "origin": [
+        48,
+        48
+      ],
+      "adjacent": [
+        "chunk-2-3",
+        "chunk-3-2",
+        "chunk-3-4"
+      ]
+    },
+    {
+      "id": "chunk-3-4",
+      "path": "chunks/chunk-3-4.json",
+      "origin": [
+        48,
+        64
+      ],
+      "adjacent": [
+        "chunk-2-4",
+        "chunk-3-3"
+      ]
+    },
+    {
+      "id": "chunk-4-1",
+      "path": "chunks/chunk-4-1.json",
+      "origin": [
+        64,
+        16
+      ],
+      "adjacent": [
+        "chunk-3-1",
+        "chunk-4-2"
+      ]
+    },
+    {
+      "id": "chunk-4-2",
+      "path": "chunks/chunk-4-2.json",
+      "origin": [
+        64,
+        32
+      ],
+      "adjacent": [
+        "chunk-3-2",
+        "chunk-4-1",
+        "chunk-5-2"
+      ]
+    },
+    {
+      "id": "chunk-5-2",
+      "path": "chunks/chunk-5-2.json",
+      "origin": [
+        80,
+        32
+      ],
+      "adjacent": [
+        "chunk-4-2",
+        "chunk-6-2"
+      ]
+    },
+    {
+      "id": "chunk-6-2",
+      "path": "chunks/chunk-6-2.json",
+      "origin": [
+        96,
+        32
+      ],
+      "adjacent": [
+        "chunk-5-2",
+        "chunk-6-3",
+        "chunk-7-2"
+      ]
+    },
+    {
+      "id": "chunk-6-3",
+      "path": "chunks/chunk-6-3.json",
+      "origin": [
+        96,
+        48
+      ],
+      "adjacent": [
+        "chunk-6-2"
+      ]
+    },
+    {
+      "id": "chunk-7-2",
+      "path": "chunks/chunk-7-2.json",
+      "origin": [
+        112,
+        32
+      ],
+      "adjacent": [
+        "chunk-6-2"
+      ]
+    }
+  ]
+}

@@ -67,7 +67,7 @@ inhabitants:
   naming: role-names and epithet-names, never modern names — Old Ash the Woodcutter, Grandmother Nettle, the Second-Cleverest Fox, Mrs. Spindle-That-Was
 
 generation:
-  scale: village
+  scale: town
   region_cadence: weekly
   caps:
     max_regions: 24

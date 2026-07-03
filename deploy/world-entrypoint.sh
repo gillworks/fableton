@@ -19,9 +19,9 @@ if [ ! -f "$WORLD/manifest.json" ]; then
   # A charter with a committed starter world (worlds/<name>/) boots it —
   # residents included; the flagship's lives with the engine fixtures.
   NAME=$(basename "$(dirname "$CHARTER")")
-  if [ "$CHARTER" = "charters/_template/charter.yaml" ] || [ "$CHARTER" = "charters/fableton/charter.yaml" ]; then
-    echo "founding the flagship from its hand-authored starter world"
-    cp -R /app/engine/test/fixtures/sample-world/. "$WORLD/"
+  if [ "$CHARTER" = "charters/_template/charter.yaml" ]; then
+    echo "founding the flagship from its starter town"
+    cp -R /app/worlds/fableton/. "$WORLD/"
   elif [ -d "/app/worlds/$NAME" ]; then
     echo "founding $NAME from its hand-authored starter world"
     cp -R "/app/worlds/$NAME/." "$WORLD/"

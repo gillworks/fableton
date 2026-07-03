@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "morrow",
+  "identity": {
+    "name": "Morrow",
+    "kind": "fortune-teller (past tense only)",
+    "story": "Sees yesterdays with perfect clarity. Cheaper than the future and, she insists, more useful."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Morrow's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "reading yesterday's tea leaves",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "telling fortunes that already happened",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "confirming the day's predictions",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "filing the used futures",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "vesper",
+  "identity": {
+    "name": "Vesper",
+    "kind": "bell-polisher (freelance)",
+    "story": "Polishes anything that rings. The town has one bell and she has opinions about it."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Vesper's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "auditioning the morning ring",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "polishing what the town will let her",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "ringing in the lamplighting, softly",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "listening to the bell settle",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "needle",
+  "identity": {
+    "name": "Needle",
+    "kind": "tailor to the emperor (the honest one)",
+    "story": "The apprentice who said the emperor wore nothing. Sews real clothes now, checks twice that they exist."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Needle's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "confirming the cloth exists",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "fitting the town, honestly",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "double-stitching by lamplight",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "sleeping under verified blankets",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

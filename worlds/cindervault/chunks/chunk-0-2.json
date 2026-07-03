@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-0-2",
   "terrain": {
-    "biome": "rise",
+    "biome": "meadow",
     "grid_size": 9,
     "heights": [
       0.643,
@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "stall-red",
+      "asset": "stall-green",
       "position": [
         3.451,
         0.532,
@@ -116,7 +116,7 @@
       "scale": 1.082
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         2.048,
         0.415,
@@ -126,7 +126,7 @@
       "scale": 0.981
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-high",
       "position": [
         8.031,
         0.486,
@@ -136,7 +136,7 @@
       "scale": 0.911
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         6.346,
         0.601,
@@ -146,7 +146,7 @@
       "scale": 0.972
     },
     {
-      "asset": "rock-small",
+      "asset": "rock-large",
       "position": [
         11.491,
         0.573,
@@ -154,6 +154,38 @@
       ],
       "rotation_y": 0.247,
       "scale": 0.937
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        4.86,
+        0.527,
+        8.617
+      ],
+      "rotation_y": 1.612,
+      "width": 2.368,
+      "depth": 2.99,
+      "height": 1.792,
+      "wall_color": "#be8a60",
+      "roof_color": "#1a1614",
+      "windows": 1,
+      "chimney": false
+    },
+    {
+      "position": [
+        9.517,
+        0.646,
+        11.433
+      ],
+      "rotation_y": 4.694,
+      "width": 2.784,
+      "depth": 2.483,
+      "height": 1.812,
+      "wall_color": "#bf8c63",
+      "roof_color": "#ed9945",
+      "windows": 1,
+      "chimney": true
     }
   ],
   "nav": {

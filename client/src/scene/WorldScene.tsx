@@ -44,12 +44,14 @@ const damp = (from: number, to: number, dt: number): number =>
 export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction }: WorldSceneProps): ReactElement {
   const worldRef = useRef<Group>(new Group());
   const chunkGroups = useRef(new Map<string, Group>());
+  const windowMaterials = useRef<import('../core/buildings.js').BuiltBuilding['windowMaterials']>([]);
   const streamer = useMemo(() => {
     const s = new ChunkStreamer(bundle.manifest, (path) => fetchChunk<Chunk>(path));
     s.onChunk((chunk, entry) => {
-      const group = buildChunkGroup(chunk, entry.origin, pieces);
-      chunkGroups.current.set(chunk.id, group);
-      worldRef.current.add(group);
+      const built = buildChunkGroup(chunk, entry.origin, pieces);
+      chunkGroups.current.set(chunk.id, built.group);
+      windowMaterials.current.push(...built.windowMaterials);
+      worldRef.current.add(built.group);
     });
     return s;
   }, [bundle.manifest, pieces]);
@@ -78,7 +80,11 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
     frustum.setFromProjectionMatrix(matrix);
     const visible = streamer.visible(frustum);
     for (const [id, group] of chunkGroups.current) group.visible = visible.has(id);
-    // Relight toward the phase's targets — never relayout.
+    // Relight toward the phase's targets — never relayout. Windows glow
+    // as the lamps come on.
+    for (const material of windowMaterials.current) {
+      material.emissiveIntensity = damp(material.emissiveIntensity, lighting.windowGlow, dt);
+    }
     const sun = sunRef.current as { intensity: number; color: Color; position: Vector3 } | null;
     if (sun) {
       sun.intensity = damp(sun.intensity, lighting.sunIntensity, dt);
@@ -106,8 +112,10 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
         target={[coin.center[0], 0.5, coin.center[1]]}
         enableDamping
         dampingFactor={0.08}
-        minDistance={10}
-        maxDistance={70}
+        minDistance={6}
+        // Zoom out far enough to frame the whole diorama, however big
+        // the world grows.
+        maxDistance={Math.max(70, Math.max(coin.rx, coin.rz) * 2.6)}
         maxPolarAngle={1.32}
         makeDefault
       />

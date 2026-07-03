@@ -16,7 +16,8 @@ export type BehaviorNode =
   | { type: 'sequence'; label: string; children: BehaviorNode[] }
   | { type: 'move'; label: string; to: string }
   | { type: 'interact'; label: string; with: string; duration_s: number }
-  | { type: 'idle'; label: string; duration_s: number };
+  | { type: 'idle'; label: string; duration_s: number }
+  | { type: 'wander'; label: string; radius: number; min_pause_s: number; max_pause_s: number };
 
 const label = nonEmpty;
 const duration_s = z.number().positive().finite();
@@ -54,6 +55,16 @@ export const BehaviorNodeSchema: z.ZodType<BehaviorNode> = z.lazy(() =>
       type: z.literal('idle'),
       label,
       duration_s,
+    }),
+    // Ambient drift: pick a seeded-random point nearby, walk there, pause a
+    // seeded-random while, repeat. Randomness comes from the sim's PRNG —
+    // deterministic, per-NPC (CLAUDE.md invariant 3).
+    z.strictObject({
+      type: z.literal('wander'),
+      label,
+      radius: z.number().positive().finite().default(5),
+      min_pause_s: z.number().positive().finite().default(2),
+      max_pause_s: z.number().positive().finite().default(10),
     }),
   ]),
 );

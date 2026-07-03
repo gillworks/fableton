@@ -6,6 +6,7 @@
 // the parsed charter via theme tokens — zero world constants.
 import { useEffect, useState, type CSSProperties, type ReactElement } from 'react';
 import { dayOf, hudInk, pollChronicle, type ChronicleEntry } from '../core/hud.js';
+import { TICKS_PER_DAY } from '../core/types.js';
 import type { WorldTheme } from '../core/theme.js';
 import type { WorldInfo } from '../core/types.js';
 
@@ -79,24 +80,52 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
           DAY {dayOf(tick)} · {info.phases[shownPhase] ?? '—'}
           {shownPhase !== livePhase ? ' · preview' : ''}
         </div>
-        <div style={{ display: 'flex', gap: 4, marginTop: 8, justifyContent: 'flex-end' }}>
+        {/* The world clock: progress through today, and how fast a day passes */}
+        <div
+          title={`time of day: ${Math.round(((tick % TICKS_PER_DAY) / TICKS_PER_DAY) * 100)}%`}
+          style={{
+            height: 3,
+            borderRadius: 999,
+            marginTop: 6,
+            background: onPale ? 'rgba(32,27,20,0.18)' : 'rgba(246,239,224,0.25)',
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              width: `${((tick % TICKS_PER_DAY) / TICKS_PER_DAY) * 100}%`,
+              height: '100%',
+              background: theme.accentHex,
+              transition: 'width 1s linear',
+            }}
+          />
+        </div>
+        <div style={{ display: 'inline-flex', background: onPale ? 'rgba(246,239,224,0.75)' : 'rgba(20,17,14,0.55)', borderRadius: 999, padding: 3, gap: 2, marginTop: 8 }}>
           {info.phases.map((phase, index) => (
             <button
               key={phase}
               title={phase + (index === livePhase ? ' (live)' : ' (preview relight)')}
               onClick={() => onSelectPhase(index === livePhase ? null : index)}
               style={{
-                width: 34,
-                height: 10,
+                fontFamily: mono,
+                fontSize: 10.5,
+                letterSpacing: 0.5,
+                padding: '4px 10px',
                 borderRadius: 999,
-                border: `1px solid ${fg}`,
+                border: 'none',
                 background: index === shownPhase ? theme.accentHex : 'transparent',
-                opacity: index === shownPhase ? 1 : 0.55,
+                color: index === shownPhase ? 'rgba(32,27,20,0.92)' : fg,
+                opacity: index === shownPhase ? 1 : 0.7,
+                fontWeight: index === shownPhase ? 700 : 400,
                 cursor: 'pointer',
-                padding: 0,
               }}
-            />
+            >
+              {phase}
+            </button>
           ))}
+        </div>
+        <div style={{ fontFamily: mono, fontSize: 9.5, letterSpacing: 1, color: fg, opacity: 0.6, marginTop: 6 }}>
+          1 DAY ≈ {Math.round((info.pace?.seconds_per_day ?? TICKS_PER_DAY / 2) / 60)} MIN
         </div>
       </div>
 

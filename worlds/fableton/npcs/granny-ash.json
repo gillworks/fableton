@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "granny-ash",
+  "identity": {
+    "name": "Granny Ash",
+    "kind": "cinder-sweeper emerita",
+    "story": "Swept the famous hearth before the famous girl. Kept the other slipper. Tells nobody which foot."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Granny Ash's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "sweeping thresholds for luck",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "airing the story's other side",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "banking the evening fires",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "keeping the slipper warm",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "old-thorn",
+  "identity": {
+    "name": "Old Thorn",
+    "kind": "hedge, semi-retired",
+    "story": "Grew around a castle for a hundred years. Prunes himself now, out of respect for the neighbors."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Old Thorn's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "stretching his roots politely",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "photosynthesizing with intent",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "redirecting lost travelers around himself",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "standing very still, but meaningfully",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

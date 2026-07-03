@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-1-1",
   "terrain": {
-    "biome": "grove",
+    "biome": "meadow",
     "grid_size": 9,
     "heights": [
       0.661,
@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "stall-stool",
+      "asset": "stall-green",
       "position": [
         6.043,
         0.749,
@@ -106,7 +106,7 @@
       "scale": 1.041
     },
     {
-      "asset": "stall-stool",
+      "asset": "stall-red",
       "position": [
         12.765,
         0.569,
@@ -126,7 +126,7 @@
       "scale": 1.021
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         6.394,
         0.737,
@@ -136,7 +136,7 @@
       "scale": 0.953
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         12.795,
         0.894,
@@ -146,7 +146,7 @@
       "scale": 1.064
     },
     {
-      "asset": "lantern",
+      "asset": "hedge",
       "position": [
         2.091,
         0.83,
@@ -156,7 +156,7 @@
       "scale": 0.983
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         12.611,
         0.753,
@@ -164,6 +164,53 @@
       ],
       "rotation_y": 2.602,
       "scale": 0.972
+    },
+    {
+      "asset": "lantern",
+      "position": [
+        6,
+        0.744,
+        7
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "fountain-round",
+      "position": [
+        9.5,
+        0.737,
+        8.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "stall-bench",
+      "position": [
+        7.5,
+        0.824,
+        10.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        3.566,
+        0.914,
+        12.302
+      ],
+      "rotation_y": 1.511,
+      "width": 3.631,
+      "depth": 3.751,
+      "height": 1.726,
+      "wall_color": "#95cbc3",
+      "roof_color": "#9ea4ae",
+      "windows": 3,
+      "chimney": false
     }
   ],
   "nav": {
@@ -185,6 +232,14 @@
         ]
       },
       {
+        "id": "gate-chunk-2-1",
+        "position": [
+          15,
+          0.794,
+          8
+        ]
+      },
+      {
         "id": "gate-chunk-0-1",
         "position": [
           1,
@@ -200,16 +255,28 @@
       ],
       [
         "heart",
+        "gate-chunk-2-1"
+      ],
+      [
+        "heart",
         "gate-chunk-0-1"
       ]
     ],
     "portals": [
+      {
+        "node": "gate-chunk-2-1",
+        "to_chunk": "chunk-2-1"
+      },
       {
         "node": "gate-chunk-0-1",
         "to_chunk": "chunk-0-1"
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "ninth-bell-odd",
+    "slackwater-meg",
+    "haar"
+  ],
   "lore": []
 }

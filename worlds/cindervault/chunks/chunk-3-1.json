@@ -116,7 +116,7 @@
       "scale": 0.917
     },
     {
-      "asset": "stall-red",
+      "asset": "stall-green",
       "position": [
         6.541,
         0.621,
@@ -136,7 +136,7 @@
       "scale": 0.973
     },
     {
-      "asset": "stall-green",
+      "asset": "stall-bench",
       "position": [
         12.625,
         0.687,
@@ -146,7 +146,7 @@
       "scale": 1.078
     },
     {
-      "asset": "rock-wide",
+      "asset": "rock-small",
       "position": [
         10.228,
         0.549,
@@ -154,6 +154,23 @@
       ],
       "rotation_y": 1.042,
       "scale": 1.04
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        5.516,
+        0.473,
+        12.691
+      ],
+      "rotation_y": 3.154,
+      "width": 3.576,
+      "depth": 2.244,
+      "height": 1.865,
+      "wall_color": "#bf8c63",
+      "roof_color": "#231e1a",
+      "windows": 2,
+      "chimney": true
     }
   ],
   "nav": {

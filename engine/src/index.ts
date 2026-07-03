@@ -27,9 +27,11 @@ export {
   vec3,
 } from './schemas/common.js';
 export {
+  BuildingSchema,
   ChunkSchema,
   NavSchema,
   PropPlacementSchema,
+  type Building,
   type Chunk,
   type Nav,
   type PropPlacement,

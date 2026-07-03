@@ -34,7 +34,19 @@
         16
       ],
       "adjacent": [
-        "chunk-0-1"
+        "chunk-0-1",
+        "chunk-2-1"
+      ]
+    },
+    {
+      "id": "chunk-2-1",
+      "path": "chunks/chunk-2-1.json",
+      "origin": [
+        32,
+        16
+      ],
+      "adjacent": [
+        "chunk-1-1"
       ]
     }
   ]

@@ -253,26 +253,29 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
   }
   for (const { file, chunk } of chunks) {
     // Terrain is one draw call and 2·(grid_size−1)² triangles; each placed
-    // prop is one draw call and its registry poly_count.
+    // prop is one draw call and its registry poly_count; each parametric
+    // building is priced at 6 draw calls (walls, two roof slabs, door,
+    // windows, chimney) and 200 triangles — a deliberate over-estimate.
     const terrainPolys = 2 * (chunk.terrain.grid_size - 1) ** 2;
     const propPolys = chunk.props.reduce(
       (sum, p) => sum + (assetsById.get(p.asset)?.poly_count ?? 0),
       0,
     );
-    const polys = terrainPolys + propPolys;
+    const buildingPolys = chunk.buildings.length * 200;
+    const polys = terrainPolys + propPolys + buildingPolys;
     if (polys > caps.chunk_poly_budget) {
       violations.push({
         file,
         rule: 'perf-budget',
-        message: `chunk "${chunk.id}" has ${polys} triangles (terrain ${terrainPolys} + props ${propPolys}), budget is ${caps.chunk_poly_budget}`,
+        message: `chunk "${chunk.id}" has ${polys} triangles (terrain ${terrainPolys} + props ${propPolys} + buildings ${buildingPolys}), budget is ${caps.chunk_poly_budget}`,
       });
     }
-    const drawCalls = 1 + chunk.props.length;
+    const drawCalls = 1 + chunk.props.length + chunk.buildings.length * 6;
     if (drawCalls > caps.chunk_drawcall_budget) {
       violations.push({
         file,
         rule: 'perf-budget',
-        message: `chunk "${chunk.id}" needs ${drawCalls} draw calls (terrain + ${chunk.props.length} props), budget is ${caps.chunk_drawcall_budget}`,
+        message: `chunk "${chunk.id}" needs ${drawCalls} draw calls (terrain + ${chunk.props.length} props + ${chunk.buildings.length} buildings), budget is ${caps.chunk_drawcall_budget}`,
       });
     }
   }

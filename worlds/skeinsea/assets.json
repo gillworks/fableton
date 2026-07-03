@@ -272,37 +272,6 @@
         "source": "Kenney Fantasy Town Kit 2.0 — https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
         "attribution": "Kenney (www.kenney.nl)"
       }
-    },
-    {
-      "id": "watermill",
-      "name": "Watermill",
-      "path": "assets/kits/kenney-fantasy-town/watermill.glb",
-      "poly_count": 600,
-      "tags": [
-        "building",
-        "landmark",
-        "water"
-      ],
-      "license": {
-        "id": "CC0-1.0",
-        "source": "Kenney Fantasy Town Kit 2.0 — https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
-        "attribution": "Kenney (www.kenney.nl)"
-      }
-    },
-    {
-      "id": "windmill",
-      "name": "Windmill",
-      "path": "assets/kits/kenney-fantasy-town/windmill.glb",
-      "poly_count": 732,
-      "tags": [
-        "building",
-        "landmark"
-      ],
-      "license": {
-        "id": "CC0-1.0",
-        "source": "Kenney Fantasy Town Kit 2.0 — https://kenney.nl/assets/fantasy-town-kit (vendored 2026-07-02; license text at assets/kits/kenney-fantasy-town/License.txt)",
-        "attribution": "Kenney (www.kenney.nl)"
-      }
     }
   ]
 }

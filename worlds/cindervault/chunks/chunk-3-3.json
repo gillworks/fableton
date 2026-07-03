@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-3-3",
   "terrain": {
-    "biome": "rise",
+    "biome": "grove",
     "grid_size": 9,
     "heights": [
       0.634,
@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "tree",
+      "asset": "stall-stool",
       "position": [
         9.313,
         0.581,
@@ -116,7 +116,7 @@
       "scale": 0.998
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         6.954,
         0.575,
@@ -126,7 +126,7 @@
       "scale": 0.952
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         5.94,
         0.577,
@@ -136,7 +136,7 @@
       "scale": 0.927
     },
     {
-      "asset": "stall",
+      "asset": "rock-wide",
       "position": [
         4.965,
         0.569,
@@ -144,6 +144,38 @@
       ],
       "rotation_y": 4.623,
       "scale": 1.082
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        4.567,
+        0.564,
+        3.44
+      ],
+      "rotation_y": 3.172,
+      "width": 4.326,
+      "depth": 2.492,
+      "height": 2.268,
+      "wall_color": "#c59772",
+      "roof_color": "#26201d",
+      "windows": 2,
+      "chimney": false
+    },
+    {
+      "position": [
+        12.676,
+        0.544,
+        11.671
+      ],
+      "rotation_y": 4.708,
+      "width": 2.658,
+      "depth": 3.757,
+      "height": 1.986,
+      "wall_color": "#c2926b",
+      "roof_color": "#e98725",
+      "windows": 3,
+      "chimney": false
     }
   ],
   "nav": {

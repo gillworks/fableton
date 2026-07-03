@@ -18,6 +18,7 @@ import {
   type BufferGeometry,
   type Material,
 } from 'three';
+import { buildBuilding, type BuiltBuilding } from './buildings.js';
 import { CHUNK_SIZE, type Chunk } from './types.js';
 
 /** One renderable piece of a kit asset: geometry + material + its local transform. */
@@ -96,25 +97,59 @@ export function buildPropInstances(
   return meshes;
 }
 
-/** Draw calls this chunk costs as built: terrain + one per instanced sub-mesh. */
+/** Draw calls as built: terrain + instanced sub-meshes + ~6 per building (validator parity). */
 export function drawCallCount(chunk: Chunk, pieces: Map<string, AssetPiece[]>): number {
   const assets = new Set(chunk.props.map((p) => p.asset));
   let calls = 1;
   for (const id of assets) calls += (pieces.get(id) ?? []).length;
+  calls += (chunk.buildings?.length ?? 0) * 6;
   return calls;
+}
+
+export interface BuiltChunk {
+  group: Group;
+  windowMaterials: BuiltBuilding['windowMaterials'];
 }
 
 export function buildChunkGroup(
   chunk: Chunk,
   origin: [number, number],
   pieces: Map<string, AssetPiece[]>,
-): Group {
+): BuiltChunk {
   const group = new Group();
   group.name = `chunk:${chunk.id}`;
   group.position.set(origin[0], 0, origin[1]);
   group.add(buildTerrain(chunk));
   for (const mesh of buildPropInstances(chunk, pieces)) group.add(mesh);
-  return group;
+  const windowMaterials: BuiltChunk['windowMaterials'] = [];
+  for (const spec of chunk.buildings ?? []) {
+    const built = buildBuilding(spec);
+    group.add(built.group);
+    windowMaterials.push(...built.windowMaterials);
+  }
+  return { group, windowMaterials };
+}
+
+/**
+ * Some kit models keep their origin mid-body rather than at the base, which
+ * buries them when placed at ground height. Bake a lift into each asset's
+ * local matrices so its lowest vertex sits at y = 0.
+ */
+export function groundAssetPieces(pieces: Map<string, AssetPiece[]>): Map<string, AssetPiece[]> {
+  const box = new Box3();
+  const pieceBox = new Box3();
+  for (const list of pieces.values()) {
+    box.makeEmpty();
+    for (const piece of list) {
+      piece.geometry.computeBoundingBox();
+      pieceBox.copy(piece.geometry.boundingBox!).applyMatrix4(piece.local);
+      box.union(pieceBox);
+    }
+    if (box.isEmpty() || Math.abs(box.min.y) < 0.01) continue;
+    const lift = new Matrix4().makeTranslation(0, -box.min.y, 0);
+    for (const piece of list) piece.local = lift.clone().multiply(piece.local);
+  }
+  return pieces;
 }
 
 /** The diorama coin: an ellipse hugging the world's footprint. */

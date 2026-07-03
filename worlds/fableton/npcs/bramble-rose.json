@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "bramble-rose",
+  "identity": {
+    "name": "Bramble Rose",
+    "kind": "briar warden",
+    "story": "Keeps the town's thorns civic-minded. A hedge that blocks a path answers to her."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Bramble Rose's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "negotiating with the morning thorns",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "training roses along the fence line",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "disarming the evening brambles",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "dreaming in green",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

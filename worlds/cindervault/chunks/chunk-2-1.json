@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-2-1",
   "terrain": {
-    "biome": "meadow",
+    "biome": "rise",
     "grid_size": 9,
     "heights": [
       0.612,
@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "tree-high",
+      "asset": "tree",
       "position": [
         12.894,
         0.671,
@@ -106,7 +106,7 @@
       "scale": 0.964
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         11.912,
         0.662,
@@ -126,7 +126,7 @@
       "scale": 0.944
     },
     {
-      "asset": "tree-crooked",
+      "asset": "tree",
       "position": [
         6.868,
         0.473,
@@ -134,6 +134,23 @@
       ],
       "rotation_y": 1.654,
       "scale": 1.022
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        12.434,
+        0.627,
+        13.342
+      ],
+      "rotation_y": 4.715,
+      "width": 2.748,
+      "depth": 2.683,
+      "height": 2.567,
+      "wall_color": "#bb8458",
+      "roof_color": "#231e1a",
+      "windows": 1,
+      "chimney": true
     }
   ],
   "nav": {

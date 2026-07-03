@@ -106,7 +106,7 @@
       "scale": 0.927
     },
     {
-      "asset": "rock-wide",
+      "asset": "rock-small",
       "position": [
         4.426,
         0.76,
@@ -116,7 +116,7 @@
       "scale": 0.909
     },
     {
-      "asset": "windmill",
+      "asset": "tree-high-round",
       "position": [
         13.217,
         0.81,
@@ -124,6 +124,23 @@
       ],
       "rotation_y": 1.579,
       "scale": 0.963
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        5.733,
+        0.93,
+        2.538
+      ],
+      "rotation_y": 1.63,
+      "width": 4.366,
+      "depth": 2.366,
+      "height": 1.915,
+      "wall_color": "#bc875c",
+      "roof_color": "#1a1614",
+      "windows": 1,
+      "chimney": false
     }
   ],
   "nav": {

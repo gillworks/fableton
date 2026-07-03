@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "goodwife-crumb",
+  "identity": {
+    "name": "Goodwife Crumb",
+    "kind": "breadcrumb-trail consultant",
+    "story": "Led two children home once; now she cannot walk anywhere without leaving a trail. The birds adore her."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Goodwife Crumb's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "scattering the first crumbs",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "being followed by optimistic pigeons",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "sweeping up her own directions",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "dreaming in droppable increments",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

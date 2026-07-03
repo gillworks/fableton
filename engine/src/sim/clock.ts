@@ -14,6 +14,8 @@ export interface ClockState {
   phase: string;
   /** 0..1 through the whole day. */
   timeOfDay: number;
+  /** 1-based day count. */
+  day: number;
 }
 
 export function clockAt(tick: number, phases: readonly string[], ticksPerPhase: number): ClockState {
@@ -22,5 +24,6 @@ export function clockAt(tick: number, phases: readonly string[], ticksPerPhase: 
     tick,
     phase: phases[Math.floor(tick / ticksPerPhase) % phases.length]!,
     timeOfDay: Math.round(((tick % dayTicks) / dayTicks) * 1000) / 1000,
+    day: Math.floor(tick / dayTicks) + 1,
   };
 }

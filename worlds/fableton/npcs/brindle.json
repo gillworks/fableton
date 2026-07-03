@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "brindle",
+  "identity": {
+    "name": "Brindle",
+    "kind": "talking dog (semi-verbal by choice)",
+    "story": "Could talk all along. Mostly chooses not to; the things people say when they think you cannot answer."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Brindle's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "patrolling the morning smells",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "holding court by the stall",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "escorting the lamplighter",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "guarding everyone, unpaid",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

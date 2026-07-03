@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "ember-wick",
+  "identity": {
+    "name": "Ember Wick",
+    "kind": "candle-ends collector",
+    "story": "Buys spent candles and swears the last inch burns truest. The lamplighter saves him stubs."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Ember Wick's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "collecting the night's stubs",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "trading wax stories at the stall",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "following the lamplighter at a respectful distance",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "burning his best inch alone",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

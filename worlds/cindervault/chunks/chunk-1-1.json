@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-1-1",
   "terrain": {
-    "biome": "grove",
+    "biome": "meadow",
     "grid_size": 9,
     "heights": [
       0.576,
@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         7.849,
         0.658,
@@ -126,7 +126,7 @@
       "scale": 0.95
     },
     {
-      "asset": "fountain-round",
+      "asset": "cart-high",
       "position": [
         5.985,
         0.601,
@@ -136,7 +136,7 @@
       "scale": 1.084
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         3.652,
         0.664,
@@ -146,7 +146,7 @@
       "scale": 0.978
     },
     {
-      "asset": "tree-high",
+      "asset": "tree-crooked",
       "position": [
         6.012,
         0.654,
@@ -154,36 +154,23 @@
       ],
       "rotation_y": 1.806,
       "scale": 0.911
-    },
+    }
+  ],
+  "buildings": [
     {
-      "asset": "stall-red",
       "position": [
-        5.5,
-        0.615,
-        6.0
+        13.064,
+        0.597,
+        11.987
       ],
-      "rotation_y": 0,
-      "scale": 1
-    },
-    {
-      "asset": "cart",
-      "position": [
-        7.2,
-        0.657,
-        9.0
-      ],
-      "rotation_y": 0,
-      "scale": 1
-    },
-    {
-      "asset": "lantern",
-      "position": [
-        9.0,
-        0.67,
-        6.5
-      ],
-      "rotation_y": 0,
-      "scale": 1
+      "rotation_y": 1.619,
+      "width": 4.098,
+      "depth": 2.225,
+      "height": 1.984,
+      "wall_color": "#c59772",
+      "roof_color": "#201b18",
+      "windows": 3,
+      "chimney": true
     }
   ],
   "nav": {
@@ -278,10 +265,6 @@
       }
     ]
   },
-  "npcs": [
-    "brann-of-the-third-hearth",
-    "ledger-ash",
-    "cinder-moll"
-  ],
+  "npcs": [],
   "lore": []
 }

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "master-thumbling",
+  "identity": {
+    "name": "Master Thumbling",
+    "kind": "a very small hero",
+    "story": "Slew a giant by paperwork. The town keeps losing sight of him and he has learned to announce corners."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Master Thumbling's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "announcing himself to doorframes",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "surveying the square from a fence post",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "avoiding brooms at dusk",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "sleeping in the good teacup",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

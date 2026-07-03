@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "bo-brindleson",
+  "identity": {
+    "name": "Bo Brindleson",
+    "kind": "shepherd of very few sheep",
+    "story": "Down to three sheep, all named after regrets. They keep each other honest."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Bo Brindleson's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "counting to three, twice",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "walking Regret, Remorse and Kevin",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "folding the flock for the night",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "dreaming of a fourth sheep",
+          "radius": 7,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

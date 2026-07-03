@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "id": "chunk-3-4",
+  "terrain": {
+    "biome": "meadow",
+    "grid_size": 9,
+    "heights": [
+      0.983,
+      0.847,
+      0.723,
+      0.66,
+      0.68,
+      0.747,
+      0.824,
+      0.871,
+      0.854,
+      0.948,
+      0.828,
+      0.717,
+      0.664,
+      0.686,
+      0.751,
+      0.824,
+      0.872,
+      0.862,
+      0.918,
+      0.815,
+      0.722,
+      0.679,
+      0.702,
+      0.761,
+      0.827,
+      0.872,
+      0.868,
+      0.889,
+      0.804,
+      0.727,
+      0.694,
+      0.717,
+      0.77,
+      0.83,
+      0.871,
+      0.874,
+      0.864,
+      0.787,
+      0.719,
+      0.692,
+      0.717,
+      0.771,
+      0.83,
+      0.872,
+      0.88,
+      0.827,
+      0.752,
+      0.687,
+      0.663,
+      0.695,
+      0.758,
+      0.827,
+      0.878,
+      0.89,
+      0.776,
+      0.702,
+      0.638,
+      0.617,
+      0.657,
+      0.737,
+      0.825,
+      0.889,
+      0.905,
+      0.728,
+      0.654,
+      0.591,
+      0.57,
+      0.619,
+      0.716,
+      0.822,
+      0.901,
+      0.92,
+      0.698,
+      0.624,
+      0.56,
+      0.54,
+      0.594,
+      0.702,
+      0.821,
+      0.908,
+      0.929
+    ]
+  },
+  "palette": [
+    "#e7dcc6",
+    "#5a8344",
+    "#e6a937",
+    "#272d4f"
+  ],
+  "props": [
+    {
+      "asset": "stall-red",
+      "position": [
+        13.772,
+        0.888,
+        13.15
+      ],
+      "rotation_y": 1.602,
+      "scale": 1.027
+    },
+    {
+      "asset": "cart-high",
+      "position": [
+        8.211,
+        0.723,
+        6
+      ],
+      "rotation_y": 2.624,
+      "scale": 0.99
+    },
+    {
+      "asset": "tree-high-round",
+      "position": [
+        11.803,
+        0.818,
+        2.693
+      ],
+      "rotation_y": 6.237,
+      "scale": 1.074
+    },
+    {
+      "asset": "tree-high-round",
+      "position": [
+        10.152,
+        0.748,
+        11.509
+      ],
+      "rotation_y": 5.409,
+      "scale": 1.083
+    },
+    {
+      "asset": "tree-high",
+      "position": [
+        12.927,
+        0.854,
+        11.564
+      ],
+      "rotation_y": 4.322,
+      "scale": 0.982
+    },
+    {
+      "asset": "fountain-square",
+      "position": [
+        3.339,
+        0.753,
+        5.621
+      ],
+      "rotation_y": 4.595,
+      "scale": 0.932
+    },
+    {
+      "asset": "hedge",
+      "position": [
+        12.112,
+        0.832,
+        7.008
+      ],
+      "rotation_y": 0.465,
+      "scale": 0.952
+    },
+    {
+      "asset": "tree",
+      "position": [
+        6,
+        0.694,
+        6
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "tree-crooked",
+      "position": [
+        10,
+        0.765,
+        9
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        5.074,
+        0.597,
+        13.247
+      ],
+      "rotation_y": 3.194,
+      "width": 2.328,
+      "depth": 2.374,
+      "height": 2.665,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#5e8a47",
+      "windows": 1,
+      "chimney": true
+    }
+  ],
+  "nav": {
+    "nodes": [
+      {
+        "id": "heart",
+        "position": [
+          8,
+          0.717,
+          8
+        ]
+      },
+      {
+        "id": "wander",
+        "position": [
+          5.359,
+          0.692,
+          3.795
+        ]
+      },
+      {
+        "id": "gate-chunk-2-4",
+        "position": [
+          1,
+          0.826,
+          8
+        ]
+      },
+      {
+        "id": "gate-chunk-3-3",
+        "position": [
+          8,
+          0.683,
+          1
+        ]
+      }
+    ],
+    "edges": [
+      [
+        "heart",
+        "wander"
+      ],
+      [
+        "heart",
+        "gate-chunk-2-4"
+      ],
+      [
+        "heart",
+        "gate-chunk-3-3"
+      ]
+    ],
+    "portals": [
+      {
+        "node": "gate-chunk-2-4",
+        "to_chunk": "chunk-2-4"
+      },
+      {
+        "node": "gate-chunk-3-3",
+        "to_chunk": "chunk-3-3"
+      }
+    ]
+  },
+  "npcs": [
+    "cobble",
+    "granny-ash",
+    "reynard-the-retired"
+  ],
+  "lore": []
+}

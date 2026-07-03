@@ -6,13 +6,15 @@
 // activity; the inspect panel and the deltas read it verbatim.
 import type { BehaviorNode } from '../schemas/behavior.js';
 import type { Chunk } from '../schemas/chunk.js';
-import { deriveSeed } from '../generate/rng.js';
+import { deriveSeed, mulberry32, type Rng } from '../generate/rng.js';
 import type { Npc } from '../schemas/npc.js';
 import { TICK_DT } from './clock.js';
 
+const CHUNK_SIZE = 16; // engine grammar (matches the generator)
+
 export const WALK_SPEED = 1.4; // world units per second
 
-type Leaf = Extract<BehaviorNode, { type: 'move' | 'interact' | 'idle' }>;
+type Leaf = Extract<BehaviorNode, { type: 'move' | 'interact' | 'idle' | 'wander' }>;
 
 export interface NpcState {
   id: string;
@@ -54,10 +56,14 @@ export class NpcRuntime {
   // target, so two NPCs sharing a destination stand beside each other
   // instead of inside each other.
   #offset: [number, number];
+  // Seeded per NPC: wandering is random but deterministic (invariant 3).
+  #rng: Rng;
+  #wanderTarget: [number, number, number] | null = null;
 
-  constructor(npc: Npc, chunk: Chunk, origin: [number, number]) {
+  constructor(npc: Npc, chunk: Chunk, origin: [number, number], worldSeed = 0) {
     this.#npc = npc;
     this.#origin = origin;
+    this.#rng = mulberry32(deriveSeed(worldSeed, `npc:${npc.id}`));
     const hash = deriveSeed(0, npc.id);
     const angle = ((hash % 360) * Math.PI) / 180;
     const radius = 0.5 + ((hash >>> 9) % 40) / 100;
@@ -89,6 +95,22 @@ export class NpcRuntime {
     if (leaf.type === 'interact' || leaf.type === 'idle') {
       this.#holdTicks = Math.max(1, Math.ceil(leaf.duration_s / TICK_DT));
     }
+    if (leaf.type === 'wander') {
+      this.#pickWanderTarget(leaf);
+    }
+  }
+
+  // Drift within the leaf's radius of wherever the day put this NPC,
+  // clamped inside the home chunk's walkable margin.
+  #pickWanderTarget(leaf: Extract<Leaf, { type: 'wander' }>): void {
+    const angle = this.#rng() * Math.PI * 2;
+    const dist = 1 + this.#rng() * Math.max(0.1, leaf.radius - 1);
+    const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
+    this.#wanderTarget = [
+      clamp(this.state.pos[0] + Math.cos(angle) * dist, this.#origin[0] + 1.5, this.#origin[0] + CHUNK_SIZE - 1.5),
+      this.state.pos[1],
+      clamp(this.state.pos[2] + Math.sin(angle) * dist, this.#origin[1] + 1.5, this.#origin[1] + CHUNK_SIZE - 1.5),
+    ];
   }
 
   #advance(): void {
@@ -136,6 +158,29 @@ export class NpcRuntime {
           round2(this.state.pos[2] + (dz / dist) * stepLen),
         ];
         this.state.ry = round3(Math.atan2(dx, dz));
+      }
+    } else if (leaf.type === 'wander') {
+      if (this.#wanderTarget) {
+        const [tx, ty, tz] = this.#wanderTarget;
+        const [dx, dy, dz] = [tx - this.state.pos[0], ty - this.state.pos[1], tz - this.state.pos[2]];
+        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        const stepLen = WALK_SPEED * 0.6 * TICK_DT; // an amble, not an errand
+        if (dist <= stepLen) {
+          this.state.pos = [round2(tx), round2(ty), round2(tz)];
+          this.#wanderTarget = null;
+          const pause = leaf.min_pause_s + this.#rng() * (leaf.max_pause_s - leaf.min_pause_s);
+          this.#holdTicks = Math.max(1, Math.ceil(pause / TICK_DT));
+        } else {
+          this.state.pos = [
+            round2(this.state.pos[0] + (dx / dist) * stepLen),
+            round2(this.state.pos[1] + (dy / dist) * stepLen),
+            round2(this.state.pos[2] + (dz / dist) * stepLen),
+          ];
+          this.state.ry = round3(Math.atan2(dx, dz));
+        }
+      } else {
+        this.#holdTicks -= 1;
+        if (this.#holdTicks <= 0) this.#pickWanderTarget(leaf);
       }
     } else {
       this.#holdTicks -= 1;

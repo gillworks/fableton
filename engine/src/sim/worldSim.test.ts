@@ -92,6 +92,48 @@ describe('WorldSim', () => {
     expect(sim.snapshot().npcs[0]!.activity).toBe('keeping to themselves');
   });
 
+  it('wander drifts between seeded-random points with varied pauses', () => {
+    const drifter: Npc = {
+      ...npcs[0]!,
+      id: 'drifter',
+      relationships: [],
+      behavior: {
+        type: 'schedule',
+        label: 'at loose ends',
+        entries: charter.aesthetic.day_phases.map((phase) => ({
+          phase,
+          child: { type: 'wander' as const, label: 'drifting about the square', radius: 5, min_pause_s: 1, max_pause_s: 4 },
+        })),
+      },
+    };
+    const chunksWith = chunks.map((c) =>
+      c.id === 'town-square' ? { ...c, npcs: [...c.npcs, 'drifter'] } : c,
+    );
+    const make = (): WorldSim =>
+      new WorldSim({ charter, manifest, chunks: chunksWith, npcs: [drifter], ticksPerPhase: 600 });
+    const sim = make();
+    const positions = new Set<string>();
+    let moving = 0;
+    let paused = 0;
+    let last = '';
+    for (let i = 0; i < 400; i++) {
+      sim.tick();
+      const pos = sim.snapshot().npcs[0]!.pos.join(',');
+      if (pos === last) paused++;
+      else moving++;
+      last = pos;
+      positions.add(pos.split(',').map((v) => Math.round(Number(v))).join(','));
+    }
+    expect(moving).toBeGreaterThan(50); // it walks
+    expect(paused).toBeGreaterThan(10); // it lingers
+    expect(positions.size).toBeGreaterThan(4); // it goes places
+    expect(sim.snapshot().npcs[0]!.activity).toBe('drifting about the square');
+    // And identically on a second run — seeded, not wall-clock random.
+    const again = make();
+    for (let i = 0; i < 400; i++) again.tick();
+    expect(again.snapshot()).toEqual(sim.snapshot());
+  });
+
   it('is deterministic: two sims produce identical delta streams and snapshots', () => {
     const a = makeSim(50);
     const b = makeSim(50);
