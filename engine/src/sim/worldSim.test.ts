@@ -45,7 +45,9 @@ describe('WorldSim', () => {
     const kneading = sim.snapshot().npcs.find((n) => n.id === 'greta-the-baker')!;
     expect(kneading.activity).toBe('kneading dough');
     expect(kneading.pos.join(',')).not.toBe(startPos); // she moved to get there
-    expect(kneading.pos).toEqual([4, 0, 4]); // the bakery door nav node
+    // She arrives at her personal spot beside the bakery-door nav node.
+    const [dx, dz] = [kneading.pos[0] - 4, kneading.pos[2] - 4];
+    expect(Math.hypot(dx, dz)).toBeLessThan(1);
   });
 
   it('activity labels change with the clock phase', () => {

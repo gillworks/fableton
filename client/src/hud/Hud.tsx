@@ -76,7 +76,8 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
             borderRadius: 999,
           }}
         >
-          DAY {dayOf(tick)} · {info.phases[livePhase] ?? '—'}
+          DAY {dayOf(tick)} · {info.phases[shownPhase] ?? '—'}
+          {shownPhase !== livePhase ? ' · preview' : ''}
         </div>
         <div style={{ display: 'flex', gap: 4, marginTop: 8, justifyContent: 'flex-end' }}>
           {info.phases.map((phase, index) => (
