@@ -19,6 +19,9 @@
 	}
 	handle {
 		root * /srv/dist
+		# Renders the {{env "..."}} social-card placeholders in index.html
+		# (text/html only; the JS bundle is untouched).
+		templates
 		try_files {path} /index.html
 		file_server
 	}
