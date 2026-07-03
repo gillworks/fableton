@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "brann-of-the-third-hearth",
+  "identity": {
+    "name": "Brann-of-the-Third-Hearth",
+    "kind": "heat-broker",
+    "story": "Lends embers at ashdawn and collects warmth with interest by dusk. The Third Hearth has never gone out on his watch, and he intends to die before it does."
+  },
+  "lore": [
+    "the-third-hearth-covenant"
+  ],
+  "relationships": [
+    {
+      "to": "ledger-ash",
+      "kind": "trusts her ledger more than his own memory"
+    },
+    {
+      "to": "cinder-moll",
+      "kind": "pays her in warmth, off the books"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "a heat-broker's day",
+    "entries": [
+      {
+        "phase": "ashdawn",
+        "child": {
+          "type": "sequence",
+          "label": "opening the brokerage",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking the cold rows to his stall",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "lending the morning embers",
+              "with": "stall-red",
+              "duration_s": 90
+            }
+          ]
+        }
+      },
+      {
+        "phase": "forge-day",
+        "child": {
+          "type": "interact",
+          "label": "brokering heat at usurious kindness",
+          "with": "stall-red",
+          "duration_s": 150
+        }
+      },
+      {
+        "phase": "smelt-dusk",
+        "child": {
+          "type": "sequence",
+          "label": "collections",
+          "children": [
+            {
+              "type": "move",
+              "label": "calling in warmth owed",
+              "to": "wander"
+            },
+            {
+              "type": "interact",
+              "label": "counting the coal cart twice",
+              "with": "cart",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "banked",
+        "child": {
+          "type": "idle",
+          "label": "sleeping beside the Third Hearth",
+          "duration_s": 300
+        }
+      }
+    ]
+  }
+}

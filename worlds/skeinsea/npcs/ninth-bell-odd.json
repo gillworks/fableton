@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "ninth-bell-odd",
+  "identity": {
+    "name": "Ninth-Bell Odd",
+    "kind": "bell-keeper",
+    "story": "The ninth bell rings for things the fog returns. Odd answers it because someone must, and because once \u2014 he does not say when \u2014 it rang for him."
+  },
+  "lore": [
+    "the-ninth-bell"
+  ],
+  "relationships": [
+    {
+      "to": "slackwater-meg",
+      "kind": "saves her the first news of any returned net"
+    },
+    {
+      "to": "haar",
+      "kind": "disagrees with the water on his behalf"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "a bell-keeper's day",
+    "entries": [
+      {
+        "phase": "morning tide",
+        "child": {
+          "type": "sequence",
+          "label": "waking the bell",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking the plankway to the bell-post",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "waking the ninth bell gently",
+              "with": "lantern",
+              "duration_s": 90
+            }
+          ]
+        }
+      },
+      {
+        "phase": "high glass",
+        "child": {
+          "type": "interact",
+          "label": "polishing the bell's good name",
+          "with": "lantern",
+          "duration_s": 140
+        }
+      },
+      {
+        "phase": "gloaming",
+        "child": {
+          "type": "move",
+          "label": "listening for what the fog kept",
+          "to": "wander"
+        }
+      },
+      {
+        "phase": "bell-dark",
+        "child": {
+          "type": "idle",
+          "label": "answering softly, so it need not ring twice",
+          "duration_s": 300
+        }
+      }
+    ]
+  }
+}

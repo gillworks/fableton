@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "cinder-moll",
+  "identity": {
+    "name": "Cinder-Moll",
+    "kind": "ash-sweep of the Cold Quarter",
+    "story": "Sweeps for the guilds but belongs to none, owes nothing, and hears the coals \u2014 which ones mean to last the night and which are lying."
+  },
+  "lore": [
+    "the-cold-quarter"
+  ],
+  "relationships": [
+    {
+      "to": "brann-of-the-third-hearth",
+      "kind": "lets him believe the warmth is payment"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "an ash-sweep's day",
+    "entries": [
+      {
+        "phase": "ashdawn",
+        "child": {
+          "type": "interact",
+          "label": "sweeping yesterday's ash into today's",
+          "with": "lantern",
+          "duration_s": 100
+        }
+      },
+      {
+        "phase": "forge-day",
+        "child": {
+          "type": "sequence",
+          "label": "the listening rounds",
+          "children": [
+            {
+              "type": "move",
+              "label": "listening for coals about to quit",
+              "to": "wander"
+            },
+            {
+              "type": "idle",
+              "label": "pressing an ear to the warm stones",
+              "duration_s": 45
+            }
+          ]
+        }
+      },
+      {
+        "phase": "smelt-dusk",
+        "child": {
+          "type": "interact",
+          "label": "trading whispers with the banked heaps",
+          "with": "lantern",
+          "duration_s": 80
+        }
+      },
+      {
+        "phase": "banked",
+        "child": {
+          "type": "idle",
+          "label": "counting cold stars, owing nothing",
+          "duration_s": 300
+        }
+      }
+    ]
+  }
+}
