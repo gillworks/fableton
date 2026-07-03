@@ -112,11 +112,13 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
         target={[coin.center[0], 0.5, coin.center[1]]}
         enableDamping
         dampingFactor={0.08}
-        minDistance={6}
+        minDistance={2.5}
         // Zoom out far enough to frame the whole diorama, however big
         // the world grows.
         maxDistance={Math.max(70, Math.max(coin.rx, coin.rz) * 2.6)}
-        maxPolarAngle={1.32}
+        // Street level: tilt to just above horizontal, so the viewer can
+        // stand among the houses (#73). The coin hides the void below.
+        maxPolarAngle={1.53}
         makeDefault
       />
     </>
