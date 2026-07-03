@@ -7,7 +7,12 @@
     "story": "Led two children home once; now she cannot walk anywhere without leaving a trail. The birds adore her."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "marigold-crumb",
+      "kind": "one of the two she led home; still leaves her a trail out of habit"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Goodwife Crumb's unhurried day",

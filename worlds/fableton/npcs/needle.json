@@ -7,7 +7,12 @@
     "story": "The apprentice who said the emperor wore nothing. Sews real clothes now, checks twice that they exist."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "mirabel-glass",
+      "kind": "professional courtesy between honest tradespeople"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Needle's unhurried day",

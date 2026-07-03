@@ -6,10 +6,22 @@
     "kind": "witch-gone-respectable",
     "story": "Once fattened children in a gingerbread house; now she feeds the whole square and dares anyone to mention it."
   },
-  "lore": ["the-gingerbread-pardon"],
+  "lore": [
+    "the-gingerbread-pardon"
+  ],
   "relationships": [
-    { "to": "reynard-the-retired", "kind": "keeps his tab open, suspiciously" },
-    { "to": "tam-the-lamplighter", "kind": "saves him the last morning loaf" }
+    {
+      "to": "reynard-the-retired",
+      "kind": "keeps his tab open, suspiciously"
+    },
+    {
+      "to": "tam-the-lamplighter",
+      "kind": "saves him the last morning loaf"
+    },
+    {
+      "to": "marigold-crumb",
+      "kind": "they play cards on hush nights; the oven is never mentioned"
+    }
   ],
   "behavior": {
     "type": "schedule",
@@ -21,14 +33,28 @@
           "type": "sequence",
           "label": "opening the bakery",
           "children": [
-            { "type": "move", "label": "walking to the oven", "to": "heart" },
-            { "type": "interact", "label": "kneading dough", "with": "stall-red", "duration_s": 90 }
+            {
+              "type": "move",
+              "label": "walking to the oven",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "kneading dough",
+              "with": "stall-red",
+              "duration_s": 90
+            }
           ]
         }
       },
       {
         "phase": "high sun",
-        "child": { "type": "interact", "label": "selling loaves at the door", "with": "stall-red", "duration_s": 120 }
+        "child": {
+          "type": "interact",
+          "label": "selling loaves at the door",
+          "with": "stall-red",
+          "duration_s": 120
+        }
       },
       {
         "phase": "lamplighting",
@@ -36,14 +62,27 @@
           "type": "sequence",
           "label": "closing up",
           "children": [
-            { "type": "move", "label": "strolling to the well", "to": "wander" },
-            { "type": "interact", "label": "trading gossip at the well", "with": "fountain-round", "duration_s": 60 }
+            {
+              "type": "move",
+              "label": "strolling to the well",
+              "to": "wander"
+            },
+            {
+              "type": "interact",
+              "label": "trading gossip at the well",
+              "with": "fountain-round",
+              "duration_s": 60
+            }
           ]
         }
       },
       {
         "phase": "hush",
-        "child": { "type": "idle", "label": "sleeping above the bakery", "duration_s": 240 }
+        "child": {
+          "type": "idle",
+          "label": "sleeping above the bakery",
+          "duration_s": 240
+        }
       }
     ]
   }

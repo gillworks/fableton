@@ -7,7 +7,12 @@
     "story": "Fishes the wishes out weekly and files them by sincerity. Returns the coins of the insincere."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "quill",
+      "kind": "files the gold-egg wishes under insincere, as requested"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Winsome's unhurried day",

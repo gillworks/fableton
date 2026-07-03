@@ -7,7 +7,12 @@
     "story": "Once flooded a town with porridge. Deeply sorry. Volunteers at every harvest festival as a warning."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "stilts",
+      "kind": "grateful for the supervision, honestly"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Humble Pot's unhurried day",

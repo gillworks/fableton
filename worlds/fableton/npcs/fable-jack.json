@@ -7,7 +7,16 @@
     "story": "Grows them short and legal now. Inspects any vine over knee height with a licensed axe."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "old-thorn",
+      "kind": "inspects him annually; both pretend it isn't personal"
+    },
+    {
+      "to": "bramble-rose",
+      "kind": "they disagree about what counts as knee height"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Fable Jack's unhurried day",

@@ -7,7 +7,12 @@
     "story": "Her wheel pricked a princess once. It sits under three locks now, and she knits, pointedly, with blunt needles."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "granny-ash",
+      "kind": "suspects which foot; has never asked"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Dame Spindle's unhurried day",

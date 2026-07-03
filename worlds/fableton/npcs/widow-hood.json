@@ -7,7 +7,12 @@
     "story": "Survived the wolf business with her dignity intact. Bakes for the whole lane and inspects every visitor's teeth."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "pip-halfpenny",
+      "kind": "they compare notes on wolves, annually"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Widow Hood's unhurried day",

@@ -7,7 +7,12 @@
     "story": "Cousin of the famous one. Strictly rodents, strictly contracted, references available on request."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "tick",
+      "kind": "insists clockwork is outside his contract"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "The Lesser Piper's unhurried day",

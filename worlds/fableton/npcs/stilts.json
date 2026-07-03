@@ -7,7 +7,16 @@
     "story": "Kept the long glass, forgave the shallow plate. Caters now; every guest gets the right dish."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "salt",
+      "kind": "will not plate without her"
+    },
+    {
+      "to": "humble-pot",
+      "kind": "works festivals beside him; keeps the ladle gently out of reach"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Stilts's unhurried day",
