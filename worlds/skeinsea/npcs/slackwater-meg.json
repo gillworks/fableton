@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "slackwater-meg",
+  "identity": {
+    "name": "Slackwater Meg",
+    "kind": "net-mender",
+    "story": "Mends nets with whatever the tide brings back. Some of the knots she unties are not hers; she unties them anyway, and remembers each one wrong on purpose."
+  },
+  "lore": [
+    "the-returned-nets"
+  ],
+  "relationships": [
+    {
+      "to": "ninth-bell-odd",
+      "kind": "pretends not to wait for his news"
+    },
+    {
+      "to": "haar",
+      "kind": "mends what his forecasts cost the ferries"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "a net-mender's day",
+    "entries": [
+      {
+        "phase": "morning tide",
+        "child": {
+          "type": "interact",
+          "label": "sorting what the tide returned, wrong",
+          "with": "fountain-round",
+          "duration_s": 110
+        }
+      },
+      {
+        "phase": "high glass",
+        "child": {
+          "type": "sequence",
+          "label": "the stringing rounds",
+          "children": [
+            {
+              "type": "move",
+              "label": "stringing nets islet to islet",
+              "to": "wander"
+            },
+            {
+              "type": "interact",
+              "label": "mending a stranger's knots",
+              "with": "stall-bench",
+              "duration_s": 90
+            }
+          ]
+        }
+      },
+      {
+        "phase": "gloaming",
+        "child": {
+          "type": "interact",
+          "label": "folding the day into the last net",
+          "with": "stall-bench",
+          "duration_s": 80
+        }
+      },
+      {
+        "phase": "bell-dark",
+        "child": {
+          "type": "idle",
+          "label": "sleeping with the tide's permission",
+          "duration_s": 300
+        }
+      }
+    ]
+  }
+}

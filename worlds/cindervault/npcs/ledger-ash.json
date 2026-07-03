@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "ledger-ash",
+  "identity": {
+    "name": "Ledger-Ash",
+    "kind": "vault-clerk",
+    "story": "Keeps the Vault's ledger, the only book in the city that is always right: what it says burned, burned. She has never made an entry in pencil."
+  },
+  "lore": [
+    "the-ledger-of-what-burned"
+  ],
+  "relationships": [
+    {
+      "to": "brann-of-the-third-hearth",
+      "kind": "audits him fondly and without mercy"
+    },
+    {
+      "to": "cinder-moll",
+      "kind": "the one debt the ledger does not name"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "a clerk's day",
+    "entries": [
+      {
+        "phase": "ashdawn",
+        "child": {
+          "type": "interact",
+          "label": "balancing what burned overnight",
+          "with": "stall-red",
+          "duration_s": 120
+        }
+      },
+      {
+        "phase": "forge-day",
+        "child": {
+          "type": "sequence",
+          "label": "the audit rounds",
+          "children": [
+            {
+              "type": "move",
+              "label": "auditing the smelt-lines",
+              "to": "wander"
+            },
+            {
+              "type": "interact",
+              "label": "recording every ember spent",
+              "with": "cart",
+              "duration_s": 90
+            }
+          ]
+        }
+      },
+      {
+        "phase": "smelt-dusk",
+        "child": {
+          "type": "move",
+          "label": "carrying the ledger home under her coat",
+          "to": "heart"
+        }
+      },
+      {
+        "phase": "banked",
+        "child": {
+          "type": "idle",
+          "label": "guarding the ledger's last page",
+          "duration_s": 300
+        }
+      }
+    ]
+  }
+}

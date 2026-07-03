@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "haar",
+  "identity": {
+    "name": "Haar",
+    "kind": "tide-reader",
+    "story": "Reads tomorrow in the water's flat places, and is wrong exactly often enough to stay humble. The parishes pay him in bread and contradiction."
+  },
+  "lore": [
+    "the-flat-water"
+  ],
+  "relationships": [
+    {
+      "to": "ninth-bell-odd",
+      "kind": "sets his watch by a bell that keeps no time"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "a tide-reader's day",
+    "entries": [
+      {
+        "phase": "morning tide",
+        "child": {
+          "type": "sequence",
+          "label": "the first reading",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking out to the flat water",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "reading the morning in the tide pool",
+              "with": "fountain-round",
+              "duration_s": 100
+            }
+          ]
+        }
+      },
+      {
+        "phase": "high glass",
+        "child": {
+          "type": "idle",
+          "label": "arguing with the horizon",
+          "duration_s": 160
+        }
+      },
+      {
+        "phase": "gloaming",
+        "child": {
+          "type": "interact",
+          "label": "writing tomorrow's tides in chalk",
+          "with": "stall-bench",
+          "duration_s": 90
+        }
+      },
+      {
+        "phase": "bell-dark",
+        "child": {
+          "type": "idle",
+          "label": "watching the bell-dark for lights",
+          "duration_s": 300
+        }
+      }
+    ]
+  }
+}

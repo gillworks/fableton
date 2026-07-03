@@ -28,6 +28,7 @@ Pre-v1. See [docs/v1.md](docs/v1.md) for the scope cut and definition of done, a
 | [`studio/`](studio/) | The agent studio (Phase B) — the pantheon that grows worlds |
 | [`charters/`](charters/) | Charter template + example charters |
 | [`assets/`](assets/) | Licensed low-poly kit + the asset registry ([docs/assets.md](docs/assets.md)) |
+| [`worlds/`](worlds/) | Hand-authored starter worlds (residents included) booted by the compose stack |
 | [`deploy/`](deploy/) | One-command Docker Compose install |
 | [`docs/`](docs/) | Specs and ADRs |
 

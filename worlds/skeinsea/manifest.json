@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "world": "Skeinsea",
+  "seed": 40417707,
+  "chunks": [
+    {
+      "id": "chunk-0-0",
+      "path": "chunks/chunk-0-0.json",
+      "origin": [
+        0,
+        0
+      ],
+      "adjacent": [
+        "chunk-0-1"
+      ]
+    },
+    {
+      "id": "chunk-0-1",
+      "path": "chunks/chunk-0-1.json",
+      "origin": [
+        0,
+        16
+      ],
+      "adjacent": [
+        "chunk-0-0",
+        "chunk-1-1"
+      ]
+    },
+    {
+      "id": "chunk-1-1",
+      "path": "chunks/chunk-1-1.json",
+      "origin": [
+        16,
+        16
+      ],
+      "adjacent": [
+        "chunk-0-1"
+      ]
+    }
+  ]
+}

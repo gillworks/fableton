@@ -15,6 +15,7 @@ RUN pnpm install --frozen-lockfile
 COPY engine engine
 COPY client client
 COPY charters charters
+COPY worlds worlds
 COPY assets assets
 COPY deploy deploy
 RUN pnpm --dir client build

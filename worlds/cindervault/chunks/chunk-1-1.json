@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "id": "chunk-1-1",
+  "terrain": {
+    "biome": "grove",
+    "grid_size": 9,
+    "heights": [
+      0.576,
+      0.553,
+      0.574,
+      0.623,
+      0.678,
+      0.716,
+      0.716,
+      0.673,
+      0.612,
+      0.544,
+      0.511,
+      0.539,
+      0.605,
+      0.678,
+      0.729,
+      0.726,
+      0.666,
+      0.581,
+      0.55,
+      0.524,
+      0.546,
+      0.601,
+      0.662,
+      0.704,
+      0.7,
+      0.646,
+      0.57,
+      0.587,
+      0.58,
+      0.591,
+      0.623,
+      0.66,
+      0.684,
+      0.678,
+      0.64,
+      0.587,
+      0.631,
+      0.645,
+      0.644,
+      0.651,
+      0.66,
+      0.665,
+      0.658,
+      0.637,
+      0.611,
+      0.657,
+      0.685,
+      0.675,
+      0.665,
+      0.654,
+      0.644,
+      0.636,
+      0.627,
+      0.619,
+      0.639,
+      0.665,
+      0.653,
+      0.638,
+      0.624,
+      0.611,
+      0.601,
+      0.593,
+      0.587,
+      0.565,
+      0.578,
+      0.565,
+      0.55,
+      0.535,
+      0.522,
+      0.511,
+      0.505,
+      0.502,
+      0.467,
+      0.462,
+      0.448,
+      0.434,
+      0.42,
+      0.407,
+      0.396,
+      0.393,
+      0.395
+    ]
+  },
+  "palette": [
+    "#6d492c",
+    "#29231f",
+    "#ea8a2a",
+    "#110f0d"
+  ],
+  "props": [
+    {
+      "asset": "watermill",
+      "position": [
+        7.849,
+        0.658,
+        6.734
+      ],
+      "rotation_y": 4.442,
+      "scale": 0.975
+    },
+    {
+      "asset": "fountain-square",
+      "position": [
+        8.443,
+        0.659,
+        8.439
+      ],
+      "rotation_y": 0.085,
+      "scale": 1.079
+    },
+    {
+      "asset": "cart-high",
+      "position": [
+        7.639,
+        0.651,
+        10.345
+      ],
+      "rotation_y": 5.323,
+      "scale": 0.95
+    },
+    {
+      "asset": "fountain-round",
+      "position": [
+        5.985,
+        0.601,
+        3.771
+      ],
+      "rotation_y": 5.433,
+      "scale": 1.084
+    },
+    {
+      "asset": "watermill",
+      "position": [
+        3.652,
+        0.664,
+        11.183
+      ],
+      "rotation_y": 6.074,
+      "scale": 0.978
+    },
+    {
+      "asset": "tree-high",
+      "position": [
+        6.012,
+        0.654,
+        8.445
+      ],
+      "rotation_y": 1.806,
+      "scale": 0.911
+    },
+    {
+      "asset": "stall-red",
+      "position": [
+        5.5,
+        0.615,
+        6.0
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "cart",
+      "position": [
+        7.2,
+        0.657,
+        9.0
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "lantern",
+      "position": [
+        9.0,
+        0.67,
+        6.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    }
+  ],
+  "nav": {
+    "nodes": [
+      {
+        "id": "heart",
+        "position": [
+          8,
+          0.66,
+          8
+        ]
+      },
+      {
+        "id": "wander",
+        "position": [
+          10.601,
+          0.706,
+          3.717
+        ]
+      },
+      {
+        "id": "gate-chunk-2-1",
+        "position": [
+          15,
+          0.624,
+          8
+        ]
+      },
+      {
+        "id": "gate-chunk-0-1",
+        "position": [
+          1,
+          0.638,
+          8
+        ]
+      },
+      {
+        "id": "gate-chunk-1-2",
+        "position": [
+          8,
+          0.478,
+          15
+        ]
+      },
+      {
+        "id": "gate-chunk-1-0",
+        "position": [
+          8,
+          0.678,
+          1
+        ]
+      }
+    ],
+    "edges": [
+      [
+        "heart",
+        "wander"
+      ],
+      [
+        "heart",
+        "gate-chunk-2-1"
+      ],
+      [
+        "heart",
+        "gate-chunk-0-1"
+      ],
+      [
+        "heart",
+        "gate-chunk-1-2"
+      ],
+      [
+        "heart",
+        "gate-chunk-1-0"
+      ]
+    ],
+    "portals": [
+      {
+        "node": "gate-chunk-2-1",
+        "to_chunk": "chunk-2-1"
+      },
+      {
+        "node": "gate-chunk-0-1",
+        "to_chunk": "chunk-0-1"
+      },
+      {
+        "node": "gate-chunk-1-2",
+        "to_chunk": "chunk-1-2"
+      },
+      {
+        "node": "gate-chunk-1-0",
+        "to_chunk": "chunk-1-0"
+      }
+    ]
+  },
+  "npcs": [
+    "brann-of-the-third-hearth",
+    "ledger-ash",
+    "cinder-moll"
+  ],
+  "lore": []
+}

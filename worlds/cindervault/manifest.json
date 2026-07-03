@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "world": "Cindervault",
+  "seed": 18890321,
+  "chunks": [
+    {
+      "id": "chunk-0-1",
+      "path": "chunks/chunk-0-1.json",
+      "origin": [
+        0,
+        16
+      ],
+      "adjacent": [
+        "chunk-0-2",
+        "chunk-1-1"
+      ]
+    },
+    {
+      "id": "chunk-0-2",
+      "path": "chunks/chunk-0-2.json",
+      "origin": [
+        0,
+        32
+      ],
+      "adjacent": [
+        "chunk-0-1",
+        "chunk-1-2"
+      ]
+    },
+    {
+      "id": "chunk-1-0",
+      "path": "chunks/chunk-1-0.json",
+      "origin": [
+        16,
+        0
+      ],
+      "adjacent": [
+        "chunk-1-1"
+      ]
+    },
+    {
+      "id": "chunk-1-1",
+      "path": "chunks/chunk-1-1.json",
+      "origin": [
+        16,
+        16
+      ],
+      "adjacent": [
+        "chunk-0-1",
+        "chunk-1-0",
+        "chunk-1-2",
+        "chunk-2-1"
+      ]
+    },
+    {
+      "id": "chunk-1-2",
+      "path": "chunks/chunk-1-2.json",
+      "origin": [
+        16,
+        32
+      ],
+      "adjacent": [
+        "chunk-0-2",
+        "chunk-1-1",
+        "chunk-2-2"
+      ]
+    },
+    {
+      "id": "chunk-2-1",
+      "path": "chunks/chunk-2-1.json",
+      "origin": [
+        32,
+        16
+      ],
+      "adjacent": [
+        "chunk-1-1",
+        "chunk-2-2",
+        "chunk-3-1"
+      ]
+    },
+    {
+      "id": "chunk-2-2",
+      "path": "chunks/chunk-2-2.json",
+      "origin": [
+        32,
+        32
+      ],
+      "adjacent": [
+        "chunk-1-2",
+        "chunk-2-1",
+        "chunk-2-3"
+      ]
+    },
+    {
+      "id": "chunk-2-3",
+      "path": "chunks/chunk-2-3.json",
+      "origin": [
+        32,
+        48
+      ],
+      "adjacent": [
+        "chunk-2-2",
+        "chunk-3-3"
+      ]
+    },
+    {
+      "id": "chunk-3-0",
+      "path": "chunks/chunk-3-0.json",
+      "origin": [
+        48,
+        0
+      ],
+      "adjacent": [
+        "chunk-3-1"
+      ]
+    },
+    {
+      "id": "chunk-3-1",
+      "path": "chunks/chunk-3-1.json",
+      "origin": [
+        48,
+        16
+      ],
+      "adjacent": [
+        "chunk-2-1",
+        "chunk-3-0"
+      ]
+    },
+    {
+      "id": "chunk-3-3",
+      "path": "chunks/chunk-3-3.json",
+      "origin": [
+        48,
+        48
+      ],
+      "adjacent": [
+        "chunk-2-3",
+        "chunk-4-3"
+      ]
+    },
+    {
+      "id": "chunk-4-3",
+      "path": "chunks/chunk-4-3.json",
+      "origin": [
+        64,
+        48
+      ],
+      "adjacent": [
+        "chunk-3-3"
+      ]
+    }
+  ]
+}
