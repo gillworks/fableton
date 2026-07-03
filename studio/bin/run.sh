@@ -14,7 +14,7 @@ set -eu
 ROLE="${1:?usage: run.sh <steward|qa|council> [world]}"
 WORLD="${2:-fableton}"
 REPO="${STUDIO_REPO:-/opt/fableton-studio}"
-LIVE_URL="${FABLETON_LIVE_URL:-https://srv1562823.hstgr.cloud}"
+LIVE_URL="${FABLETON_LIVE_URL:-https://fableton.world}"
 
 case "$ROLE" in
   steward) MODEL="${STEWARD_MODEL:-claude-sonnet-5}"; TIMEOUT=2400 ;;
