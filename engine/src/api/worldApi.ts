@@ -120,6 +120,10 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         world: deps.charter.identity.name,
         premise: deps.charter.identity.premise,
         seed: deps.charter.identity.seed,
+        charter_version: deps.charter.schema_version,
+        // Studio construction sites (Phase B populates this; the client
+        // renders markers for whatever appears here).
+        construction: [],
         phases: deps.charter.aesthetic.day_phases,
         // Charter theme tokens (docs/design.md): the client derives its
         // atmosphere, accent, and type from these — never from constants.

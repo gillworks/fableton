@@ -19,6 +19,8 @@ import {
 } from 'three';
 import { colorFor } from '@fableton/engine/color';
 import type { AssetPiece } from '../core/chunkMeshes.js';
+import { ConstructionMarker } from './ConstructionMarker.js';
+import type { ConstructionSite } from '../core/types.js';
 import { buildChunkGroup, coinFor } from '../core/chunkMeshes.js';
 import type { SimState } from '../core/interpolator.js';
 import { ChunkStreamer } from '../core/streamer.js';
@@ -33,12 +35,13 @@ export interface WorldSceneProps {
   theme: WorldTheme;
   phaseIndex: number;
   onSelect: (npcId: string) => void;
+  construction: ConstructionSite[];
 }
 
 const damp = (from: number, to: number, dt: number): number =>
   from + (to - from) * Math.min(1, dt * 3);
 
-export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect }: WorldSceneProps): ReactElement {
+export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction }: WorldSceneProps): ReactElement {
   const worldRef = useRef<Group>(new Group());
   const chunkGroups = useRef(new Map<string, Group>());
   const streamer = useMemo(() => {
@@ -95,6 +98,10 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect }:
       </mesh>
       <primitive object={worldRef.current} />
       <Npcs sim={sim} theme={theme} onSelect={onSelect} />
+      {construction.map((site) => {
+        const entry = bundle.manifest.chunks.find((c) => c.id === site.chunk);
+        return entry ? <ConstructionMarker key={site.chunk + site.pr} site={site} origin={entry.origin} /> : null;
+      })}
       <OrbitControls
         target={[coin.center[0], 0.5, coin.center[1]]}
         enableDamping

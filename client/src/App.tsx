@@ -9,7 +9,9 @@ import { loadAssetPieces } from './core/assets.js';
 import { coinFor } from './core/chunkMeshes.js';
 import type { AssetPiece } from './core/chunkMeshes.js';
 import { SimState, connectSim } from './core/interpolator.js';
+import { constructionSites } from './core/hud.js';
 import { loadWorld, type WorldBundle } from './core/loadWorld.js';
+import { Hud } from './hud/Hud.js';
 import { deriveTheme, phaseLighting } from './core/theme.js';
 import { InspectPanel } from './scene/InspectPanel.js';
 import { WorldScene } from './scene/WorldScene.js';
@@ -18,11 +20,14 @@ export function App(): ReactElement {
   const [bundle, setBundle] = useState<WorldBundle | null>(null);
   const [pieces, setPieces] = useState<Map<string, AssetPiece[]> | null>(null);
   const [phase, setPhase] = useState(0);
+  const [phaseOverride, setPhaseOverride] = useState<number | null>(null);
+  const [tick, setTick] = useState(0);
   const [failure, setFailure] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const sim = useMemo(() => new SimState(), []);
 
   useEffect(() => {
+    const dayTimer = setInterval(() => setTick(sim.clock.tick), 1000);
     let disposed = false;
     loadWorld()
       .then(async (b) => {
@@ -39,6 +44,7 @@ export function App(): ReactElement {
     );
     return () => {
       disposed = true;
+      clearInterval(dayTimer);
       disconnect();
     };
   }, [sim]);
@@ -51,7 +57,10 @@ export function App(): ReactElement {
   }
 
   const theme = deriveTheme(bundle.info.theme);
-  const lighting = phaseLighting(phase, theme);
+  // The selector previews a relight; the sim clock stays authoritative.
+  const shownPhase = phaseOverride ?? phase;
+  const lighting = phaseLighting(shownPhase, theme);
+  const sites = constructionSites(bundle.info.construction, location.search);
   // Cozy default framing: storybook three-quarter view sized to the diorama.
   const coin = coinFor(bundle.manifest.chunks.map((c) => c.origin));
   const span = Math.max(coin.rx, coin.rz);
@@ -80,10 +89,20 @@ export function App(): ReactElement {
           pieces={pieces}
           sim={sim}
           theme={theme}
-          phaseIndex={phase}
+          phaseIndex={shownPhase}
           onSelect={setSelected}
+          construction={sites}
         />
       </Canvas>
+      <Hud
+        info={bundle.info}
+        theme={theme}
+        backdropHex={lighting.gradientTop}
+        livePhase={phase}
+        shownPhase={shownPhase}
+        tick={tick}
+        onSelectPhase={setPhaseOverride}
+      />
       {selected && (
         <InspectPanel npcId={selected} sim={sim} theme={theme} onClose={() => setSelected(null)} />
       )}

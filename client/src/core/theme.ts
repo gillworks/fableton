@@ -7,6 +7,16 @@
 import { colorFor, hslToHex } from '@fableton/engine/color';
 import type { ThemeTokens } from './types.js';
 
+// Engine defaults for a charter that omits a theme token: deliberately
+// nobody's world — neutral stone and bone, a plain gold accent. A world
+// must never inherit another world's values (CLAUDE.md invariant 5).
+export const ENGINE_DEFAULT_THEME: ThemeTokens = {
+  theme: 'unthemed',
+  palette: ['stone', 'slate', 'bone', 'midnight'],
+  accent: 'gold',
+  typography: { display: 'Georgia', mono: 'ui-monospace' },
+};
+
 export interface WorldTheme {
   paletteHex: string[];
   accentHex: string;
@@ -25,12 +35,14 @@ export interface PhaseLighting {
   fogColor: string;
 }
 
-export function deriveTheme(tokens: ThemeTokens): WorldTheme {
+export function deriveTheme(tokens?: Partial<ThemeTokens>): WorldTheme {
+  const palette =
+    tokens?.palette && tokens.palette.length > 0 ? tokens.palette : ENGINE_DEFAULT_THEME.palette;
   return {
-    paletteHex: tokens.palette.map(colorFor),
-    accentHex: colorFor(tokens.accent),
-    display: tokens.typography.display,
-    mono: tokens.typography.mono,
+    paletteHex: palette.map(colorFor),
+    accentHex: colorFor(tokens?.accent ?? ENGINE_DEFAULT_THEME.accent),
+    display: tokens?.typography?.display ?? ENGINE_DEFAULT_THEME.typography.display,
+    mono: tokens?.typography?.mono ?? ENGINE_DEFAULT_THEME.typography.mono,
   };
 }
 
