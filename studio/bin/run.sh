@@ -37,13 +37,41 @@ LOG="$LOG_DIR/$(date -u +%Y%m%dT%H%M%SZ).log"
 # GNU timeout when present (Linux); bare where it isn't (macOS dry-runs).
 if command -v timeout >/dev/null 2>&1; then RUN="timeout $TIMEOUT claude"; else RUN="claude"; fi
 
+# Tokens per tier, from day one (#42: data before levers). The JSON
+# envelope carries usage + cost; the transcript keeps the readable result
+# and every session appends one row to the ledger.
+USAGE_CSV="studio/logs/usage.csv"
+[ -f "$USAGE_CSV" ] || echo "utc,role,model,input_tokens,cache_creation_tokens,cache_read_tokens,output_tokens,cost_usd,duration_ms,num_turns,exit" > "$USAGE_CSV"
+
 {
   echo "=== $ROLE session · world=$WORLD · model=$MODEL · $(date -u +%FT%TZ) ==="
-  $RUN -p "World: $WORLD. Live URL: $LIVE_URL.
+  OUT=$($RUN -p "World: $WORLD. Live URL: $LIVE_URL.
 
 $(cat "$BRIEF")" \
     --model "$MODEL" \
-    --dangerously-skip-permissions || echo "!! session exited nonzero ($?)"
+    --output-format json \
+    --dangerously-skip-permissions) || echo "!! session exited nonzero ($?)"
+  printf '%s\n' "$OUT" | ROLE="$ROLE" MODEL="$MODEL" USAGE_CSV="$USAGE_CSV" node -e '
+    let raw = "";
+    process.stdin.on("data", (c) => (raw += c));
+    process.stdin.on("end", () => {
+      try {
+        const r = JSON.parse(raw);
+        console.log(r.result ?? raw);
+        const u = r.usage ?? {};
+        const row = [
+          new Date().toISOString(), process.env.ROLE, process.env.MODEL,
+          u.input_tokens ?? 0, u.cache_creation_input_tokens ?? 0,
+          u.cache_read_input_tokens ?? 0, u.output_tokens ?? 0,
+          r.total_cost_usd ?? 0, r.duration_ms ?? 0, r.num_turns ?? 0,
+          r.is_error ? "error" : "ok",
+        ];
+        require("fs").appendFileSync(process.env.USAGE_CSV, row.join(",") + "\n");
+      } catch {
+        console.log(raw); // not JSON (crash, timeout) — keep the evidence, skip the row
+      }
+    });
+  '
   echo "=== end · $(date -u +%FT%TZ) ==="
 } >> "$LOG" 2>&1
 
