@@ -7,7 +7,12 @@
     "story": "Slew a giant by paperwork. The town keeps losing sight of him and he has learned to announce corners."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "needle",
+      "kind": "sews him a bright flag so the town stops stepping on him"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Master Thumbling's unhurried day",
