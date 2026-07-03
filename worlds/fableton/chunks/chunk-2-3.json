@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "id": "chunk-2-3",
+  "terrain": {
+    "biome": "rise",
+    "grid_size": 9,
+    "heights": [
+      1.076,
+      1.121,
+      1.15,
+      1.187,
+      1.244,
+      1.296,
+      1.318,
+      1.292,
+      1.228,
+      1.048,
+      1.089,
+      1.117,
+      1.14,
+      1.169,
+      1.189,
+      1.191,
+      1.164,
+      1.11,
+      1.015,
+      1.054,
+      1.079,
+      1.09,
+      1.093,
+      1.085,
+      1.069,
+      1.042,
+      0.998,
+      0.98,
+      1.016,
+      1.038,
+      1.043,
+      1.034,
+      1.015,
+      0.991,
+      0.967,
+      0.929,
+      0.97,
+      1.006,
+      1.027,
+      1.032,
+      1.025,
+      1.01,
+      0.99,
+      0.967,
+      0.924,
+      0.995,
+      1.034,
+      1.056,
+      1.063,
+      1.062,
+      1.054,
+      1.042,
+      1.019,
+      0.956,
+      1.026,
+      1.07,
+      1.093,
+      1.101,
+      1.107,
+      1.108,
+      1.103,
+      1.08,
+      0.996,
+      1.035,
+      1.081,
+      1.104,
+      1.113,
+      1.123,
+      1.131,
+      1.132,
+      1.109,
+      1.012,
+      1,
+      1.043,
+      1.064,
+      1.071,
+      1.083,
+      1.094,
+      1.097,
+      1.078,
+      0.983
+    ]
+  },
+  "palette": [
+    "#e7dcc6",
+    "#5a8344",
+    "#e6a937",
+    "#272d4f"
+  ],
+  "props": [
+    {
+      "asset": "rock-large",
+      "position": [
+        12.097,
+        1.12,
+        13.28
+      ],
+      "rotation_y": 2.695,
+      "scale": 0.97
+    },
+    {
+      "asset": "fountain-round",
+      "position": [
+        3.066,
+        1.09,
+        13.368
+      ],
+      "rotation_y": 1.769,
+      "scale": 0.912
+    },
+    {
+      "asset": "rock-small",
+      "position": [
+        6.745,
+        1.03,
+        7.932
+      ],
+      "rotation_y": 5.386,
+      "scale": 0.972
+    },
+    {
+      "asset": "watermill",
+      "position": [
+        8.228,
+        1.089,
+        11.218
+      ],
+      "rotation_y": 2.116,
+      "scale": 0.943
+    },
+    {
+      "asset": "stall-red",
+      "position": [
+        11.295,
+        1.007,
+        8.419
+      ],
+      "rotation_y": 2.922,
+      "scale": 1.038
+    },
+    {
+      "asset": "cart-high",
+      "position": [
+        7.058,
+        1.055,
+        9.551
+      ],
+      "rotation_y": 0.954,
+      "scale": 0.973
+    },
+    {
+      "asset": "hedge",
+      "position": [
+        5.738,
+        1.065,
+        10.139
+      ],
+      "rotation_y": 4.426,
+      "scale": 1.076
+    },
+    {
+      "asset": "tree",
+      "position": [
+        6.0,
+        1.043,
+        6.0
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "tree-crooked",
+      "position": [
+        10.0,
+        1.032,
+        9.0
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        6.572,
+        1.104,
+        12.225
+      ],
+      "rotation_y": 1.578,
+      "width": 3.713,
+      "depth": 2.164,
+      "height": 2.439,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#51763d",
+      "windows": 3,
+      "chimney": true
+    },
+    {
+      "position": [
+        10.808,
+        1.021,
+        5.569
+      ],
+      "rotation_y": -0.009,
+      "width": 4.075,
+      "depth": 3.735,
+      "height": 2.101,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#e9b34e",
+      "windows": 1,
+      "chimney": false
+    },
+    {
+      "position": [
+        3.807,
+        1.085,
+        11.672
+      ],
+      "rotation_y": -0.002,
+      "width": 4,
+      "depth": 3.707,
+      "height": 1.766,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#282f52",
+      "windows": 2,
+      "chimney": true
+    }
+  ],
+  "nav": {
+    "nodes": [
+      {
+        "id": "heart",
+        "position": [
+          8,
+          1.025,
+          8
+        ]
+      },
+      {
+        "id": "wander",
+        "position": [
+          11.578,
+          1.112,
+          12.55
+        ]
+      },
+      {
+        "id": "gate-chunk-1-3",
+        "position": [
+          1,
+          0.988,
+          8
+        ]
+      },
+      {
+        "id": "gate-chunk-2-2",
+        "position": [
+          8,
+          1.207,
+          1
+        ]
+      }
+    ],
+    "edges": [
+      [
+        "heart",
+        "wander"
+      ],
+      [
+        "heart",
+        "gate-chunk-1-3"
+      ],
+      [
+        "heart",
+        "gate-chunk-2-2"
+      ]
+    ],
+    "portals": [
+      {
+        "node": "gate-chunk-1-3",
+        "to_chunk": "chunk-1-3"
+      },
+      {
+        "node": "gate-chunk-2-2",
+        "to_chunk": "chunk-2-2"
+      }
+    ]
+  },
+  "npcs": [
+    "reynard-the-retired"
+  ],
+  "lore": []
+}

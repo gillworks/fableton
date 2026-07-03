@@ -136,6 +136,7 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         chunks: deps.manifest.chunks.length,
         npcs: npcs.size,
         clock,
+        pace: deps.sim.pace(),
       });
     }
     if (req.method === 'GET' && path === '/api/npcs') {

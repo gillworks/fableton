@@ -24,11 +24,24 @@ export interface PropPlacement {
   scale?: number;
 }
 
+export interface Building {
+  position: [number, number, number];
+  rotation_y?: number;
+  width: number;
+  depth: number;
+  height: number;
+  wall_color: string;
+  roof_color: string;
+  windows?: number;
+  chimney?: boolean;
+}
+
 export interface Chunk {
   id: string;
   terrain: { biome: string; grid_size: number; heights: number[] };
   palette: string[];
   props: PropPlacement[];
+  buildings?: Building[];
   nav: { nodes: { id: string; position: [number, number, number] }[] };
   npcs: string[];
 }
@@ -62,7 +75,8 @@ export interface WorldInfo {
   theme?: Partial<ThemeTokens>;
   chunks: number;
   npcs: number;
-  clock: { tick: number; phase: string; timeOfDay: number };
+  clock: { tick: number; phase: string; timeOfDay: number; day?: number };
+  pace?: { ticks_per_day: number; seconds_per_day: number };
 }
 
 export interface NpcSnapshot {

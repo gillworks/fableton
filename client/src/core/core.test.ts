@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { Frustum, Matrix4, PerspectiveCamera, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { BoxGeometry, MeshLambertMaterial } from 'three';
+import { buildBuilding } from './buildings.js';
 import { buildChunkGroup, buildPropInstances, buildTerrain, coinFor, drawCallCount, type AssetPiece } from './chunkMeshes.js';
 import { SimState } from './interpolator.js';
 import { ChunkStreamer } from './streamer.js';
@@ -50,7 +51,7 @@ describe('chunkMeshes', () => {
 
   it('chunk group sits at its manifest origin', () => {
     const entry = manifest.chunks.find((c) => c.id === 'town-square')!;
-    const group = buildChunkGroup(townSquare, entry.origin, fakePieces());
+    const { group } = buildChunkGroup(townSquare, entry.origin, fakePieces());
     expect([group.position.x, group.position.z]).toEqual(entry.origin);
   });
 
@@ -58,6 +59,37 @@ describe('chunkMeshes', () => {
     const coin = coinFor(manifest.chunks.map((c) => c.origin));
     expect(coin.rx).toBeGreaterThan(16);
     expect(coin.center[0]).toBeDefined();
+  });
+});
+
+describe('buildings', () => {
+  const spec = {
+    position: [8, 0.4, 8] as [number, number, number],
+    rotation_y: 0.1,
+    width: 3,
+    depth: 2.5,
+    height: 2,
+    wall_color: '#e8dcc0',
+    roof_color: '#a04a38',
+    windows: 2,
+    chimney: true,
+  };
+
+  it('assembles the mockup anatomy: walls, double-slab roof, door, windows, chimney', () => {
+    const built = buildBuilding(spec);
+    expect(built.group.children.length).toBe(4 + 2 * 2 + 1); // walls+2 slabs+door + windows*2 sides + chimney
+    expect(built.windowMaterials).toHaveLength(4);
+    expect(built.group.position.y).toBeCloseTo(0.4);
+  });
+
+  it('windows start dark; glow is driven externally by phase', () => {
+    const built = buildBuilding(spec);
+    for (const m of built.windowMaterials) expect(m.emissiveIntensity).toBe(0);
+  });
+
+  it('draw-call estimate prices buildings like the validator', () => {
+    const withBuildings = { ...townSquare, buildings: [spec, spec] };
+    expect(drawCallCount(withBuildings, fakePieces())).toBe(drawCallCount(townSquare, fakePieces()) + 12);
   });
 });
 

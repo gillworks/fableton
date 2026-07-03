@@ -75,6 +75,23 @@ describe('generateWorld', () => {
     }
   });
 
+  it('buildings are grounded, palette-derived, and budget-priced', () => {
+    const { chunks } = generateWorld(fableton, registry);
+    let total = 0;
+    for (const chunk of chunks) {
+      for (const b of chunk.buildings) {
+        total += 1;
+        const min = Math.min(...chunk.terrain.heights);
+        const max = Math.max(...chunk.terrain.heights);
+        expect(b.position[1]).toBeGreaterThanOrEqual(min - 0.01);
+        expect(b.position[1]).toBeLessThanOrEqual(max + 0.01);
+        expect(b.wall_color).toMatch(/^#[0-9a-f]{6}$/);
+        expect(b.roof_color).toMatch(/^#[0-9a-f]{6}$/);
+      }
+    }
+    expect(total).toBeGreaterThan(chunks.length); // a town, not a field
+  });
+
   it('output passes the validation gate (pnpm validate)', () => {
     for (const charter of [fableton, cindervault]) {
       const { manifest, chunks } = generateWorld(charter, registry);

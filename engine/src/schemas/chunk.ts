@@ -13,6 +13,24 @@ export const PropPlacementSchema = z.strictObject({
   scale: z.number().positive().finite().default(1),
 });
 
+// Buildings are parametric world-data the client renders from primitives
+// (docs/design.md: chunky silhouettes, double-slab hipped roofs, leaning
+// chimneys, windows that glow by phase). The generator authors the
+// parameters; the engine never hardcodes a house.
+export const BuildingSchema = z.strictObject({
+  /** Footprint center, chunk-local, y = ground height. */
+  position: vec3,
+  rotation_y: finite.default(0),
+  width: z.number().positive().finite(),
+  depth: z.number().positive().finite(),
+  height: z.number().positive().finite(),
+  wall_color: hexColor,
+  roof_color: hexColor,
+  /** Glowing windows per long wall (0 = a windowless shed). */
+  windows: z.number().int().min(0).max(4).default(0),
+  chimney: z.boolean().default(false),
+});
+
 // Nav-lite: a walk graph, not a navmesh. Portals name the nav node an NPC
 // stands on to cross into an adjacent chunk; the CI gate walks these for
 // world connectivity.
@@ -91,11 +109,13 @@ export const ChunkSchema = z.strictObject({
     }),
   palette: z.array(hexColor).min(1),
   props: z.array(PropPlacementSchema),
+  buildings: z.array(BuildingSchema).default([]),
   nav: NavSchema,
   npcs: z.array(idSlug),
   lore: z.array(idSlug),
 });
 
+export type Building = z.infer<typeof BuildingSchema>;
 export type PropPlacement = z.infer<typeof PropPlacementSchema>;
 export type Nav = z.infer<typeof NavSchema>;
 export type Chunk = z.infer<typeof ChunkSchema>;

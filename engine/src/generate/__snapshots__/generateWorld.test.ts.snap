@@ -5,7 +5,7 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
   "schema_version": 1,
   "id": "chunk-0-1",
   "terrain": {
-    "biome": "meadow",
+    "biome": "rise",
     "grid_size": 9,
     "heights": [
       0.565,
@@ -129,6 +129,68 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
       "scale": 1.048
     }
   ],
+  "buildings": [
+    {
+      "position": [
+        4.988,
+        0.624,
+        7.627
+      ],
+      "rotation_y": 4.745,
+      "width": 3.367,
+      "depth": 2.055,
+      "height": 2.706,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#5a8344",
+      "windows": 1,
+      "chimney": false
+    },
+    {
+      "position": [
+        2.842,
+        0.675,
+        10.405
+      ],
+      "rotation_y": 1.569,
+      "width": 2.945,
+      "depth": 2.788,
+      "height": 2.196,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#eab553",
+      "windows": 2,
+      "chimney": false
+    },
+    {
+      "position": [
+        11.751,
+        0.73,
+        11.74
+      ],
+      "rotation_y": 4.708,
+      "width": 3.893,
+      "depth": 2.242,
+      "height": 2.352,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#272d4f",
+      "windows": 2,
+      "chimney": true
+    },
+    {
+      "position": [
+        9.288,
+        0.645,
+        8.471
+      ],
+      "rotation_y": 3.162,
+      "width": 3.791,
+      "depth": 3.108,
+      "height": 2.607,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#f0e9db",
+      "windows": 1,
+      "chimney": false
+    }
+  ],
   "nav": {
     "nodes": [
       {
@@ -142,9 +204,9 @@ exports[`generateWorld > golden seed: chunks are byte-identical too 1`] = `
       {
         "id": "wander",
         "position": [
-          10.255,
-          0.658,
-          8.306
+          8.436,
+          0.571,
+          5.15
         ]
       },
       {

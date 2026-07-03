@@ -42,7 +42,7 @@ export default defineConfig({
   plugins: [
     react(),
     statics({
-      '/world': join(import.meta.dirname, '../engine/test/fixtures/sample-world'),
+      '/world': join(import.meta.dirname, '..', process.env['FABLETON_WORLD'] ?? 'engine/test/fixtures/sample-world'),
       '/assets': join(import.meta.dirname, '../assets'),
     }),
   ],

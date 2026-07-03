@@ -156,6 +156,53 @@
       "scale": 0.944
     }
   ],
+  "buildings": [
+    {
+      "position": [
+        4.75,
+        0.446,
+        12.393
+      ],
+      "rotation_y": 3.119,
+      "width": 3.401,
+      "depth": 2.81,
+      "height": 2.429,
+      "wall_color": "#c89c79",
+      "roof_color": "#3a322c",
+      "windows": 3,
+      "chimney": false
+    },
+    {
+      "position": [
+        4.159,
+        0.288,
+        6.537
+      ],
+      "rotation_y": 0.035,
+      "width": 3.73,
+      "depth": 2.288,
+      "height": 2.637,
+      "wall_color": "#bf8c63",
+      "roof_color": "#e98725",
+      "windows": 2,
+      "chimney": true
+    },
+    {
+      "position": [
+        5.446,
+        0.432,
+        11.572
+      ],
+      "rotation_y": 4.683,
+      "width": 3.351,
+      "depth": 2.729,
+      "height": 2.159,
+      "wall_color": "#be8a60",
+      "roof_color": "#110f0d",
+      "windows": 2,
+      "chimney": false
+    }
+  ],
   "nav": {
     "nodes": [
       {
@@ -169,9 +216,9 @@
       {
         "id": "wander",
         "position": [
-          9.049,
-          0.435,
-          8.46
+          4.673,
+          0.379,
+          9.734
         ]
       },
       {

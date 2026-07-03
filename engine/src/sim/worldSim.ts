@@ -13,7 +13,7 @@ import type { Charter } from '../schemas/charter.js';
 import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import type { Npc } from '../schemas/npc.js';
-import { DEFAULT_TICKS_PER_PHASE, clockAt, type ClockState } from './clock.js';
+import { DEFAULT_TICKS_PER_PHASE, TICK_HZ, clockAt, type ClockState } from './clock.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
 
 export const DELTA_ENVELOPE_BUDGET = 64;
@@ -80,6 +80,12 @@ export class WorldSim {
 
   clock(): ClockState {
     return clockAt(this.#tick, this.#phases, this.#ticksPerPhase);
+  }
+
+  /** How fast world time moves: one full day in sim ticks and real seconds. */
+  pace(): { ticks_per_day: number; seconds_per_day: number } {
+    const ticks = this.#ticksPerPhase * this.#phases.length;
+    return { ticks_per_day: ticks, seconds_per_day: ticks / TICK_HZ };
   }
 
   onEvent(listener: (event: SimEvent) => void): void {

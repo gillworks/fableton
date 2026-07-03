@@ -7,7 +7,7 @@ cd deploy && docker compose up -d
 # → explorable world at http://localhost:8080 (FABLETON_PORT to change)
 ```
 
-First boot founds the world into the `world-data` volume: charters with a committed starter world (`worlds/<name>/` — the flagship, Cindervault, Skeinsea) boot it, residents included; any other charter generates a fresh skeleton world. Every boot re-runs the validation gate before serving — an invalid world never comes up. `docker compose down -v` forgets the world; without `-v` it persists.
+First boot founds the world into the `world-data` volume: charters with a committed starter world (`worlds/<name>/` — the flagship's town, Cindervault, Skeinsea) boot it, residents included; any other charter generates a fresh skeleton world. Every boot re-runs the validation gate before serving — an invalid world never comes up. `docker compose down -v` forgets the world; without `-v` it persists.
 
 v1 services: `caddy` (client + chunks + API proxy) · `world-sim` · `world-api` · `postgres`.
 Phase B adds: `studio` (agent runtime) · `qa-bot` · orchestration control plane.

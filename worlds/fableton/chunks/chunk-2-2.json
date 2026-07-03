@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "id": "chunk-2-2",
+  "terrain": {
+    "biome": "meadow",
+    "grid_size": 9,
+    "heights": [
+      1.067,
+      1.083,
+      1.1,
+      1.137,
+      1.193,
+      1.243,
+      1.265,
+      1.246,
+      1.228,
+      1.085,
+      1.076,
+      1.083,
+      1.133,
+      1.218,
+      1.3,
+      1.343,
+      1.324,
+      1.295,
+      1.103,
+      1.084,
+      1.086,
+      1.142,
+      1.24,
+      1.336,
+      1.387,
+      1.368,
+      1.334,
+      1.119,
+      1.109,
+      1.116,
+      1.171,
+      1.267,
+      1.36,
+      1.409,
+      1.388,
+      1.347,
+      1.127,
+      1.137,
+      1.152,
+      1.206,
+      1.297,
+      1.384,
+      1.429,
+      1.405,
+      1.353,
+      1.126,
+      1.158,
+      1.183,
+      1.234,
+      1.319,
+      1.4,
+      1.441,
+      1.414,
+      1.35,
+      1.117,
+      1.163,
+      1.194,
+      1.243,
+      1.324,
+      1.401,
+      1.439,
+      1.412,
+      1.339,
+      1.1,
+      1.147,
+      1.178,
+      1.224,
+      1.301,
+      1.375,
+      1.411,
+      1.384,
+      1.313,
+      1.076,
+      1.121,
+      1.15,
+      1.187,
+      1.244,
+      1.296,
+      1.318,
+      1.292,
+      1.228
+    ]
+  },
+  "palette": [
+    "#e7dcc6",
+    "#5a8344",
+    "#e6a937",
+    "#272d4f"
+  ],
+  "props": [
+    {
+      "asset": "watermill",
+      "position": [
+        9.54,
+        1.372,
+        12.867
+      ],
+      "rotation_y": 5.525,
+      "scale": 0.936
+    },
+    {
+      "asset": "tree-high",
+      "position": [
+        6.128,
+        1.196,
+        7.11
+      ],
+      "rotation_y": 3.395,
+      "scale": 1.048
+    },
+    {
+      "asset": "tree-high",
+      "position": [
+        6.015,
+        1.225,
+        13.938
+      ],
+      "rotation_y": 4.845,
+      "scale": 0.948
+    },
+    {
+      "asset": "cart-high",
+      "position": [
+        4.985,
+        1.14,
+        5.794
+      ],
+      "rotation_y": 5.084,
+      "scale": 1.074
+    },
+    {
+      "asset": "rock-large",
+      "position": [
+        8.734,
+        1.349,
+        10.024
+      ],
+      "rotation_y": 3.381,
+      "scale": 0.988
+    },
+    {
+      "asset": "stall-green",
+      "position": [
+        2.308,
+        1.162,
+        10.006
+      ],
+      "rotation_y": 1.118,
+      "scale": 1.056
+    },
+    {
+      "asset": "stall-red",
+      "position": [
+        5.5,
+        1.157,
+        6.0
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "fountain-round",
+      "position": [
+        9.5,
+        1.367,
+        8.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "lantern",
+      "position": [
+        7.0,
+        1.278,
+        10.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "cart",
+      "position": [
+        11.5,
+        1.385,
+        5.0
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    }
+  ],
+  "buildings": [
+    {
+      "position": [
+        7.728,
+        1.297,
+        9.061
+      ],
+      "rotation_y": -0.018,
+      "width": 4.047,
+      "depth": 2.781,
+      "height": 2.017,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#53793e",
+      "windows": 2,
+      "chimney": true
+    },
+    {
+      "position": [
+        7.001,
+        1.262,
+        8.855
+      ],
+      "rotation_y": 1.546,
+      "width": 3.966,
+      "depth": 2.736,
+      "height": 2.349,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#e7ab3c",
+      "windows": 2,
+      "chimney": true
+    },
+    {
+      "position": [
+        11.955,
+        1.439,
+        11.206
+      ],
+      "rotation_y": 4.766,
+      "width": 2.528,
+      "depth": 3.313,
+      "height": 1.825,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#232948",
+      "windows": 2,
+      "chimney": true
+    },
+    {
+      "position": [
+        2.709,
+        1.106,
+        5.609
+      ],
+      "rotation_y": 4.667,
+      "width": 3.46,
+      "depth": 3.774,
+      "height": 2.799,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#e7dcc5",
+      "windows": 3,
+      "chimney": true
+    }
+  ],
+  "nav": {
+    "nodes": [
+      {
+        "id": "heart",
+        "position": [
+          8,
+          1.297,
+          8
+        ]
+      },
+      {
+        "id": "wander",
+        "position": [
+          10.972,
+          1.42,
+          9.956
+        ]
+      },
+      {
+        "id": "gate-chunk-1-2",
+        "position": [
+          1,
+          1.132,
+          8
+        ]
+      },
+      {
+        "id": "gate-chunk-2-3",
+        "position": [
+          8,
+          1.273,
+          15
+        ]
+      },
+      {
+        "id": "gate-chunk-2-1",
+        "position": [
+          8,
+          1.206,
+          1
+        ]
+      }
+    ],
+    "edges": [
+      [
+        "heart",
+        "wander"
+      ],
+      [
+        "heart",
+        "gate-chunk-1-2"
+      ],
+      [
+        "heart",
+        "gate-chunk-2-3"
+      ],
+      [
+        "heart",
+        "gate-chunk-2-1"
+      ]
+    ],
+    "portals": [
+      {
+        "node": "gate-chunk-1-2",
+        "to_chunk": "chunk-1-2"
+      },
+      {
+        "node": "gate-chunk-2-3",
+        "to_chunk": "chunk-2-3"
+      },
+      {
+        "node": "gate-chunk-2-1",
+        "to_chunk": "chunk-2-1"
+      }
+    ]
+  },
+  "npcs": [
+    "greta-the-baker",
+    "tam-the-lamplighter"
+  ],
+  "lore": []
+}

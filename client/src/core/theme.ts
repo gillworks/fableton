@@ -25,6 +25,8 @@ export interface WorldTheme {
 }
 
 export interface PhaseLighting {
+  /** Emissive intensity for building windows (lamplit evenings glow). */
+  windowGlow: number;
   /** Normalized sun direction, y-up. */
   sunPosition: [number, number, number];
   sunIntensity: number;
@@ -71,10 +73,10 @@ const shade = (hex: string, dl: number, ds = 0): string => {
 // The engine-fixed day arc: dawn low in the east, noon high, dusk low in
 // the west, night a dim moon. Phase changes relight, never relayout.
 const PHASE_GRAMMAR = [
-  { sun: [30, 14, 8], intensity: 1.5, warmth: +8, ambient: 0.75, skyLift: +6 },
-  { sun: [6, 30, 6], intensity: 2.2, warmth: 0, ambient: 0.95, skyLift: +14 },
-  { sun: [-26, 10, 10], intensity: 1.3, warmth: +16, ambient: 0.6, skyLift: -4 },
-  { sun: [-10, 18, -22], intensity: 0.45, warmth: -20, ambient: 0.35, skyLift: -30 },
+  { sun: [30, 14, 8], intensity: 1.5, warmth: +8, ambient: 0.75, skyLift: +6, glow: 0.25 },
+  { sun: [6, 30, 6], intensity: 2.2, warmth: 0, ambient: 0.95, skyLift: +14, glow: 0 },
+  { sun: [-26, 10, 10], intensity: 1.3, warmth: +16, ambient: 0.6, skyLift: -4, glow: 1 },
+  { sun: [-10, 18, -22], intensity: 0.45, warmth: -20, ambient: 0.35, skyLift: -30, glow: 0.8 },
 ] as const;
 
 export function phaseLighting(phaseIndex: number, theme: WorldTheme): PhaseLighting {
@@ -83,6 +85,7 @@ export function phaseLighting(phaseIndex: number, theme: WorldTheme): PhaseLight
   const ground = theme.paletteHex[0]!;
   const accent = hexToHsl(theme.accentHex);
   return {
+    windowGlow: grammar.glow,
     sunPosition: [...grammar.sun] as [number, number, number],
     sunIntensity: grammar.intensity,
     sunColor: hslToHex(

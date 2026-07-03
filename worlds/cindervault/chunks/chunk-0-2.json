@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-0-2",
   "terrain": {
-    "biome": "rise",
+    "biome": "grove",
     "grid_size": 9,
     "heights": [
       0.643,
@@ -156,6 +156,68 @@
       "scale": 0.937
     }
   ],
+  "buildings": [
+    {
+      "position": [
+        10.984,
+        0.484,
+        6.285
+      ],
+      "rotation_y": 1.616,
+      "width": 2.417,
+      "depth": 3.369,
+      "height": 2.218,
+      "wall_color": "#c4946e",
+      "roof_color": "#1a1614",
+      "windows": 1,
+      "chimney": true
+    },
+    {
+      "position": [
+        3.505,
+        0.499,
+        8.458
+      ],
+      "rotation_y": 3.118,
+      "width": 2.778,
+      "depth": 3.316,
+      "height": 2.793,
+      "wall_color": "#bc875c",
+      "roof_color": "#ed9945",
+      "windows": 2,
+      "chimney": true
+    },
+    {
+      "position": [
+        3.067,
+        0.468,
+        10.876
+      ],
+      "rotation_y": 4.744,
+      "width": 2.746,
+      "depth": 2.996,
+      "height": 2.596,
+      "wall_color": "#bf8c63",
+      "roof_color": "#110f0d",
+      "windows": 1,
+      "chimney": true
+    },
+    {
+      "position": [
+        8.617,
+        0.503,
+        5.992
+      ],
+      "rotation_y": 4.662,
+      "width": 3.41,
+      "depth": 2.386,
+      "height": 1.95,
+      "wall_color": "#bc875c",
+      "roof_color": "#5e3f26",
+      "windows": 3,
+      "chimney": true
+    }
+  ],
   "nav": {
     "nodes": [
       {
@@ -169,9 +231,9 @@
       {
         "id": "wander",
         "position": [
-          12.316,
-          0.426,
-          3.988
+          5.454,
+          0.569,
+          11.997
         ]
       },
       {

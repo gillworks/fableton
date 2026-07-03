@@ -10,7 +10,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "validate": "tsx src/validate/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world && tsx src/validate/checkRegistry.ts --charter ../charters/_template/charter.yaml --registry ../assets/registry.json && tsx src/validate/cli.ts --charter ../charters/cindervault/charter.yaml --world ../worlds/cindervault && tsx src/validate/cli.ts --charter ../charters/skeinsea/charter.yaml --world ../worlds/skeinsea",
+    "validate": "tsx src/validate/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world && tsx src/validate/checkRegistry.ts --charter ../charters/_template/charter.yaml --registry ../assets/registry.json && tsx src/validate/cli.ts --charter ../charters/fableton/charter.yaml --world ../worlds/fableton && tsx src/validate/cli.ts --charter ../charters/cindervault/charter.yaml --world ../worlds/cindervault && tsx src/validate/cli.ts --charter ../charters/skeinsea/charter.yaml --world ../worlds/skeinsea",
     "sim": "tsx src/sim/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world",
     "serve": "tsx src/api/cli.ts --charter ../charters/_template/charter.yaml --world test/fixtures/sample-world"
   },
