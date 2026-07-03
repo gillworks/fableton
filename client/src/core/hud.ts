@@ -18,6 +18,19 @@ export function luminanceOf(hex: string): number {
 export const hudInk = (backdropHex: string): 'ink' | 'paper' =>
   luminanceOf(backdropHex) > 0.55 ? 'ink' : 'paper';
 
+/** HUD chrome and panels render at 150% — the EP-tuned reading size (#74). */
+export const HUD_ZOOM = 1.5;
+
+/**
+ * The z stack (#71): in-world overlays (NPC tags, construction placards)
+ * sit UNDER the HUD chrome, which sits under the reading panels. drei's
+ * Html defaults to an astronomically high z-index, so every overlay must
+ * pass OVERLAY_Z_RANGE explicitly.
+ */
+export const OVERLAY_Z_RANGE: [number, number] = [5, 0];
+export const HUD_Z = 10;
+export const PANEL_Z = 40;
+
 /** Day number, 1-based: the sim clock is a pure function of tick. */
 export const dayOf = (tick: number, ticksPerDay: number = TICKS_PER_DAY): number =>
   Math.floor(tick / ticksPerDay) + 1;

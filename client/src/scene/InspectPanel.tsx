@@ -6,6 +6,7 @@
 // reader's lamplight — so its surface colors are engine grammar; only
 // the accent dot and typography come from the charter.
 import { useEffect, useState, type ReactElement } from 'react';
+import { PANEL_Z, HUD_ZOOM } from '../core/hud.js';
 import { buildPanelData, type NpcDetail, type PanelData } from '../core/inspect.js';
 import type { SimState } from '../core/interpolator.js';
 import type { WorldTheme } from '../core/theme.js';
@@ -65,8 +66,10 @@ export function InspectPanel({ npcId, sim, theme, onClose }: InspectPanelProps):
     <aside
       style={{
         position: 'fixed',
-        top: 18,
-        right: 18,
+        // Below the clock cluster (#72): the panel must never cover the
+        // DAY pill, day bar, or phase selector.
+        top: 132,
+        right: 14,
         width: 292,
         background: PARCHMENT,
         color: INK,
@@ -75,6 +78,8 @@ export function InspectPanel({ npcId, sim, theme, onClose }: InspectPanelProps):
         boxShadow: '0 12px 40px rgba(20, 14, 6, 0.35)',
         fontFamily: display,
         lineHeight: 1.45,
+        zoom: HUD_ZOOM,
+        zIndex: PANEL_Z,
       }}
     >
       <button

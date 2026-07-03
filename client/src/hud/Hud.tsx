@@ -5,7 +5,7 @@
 // bottom chronicle bar. Every color, face, and phase name arrives from
 // the parsed charter via theme tokens — zero world constants.
 import { useEffect, useState, type CSSProperties, type ReactElement } from 'react';
-import { dayOf, hudInk, paceLabel, pollChronicle, pollChronicleFile, type ChronicleEntry } from '../core/hud.js';
+import { HUD_Z, HUD_ZOOM, dayOf, hudInk, paceLabel, pollChronicle, pollChronicleFile, type ChronicleEntry } from '../core/hud.js';
 import { TICKS_PER_DAY } from '../core/types.js';
 import type { WorldTheme } from '../core/theme.js';
 import type { WorldInfo } from '../core/types.js';
@@ -57,7 +57,7 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
   return (
     <>
       {/* Top-left: who this world is */}
-      <div style={{ position: 'fixed', top: 20, left: 24, color: fg, textShadow: fgShadow }}>
+      <div style={{ position: 'fixed', top: 20, left: 24, color: fg, textShadow: fgShadow, zoom: HUD_ZOOM, zIndex: HUD_Z }}>
         <div style={{ fontFamily: display, fontWeight: 700, fontSize: 26, letterSpacing: 5, textTransform: 'uppercase' }}>
           {info.world}
         </div>
@@ -71,7 +71,7 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
       </div>
 
       {/* Top-right: the clock and the four-segment phase selector */}
-      <div style={{ position: 'fixed', top: 20, right: 20, textAlign: 'right' }}>
+      <div style={{ position: 'fixed', top: 20, right: 20, textAlign: 'right', zoom: HUD_ZOOM, zIndex: HUD_Z }}>
         <div
           style={{
             display: 'inline-block',
@@ -156,6 +156,8 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
           background: 'linear-gradient(transparent, rgba(12, 10, 8, 0.55))',
           color: PAPER,
           cursor: chronicle && chronicle.length > 0 ? 'pointer' : 'default',
+          zoom: HUD_ZOOM,
+          zIndex: HUD_Z,
         }}
       >
         <span style={{ fontFamily: mono, fontSize: 10, letterSpacing: 3, opacity: 0.6 }}>CHRONICLE</span>

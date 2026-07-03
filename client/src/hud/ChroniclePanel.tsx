@@ -6,7 +6,7 @@
 // engine grammar; typography and the accent come from the charter. PR
 // references render as links when the world knows its repo.
 import { useEffect, type ReactElement } from 'react';
-import { chronicleSegments } from '../core/hud.js';
+import { PANEL_Z, HUD_ZOOM, chronicleSegments } from '../core/hud.js';
 import type { WorldTheme } from '../core/theme.js';
 
 const PARCHMENT = '#f6efe0';
@@ -36,7 +36,7 @@ export function ChroniclePanel({ entries, theme, repoUrl, onClose }: ChroniclePa
   return (
     <div
       onClick={onClose}
-      style={{ position: 'fixed', inset: 0, background: 'rgba(12, 10, 8, 0.35)', zIndex: 20 }}
+      style={{ position: 'fixed', inset: 0, background: 'rgba(12, 10, 8, 0.35)', zIndex: PANEL_Z }}
     >
       <aside
         aria-label="chronicle"
@@ -47,7 +47,9 @@ export function ChroniclePanel({ entries, theme, repoUrl, onClose }: ChroniclePa
           bottom: 56,
           transform: 'translateX(-50%)',
           width: 'min(620px, calc(100vw - 48px))',
-          maxHeight: 'min(480px, 62vh)',
+          // Sized for the 150% zoom: 46vh zoomed ≈ 69vh visual, leaving
+          // the clock cluster and the bar both visible.
+          maxHeight: 'min(420px, 46vh)',
           overflowY: 'auto',
           background: PARCHMENT,
           color: INK,
@@ -56,6 +58,7 @@ export function ChroniclePanel({ entries, theme, repoUrl, onClose }: ChroniclePa
           boxShadow: '0 12px 40px rgba(20, 14, 6, 0.35)',
           fontFamily: display,
           lineHeight: 1.5,
+          zoom: HUD_ZOOM,
         }}
       >
         <div style={{ display: 'flex', alignItems: 'baseline', marginBottom: 10 }}>
