@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "kind": "decree-log",
+  "world": "Fableton",
+  "decrees": [
+    {
+      "seq": 1,
+      "issued": "2026-07-03T05:56:36Z",
+      "title": "The Law of Ties",
+      "text": "No resident enters Fableton alone. Every new soul arrives with at least one tie to a living neighbor, written into both their stories. A town is not thirty tales in one field; it is what the tales owe each other."
+    },
+    {
+      "seq": 2,
+      "issued": "2026-07-03T05:56:36Z",
+      "title": "On the Chronicle",
+      "text": "The Chronicle speaks once a day, in the town's own voice. It does not report; it remembers. A line that could open a story is lawful; a line that could open a ticket is not."
+    }
+  ]
+}
