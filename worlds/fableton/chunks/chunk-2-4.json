@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         9.873,
         0.82,
@@ -106,7 +106,7 @@
       "scale": 0.947
     },
     {
-      "asset": "rock-small",
+      "asset": "rock-large",
       "position": [
         13.487,
         1.012,
@@ -126,7 +126,7 @@
       "scale": 1.08
     },
     {
-      "asset": "windmill",
+      "asset": "tree-high-round",
       "position": [
         2.354,
         0.73,

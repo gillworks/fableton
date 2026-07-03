@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "stall-stool",
+      "asset": "stall-green",
       "position": [
         6.043,
         0.749,
@@ -106,7 +106,7 @@
       "scale": 1.041
     },
     {
-      "asset": "stall-stool",
+      "asset": "stall-red",
       "position": [
         12.765,
         0.569,
@@ -126,7 +126,7 @@
       "scale": 1.021
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         6.394,
         0.737,
@@ -136,7 +136,7 @@
       "scale": 0.953
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         12.795,
         0.894,
@@ -146,7 +146,7 @@
       "scale": 1.064
     },
     {
-      "asset": "lantern",
+      "asset": "hedge",
       "position": [
         2.091,
         0.83,
@@ -156,7 +156,7 @@
       "scale": 0.983
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         12.611,
         0.753,
@@ -166,11 +166,31 @@
       "scale": 0.972
     },
     {
+      "asset": "lantern",
+      "position": [
+        6,
+        0.744,
+        7
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
       "asset": "fountain-round",
       "position": [
         9.5,
         0.737,
         8.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "stall-bench",
+      "position": [
+        7.5,
+        0.824,
+        10.5
       ],
       "rotation_y": 0,
       "scale": 1
@@ -190,21 +210,6 @@
       "wall_color": "#95cbc3",
       "roof_color": "#9ea4ae",
       "windows": 3,
-      "chimney": false
-    },
-    {
-      "position": [
-        10.112,
-        0.797,
-        11.305
-      ],
-      "rotation_y": 1.551,
-      "width": 2.263,
-      "depth": 3.351,
-      "height": 1.965,
-      "wall_color": "#bbddd8",
-      "roof_color": "#8dab87",
-      "windows": 1,
       "chimney": false
     }
   ],

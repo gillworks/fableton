@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "tree",
+      "asset": "stall-stool",
       "position": [
         9.313,
         0.581,
@@ -116,7 +116,7 @@
       "scale": 0.998
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         6.954,
         0.575,
@@ -126,7 +126,7 @@
       "scale": 0.952
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         5.94,
         0.577,
@@ -136,7 +136,7 @@
       "scale": 0.927
     },
     {
-      "asset": "stall",
+      "asset": "rock-wide",
       "position": [
         4.965,
         0.569,

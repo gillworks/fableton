@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         7.849,
         0.658,
@@ -126,7 +126,7 @@
       "scale": 0.95
     },
     {
-      "asset": "fountain-round",
+      "asset": "cart-high",
       "position": [
         5.985,
         0.601,
@@ -136,7 +136,7 @@
       "scale": 1.084
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         3.652,
         0.664,
@@ -146,7 +146,7 @@
       "scale": 0.978
     },
     {
-      "asset": "tree-high",
+      "asset": "tree-crooked",
       "position": [
         6.012,
         0.654,

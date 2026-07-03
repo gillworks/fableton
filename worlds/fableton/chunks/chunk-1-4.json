@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         13.219,
         0.615,
@@ -106,7 +106,7 @@
       "scale": 1
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         4.331,
         0.68,
@@ -116,7 +116,7 @@
       "scale": 1.041
     },
     {
-      "asset": "stall-stool",
+      "asset": "stall-red",
       "position": [
         3.674,
         0.595,
@@ -126,7 +126,7 @@
       "scale": 1.086
     },
     {
-      "asset": "hedge",
+      "asset": "fountain-square",
       "position": [
         10.855,
         0.793,
@@ -136,7 +136,7 @@
       "scale": 0.914
     },
     {
-      "asset": "stall",
+      "asset": "rock-wide",
       "position": [
         10.95,
         0.682,

@@ -106,7 +106,7 @@
       "scale": 1.057
     },
     {
-      "asset": "tree",
+      "asset": "stall-red",
       "position": [
         6.795,
         0.822,
@@ -116,7 +116,7 @@
       "scale": 1.04
     },
     {
-      "asset": "stall",
+      "asset": "rock-wide",
       "position": [
         2.448,
         0.739,
@@ -126,7 +126,7 @@
       "scale": 0.996
     },
     {
-      "asset": "rock-large",
+      "asset": "lantern",
       "position": [
         7.161,
         0.81,
@@ -146,7 +146,7 @@
       "scale": 1.064
     },
     {
-      "asset": "hedge",
+      "asset": "fountain-square",
       "position": [
         4.152,
         0.756,
@@ -156,7 +156,7 @@
       "scale": 1.096
     },
     {
-      "asset": "stall-stool",
+      "asset": "stall-red",
       "position": [
         6.356,
         0.802,

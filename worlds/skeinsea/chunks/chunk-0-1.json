@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         8.992,
         0.732,
@@ -106,7 +106,7 @@
       "scale": 1.049
     },
     {
-      "asset": "stall-red",
+      "asset": "stall-green",
       "position": [
         5.021,
         0.764,
@@ -116,7 +116,7 @@
       "scale": 1.06
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         4.945,
         0.687,

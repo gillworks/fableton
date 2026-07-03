@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "fountain-round",
+      "asset": "cart-high",
       "position": [
         7.338,
         0.837,
@@ -106,7 +106,7 @@
       "scale": 0.947
     },
     {
-      "asset": "tree-crooked",
+      "asset": "stall-stool",
       "position": [
         10.908,
         0.956,
@@ -126,7 +126,7 @@
       "scale": 1.076
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         8.355,
         0.858,
@@ -136,7 +136,7 @@
       "scale": 0.973
     },
     {
-      "asset": "stall-stool",
+      "asset": "stall-red",
       "position": [
         13.496,
         0.968,

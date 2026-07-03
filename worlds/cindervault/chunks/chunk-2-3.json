@@ -106,7 +106,7 @@
       "scale": 0.919
     },
     {
-      "asset": "fountain-square",
+      "asset": "fountain-round",
       "position": [
         2.175,
         0.779,
@@ -116,7 +116,7 @@
       "scale": 0.961
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         11.856,
         0.72,

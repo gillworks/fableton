@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "tree-high",
+      "asset": "tree-crooked",
       "position": [
         2.436,
         1.285,
@@ -106,7 +106,7 @@
       "scale": 0.912
     },
     {
-      "asset": "tree-crooked",
+      "asset": "stall-stool",
       "position": [
         4.255,
         1.174,
@@ -116,7 +116,7 @@
       "scale": 0.943
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         4.847,
         1.17,
@@ -126,7 +126,7 @@
       "scale": 0.999
     },
     {
-      "asset": "stall-green",
+      "asset": "stall-bench",
       "position": [
         6.98,
         1,

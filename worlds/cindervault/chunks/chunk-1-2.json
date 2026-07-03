@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "stall-stool",
+      "asset": "stall-red",
       "position": [
         5.459,
         0.452,
@@ -106,7 +106,7 @@
       "scale": 0.965
     },
     {
-      "asset": "rock-large",
+      "asset": "lantern",
       "position": [
         10.245,
         0.453,
@@ -116,7 +116,7 @@
       "scale": 1.085
     },
     {
-      "asset": "stall",
+      "asset": "rock-wide",
       "position": [
         6.848,
         0.554,
@@ -126,7 +126,7 @@
       "scale": 0.951
     },
     {
-      "asset": "stall-red",
+      "asset": "stall-green",
       "position": [
         8.272,
         0.31,
@@ -136,7 +136,7 @@
       "scale": 1.084
     },
     {
-      "asset": "stall-red",
+      "asset": "stall-green",
       "position": [
         7.235,
         0.475,

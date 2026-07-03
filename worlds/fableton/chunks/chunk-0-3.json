@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         4.551,
         0.542,
@@ -106,7 +106,7 @@
       "scale": 0.997
     },
     {
-      "asset": "stall",
+      "asset": "rock-wide",
       "position": [
         5.03,
         0.492,
@@ -126,7 +126,7 @@
       "scale": 0.975
     },
     {
-      "asset": "stall-red",
+      "asset": "stall-green",
       "position": [
         7.471,
         0.638,
@@ -136,7 +136,7 @@
       "scale": 1.007
     },
     {
-      "asset": "windmill",
+      "asset": "tree-high-round",
       "position": [
         13.555,
         0.679,
@@ -146,7 +146,7 @@
       "scale": 1.011
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         5.576,
         0.526,

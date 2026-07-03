@@ -106,7 +106,7 @@
       "scale": 0.961
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         9.208,
         0.943,
@@ -116,7 +116,7 @@
       "scale": 0.947
     },
     {
-      "asset": "tree-high",
+      "asset": "tree-crooked",
       "position": [
         7.673,
         0.854,
@@ -126,7 +126,7 @@
       "scale": 0.955
     },
     {
-      "asset": "stall-red",
+      "asset": "stall-green",
       "position": [
         11.635,
         1.055,

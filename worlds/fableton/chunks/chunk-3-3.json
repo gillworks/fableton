@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "tree",
+      "asset": "stall-red",
       "position": [
         2.809,
         0.839,
@@ -106,7 +106,7 @@
       "scale": 0.921
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         2.464,
         0.846,
@@ -116,7 +116,7 @@
       "scale": 1.096
     },
     {
-      "asset": "stall-stool",
+      "asset": "stall-red",
       "position": [
         2.682,
         0.864,
@@ -126,7 +126,7 @@
       "scale": 0.92
     },
     {
-      "asset": "rock-wide",
+      "asset": "rock-small",
       "position": [
         3.123,
         0.968,
@@ -136,7 +136,7 @@
       "scale": 1.069
     },
     {
-      "asset": "tree",
+      "asset": "stall-stool",
       "position": [
         12.393,
         0.872,
@@ -144,16 +144,6 @@
       ],
       "rotation_y": 1.701,
       "scale": 0.98
-    },
-    {
-      "asset": "stall-red",
-      "position": [
-        5.5,
-        0.794,
-        6
-      ],
-      "rotation_y": 0,
-      "scale": 1
     },
     {
       "asset": "fountain-round",

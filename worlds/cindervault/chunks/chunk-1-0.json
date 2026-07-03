@@ -106,7 +106,7 @@
       "scale": 0.986
     },
     {
-      "asset": "fountain-square",
+      "asset": "fountain-round",
       "position": [
         7.358,
         0.734,
@@ -116,7 +116,7 @@
       "scale": 1.072
     },
     {
-      "asset": "windmill",
+      "asset": "tree-high-round",
       "position": [
         2.762,
         0.75,
@@ -126,7 +126,7 @@
       "scale": 1.087
     },
     {
-      "asset": "tree",
+      "asset": "stall-red",
       "position": [
         13.048,
         0.602,
@@ -146,7 +146,7 @@
       "scale": 0.954
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         3.873,
         0.742,
@@ -156,7 +156,7 @@
       "scale": 1.041
     },
     {
-      "asset": "windmill",
+      "asset": "tree-high-round",
       "position": [
         10.342,
         0.777,

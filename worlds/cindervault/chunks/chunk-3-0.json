@@ -106,7 +106,7 @@
       "scale": 0.927
     },
     {
-      "asset": "rock-wide",
+      "asset": "rock-small",
       "position": [
         4.426,
         0.76,
@@ -116,7 +116,7 @@
       "scale": 0.909
     },
     {
-      "asset": "windmill",
+      "asset": "tree-high-round",
       "position": [
         13.217,
         0.81,

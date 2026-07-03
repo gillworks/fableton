@@ -131,7 +131,7 @@ export function buildChunkGroup(
 }
 
 /**
- * Some kit models keep their origin mid-body (windmill, watermill), which
+ * Some kit models keep their origin mid-body rather than at the base, which
  * buries them when placed at ground height. Bake a lift into each asset's
  * local matrices so its lowest vertex sits at y = 0.
  */

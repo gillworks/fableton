@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "fountain-round",
+      "asset": "cart-high",
       "position": [
         5.077,
         0.594,
@@ -106,7 +106,7 @@
       "scale": 1.075
     },
     {
-      "asset": "tree-crooked",
+      "asset": "stall-stool",
       "position": [
         3.064,
         0.549,
@@ -116,7 +116,7 @@
       "scale": 0.974
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-crooked",
       "position": [
         8.392,
         0.625,
@@ -126,7 +126,7 @@
       "scale": 1.005
     },
     {
-      "asset": "tree-crooked",
+      "asset": "stall-stool",
       "position": [
         10.05,
         0.674,
@@ -136,7 +136,7 @@
       "scale": 0.986
     },
     {
-      "asset": "stall-stool",
+      "asset": "stall-red",
       "position": [
         6.449,
         0.652,

@@ -116,7 +116,7 @@
       "scale": 0.917
     },
     {
-      "asset": "rock-small",
+      "asset": "rock-large",
       "position": [
         3.111,
         0.663,
@@ -126,7 +126,7 @@
       "scale": 1.046
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         8.919,
         0.435,
@@ -146,7 +146,7 @@
       "scale": 1.091
     },
     {
-      "asset": "stall",
+      "asset": "rock-wide",
       "position": [
         12.101,
         0.496,

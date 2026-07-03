@@ -96,7 +96,7 @@
   ],
   "props": [
     {
-      "asset": "windmill",
+      "asset": "tree-high-round",
       "position": [
         6.55,
         0.546,
@@ -106,7 +106,7 @@
       "scale": 1.004
     },
     {
-      "asset": "watermill",
+      "asset": "tree-high",
       "position": [
         3.337,
         0.486,
@@ -126,7 +126,7 @@
       "scale": 1.01
     },
     {
-      "asset": "tree",
+      "asset": "stall-stool",
       "position": [
         13.883,
         0.533,
@@ -136,7 +136,7 @@
       "scale": 1.042
     },
     {
-      "asset": "tree-high-round",
+      "asset": "tree-high",
       "position": [
         11.478,
         0.466,
@@ -146,7 +146,7 @@
       "scale": 1.051
     },
     {
-      "asset": "rock-small",
+      "asset": "rock-large",
       "position": [
         6.781,
         0.485,
@@ -156,7 +156,7 @@
       "scale": 1.003
     },
     {
-      "asset": "stall-bench",
+      "asset": "stall",
       "position": [
         9.036,
         0.506,
