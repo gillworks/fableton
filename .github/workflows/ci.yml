@@ -22,9 +22,8 @@ jobs:
       # This job is the standard: schema-valid, refs resolve, navmesh connects, perf budget holds.
       - run: pnpm validate
 
-  # The v1 definition-of-done harness (docs/v1.md). Tests whose pieces
-  # haven't landed yet SKIP with the reason; the v1 tag must pass with
-  # --no-skip (flip it here at tag time).
+  # The v1 definition-of-done harness (docs/v1.md), skips forbidden —
+  # flipped to --no-skip at v1 tag time (issue #30).
   acceptance:
     runs-on: ubuntu-latest
     steps:
@@ -34,4 +33,4 @@ jobs:
         with:
           node-version: 20
       - run: pnpm install --no-frozen-lockfile
-      - run: pnpm accept
+      - run: pnpm accept --no-skip
