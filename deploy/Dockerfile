@@ -29,5 +29,7 @@ ENTRYPOINT ["sh", "deploy/world-entrypoint.sh"]
 
 FROM caddy:2-alpine AS static
 COPY deploy/Caddyfile /etc/caddy/Caddyfile
+COPY deploy/caddy-entrypoint.sh /usr/local/bin/caddy-entrypoint.sh
+ENTRYPOINT ["sh", "/usr/local/bin/caddy-entrypoint.sh"]
 COPY --from=builder /app/client/dist /srv/dist
 COPY --from=builder /app/assets /srv/assets
