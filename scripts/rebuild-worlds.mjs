@@ -2,97 +2,42 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 // Rebuild the committed starter worlds (worlds/<name>/) after a generator
-// change: regenerate each world's skeleton from its charter, then re-dress
-// the home chunks (themed props at fixed spots, grounded on the new mesh)
-// and re-attach the residents. NPC files (npcs/) and divine artifacts
-// (artifacts/) are preserved — authored content, not generated.
+// change — WITHOUT clobbering the studio's work. worlds/ is steward-owned
+// (issue #64): residents move, props appear, the chronicle grows, all
+// through merged PRs. So this script replaces only what the generator
+// produces (manifest.json, assets.json, chunks/) and reads everything
+// authored back out of the CURRENT world before regenerating:
+//
+//   - NPC placement: each chunk's `npcs` array (preserve-by-read — a
+//     resident the steward moved stays moved)
+//   - Authored props: any prop in a current chunk that the regeneration
+//     does not produce for that chunk is carried over, re-grounded on the
+//     new mesh
+//   - Untouched entirely: npcs/, artifacts/, chronicle.md, og.png, and
+//     any other file the studio adds beside the generated ones
+//
+// Caveat (documented in #64): authored props are detected by diffing
+// against the fresh generation, so if the generator's PROP PLACEMENT
+// logic itself changed, old generated props are indistinguishable from
+// authored ones and get carried over too. The per-chunk carry counts are
+// logged — review the git diff when they look fat.
+//
+// A rebuild with an unchanged generator is a no-op (that is the test).
 import { execFileSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 
-// Per-world dressing: home chunks, the themed props they need, residents.
-// Chunk ids use 'index:N' (Nth chunk in the manifest) so re-dressing
-// survives layout changes; fixed ids pin a specific chunk.
+// The only per-world config left: which charter, and the founding
+// timestamp (a fixed point the sim's clock derives "day N" from — see
+// issue #57; rebuilds must never re-stamp it).
 const WORLDS = {
-  fableton: {
-    charter: 'charters/fableton/charter.yaml',
-    // Founding timestamps are fixed points (issue #57): the sim derives
-    // "day N" from them, so rebuilds must never re-stamp.
-    founded_at: '2026-07-03T02:00:53Z',
-    // Townsfolk (wander trees — no prop/nav dependencies) spread across
-    // the town by chunk index. Heroes live in the dressed chunks below.
-    townsfolk: {
-      0: ['pip-halfpenny', 'goodwife-crumb'],
-      1: ['dame-spindle', 'quill'],
-      2: ['old-thorn', 'bo-brindleson'],
-      3: ['master-thumbling'],
-      4: ['widow-hood', 'marigold-crumb'],
-      5: ['brindle', 'ember-wick'],
-      6: ['the-lesser-piper'],
-      7: ['salt', 'stilts'],
-      9: ['cobble', 'granny-ash'],
-      10: ['mirabel-glass', 'needle'],
-      11: ['humble-pot'],
-      12: ['bramble-rose', 'fable-jack'],
-      13: ['tick', 'morrow'],
-      14: ['puddle', 'winsome'],
-      15: ['ferrous-the-constant', 'vesper'],
-    },
-    dress: [
-      {
-        chunk: 'index:middle',
-        props: [
-          ['stall-red', 5.5, 6.0],
-          ['fountain-round', 9.5, 8.5],
-          ['lantern', 7.0, 10.5],
-          ['cart', 11.5, 5.0],
-        ],
-        npcs: ['greta-the-baker', 'tam-the-lamplighter'],
-      },
-      {
-        chunk: 'index:middle+1',
-        props: [
-          ['tree', 6.0, 6.0],
-          ['tree-crooked', 10.0, 9.0],
-        ],
-        npcs: ['reynard-the-retired'],
-      },
-    ],
-  },
-  cindervault: {
-    charter: 'charters/cindervault/charter.yaml',
-    founded_at: '2026-07-03T01:56:21Z',
-    dress: [
-      {
-        chunk: 'index:middle',
-        props: [
-          ['stall-red', 5.5, 6.0],
-          ['cart', 7.2, 9.0],
-          ['lantern', 9.0, 6.5],
-        ],
-        npcs: ['brann-of-the-third-hearth', 'ledger-ash', 'cinder-moll'],
-      },
-    ],
-  },
-  skeinsea: {
-    charter: 'charters/skeinsea/charter.yaml',
-    founded_at: '2026-07-03T01:56:21Z',
-    dress: [
-      {
-        chunk: 'index:middle',
-        props: [
-          ['lantern', 6.0, 7.0],
-          ['fountain-round', 9.5, 8.5],
-          ['stall-bench', 7.5, 10.5],
-        ],
-        npcs: ['ninth-bell-odd', 'slackwater-meg', 'haar'],
-      },
-    ],
-  },
+  fableton: { charter: 'charters/fableton/charter.yaml', founded_at: '2026-07-03T02:00:53Z' },
+  cindervault: { charter: 'charters/cindervault/charter.yaml', founded_at: '2026-07-03T01:56:21Z' },
+  skeinsea: { charter: 'charters/skeinsea/charter.yaml', founded_at: '2026-07-03T01:56:21Z' },
 };
 
 const GRID = 9;
@@ -108,57 +53,90 @@ function groundOn(heights, x, z) {
   return Math.round((a + (b - a) * fx + (c - a) * fz + (a - b - c + d) * fx * fz) * 1000) / 1000;
 }
 
+const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'));
+const writeJson = (path, doc) => writeFileSync(path, JSON.stringify(doc, null, 2) + '\n');
+const propKey = (p) => `${p.asset}@${p.position[0]},${p.position[2]}`;
+
 for (const [name, config] of Object.entries(WORLDS)) {
   const worldDir = join(root, 'worlds', name);
-  const AUTHORED = ['npcs', 'artifacts'];
-  const backupOf = (sub) => join(tmpdir(), `fableton-${sub}-${name}`);
-  for (const sub of AUTHORED) {
-    rmSync(backupOf(sub), { recursive: true, force: true });
-    if (existsSync(join(worldDir, sub))) cpSync(join(worldDir, sub), backupOf(sub), { recursive: true });
-  }
-  rmSync(worldDir, { recursive: true, force: true });
 
-  execFileSync('pnpm', ['--dir', join(root, 'engine'), 'exec', 'tsx', 'src/generate/cli.ts', '--charter', join(root, config.charter), '--out', worldDir, '--founded-at', config.founded_at], { stdio: 'inherit' });
-
-  for (const sub of AUTHORED) {
-    if (existsSync(backupOf(sub))) cpSync(backupOf(sub), join(worldDir, sub), { recursive: true });
-  }
-
-  const manifest = JSON.parse(readFileSync(join(worldDir, 'manifest.json'), 'utf8'));
-  const ids = manifest.chunks.map((c) => c.id);
-  const resolve = (ref) => {
-    if (!ref.startsWith('index:')) return ref;
-    const middle = Math.floor(ids.length / 2);
-    return ids[ref === 'index:middle' ? middle : middle + Number(ref.split('+')[1] ?? 0)];
-  };
-
-  for (const [indexStr, folks] of Object.entries(config.townsfolk ?? {})) {
-    const id = ids[Number(indexStr)];
-    if (!id) continue;
-    const path = join(worldDir, 'chunks', `${id}.json`);
-    const chunk = JSON.parse(readFileSync(path, 'utf8'));
-    chunk.npcs = [...new Set([...chunk.npcs, ...folks])];
-    writeFileSync(path, JSON.stringify(chunk, null, 2) + '\n');
-  }
-
-  for (const dress of config.dress) {
-    const id = resolve(dress.chunk);
-    const path = join(worldDir, 'chunks', `${id}.json`);
-    const chunk = JSON.parse(readFileSync(path, 'utf8'));
-    const have = new Set(chunk.props.map((p) => p.asset));
-    for (const [asset, x, z] of dress.props) {
-      if (!have.has(asset)) {
-        chunk.props.push({ asset, position: [x, groundOn(chunk.terrain.heights, x, z), z], rotation_y: 0, scale: 1 });
-      }
+  // 1. Read the steward's current truth before touching anything.
+  const current = new Map(); // chunk id → { npcs, props, origin }
+  if (existsSync(join(worldDir, 'chunks'))) {
+    for (const file of readdirSync(join(worldDir, 'chunks')).filter((f) => f.endsWith('.json'))) {
+      const chunk = readJson(join(worldDir, 'chunks', file));
+      current.set(chunk.id, { npcs: chunk.npcs, props: chunk.props, origin: null });
     }
-    // Dressing may crowd a generated building — drop any that now collides.
+  }
+  const oldManifest = existsSync(join(worldDir, 'manifest.json'))
+    ? readJson(join(worldDir, 'manifest.json'))
+    : null;
+  for (const entry of oldManifest?.chunks ?? []) {
+    if (current.has(entry.id)) current.get(entry.id).origin = entry.origin;
+  }
+
+  // 2. Regenerate the skeleton into a temp dir.
+  const tmp = mkdtempSync(join(tmpdir(), `fableton-rebuild-${name}-`));
+  execFileSync(
+    'pnpm',
+    ['--dir', join(root, 'engine'), 'exec', 'tsx', 'src/generate/cli.ts', '--charter', join(root, config.charter), '--out', tmp, '--founded-at', config.founded_at],
+    { stdio: 'inherit' },
+  );
+  const manifest = readJson(join(tmp, 'manifest.json'));
+  const newIds = new Set(manifest.chunks.map((c) => c.id));
+
+  // 3. Re-place every resident on the new skeleton. A chunk that no
+  //    longer exists (layout change) re-homes its residents to the
+  //    nearest new chunk by origin, loudly.
+  const nearestTo = ([x, z]) =>
+    manifest.chunks.reduce(
+      (best, c) => {
+        const d = (c.origin[0] - x) ** 2 + (c.origin[1] - z) ** 2;
+        return d < best.d ? { id: c.id, d } : best;
+      },
+      { id: manifest.chunks[0].id, d: Infinity },
+    ).id;
+  const npcsFor = new Map(manifest.chunks.map((c) => [c.id, []]));
+  for (const [id, data] of current) {
+    if (data.npcs.length === 0) continue;
+    let home = id;
+    if (!newIds.has(id)) {
+      home = data.origin ? nearestTo(data.origin) : manifest.chunks[Math.floor(manifest.chunks.length / 2)].id;
+      console.warn(`  ! chunk ${id} is gone — re-homing ${data.npcs.join(', ')} to ${home}`);
+    }
+    npcsFor.get(home).push(...data.npcs);
+  }
+
+  // 4. Carry authored props (anything the fresh generation didn't
+  //    produce for that chunk), re-grounded on the new terrain.
+  for (const entry of manifest.chunks) {
+    const chunk = readJson(join(tmp, 'chunks', `${entry.id}.json`));
+    const generated = new Set(chunk.props.map(propKey));
+    const carried = (current.get(entry.id)?.props ?? []).filter((p) => !generated.has(propKey(p)));
+    for (const p of carried) {
+      chunk.props.push({
+        ...p,
+        position: [p.position[0], groundOn(chunk.terrain.heights, p.position[0], p.position[2]), p.position[2]],
+      });
+    }
+    // Carried props may crowd a generated building — drop any that collides.
     chunk.buildings = chunk.buildings.filter((b) => {
       const r = Math.hypot(b.width, b.depth) / 2;
       return chunk.props.every((p) => Math.hypot(b.position[0] - p.position[0], b.position[2] - p.position[2]) > r + 0.8);
     });
-    chunk.npcs = [...new Set([...chunk.npcs, ...dress.npcs])];
-    writeFileSync(path, JSON.stringify(chunk, null, 2) + '\n');
-    console.log(`  dressed ${name}/${id} (${dress.npcs.length} residents)`);
+    chunk.npcs = [...new Set(npcsFor.get(entry.id))].sort();
+    writeJson(join(tmp, 'chunks', `${entry.id}.json`), chunk);
+    if (carried.length > 0) console.log(`  carried ${carried.length} authored prop(s) into ${name}/${entry.id}`);
   }
+
+  // 5. Replace ONLY the generated outputs; authored files stay untouched.
+  rmSync(join(worldDir, 'chunks'), { recursive: true, force: true });
+  cpSync(join(tmp, 'chunks'), join(worldDir, 'chunks'), { recursive: true });
+  writeJson(join(worldDir, 'manifest.json'), manifest);
+  cpSync(join(tmp, 'assets.json'), join(worldDir, 'assets.json'));
+  rmSync(tmp, { recursive: true, force: true });
+
+  const placed = [...npcsFor.values()].reduce((n, list) => n + list.length, 0);
+  console.log(`✓ ${name} rebuilt — ${manifest.chunks.length} chunks, ${placed} residents kept in place`);
 }
-console.log('starter worlds rebuilt — run pnpm validate');
+console.log('starter worlds rebuilt — run pnpm validate and REVIEW THE DIFF (see #64)');
