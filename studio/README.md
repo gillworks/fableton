@@ -26,10 +26,23 @@ An orchestration control plane (e.g. Paperclip) is deliberately **not** part of 
 
 - `prompts/steward.md` · `prompts/qa.md` · `prompts/council.md` — the three role briefs. Self-contained: a fresh headless session given only the brief + this repo performs its cycle.
 - `bin/run.sh <role> [world]` — the headless runner: fresh `main`, role model from env, brief injected, transcript to `studio/logs/<role>/` (gitignored).
-- `bin/validate-artifacts.ts <world>` — divine artifacts vs engine schemas (absent = valid; invalid = fail).
+- `bin/validate-artifacts.ts [world]` — divine artifacts vs engine schemas (absent = valid; invalid = fail). No argument = every world; `pnpm validate` runs that form, so an invalid decree log fails the same gate as an invalid chunk (#41).
 - Install cadence: `deploy/crontab.example`. The studio runs from its **own clone** (default `/opt/fableton-studio`, `STUDIO_REPO` to change) — never the auto-deploy clone, which must stay fast-forward-only.
 
 The full loop: sprite files findings → steward PRs world-data through the gate → auto-merge on green → auto-deploy syncs the live world from the repo → council audits every merge, rules petitions, sets direction. The repo is the coordinator; nobody talks live.
+
+## The escalation contract (#41)
+
+Escalations are the only channel by which law questions travel upward. The contract, end to end:
+
+1. **Raise.** The steward (mid-build, per `prompts/steward.md`) or the QA sprite (on a charter contradiction in shipped content, per `prompts/qa.md`) opens an issue titled `Petition: …` with the **`escalation`** label — two sentences: what needs ruling, and the cheapest ruling that unblocks. The steward ends its session without building; sprites never build anyway. Nobody else sets the label; humans wanting things use `wish` / `feedback`.
+2. **Rule.** The next council session answers **every** open `escalation` issue (a petition never survives a council unanswered): a ruling comment of two or three sentences citing the charter section or decree that grounds it, then close — or relabel `wish` when the ruling turns the petition into buildable work.
+3. **Record.** A ruling that sets precedent (anything a future steward must obey) is appended to `worlds/<world>/artifacts/decrees.json` in the same council PR, and the ruling comment cites its decree (`Decree N`). A one-off clarification with no precedent needs no decree — scarcity keeps decrees load-bearing.
+4. **The ceiling.** A petition that requires changing the charter itself is relabeled `escalation,needs-ep-review` and argued to the founder, who ratifies or refuses; the council never edits the constitution.
+
+## Context assembly (the cache-friendly prefix)
+
+Every role brief opens by reading the same documents in the same order — charter → `artifacts/master-plan.json` → `artifacts/decrees.json` (→ `amendments/`) → the recent chronicle — before any session-specific input (backlog, PR list, findings). Stable, slow-changing law first and volatile context last keeps the shared prefix of consecutive sessions identical, which is exactly what prompt caching rewards; it is also why decrees are append-only. When editing a brief, preserve that order.
 
 ### Non-root requirement (learned in production)
 

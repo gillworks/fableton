@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 //
-// Validate a world's divine artifacts against the engine schemas.
-//   pnpm --dir studio exec tsx bin/validate-artifacts.ts <world>
+// Validate divine artifacts against the engine schemas — one world, or
+// every world in the repo when no argument is given (the pnpm validate
+// gate runs the no-arg form; issue #41).
+//   pnpm --dir studio exec tsx bin/validate-artifacts.ts [world]
 // Absent artifacts are fine (a young world); present-but-invalid fails.
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -11,13 +13,13 @@ import {
   WorldBibleAmendmentSchema,
 } from '@fableton/engine';
 
-const world = process.argv[2];
-if (!world) {
-  console.error('usage: validate-artifacts.ts <world>');
-  process.exit(2);
-}
-
-const dir = join(import.meta.dirname, '..', '..', 'worlds', world, 'artifacts');
+const worldsRoot = join(import.meta.dirname, '..', '..', 'worlds');
+const worlds = process.argv[2]
+  ? [process.argv[2]]
+  : readdirSync(worldsRoot, { withFileTypes: true })
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
+      .sort();
 let failures = 0;
 
 function check(name: string, schema: { parse: (v: unknown) => unknown }, path: string) {
@@ -30,18 +32,20 @@ function check(name: string, schema: { parse: (v: unknown) => unknown }, path: s
   }
 }
 
-if (!existsSync(dir)) {
-  console.log(`no artifacts yet for ${world} — valid (a young world)`);
-  process.exit(0);
+for (const world of worlds) {
+  const dir = join(worldsRoot, world, 'artifacts');
+  if (!existsSync(dir)) {
+    console.log(`no artifacts yet for ${world} — valid (a young world)`);
+    continue;
+  }
+  if (existsSync(join(dir, 'master-plan.json')))
+    check(`${world}/master-plan.json`, MasterPlanSchema, join(dir, 'master-plan.json'));
+  if (existsSync(join(dir, 'decrees.json')))
+    check(`${world}/decrees.json`, DecreeLogSchema, join(dir, 'decrees.json'));
+  const amendments = join(dir, 'amendments');
+  if (existsSync(amendments))
+    for (const f of readdirSync(amendments).filter((f) => f.endsWith('.json')))
+      check(`${world}/amendments/${f}`, WorldBibleAmendmentSchema, join(amendments, f));
 }
-
-if (existsSync(join(dir, 'master-plan.json')))
-  check('master-plan.json', MasterPlanSchema, join(dir, 'master-plan.json'));
-if (existsSync(join(dir, 'decrees.json')))
-  check('decrees.json', DecreeLogSchema, join(dir, 'decrees.json'));
-const amendments = join(dir, 'amendments');
-if (existsSync(amendments))
-  for (const f of readdirSync(amendments).filter((f) => f.endsWith('.json')))
-    check(`amendments/${f}`, WorldBibleAmendmentSchema, join(amendments, f));
 
 process.exit(failures ? 1 : 0);

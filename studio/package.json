@@ -16,6 +16,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "found": "tsx src/cli.ts"
+    "found": "tsx src/cli.ts",
+    "validate": "tsx bin/validate-artifacts.ts"
   }
 }
