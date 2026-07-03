@@ -21,3 +21,12 @@ The thin slice runs **without an orchestration platform**. The repo is the coord
 - Coordination artifacts: backlog issues (`wish` / `feedback` / `escalation` labels) in; PRs, decrees, master-plan updates, chronicle lines out.
 
 An orchestration control plane (e.g. Paperclip) is deliberately **not** part of the slice — re-evaluate after the First Autonomous Week milestone, when continuous operation, per-agent budget enforcement, and a single ops dashboard become load-bearing. Anything added then lives in `/deploy` config, never woven through engine or studio code.
+
+## Phase B files (this package)
+
+- `prompts/steward.md` · `prompts/qa.md` · `prompts/council.md` — the three role briefs. Self-contained: a fresh headless session given only the brief + this repo performs its cycle.
+- `bin/run.sh <role> [world]` — the headless runner: fresh `main`, role model from env, brief injected, transcript to `studio/logs/<role>/` (gitignored).
+- `bin/validate-artifacts.ts <world>` — divine artifacts vs engine schemas (absent = valid; invalid = fail).
+- Install cadence: `deploy/crontab.example`. The studio runs from its **own clone** (default `/opt/fableton-studio`, `STUDIO_REPO` to change) — never the auto-deploy clone, which must stay fast-forward-only.
+
+The full loop: sprite files findings → steward PRs world-data through the gate → auto-merge on green → auto-deploy syncs the live world from the repo → council audits every merge, rules petitions, sets direction. The repo is the coordinator; nobody talks live.
