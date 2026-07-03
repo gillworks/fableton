@@ -169,63 +169,18 @@
   "buildings": [
     {
       "position": [
-        10.909,
-        0.919,
-        12.013
+        2.85,
+        0.729,
+        13.235
       ],
-      "rotation_y": 4.738,
-      "width": 3.194,
-      "depth": 2.102,
-      "height": 1.735,
+      "rotation_y": 0.012,
+      "width": 3.882,
+      "depth": 3.557,
+      "height": 1.704,
       "wall_color": "#f6f2e9",
-      "roof_color": "#53793e",
-      "windows": 2,
-      "chimney": true
-    },
-    {
-      "position": [
-        3.323,
-        0.739,
-        12.257
-      ],
-      "rotation_y": 3.172,
-      "width": 3.759,
-      "depth": 3.095,
-      "height": 2.67,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#e5a52e",
-      "windows": 2,
+      "roof_color": "#5c8745",
+      "windows": 1,
       "chimney": false
-    },
-    {
-      "position": [
-        6.96,
-        0.815,
-        5.552
-      ],
-      "rotation_y": 1.551,
-      "width": 2.708,
-      "depth": 3.18,
-      "height": 2.691,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#2a3155",
-      "windows": 1,
-      "chimney": true
-    },
-    {
-      "position": [
-        10.068,
-        0.86,
-        7.486
-      ],
-      "rotation_y": 4.737,
-      "width": 4.246,
-      "depth": 2.842,
-      "height": 2.267,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#e2d5bb",
-      "windows": 1,
-      "chimney": true
     }
   ],
   "nav": {
@@ -241,9 +196,9 @@
       {
         "id": "wander",
         "position": [
-          7.96,
-          0.826,
-          6.702
+          12.58,
+          0.903,
+          7.517
         ]
       },
       {
@@ -255,11 +210,19 @@
         ]
       },
       {
-        "id": "gate-chunk-1-2",
+        "id": "gate-chunk-0-3",
+        "position": [
+          1,
+          0.705,
+          8
+        ]
+      },
+      {
+        "id": "gate-chunk-1-4",
         "position": [
           8,
-          0.883,
-          1
+          0.861,
+          15
         ]
       }
     ],
@@ -274,7 +237,11 @@
       ],
       [
         "heart",
-        "gate-chunk-1-2"
+        "gate-chunk-0-3"
+      ],
+      [
+        "heart",
+        "gate-chunk-1-4"
       ]
     ],
     "portals": [
@@ -283,8 +250,12 @@
         "to_chunk": "chunk-2-3"
       },
       {
-        "node": "gate-chunk-1-2",
-        "to_chunk": "chunk-1-2"
+        "node": "gate-chunk-0-3",
+        "to_chunk": "chunk-0-3"
+      },
+      {
+        "node": "gate-chunk-1-4",
+        "to_chunk": "chunk-1-4"
       }
     ]
   },

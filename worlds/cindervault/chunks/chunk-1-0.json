@@ -169,63 +169,18 @@
   "buildings": [
     {
       "position": [
-        12,
-        0.67,
-        5.181
+        4.555,
+        0.665,
+        12.221
       ],
-      "rotation_y": 1.561,
-      "width": 3.706,
-      "depth": 2.81,
-      "height": 1.889,
-      "wall_color": "#c4946e",
-      "roof_color": "#342d27",
-      "windows": 1,
-      "chimney": false
-    },
-    {
-      "position": [
-        7.396,
-        0.606,
-        9.395
-      ],
-      "rotation_y": 4.751,
-      "width": 3.978,
-      "depth": 2.456,
-      "height": 2.316,
-      "wall_color": "#c59772",
-      "roof_color": "#eb9137",
-      "windows": 2,
-      "chimney": false
-    },
-    {
-      "position": [
-        11.738,
-        0.695,
-        4.689
-      ],
-      "rotation_y": -0.037,
-      "width": 3.448,
-      "depth": 3.007,
-      "height": 1.876,
-      "wall_color": "#c2926b",
-      "roof_color": "#110f0d",
+      "rotation_y": 3.11,
+      "width": 2.478,
+      "depth": 2.063,
+      "height": 2.63,
+      "wall_color": "#c18f67",
+      "roof_color": "#3a322c",
       "windows": 2,
       "chimney": true
-    },
-    {
-      "position": [
-        5.574,
-        0.663,
-        10.616
-      ],
-      "rotation_y": 4.676,
-      "width": 2.277,
-      "depth": 2.856,
-      "height": 2.18,
-      "wall_color": "#be8a60",
-      "roof_color": "#6d492c",
-      "windows": 3,
-      "chimney": false
     }
   ],
   "nav": {
@@ -241,9 +196,9 @@
       {
         "id": "wander",
         "position": [
-          4.868,
-          0.666,
-          11.838
+          12.788,
+          0.559,
+          9.847
         ]
       },
       {

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-1-1",
   "terrain": {
-    "biome": "grove",
+    "biome": "meadow",
     "grid_size": 9,
     "heights": [
       0.661,
@@ -164,52 +164,47 @@
       ],
       "rotation_y": 2.602,
       "scale": 0.972
+    },
+    {
+      "asset": "fountain-round",
+      "position": [
+        9.5,
+        0.737,
+        8.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
     }
   ],
   "buildings": [
     {
       "position": [
-        12.802,
-        0.856,
-        11.968
+        3.566,
+        0.914,
+        12.302
       ],
-      "rotation_y": 4.752,
-      "width": 2.76,
-      "depth": 2.812,
-      "height": 2.691,
-      "wall_color": "#a6d3cd",
-      "roof_color": "#a0a7b0",
-      "windows": 1,
-      "chimney": true
-    },
-    {
-      "position": [
-        5.118,
-        0.746,
-        6.731
-      ],
-      "rotation_y": -0.024,
-      "width": 3.605,
-      "depth": 2.216,
-      "height": 1.821,
-      "wall_color": "#b0d8d3",
-      "roof_color": "#8dab87",
+      "rotation_y": 1.511,
+      "width": 3.631,
+      "depth": 3.751,
+      "height": 1.726,
+      "wall_color": "#95cbc3",
+      "roof_color": "#9ea4ae",
       "windows": 3,
       "chimney": false
     },
     {
       "position": [
-        8.787,
-        0.713,
-        7.472
+        10.112,
+        0.797,
+        11.305
       ],
-      "rotation_y": -0.042,
-      "width": 4.233,
-      "depth": 2.275,
-      "height": 2.41,
-      "wall_color": "#b4dad5",
-      "roof_color": "#e2d8bb",
-      "windows": 2,
+      "rotation_y": 1.551,
+      "width": 2.263,
+      "depth": 3.351,
+      "height": 1.965,
+      "wall_color": "#bbddd8",
+      "roof_color": "#8dab87",
+      "windows": 1,
       "chimney": false
     }
   ],
@@ -226,9 +221,17 @@
       {
         "id": "wander",
         "position": [
-          12.725,
-          0.787,
-          9.343
+          8.431,
+          0.647,
+          5.544
+        ]
+      },
+      {
+        "id": "gate-chunk-2-1",
+        "position": [
+          15,
+          0.794,
+          8
         ]
       },
       {
@@ -247,16 +250,28 @@
       ],
       [
         "heart",
+        "gate-chunk-2-1"
+      ],
+      [
+        "heart",
         "gate-chunk-0-1"
       ]
     ],
     "portals": [
+      {
+        "node": "gate-chunk-2-1",
+        "to_chunk": "chunk-2-1"
+      },
       {
         "node": "gate-chunk-0-1",
         "to_chunk": "chunk-0-1"
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "ninth-bell-odd",
+    "slackwater-meg",
+    "haar"
+  ],
   "lore": []
 }

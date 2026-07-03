@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-3-1",
   "terrain": {
-    "biome": "grove",
+    "biome": "rise",
     "grid_size": 9,
     "heights": [
       0.836,
@@ -159,61 +159,16 @@
   "buildings": [
     {
       "position": [
-        6.144,
-        1.061,
-        11.664
+        3.406,
+        0.753,
+        3.448
       ],
-      "rotation_y": 3.108,
-      "width": 4.306,
-      "depth": 2.406,
-      "height": 2.578,
+      "rotation_y": 0.042,
+      "width": 2.929,
+      "depth": 3.5,
+      "height": 1.91,
       "wall_color": "#f6f2e9",
-      "roof_color": "#4e723b",
-      "windows": 1,
-      "chimney": true
-    },
-    {
-      "position": [
-        5.352,
-        1.045,
-        10.098
-      ],
-      "rotation_y": 0.025,
-      "width": 4.067,
-      "depth": 2.344,
-      "height": 2.436,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#e5a32a",
-      "windows": 2,
-      "chimney": false
-    },
-    {
-      "position": [
-        10.614,
-        0.76,
-        8.397
-      ],
-      "rotation_y": 3.093,
-      "width": 4.191,
-      "depth": 2.959,
-      "height": 1.984,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#252b4b",
-      "windows": 1,
-      "chimney": true
-    },
-    {
-      "position": [
-        8.725,
-        0.657,
-        3.155
-      ],
-      "rotation_y": 3.146,
-      "width": 3.809,
-      "depth": 3.438,
-      "height": 1.769,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#e4d7be",
+      "roof_color": "#5e8a47",
       "windows": 1,
       "chimney": false
     }
@@ -231,17 +186,25 @@
       {
         "id": "wander",
         "position": [
-          11.005,
-          0.765,
-          11.053
+          12.788,
+          0.648,
+          12.575
         ]
       },
       {
-        "id": "gate-chunk-2-1",
+        "id": "gate-chunk-4-1",
         "position": [
-          1,
-          0.995,
+          15,
+          0.582,
           8
+        ]
+      },
+      {
+        "id": "gate-chunk-3-2",
+        "position": [
+          8,
+          1.025,
+          15
         ]
       },
       {
@@ -260,7 +223,11 @@
       ],
       [
         "heart",
-        "gate-chunk-2-1"
+        "gate-chunk-4-1"
+      ],
+      [
+        "heart",
+        "gate-chunk-3-2"
       ],
       [
         "heart",
@@ -269,8 +236,12 @@
     ],
     "portals": [
       {
-        "node": "gate-chunk-2-1",
-        "to_chunk": "chunk-2-1"
+        "node": "gate-chunk-4-1",
+        "to_chunk": "chunk-4-1"
+      },
+      {
+        "node": "gate-chunk-3-2",
+        "to_chunk": "chunk-3-2"
       },
       {
         "node": "gate-chunk-3-0",

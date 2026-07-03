@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-2-3",
   "terrain": {
-    "biome": "meadow",
+    "biome": "hollow",
     "grid_size": 9,
     "heights": [
       0.547,
@@ -129,33 +129,33 @@
   "buildings": [
     {
       "position": [
-        12.985,
-        0.714,
-        10.1
+        5.071,
+        0.785,
+        10.153
       ],
-      "rotation_y": 1.61,
-      "width": 2.664,
-      "depth": 3.475,
-      "height": 1.997,
-      "wall_color": "#bf8c63",
-      "roof_color": "#2f2823",
-      "windows": 1,
-      "chimney": false
+      "rotation_y": 1.568,
+      "width": 3.414,
+      "depth": 2.91,
+      "height": 2.408,
+      "wall_color": "#cba280",
+      "roof_color": "#171412",
+      "windows": 3,
+      "chimney": true
     },
     {
       "position": [
-        5.588,
-        0.637,
-        2.789
+        12.073,
+        0.656,
+        13.476
       ],
-      "rotation_y": 3.143,
-      "width": 2.291,
-      "depth": 3.153,
-      "height": 2.019,
-      "wall_color": "#cda484",
-      "roof_color": "#e98725",
+      "rotation_y": 4.739,
+      "width": 3.688,
+      "depth": 2.619,
+      "height": 1.754,
+      "wall_color": "#c18f67",
+      "roof_color": "#ec9641",
       "windows": 2,
-      "chimney": true
+      "chimney": false
     }
   ],
   "nav": {
@@ -171,9 +171,9 @@
       {
         "id": "wander",
         "position": [
-          8.366,
-          0.759,
-          9.514
+          5.313,
+          0.717,
+          5.107
         ]
       },
       {

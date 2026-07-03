@@ -26,12 +26,12 @@ const CHUNK_SIZE = 16; // world units per chunk side
 const GRID_SIZE = 9; // heightmap vertices per side
 const BIOMES = ['meadow', 'grove', 'hollow', 'rise'] as const;
 const SCALE_CHUNKS: Record<string, number> = {
-  hamlet: 3,
-  village: 5,
-  town: 8,
-  city: 12,
+  hamlet: 4,
+  village: 8,
+  town: 16,
+  city: 24,
 };
-const DEFAULT_CHUNKS = 5;
+const DEFAULT_CHUNKS = 8;
 
 const round3 = (x: number): number => Math.round(x * 1000) / 1000;
 
@@ -175,36 +175,6 @@ function generateChunk(
     });
   }
 
-  // Buildings: parametric world-data (docs/design.md silhouettes). Roofs
-  // rotate through shades derived from the charter palette; walls stay
-  // in a warm neutral band tinted by the first palette entry. Windows
-  // glow by phase on the client; corner-most houses get chimneys.
-  const paletteHex = charter.aesthetic.palette.map(colorFor);
-  const buildingCount = randInt(rng, 2, 4);
-  const buildings: Chunk['buildings'] = [];
-  for (let i = 0; i < buildingCount; i++) {
-    // Priced like the validator: ~200 tris and 6 draw calls per building.
-    if (polys + 200 > caps.chunk_poly_budget) break;
-    if (1 + props.length + (buildings.length + 1) * 6 > caps.chunk_drawcall_budget) break;
-    polys += 200;
-    const width = round3(2.2 + rng() * 2.2);
-    const depth = round3(2 + rng() * 1.8);
-    const lx = 2.5 + rng() * (CHUNK_SIZE - 5);
-    const lz = 2.5 + rng() * (CHUNK_SIZE - 5);
-    const roofBase = paletteHex[(i + 1) % paletteHex.length]!;
-    buildings.push({
-      position: [round3(lx), heightOnMesh(heights, lx, lz), round3(lz)],
-      rotation_y: round3((randInt(rng, 0, 3) * Math.PI) / 2 + (rng() - 0.5) * 0.12),
-      width,
-      depth,
-      height: round3(1.7 + rng() * 1.1),
-      wall_color: shadeHex(paletteHex[0]!, 24 + randInt(rng, 0, 12)),
-      roof_color: shadeHex(roofBase, -6 + randInt(rng, 0, 12)),
-      windows: randInt(rng, 1, 3),
-      chimney: rng() < 0.45,
-    });
-  }
-
   // Nav-lite: a heart node, a wander node, and one gate node per
   // neighbour, star-wired to the heart (connected by construction).
   // Gates sit at the shared edge midpoint; both sides generate their own
@@ -224,6 +194,59 @@ function generateChunk(
     });
     edges.push(['heart', gate]);
     portals.push({ node: gate, to_chunk: n.id });
+  }
+
+  // Buildings: parametric world-data (docs/design.md silhouettes),
+  // placed with clearance — never intersecting each other, the props,
+  // the nav nodes, or the straight lines NPCs walk between them.
+  // Deterministic rejection sampling: same seed, same town.
+  const paletteHex = charter.aesthetic.palette.map(colorFor);
+  const navSegments: [number, number, number, number][] = edges.map(([a, b]) => {
+    const pa = nodes.find((n) => n.id === a)!.position;
+    const pb = nodes.find((n) => n.id === b)!.position;
+    return [pa[0], pa[2], pb[0], pb[2]];
+  });
+  const segmentDistance = (px: number, pz: number, [ax, az, bx, bz]: [number, number, number, number]): number => {
+    const dx = bx - ax;
+    const dz = bz - az;
+    const t = Math.max(0, Math.min(1, ((px - ax) * dx + (pz - az) * dz) / (dx * dx + dz * dz || 1)));
+    return Math.hypot(px - (ax + t * dx), pz - (az + t * dz));
+  };
+  const buildingCount = randInt(rng, 2, 4);
+  const buildings: Chunk['buildings'] = [];
+  for (let i = 0; i < buildingCount; i++) {
+    // Priced like the validator: ~200 tris and 6 draw calls per building.
+    if (polys + 200 > caps.chunk_poly_budget) break;
+    if (1 + props.length + (buildings.length + 1) * 6 > caps.chunk_drawcall_budget) break;
+    const width = round3(2.2 + rng() * 2.2);
+    const depth = round3(2 + rng() * 1.8);
+    const radius = Math.hypot(width, depth) / 2;
+    let placed: [number, number] | null = null;
+    for (let attempt = 0; attempt < 14 && !placed; attempt++) {
+      const lx = 2.5 + rng() * (CHUNK_SIZE - 5);
+      const lz = 2.5 + rng() * (CHUNK_SIZE - 5);
+      const clearOfBuildings = buildings.every(
+        (b) => Math.hypot(b.position[0] - lx, b.position[2] - lz) > radius + Math.hypot(b.width, b.depth) / 2 + 0.5,
+      );
+      const clearOfProps = props.every((p) => Math.hypot(p.position[0] - lx, p.position[2] - lz) > radius + 0.9);
+      // NPCs stand up to ~0.9 from a node and walk node-to-node lines.
+      const clearOfWalks = navSegments.every((s) => segmentDistance(lx, lz, s) > radius + 1.1);
+      if (clearOfBuildings && clearOfProps && clearOfWalks) placed = [lx, lz];
+    }
+    if (!placed) continue; // a crowded chunk keeps its open ground
+    polys += 200;
+    const roofBase = paletteHex[(buildings.length + 1) % paletteHex.length]!;
+    buildings.push({
+      position: [round3(placed[0]), heightOnMesh(heights, placed[0], placed[1]), round3(placed[1])],
+      rotation_y: round3((randInt(rng, 0, 3) * Math.PI) / 2 + (rng() - 0.5) * 0.12),
+      width,
+      depth,
+      height: round3(1.7 + rng() * 1.1),
+      wall_color: shadeHex(paletteHex[0]!, 24 + randInt(rng, 0, 12)),
+      roof_color: shadeHex(roofBase, -6 + randInt(rng, 0, 12)),
+      windows: randInt(rng, 1, 3),
+      chimney: rng() < 0.45,
+    });
   }
 
   return ChunkSchema.parse({

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-0-2",
   "terrain": {
-    "biome": "grove",
+    "biome": "meadow",
     "grid_size": 9,
     "heights": [
       0.643,
@@ -159,62 +159,32 @@
   "buildings": [
     {
       "position": [
-        10.984,
-        0.484,
-        6.285
+        4.86,
+        0.527,
+        8.617
       ],
-      "rotation_y": 1.616,
-      "width": 2.417,
-      "depth": 3.369,
-      "height": 2.218,
-      "wall_color": "#c4946e",
+      "rotation_y": 1.612,
+      "width": 2.368,
+      "depth": 2.99,
+      "height": 1.792,
+      "wall_color": "#be8a60",
       "roof_color": "#1a1614",
       "windows": 1,
-      "chimney": true
+      "chimney": false
     },
     {
       "position": [
-        3.505,
-        0.499,
-        8.458
+        9.517,
+        0.646,
+        11.433
       ],
-      "rotation_y": 3.118,
-      "width": 2.778,
-      "depth": 3.316,
-      "height": 2.793,
-      "wall_color": "#bc875c",
-      "roof_color": "#ed9945",
-      "windows": 2,
-      "chimney": true
-    },
-    {
-      "position": [
-        3.067,
-        0.468,
-        10.876
-      ],
-      "rotation_y": 4.744,
-      "width": 2.746,
-      "depth": 2.996,
-      "height": 2.596,
+      "rotation_y": 4.694,
+      "width": 2.784,
+      "depth": 2.483,
+      "height": 1.812,
       "wall_color": "#bf8c63",
-      "roof_color": "#110f0d",
+      "roof_color": "#ed9945",
       "windows": 1,
-      "chimney": true
-    },
-    {
-      "position": [
-        8.617,
-        0.503,
-        5.992
-      ],
-      "rotation_y": 4.662,
-      "width": 3.41,
-      "depth": 2.386,
-      "height": 1.95,
-      "wall_color": "#bc875c",
-      "roof_color": "#5e3f26",
-      "windows": 3,
       "chimney": true
     }
   ],
@@ -231,9 +201,9 @@
       {
         "id": "wander",
         "position": [
-          5.454,
-          0.569,
-          11.997
+          12.316,
+          0.426,
+          3.988
         ]
       },
       {

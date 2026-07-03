@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-0-0",
   "terrain": {
-    "biome": "hollow",
+    "biome": "meadow",
     "grid_size": 9,
     "heights": [
       1.276,
@@ -164,77 +164,37 @@
       ],
       "rotation_y": 0.865,
       "scale": 0.97
-    },
-    {
-      "asset": "lantern",
-      "position": [
-        6.0,
-        1.114,
-        7.0
-      ],
-      "rotation_y": 0,
-      "scale": 1
     }
   ],
   "buildings": [
     {
       "position": [
-        10.07,
-        1.111,
-        7.384
+        3.135,
+        1.114,
+        4.144
       ],
-      "rotation_y": -0.028,
-      "width": 3.566,
-      "depth": 2.425,
-      "height": 1.764,
-      "wall_color": "#98cdc5",
-      "roof_color": "#989fa9",
+      "rotation_y": -0.015,
+      "width": 3.714,
+      "depth": 2.799,
+      "height": 2.486,
+      "wall_color": "#95cbc3",
+      "roof_color": "#a3a9b2",
       "windows": 2,
-      "chimney": false
+      "chimney": true
     },
     {
       "position": [
-        8.555,
-        1.128,
-        7.177
+        13.068,
+        0.924,
+        12.19
       ],
-      "rotation_y": 1.571,
-      "width": 2.333,
-      "depth": 2.794,
-      "height": 2.466,
-      "wall_color": "#a3d2cb",
-      "roof_color": "#90ad8a",
-      "windows": 3,
-      "chimney": false
-    },
-    {
-      "position": [
-        9.998,
-        1.1,
-        10.275
-      ],
-      "rotation_y": 0.045,
-      "width": 3.695,
-      "depth": 3.61,
-      "height": 1.76,
-      "wall_color": "#a3d2cb",
-      "roof_color": "#f0eadb",
-      "windows": 3,
-      "chimney": false
-    },
-    {
-      "position": [
-        5.507,
-        1.088,
-        9.446
-      ],
-      "rotation_y": 4.661,
-      "width": 3.59,
-      "depth": 2.324,
-      "height": 2.397,
-      "wall_color": "#b7dcd7",
-      "roof_color": "#42857c",
-      "windows": 3,
+      "rotation_y": 1.592,
+      "width": 3.176,
+      "depth": 2.898,
+      "height": 2.684,
+      "wall_color": "#b0d8d3",
+      "roof_color": "#87a781",
+      "windows": 1,
       "chimney": false
     }
   ],
@@ -251,9 +211,9 @@
       {
         "id": "wander",
         "position": [
-          8.641,
-          0.952,
-          3.021
+          10.079,
+          1.118,
+          9.207
         ]
       },
       {
@@ -282,10 +242,6 @@
       }
     ]
   },
-  "npcs": [
-    "ninth-bell-odd",
-    "slackwater-meg",
-    "haar"
-  ],
+  "npcs": [],
   "lore": []
 }

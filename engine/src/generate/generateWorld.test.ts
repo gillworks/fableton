@@ -59,7 +59,7 @@ describe('generateWorld', () => {
         caps: { ...fableton.generation.caps, max_regions: 2 },
       },
     };
-    expect(generateWorld(fableton, registry).manifest.chunks).toHaveLength(5); // village
+    expect(generateWorld(fableton, registry).manifest.chunks).toHaveLength(8); // village (doubled grammar)
     expect(generateWorld(capped, registry).manifest.chunks).toHaveLength(2);
 
     const tightPolys: Charter = {
@@ -90,6 +90,37 @@ describe('generateWorld', () => {
       }
     }
     expect(total).toBeGreaterThan(chunks.length); // a town, not a field
+  });
+
+  it('buildings never intersect each other, props, or the walk lines', () => {
+    for (const charter of [fableton, cindervault]) {
+      const { chunks } = generateWorld(charter, registry);
+      for (const chunk of chunks) {
+        const radius = (b: (typeof chunk.buildings)[number]): number => Math.hypot(b.width, b.depth) / 2;
+        for (let i = 0; i < chunk.buildings.length; i++) {
+          const a = chunk.buildings[i]!;
+          for (let j = i + 1; j < chunk.buildings.length; j++) {
+            const b = chunk.buildings[j]!;
+            const dist = Math.hypot(a.position[0] - b.position[0], a.position[2] - b.position[2]);
+            expect(dist, `${chunk.id}: buildings ${i}/${j} overlap`).toBeGreaterThan(radius(a) + radius(b));
+          }
+          for (const p of chunk.props) {
+            const dist = Math.hypot(a.position[0] - p.position[0], a.position[2] - p.position[2]);
+            expect(dist, `${chunk.id}: building ${i} sits on prop ${p.asset}`).toBeGreaterThan(radius(a) + 0.8);
+          }
+          const nodeAt = new Map(chunk.nav.nodes.map((n) => [n.id, n.position]));
+          for (const [ea, eb] of chunk.nav.edges) {
+            const [ax, , az] = nodeAt.get(ea)!;
+            const [bx, , bz] = nodeAt.get(eb)!;
+            const dx = bx - ax;
+            const dz = bz - az;
+            const tt = Math.max(0, Math.min(1, ((a.position[0] - ax) * dx + (a.position[2] - az) * dz) / (dx * dx + dz * dz || 1)));
+            const seg = Math.hypot(a.position[0] - (ax + tt * dx), a.position[2] - (az + tt * dz));
+            expect(seg, `${chunk.id}: building ${i} blocks a walk line`).toBeGreaterThan(radius(a) + 1);
+          }
+        }
+      }
+    }
   });
 
   it('output passes the validation gate (pnpm validate)', () => {

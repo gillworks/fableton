@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-1-1",
   "terrain": {
-    "biome": "grove",
+    "biome": "meadow",
     "grid_size": 9,
     "heights": [
       0.576,
@@ -154,98 +154,23 @@
       ],
       "rotation_y": 1.806,
       "scale": 0.911
-    },
-    {
-      "asset": "stall-red",
-      "position": [
-        5.5,
-        0.615,
-        6.0
-      ],
-      "rotation_y": 0,
-      "scale": 1
-    },
-    {
-      "asset": "cart",
-      "position": [
-        7.2,
-        0.657,
-        9.0
-      ],
-      "rotation_y": 0,
-      "scale": 1
-    },
-    {
-      "asset": "lantern",
-      "position": [
-        9.0,
-        0.67,
-        6.5
-      ],
-      "rotation_y": 0,
-      "scale": 1
     }
   ],
   "buildings": [
     {
       "position": [
-        11.699,
-        0.646,
-        9.195
+        13.064,
+        0.597,
+        11.987
       ],
-      "rotation_y": 4.689,
-      "width": 2.358,
-      "depth": 2.532,
-      "height": 2.102,
-      "wall_color": "#bb8458",
-      "roof_color": "#2f2823",
-      "windows": 1,
+      "rotation_y": 1.619,
+      "width": 4.098,
+      "depth": 2.225,
+      "height": 1.984,
+      "wall_color": "#c59772",
+      "roof_color": "#201b18",
+      "windows": 3,
       "chimney": true
-    },
-    {
-      "position": [
-        11.079,
-        0.614,
-        11.497
-      ],
-      "rotation_y": 1.563,
-      "width": 2.792,
-      "depth": 2.104,
-      "height": 1.795,
-      "wall_color": "#cba280",
-      "roof_color": "#e9821c",
-      "windows": 2,
-      "chimney": false
-    },
-    {
-      "position": [
-        13.152,
-        0.648,
-        7.627
-      ],
-      "rotation_y": 4.685,
-      "width": 3.282,
-      "depth": 2.58,
-      "height": 2.136,
-      "wall_color": "#cba280",
-      "roof_color": "#110f0d",
-      "windows": 2,
-      "chimney": false
-    },
-    {
-      "position": [
-        5.58,
-        0.659,
-        9.024
-      ],
-      "rotation_y": 1.553,
-      "width": 2.475,
-      "depth": 2.113,
-      "height": 2.138,
-      "wall_color": "#cda484",
-      "roof_color": "#7f5534",
-      "windows": 2,
-      "chimney": false
     }
   ],
   "nav": {
@@ -261,9 +186,9 @@
       {
         "id": "wander",
         "position": [
-          5.584,
-          0.657,
-          8.89
+          10.601,
+          0.706,
+          3.717
         ]
       },
       {
@@ -340,10 +265,6 @@
       }
     ]
   },
-  "npcs": [
-    "brann-of-the-third-hearth",
-    "ledger-ash",
-    "cinder-moll"
-  ],
+  "npcs": [],
   "lore": []
 }

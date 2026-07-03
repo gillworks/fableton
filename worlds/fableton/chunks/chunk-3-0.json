@@ -146,68 +146,7 @@
       "scale": 0.919
     }
   ],
-  "buildings": [
-    {
-      "position": [
-        6.925,
-        0.589,
-        11.025
-      ],
-      "rotation_y": 3.109,
-      "width": 3.428,
-      "depth": 2.204,
-      "height": 1.987,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#65944c",
-      "windows": 2,
-      "chimney": true
-    },
-    {
-      "position": [
-        3.541,
-        0.573,
-        4.286
-      ],
-      "rotation_y": 4.735,
-      "width": 4.359,
-      "depth": 3.158,
-      "height": 2.58,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#e9b34e",
-      "windows": 1,
-      "chimney": false
-    },
-    {
-      "position": [
-        11.917,
-        0.77,
-        10.569
-      ],
-      "rotation_y": 3.108,
-      "width": 2.678,
-      "depth": 2.884,
-      "height": 2.285,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#252b4b",
-      "windows": 3,
-      "chimney": false
-    },
-    {
-      "position": [
-        2.857,
-        0.595,
-        11.199
-      ],
-      "rotation_y": 1.528,
-      "width": 3.978,
-      "depth": 2.809,
-      "height": 1.733,
-      "wall_color": "#f6f2e9",
-      "roof_color": "#eee7d7",
-      "windows": 1,
-      "chimney": true
-    }
-  ],
+  "buildings": [],
   "nav": {
     "nodes": [
       {
@@ -221,9 +160,9 @@
       {
         "id": "wander",
         "position": [
-          10.24,
-          0.675,
-          3.653
+          12.898,
+          0.813,
+          8.583
         ]
       },
       {

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "chunk-2-2",
   "terrain": {
-    "biome": "grove",
+    "biome": "rise",
     "grid_size": 9,
     "heights": [
       0.395,
@@ -154,52 +154,42 @@
       ],
       "rotation_y": 2.38,
       "scale": 0.944
+    },
+    {
+      "asset": "stall-red",
+      "position": [
+        5.5,
+        0.292,
+        6
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "cart",
+      "position": [
+        7.2,
+        0.396,
+        9
+      ],
+      "rotation_y": 0,
+      "scale": 1
     }
   ],
   "buildings": [
     {
       "position": [
-        4.75,
-        0.446,
-        12.393
+        13.473,
+        0.573,
+        11.97
       ],
-      "rotation_y": 3.119,
-      "width": 3.401,
-      "depth": 2.81,
-      "height": 2.429,
-      "wall_color": "#c89c79",
-      "roof_color": "#3a322c",
-      "windows": 3,
-      "chimney": false
-    },
-    {
-      "position": [
-        4.159,
-        0.288,
-        6.537
-      ],
-      "rotation_y": 0.035,
-      "width": 3.73,
-      "depth": 2.288,
-      "height": 2.637,
-      "wall_color": "#bf8c63",
-      "roof_color": "#e98725",
-      "windows": 2,
-      "chimney": true
-    },
-    {
-      "position": [
-        5.446,
-        0.432,
-        11.572
-      ],
-      "rotation_y": 4.683,
-      "width": 3.351,
-      "depth": 2.729,
-      "height": 2.159,
-      "wall_color": "#be8a60",
-      "roof_color": "#110f0d",
-      "windows": 2,
+      "rotation_y": 3.165,
+      "width": 2.65,
+      "depth": 3.619,
+      "height": 1.876,
+      "wall_color": "#bc875c",
+      "roof_color": "#231e1a",
+      "windows": 1,
       "chimney": false
     }
   ],
@@ -216,9 +206,9 @@
       {
         "id": "wander",
         "position": [
-          4.673,
-          0.379,
-          9.734
+          9.049,
+          0.435,
+          8.46
         ]
       },
       {
@@ -279,6 +269,10 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "brann-of-the-third-hearth",
+    "ledger-ash",
+    "cinder-moll"
+  ],
   "lore": []
 }
