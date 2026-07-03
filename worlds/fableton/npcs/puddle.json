@@ -7,7 +7,12 @@
     "story": "Turned down the princess politely. The pond life suits him and the crown would not have."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "salt",
+      "kind": "the princess he turned down, on excellent terms"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Puddle's unhurried day",

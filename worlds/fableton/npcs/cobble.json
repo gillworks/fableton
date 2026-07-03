@@ -7,7 +7,12 @@
     "story": "Made shoes for free until the union formed. Now works dawn hours only, and the boots have never been better."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "greta-the-baker",
+      "kind": "buys the first burnt loaf, cheap, every dawn"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Cobble's unhurried day",

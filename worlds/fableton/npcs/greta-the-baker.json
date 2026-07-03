@@ -21,6 +21,10 @@
     {
       "to": "marigold-crumb",
       "kind": "they play cards on hush nights; the oven is never mentioned"
+    },
+    {
+      "to": "cobble",
+      "kind": "the only customer up before her oven"
     }
   ],
   "behavior": {

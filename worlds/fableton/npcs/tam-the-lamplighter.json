@@ -17,6 +17,10 @@
     {
       "to": "ember-wick",
       "kind": "saves him every candle-end in town"
+    },
+    {
+      "to": "vesper",
+      "kind": "the bell that tells him he's on time"
     }
   ],
   "behavior": {

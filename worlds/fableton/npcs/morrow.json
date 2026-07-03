@@ -7,7 +7,12 @@
     "story": "Sees yesterdays with perfect clarity. Cheaper than the future and, she insists, more useful."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "pip-halfpenny",
+      "kind": "he asks her yesterday's news twice, just to be sure"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Morrow's unhurried day",

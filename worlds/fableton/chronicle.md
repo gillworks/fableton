@@ -3,3 +3,4 @@ One line per day, the town seen from above. Newest last.
 
 The town woke to find it had always had neighbors: debts remembered, card games resumed, and one dog who could have said so all along. (PR #48)
 COUNCIL — The god read the town like a ledger and found it newly acquainted; two laws now stand so it stays that way. (PR #49)
+Five who stood at the edges found their names in other mouths: a cobbler's dawn loaf, a bell that answers the lamps, a flag sewn for the smallest hero, a fortune double-checked, and a princess who is glad, truly glad, to have been refused. (PR #53)

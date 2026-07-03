@@ -7,7 +7,12 @@
     "story": "Polishes anything that rings. The town has one bell and she has opinions about it."
   },
   "lore": [],
-  "relationships": [],
+  "relationships": [
+    {
+      "to": "tam-the-lamplighter",
+      "kind": "rings the bell the moment his lamps catch"
+    }
+  ],
   "behavior": {
     "type": "schedule",
     "label": "Vesper's unhurried day",
