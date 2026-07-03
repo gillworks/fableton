@@ -4,8 +4,8 @@
 // Rebuild the committed starter worlds (worlds/<name>/) after a generator
 // change: regenerate each world's skeleton from its charter, then re-dress
 // the home chunks (themed props at fixed spots, grounded on the new mesh)
-// and re-attach the residents. NPC files under worlds/<name>/npcs/ are
-// preserved — they are authored content, not generated.
+// and re-attach the residents. NPC files (npcs/) and divine artifacts
+// (artifacts/) are preserved — authored content, not generated.
 import { execFileSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -20,6 +20,9 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const WORLDS = {
   fableton: {
     charter: 'charters/fableton/charter.yaml',
+    // Founding timestamps are fixed points (issue #57): the sim derives
+    // "day N" from them, so rebuilds must never re-stamp.
+    founded_at: '2026-07-03T02:00:53Z',
     // Townsfolk (wander trees — no prop/nav dependencies) spread across
     // the town by chunk index. Heroes live in the dressed chunks below.
     townsfolk: {
@@ -62,6 +65,7 @@ const WORLDS = {
   },
   cindervault: {
     charter: 'charters/cindervault/charter.yaml',
+    founded_at: '2026-07-03T01:56:21Z',
     dress: [
       {
         chunk: 'index:middle',
@@ -76,6 +80,7 @@ const WORLDS = {
   },
   skeinsea: {
     charter: 'charters/skeinsea/charter.yaml',
+    founded_at: '2026-07-03T01:56:21Z',
     dress: [
       {
         chunk: 'index:middle',
@@ -105,14 +110,19 @@ function groundOn(heights, x, z) {
 
 for (const [name, config] of Object.entries(WORLDS)) {
   const worldDir = join(root, 'worlds', name);
-  const npcBackup = join(tmpdir(), `fableton-npcs-${name}`);
-  rmSync(npcBackup, { recursive: true, force: true });
-  if (existsSync(join(worldDir, 'npcs'))) cpSync(join(worldDir, 'npcs'), npcBackup, { recursive: true });
+  const AUTHORED = ['npcs', 'artifacts'];
+  const backupOf = (sub) => join(tmpdir(), `fableton-${sub}-${name}`);
+  for (const sub of AUTHORED) {
+    rmSync(backupOf(sub), { recursive: true, force: true });
+    if (existsSync(join(worldDir, sub))) cpSync(join(worldDir, sub), backupOf(sub), { recursive: true });
+  }
   rmSync(worldDir, { recursive: true, force: true });
 
-  execFileSync('pnpm', ['--dir', join(root, 'engine'), 'exec', 'tsx', 'src/generate/cli.ts', '--charter', join(root, config.charter), '--out', worldDir], { stdio: 'inherit' });
+  execFileSync('pnpm', ['--dir', join(root, 'engine'), 'exec', 'tsx', 'src/generate/cli.ts', '--charter', join(root, config.charter), '--out', worldDir, '--founded-at', config.founded_at], { stdio: 'inherit' });
 
-  if (existsSync(npcBackup)) cpSync(npcBackup, join(worldDir, 'npcs'), { recursive: true });
+  for (const sub of AUTHORED) {
+    if (existsSync(backupOf(sub))) cpSync(backupOf(sub), join(worldDir, sub), { recursive: true });
+  }
 
   const manifest = JSON.parse(readFileSync(join(worldDir, 'manifest.json'), 'utf8'));
   const ids = manifest.chunks.map((c) => c.id);

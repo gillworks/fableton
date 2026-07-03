@@ -20,6 +20,11 @@ export const WorldManifestSchema = z
     schema_version: z.literal(WORLD_DATA_SCHEMA_VERSION),
     world: nonEmpty,
     seed: z.number().int().min(0).max(0xffff_ffff),
+    // When the world was founded (UTC). The sim derives "day N" from wall
+    // time elapsed since this stamp, so deploys and restarts never reset
+    // the town to day 1 (issue #57). Optional: pre-#57 worlds still parse
+    // and simply start at day 1 each boot.
+    founded_at: z.iso.datetime().optional(),
     chunks: z.array(ManifestChunkSchema).min(1),
   })
   .check((ctx) => {

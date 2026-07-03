@@ -107,7 +107,10 @@ export type SimMessage = SimSnapshot | SimDelta;
 /** Engine grammar: world units per chunk side (matches the generator). */
 export const CHUNK_SIZE = 16;
 
-/** Engine grammar: sim clock shape (matches engine/src/sim/clock.ts). */
+/**
+ * Fallback clock shape for pre-#57 worlds whose API sends no pace. Live
+ * worlds override all of this via /api/world's pace (charter-tuned).
+ */
 export const TICKS_PER_PHASE = 600;
 export const PHASES_PER_DAY = 4;
 export const TICKS_PER_DAY = TICKS_PER_PHASE * PHASES_PER_DAY;

@@ -2,6 +2,7 @@
   "schema_version": 1,
   "world": "Cindervault",
   "seed": 18890321,
+  "founded_at": "2026-07-03T01:56:21Z",
   "chunks": [
     {
       "id": "chunk-0-1",

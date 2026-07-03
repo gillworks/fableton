@@ -13,7 +13,7 @@ import type { Charter } from '../schemas/charter.js';
 import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import type { Npc } from '../schemas/npc.js';
-import { DEFAULT_TICKS_PER_PHASE, TICK_HZ, clockAt, type ClockState } from './clock.js';
+import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
 
 export const DELTA_ENVELOPE_BUDGET = 64;
@@ -50,8 +50,14 @@ export interface WorldSimOptions {
   manifest: WorldManifest;
   chunks: Chunk[];
   npcs: Npc[];
-  /** Engine default 600 (5 min/phase at 2 Hz); tests shrink it. */
+  /** Overrides the charter-derived pace (tests shrink it). */
   ticksPerPhase?: number;
+  /**
+   * Tick to resume from — the server layer derives it from the manifest's
+   * founded_at and the wall clock (issue #57), so a redeployed world picks
+   * up on the same day and phase. Default 0 (a freshly founded world).
+   */
+  startTick?: number;
 }
 
 export class WorldSim {
@@ -65,7 +71,10 @@ export class WorldSim {
 
   constructor(options: WorldSimOptions) {
     this.#phases = options.charter.aesthetic.day_phases;
-    this.#ticksPerPhase = options.ticksPerPhase ?? DEFAULT_TICKS_PER_PHASE;
+    this.#ticksPerPhase =
+      options.ticksPerPhase ??
+      ticksPerPhaseFor(options.charter.generation.day_length_hours, this.#phases.length);
+    this.#tick = options.startTick ?? 0;
     const originOf = new Map(options.manifest.chunks.map((c) => [c.id, c.origin]));
     // Sorted so runtime order (and therefore delta order) is stable.
     this.#runtimes = [...options.npcs]

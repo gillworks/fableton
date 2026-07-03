@@ -267,7 +267,11 @@ function generateChunk(
  * navmesh-lite, manifest. Prop meshes come from the supplied (licensed)
  * asset registry. Output is schema-validated before it leaves.
  */
-export function generateWorld(charter: Charter, registry: AssetRegistry): GeneratedWorld {
+export function generateWorld(
+  charter: Charter,
+  registry: AssetRegistry,
+  options: { foundedAt?: string } = {},
+): GeneratedWorld {
   const caps = charter.generation.caps;
   const scaleChunks = SCALE_CHUNKS[charter.generation.scale] ?? DEFAULT_CHUNKS;
   const count = Math.min(scaleChunks, caps.max_regions);
@@ -291,6 +295,9 @@ export function generateWorld(charter: Charter, registry: AssetRegistry): Genera
     schema_version: 1,
     world: charter.identity.name,
     seed: charter.identity.seed,
+    // The founding timestamp is an INPUT, never read from the clock here —
+    // charter + seed (+ foundedAt) stays byte-identical across runs.
+    ...(options.foundedAt !== undefined && { founded_at: options.foundedAt }),
     chunks: cells.map((cell) => ({
       id: chunkId(cell),
       path: `chunks/${chunkId(cell)}.json`,

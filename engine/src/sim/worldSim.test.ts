@@ -169,4 +169,21 @@ describe('WorldSim', () => {
     // Reynard is napping (idle): after his first announcement, silence.
     expect(second.npcs.find((n) => n.id === 'reynard-the-retired')).toBeUndefined();
   });
+
+  it('resumes from startTick: a redeploy lands on the derived day and phase', () => {
+    const ticksPerPhase = 10; // 40-tick days
+    const resumed = new WorldSim({ charter, manifest, chunks, npcs, ticksPerPhase, startTick: 92 });
+    expect(resumed.clock().day).toBe(3);
+    expect(resumed.clock().phase).toBe(charter.aesthetic.day_phases[1]);
+    // The resumed sim keeps ticking from there — no reset to day 1.
+    resumed.tick();
+    expect(resumed.snapshot().tick).toBe(93);
+  });
+
+  it('derives its pace from the charter day length when no override is given', () => {
+    const sim = new WorldSim({ charter, manifest, chunks, npcs });
+    const expectedDayTicks = charter.generation.day_length_hours * 3600 * 2; // TICK_HZ
+    expect(sim.pace().ticks_per_day).toBe(expectedDayTicks);
+    expect(sim.pace().seconds_per_day).toBe(charter.generation.day_length_hours * 3600);
+  });
 });

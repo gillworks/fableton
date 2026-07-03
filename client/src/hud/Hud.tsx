@@ -5,7 +5,7 @@
 // bottom chronicle bar. Every color, face, and phase name arrives from
 // the parsed charter via theme tokens — zero world constants.
 import { useEffect, useState, type CSSProperties, type ReactElement } from 'react';
-import { dayOf, hudInk, pollChronicle, type ChronicleEntry } from '../core/hud.js';
+import { dayOf, hudInk, paceLabel, pollChronicle, type ChronicleEntry } from '../core/hud.js';
 import { TICKS_PER_DAY } from '../core/types.js';
 import type { WorldTheme } from '../core/theme.js';
 import type { WorldInfo } from '../core/types.js';
@@ -29,6 +29,10 @@ const PAPER = 'rgba(246, 239, 224, 0.92)';
 export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onSelectPhase }: HudProps): ReactElement {
   const [latest, setLatest] = useState<ChronicleEntry | null>(null);
   useEffect(() => pollChronicle(setLatest), []);
+
+  // The day length is the charter's, not the engine's: the API's pace is
+  // authoritative, the constant is only a pre-#57 fallback.
+  const ticksPerDay = info.pace?.ticks_per_day ?? TICKS_PER_DAY;
 
   const mono = `"${theme.mono}", ui-monospace, monospace`;
   const display = `"${theme.display}", Georgia, serif`;
@@ -77,12 +81,12 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
             borderRadius: 999,
           }}
         >
-          DAY {dayOf(tick)} · {info.phases[shownPhase] ?? '—'}
+          DAY {dayOf(tick, ticksPerDay)} · {info.phases[shownPhase] ?? '—'}
           {shownPhase !== livePhase ? ' · preview' : ''}
         </div>
         {/* The world clock: progress through today, and how fast a day passes */}
         <div
-          title={`time of day: ${Math.round(((tick % TICKS_PER_DAY) / TICKS_PER_DAY) * 100)}%`}
+          title={`time of day: ${Math.round(((tick % ticksPerDay) / ticksPerDay) * 100)}%`}
           style={{
             height: 3,
             borderRadius: 999,
@@ -93,7 +97,7 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
         >
           <div
             style={{
-              width: `${((tick % TICKS_PER_DAY) / TICKS_PER_DAY) * 100}%`,
+              width: `${((tick % ticksPerDay) / ticksPerDay) * 100}%`,
               height: '100%',
               background: theme.accentHex,
               transition: 'width 1s linear',
@@ -125,7 +129,7 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
           ))}
         </div>
         <div style={{ fontFamily: mono, fontSize: 9.5, letterSpacing: 1, color: fg, opacity: 0.6, marginTop: 6 }}>
-          1 DAY ≈ {Math.round((info.pace?.seconds_per_day ?? TICKS_PER_DAY / 2) / 60)} MIN
+          1 DAY ≈ {paceLabel(info.pace?.seconds_per_day ?? ticksPerDay / 2)}
         </div>
       </div>
 

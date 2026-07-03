@@ -209,3 +209,18 @@ describe('theme', () => {
     for (const p of phases) expect(p.gradientTop).toMatch(/^#[0-9a-f]{6}$/);
   });
 });
+
+describe('hud clock math', () => {
+  it('dayOf follows the world pace, not the engine constant', async () => {
+    const { dayOf } = await import('./hud.js');
+    expect(dayOf(0, 40)).toBe(1);
+    expect(dayOf(92, 40)).toBe(3);
+    expect(dayOf(2400)).toBe(2); // fallback: the pre-#57 engine default
+  });
+
+  it('paceLabel switches to hours for slow, charter-scale days', async () => {
+    const { paceLabel } = await import('./hud.js');
+    expect(paceLabel(1200)).toBe('20 MIN');
+    expect(paceLabel(6 * 3600)).toBe('6 HR');
+  });
+});

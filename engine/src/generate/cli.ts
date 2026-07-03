@@ -15,10 +15,14 @@ const { values } = parseArgs({
   options: {
     charter: { type: 'string' },
     out: { type: 'string' },
+    // ISO UTC founding timestamp stamped into the manifest — the caller
+    // (entrypoint, rebuild script) owns the wall-clock read, so generation
+    // itself stays deterministic.
+    'founded-at': { type: 'string' },
   },
 });
 if (!values.charter || !values.out) {
-  console.error('usage: cli.ts --charter <charter.yaml> --out <dir>');
+  console.error('usage: cli.ts --charter <charter.yaml> --out <dir> [--founded-at <iso-utc>]');
   process.exit(2);
 }
 
@@ -27,7 +31,8 @@ const charter = parseCharter(readFileSync(values.charter, 'utf8'));
 const registry = AssetRegistrySchema.parse(
   JSON.parse(readFileSync(new URL('../../../assets/registry.json', import.meta.url), 'utf8')),
 );
-const { manifest, chunks } = generateWorld(charter, registry);
+const foundedAt = values['founded-at'];
+const { manifest, chunks } = generateWorld(charter, registry, foundedAt ? { foundedAt } : {});
 
 mkdirSync(join(outDir, 'chunks'), { recursive: true });
 mkdirSync(join(outDir, 'npcs'), { recursive: true });
