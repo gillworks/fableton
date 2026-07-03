@@ -19,6 +19,9 @@ services:
       target: world
     environment:
       FABLETON_CHARTER: ${FABLETON_CHARTER:-charters/_template/charter.yaml}
+      # Where this instance's studio works — chronicle PR references in
+      # the client link here (issue #59). Unset it for plain text.
+      FABLETON_REPO_URL: ${FABLETON_REPO_URL:-https://github.com/gillworks/fableton}
       DATABASE_URL: ${DATABASE_URL:-postgres://fableton:${POSTGRES_PASSWORD:-fableton}@postgres:5432/fableton}
     volumes:
       - world-data:/world

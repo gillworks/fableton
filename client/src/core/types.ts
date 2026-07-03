@@ -70,6 +70,8 @@ export interface WorldInfo {
   premise: string;
   seed: number;
   charter_version?: number;
+  /** Where the studio works — chronicle PR refs link here when set. */
+  repo_url?: string;
   construction?: ConstructionSite[];
   phases: string[];
   theme?: Partial<ThemeTokens>;

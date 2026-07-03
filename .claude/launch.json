@@ -3,8 +3,10 @@
   "configurations": [
     {
       "name": "engine-serve",
-      "runtimeExecutable": "pnpm",
+      "runtimeExecutable": "env",
       "runtimeArgs": [
+        "FABLETON_REPO_URL=https://github.com/gillworks/fableton",
+        "pnpm",
         "--dir",
         "engine",
         "exec",

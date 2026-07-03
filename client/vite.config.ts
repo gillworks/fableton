@@ -12,6 +12,7 @@ import { defineConfig, type Plugin } from 'vite';
 const TYPES: Record<string, string> = {
   '.json': 'application/json',
   '.glb': 'model/gltf-binary',
+  '.md': 'text/markdown',
   '.txt': 'text/plain',
   '.png': 'image/png',
   '.woff2': 'font/woff2',
