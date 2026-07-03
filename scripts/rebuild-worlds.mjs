@@ -20,6 +20,25 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const WORLDS = {
   fableton: {
     charter: 'charters/fableton/charter.yaml',
+    // Townsfolk (wander trees — no prop/nav dependencies) spread across
+    // the town by chunk index. Heroes live in the dressed chunks below.
+    townsfolk: {
+      0: ['pip-halfpenny', 'goodwife-crumb'],
+      1: ['dame-spindle', 'quill'],
+      2: ['old-thorn', 'bo-brindleson'],
+      3: ['master-thumbling'],
+      4: ['widow-hood', 'marigold-crumb'],
+      5: ['brindle', 'ember-wick'],
+      6: ['the-lesser-piper'],
+      7: ['salt', 'stilts'],
+      9: ['cobble', 'granny-ash'],
+      10: ['mirabel-glass', 'needle'],
+      11: ['humble-pot'],
+      12: ['bramble-rose', 'fable-jack'],
+      13: ['tick', 'morrow'],
+      14: ['puddle', 'winsome'],
+      15: ['ferrous-the-constant', 'vesper'],
+    },
     dress: [
       {
         chunk: 'index:middle',
@@ -103,6 +122,15 @@ for (const [name, config] of Object.entries(WORLDS)) {
     return ids[ref === 'index:middle' ? middle : middle + Number(ref.split('+')[1] ?? 0)];
   };
 
+  for (const [indexStr, folks] of Object.entries(config.townsfolk ?? {})) {
+    const id = ids[Number(indexStr)];
+    if (!id) continue;
+    const path = join(worldDir, 'chunks', `${id}.json`);
+    const chunk = JSON.parse(readFileSync(path, 'utf8'));
+    chunk.npcs = [...new Set([...chunk.npcs, ...folks])];
+    writeFileSync(path, JSON.stringify(chunk, null, 2) + '\n');
+  }
+
   for (const dress of config.dress) {
     const id = resolve(dress.chunk);
     const path = join(worldDir, 'chunks', `${id}.json`);
@@ -118,7 +146,7 @@ for (const [name, config] of Object.entries(WORLDS)) {
       const r = Math.hypot(b.width, b.depth) / 2;
       return chunk.props.every((p) => Math.hypot(b.position[0] - p.position[0], b.position[2] - p.position[2]) > r + 0.8);
     });
-    chunk.npcs = dress.npcs;
+    chunk.npcs = [...new Set([...chunk.npcs, ...dress.npcs])];
     writeFileSync(path, JSON.stringify(chunk, null, 2) + '\n');
     console.log(`  dressed ${name}/${id} (${dress.npcs.length} residents)`);
   }

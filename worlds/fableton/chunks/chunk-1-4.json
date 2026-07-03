@@ -217,6 +217,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "old-thorn",
+    "bo-brindleson"
+  ],
   "lore": []
 }

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "ferrous-the-constant",
+  "identity": {
+    "name": "Ferrous the Constant",
+    "kind": "tin soldier, honorably discharged",
+    "story": "Melted for love once and was recast. Stands watch over the fountain because standing watch is what he knows."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Ferrous the Constant's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "polishing his one remaining medal",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "standing the noon watch",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "saluting the lamplighter",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "rusting, contentedly",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

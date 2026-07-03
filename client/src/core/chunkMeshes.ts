@@ -130,6 +130,28 @@ export function buildChunkGroup(
   return { group, windowMaterials };
 }
 
+/**
+ * Some kit models keep their origin mid-body (windmill, watermill), which
+ * buries them when placed at ground height. Bake a lift into each asset's
+ * local matrices so its lowest vertex sits at y = 0.
+ */
+export function groundAssetPieces(pieces: Map<string, AssetPiece[]>): Map<string, AssetPiece[]> {
+  const box = new Box3();
+  const pieceBox = new Box3();
+  for (const list of pieces.values()) {
+    box.makeEmpty();
+    for (const piece of list) {
+      piece.geometry.computeBoundingBox();
+      pieceBox.copy(piece.geometry.boundingBox!).applyMatrix4(piece.local);
+      box.union(pieceBox);
+    }
+    if (box.isEmpty() || Math.abs(box.min.y) < 0.01) continue;
+    const lift = new Matrix4().makeTranslation(0, -box.min.y, 0);
+    for (const piece of list) piece.local = lift.clone().multiply(piece.local);
+  }
+  return pieces;
+}
+
 /** The diorama coin: an ellipse hugging the world's footprint. */
 export function coinFor(origins: [number, number][]): { center: [number, number]; rx: number; rz: number } {
   const box = new Box3();

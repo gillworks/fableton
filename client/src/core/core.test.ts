@@ -7,7 +7,7 @@ import { Frustum, Matrix4, PerspectiveCamera, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { BoxGeometry, MeshLambertMaterial } from 'three';
 import { buildBuilding } from './buildings.js';
-import { buildChunkGroup, buildPropInstances, buildTerrain, coinFor, drawCallCount, type AssetPiece } from './chunkMeshes.js';
+import { buildChunkGroup, buildPropInstances, buildTerrain, coinFor, drawCallCount, groundAssetPieces, type AssetPiece } from './chunkMeshes.js';
 import { SimState } from './interpolator.js';
 import { ChunkStreamer } from './streamer.js';
 import { deriveTheme, phaseLighting } from './theme.js';
@@ -59,6 +59,26 @@ describe('chunkMeshes', () => {
     const coin = coinFor(manifest.chunks.map((c) => c.origin));
     expect(coin.rx).toBeGreaterThan(16);
     expect(coin.center[0]).toBeDefined();
+  });
+});
+
+describe('groundAssetPieces', () => {
+  it('lifts models whose origin is mid-body so they sit on the ground', () => {
+    // A "windmill": its geometry spans y -2..2 around the origin.
+    const sunken: AssetPiece[] = [
+      { geometry: new BoxGeometry(1, 4, 1), material: new MeshLambertMaterial(), local: new Matrix4() },
+    ];
+    // A "tree": origin already at the base (y 0..2 via local matrix).
+    const grounded: AssetPiece[] = [
+      { geometry: new BoxGeometry(1, 2, 1), material: new MeshLambertMaterial(), local: new Matrix4().makeTranslation(0, 1, 0) },
+    ];
+    const map = groundAssetPieces(new Map([['windmill', sunken], ['tree', grounded]]));
+    const minY = (p: AssetPiece): number => {
+      p.geometry.computeBoundingBox();
+      return p.geometry.boundingBox!.clone().applyMatrix4(p.local).min.y;
+    };
+    expect(minY(map.get('windmill')![0]!)).toBeCloseTo(0);
+    expect(minY(map.get('tree')![0]!)).toBeCloseTo(0);
   });
 });
 

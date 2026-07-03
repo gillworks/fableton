@@ -234,6 +234,8 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "humble-pot"
+  ],
   "lore": []
 }

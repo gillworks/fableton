@@ -191,6 +191,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "brindle",
+    "ember-wick"
+  ],
   "lore": []
 }

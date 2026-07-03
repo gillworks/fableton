@@ -274,6 +274,8 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "master-thumbling"
+  ],
   "lore": []
 }

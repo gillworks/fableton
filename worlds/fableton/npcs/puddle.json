@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "puddle",
+  "identity": {
+    "name": "Puddle",
+    "kind": "frog, un-kissed by preference",
+    "story": "Turned down the princess politely. The pond life suits him and the crown would not have."
+  },
+  "lore": [],
+  "relationships": [],
+  "behavior": {
+    "type": "schedule",
+    "label": "Puddle's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "croaking the morning report",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "sunning on the fountain rim",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "singing the gloaming chorus",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "floating, entirely content",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}

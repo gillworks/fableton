@@ -232,6 +232,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "pip-halfpenny",
+    "goodwife-crumb"
+  ],
   "lore": []
 }

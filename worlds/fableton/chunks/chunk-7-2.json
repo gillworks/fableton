@@ -212,6 +212,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "ferrous-the-constant",
+    "vesper"
+  ],
   "lore": []
 }

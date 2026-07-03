@@ -217,6 +217,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "puddle",
+    "winsome"
+  ],
   "lore": []
 }

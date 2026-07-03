@@ -73,7 +73,7 @@ export class WorldSim {
       .map((npc) => {
         const chunk = options.chunks.find((c) => c.npcs.includes(npc.id));
         if (!chunk) throw new Error(`npc "${npc.id}" is not placed in any chunk`);
-        return new NpcRuntime(npc, chunk, originOf.get(chunk.id)!);
+        return new NpcRuntime(npc, chunk, originOf.get(chunk.id)!, options.charter.identity.seed);
       });
     this.#lastPhase = this.clock().phase;
   }

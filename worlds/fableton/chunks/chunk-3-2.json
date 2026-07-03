@@ -254,6 +254,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "salt",
+    "stilts"
+  ],
   "lore": []
 }

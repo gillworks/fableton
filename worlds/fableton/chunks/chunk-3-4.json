@@ -264,6 +264,8 @@
     ]
   },
   "npcs": [
+    "cobble",
+    "granny-ash",
     "reynard-the-retired"
   ],
   "lore": []

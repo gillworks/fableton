@@ -203,6 +203,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "bramble-rose",
+    "fable-jack"
+  ],
   "lore": []
 }

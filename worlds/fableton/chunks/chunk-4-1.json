@@ -258,6 +258,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "mirabel-glass",
+    "needle"
+  ],
   "lore": []
 }

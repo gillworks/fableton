@@ -4,7 +4,7 @@
 // is loaded once and decomposed into AssetPieces for instancing.
 import { Matrix4, Mesh } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import type { AssetPiece } from './chunkMeshes.js';
+import { groundAssetPieces, type AssetPiece } from './chunkMeshes.js';
 import type { RegistryAsset } from './types.js';
 
 export async function loadAssetPieces(
@@ -29,5 +29,5 @@ export async function loadAssetPieces(
       out.set(asset.id, pieces);
     }),
   );
-  return out;
+  return groundAssetPieces(out);
 }

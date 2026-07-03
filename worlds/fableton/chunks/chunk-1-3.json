@@ -259,6 +259,9 @@
       }
     ]
   },
-  "npcs": [],
+  "npcs": [
+    "dame-spindle",
+    "quill"
+  ],
   "lore": []
 }
