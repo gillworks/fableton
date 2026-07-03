@@ -34,9 +34,12 @@ LOG_DIR="studio/logs/$ROLE"
 mkdir -p "$LOG_DIR"
 LOG="$LOG_DIR/$(date -u +%Y%m%dT%H%M%SZ).log"
 
+# GNU timeout when present (Linux); bare where it isn't (macOS dry-runs).
+if command -v timeout >/dev/null 2>&1; then RUN="timeout $TIMEOUT claude"; else RUN="claude"; fi
+
 {
   echo "=== $ROLE session · world=$WORLD · model=$MODEL · $(date -u +%FT%TZ) ==="
-  timeout "$TIMEOUT" claude -p "World: $WORLD. Live URL: $LIVE_URL.
+  $RUN -p "World: $WORLD. Live URL: $LIVE_URL.
 
 $(cat "$BRIEF")" \
     --model "$MODEL" \
