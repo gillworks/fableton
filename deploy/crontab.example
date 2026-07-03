@@ -1,16 +1,27 @@
 # SPDX-License-Identifier: Apache-2.0
-# Fableton instance crontab — install with: crontab deploy/crontab.example
-# (merges: keep the auto-deploy line if already installed)
+# Fableton instance crontabs — TWO users, TWO crontabs.
 #
-# Prerequisites for the studio lines (studio/README.md § Runtime):
-#   - Claude Code on the host, authenticated: `claude setup-token`
-#   - gh authenticated with a repo-scoped token
-#   - studio working clone at /opt/fableton-studio (never the deploy clone)
+# Claude Code refuses --dangerously-skip-permissions as root, and agents
+# shouldn't run as root anyway. The stack splits:
+#   root         → auto-deploy (needs docker)
+#   studio user  → the pantheon (Claude Code sessions; owns /opt/fableton-studio)
+#
+# One-time setup for the studio user:
+#   useradd -m -s /bin/bash studio
+#   chown -R studio:studio /opt/fableton-studio
+#   su - studio -c "cd /opt/fableton-studio && git pull && pnpm install"   # bootstrap: run.sh must exist before cron can call it
+#   su - studio -c "git config --global user.name 'Fableton Studio' && git config --global user.email you@example.com"
+#   su - studio -c "gh auth login"          # device flow; answer Yes to git credential setup
+#   claude setup-token                       # browser flow on the account that pays; put the token below
+#   touch /var/log/fableton-studio.log && chown studio:studio /var/log/fableton-studio.log
+#   crontab -u studio <the studio section of this file>
 
-# Engine auto-deploy: track origin/main, rebuild when it moves
+# ─── root crontab ────────────────────────────────────────────────────────
 */2 * * * * flock -n /run/fableton-deploy.lock /opt/fableton/deploy/auto-deploy.sh >> /var/log/fableton-deploy.log 2>&1
 
-# The pantheon (UTC): steward every 4h · sprite at 08:30/18:30 · council at 09:00
-0 */4 * * * flock -n /run/fableton-steward.lock /opt/fableton-studio/studio/bin/run.sh steward >> /var/log/fableton-studio.log 2>&1
-30 8,18 * * * flock -n /run/fableton-qa.lock /opt/fableton-studio/studio/bin/run.sh qa >> /var/log/fableton-studio.log 2>&1
-0 9 * * * flock -n /run/fableton-council.lock /opt/fableton-studio/studio/bin/run.sh council >> /var/log/fableton-studio.log 2>&1
+# ─── studio user crontab (UTC): steward */4h · sprite 08:30+18:30 · council 09:00 ───
+CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-REPLACE-ME
+PATH=/usr/local/bin:/usr/bin:/bin
+0 */4 * * * flock -n /tmp/fableton-steward.lock /opt/fableton-studio/studio/bin/run.sh steward >> /var/log/fableton-studio.log 2>&1
+30 8,18 * * * flock -n /tmp/fableton-qa.lock /opt/fableton-studio/studio/bin/run.sh qa >> /var/log/fableton-studio.log 2>&1
+0 9 * * * flock -n /tmp/fableton-council.lock /opt/fableton-studio/studio/bin/run.sh council >> /var/log/fableton-studio.log 2>&1
