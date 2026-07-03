@@ -274,9 +274,9 @@
     ]
   },
   "npcs": [
+    "haar",
     "ninth-bell-odd",
-    "slackwater-meg",
-    "haar"
+    "slackwater-meg"
   ],
   "lore": []
 }

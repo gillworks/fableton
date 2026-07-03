@@ -255,8 +255,8 @@
     ]
   },
   "npcs": [
-    "tick",
-    "morrow"
+    "morrow",
+    "tick"
   ],
   "lore": []
 }
