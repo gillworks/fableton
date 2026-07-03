@@ -6,6 +6,7 @@
 // placard opens the PR when the site carries a URL (Phase B studio
 // emits them; the ?construction= override demos it today).
 import { Html } from '@react-three/drei';
+import { OVERLAY_Z_RANGE } from '../core/hud.js';
 import type { ReactElement } from 'react';
 import { CHUNK_SIZE, type ConstructionSite } from '../core/types.js';
 
@@ -41,7 +42,7 @@ export function ConstructionMarker({
         </mesh>
       </group>
       {/* the placard */}
-      <Html center position={[0, 6.4, 0]} distanceFactor={30}>
+      <Html center position={[0, 6.4, 0]} distanceFactor={30} zIndexRange={OVERLAY_Z_RANGE}>
         <a
           href={site.url ?? '#'}
           target="_blank"

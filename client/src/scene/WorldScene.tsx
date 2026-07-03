@@ -17,6 +17,7 @@ import {
   CylinderGeometry,
   Vector3,
 } from 'three';
+import { OVERLAY_Z_RANGE } from '../core/hud.js';
 import { colorFor } from '@fableton/engine/color';
 import type { AssetPiece } from '../core/chunkMeshes.js';
 import { ConstructionMarker } from './ConstructionMarker.js';
@@ -184,15 +185,15 @@ function Npcs({ sim, theme, onSelect }: { sim: SimState; theme: WorldTheme; onSe
               <meshLambertMaterial color={theme.accentHex} />
             </mesh>
             {/* The ambient activity tooltip: the live tree label, verbatim */}
-            <Html center distanceFactor={26} position={[0, 1.25, 0]} style={{ pointerEvents: 'none' }}>
+            <Html center distanceFactor={26} position={[0, 1.25, 0]} zIndexRange={OVERLAY_Z_RANGE} style={{ pointerEvents: 'none' }}>
               <div
                 style={{
                   background: 'rgba(24, 22, 20, 0.88)',
                   color: '#f3ede2',
                   fontFamily: `"${theme.mono}", ui-monospace, monospace`,
-                  fontSize: 11,
-                  padding: '3px 8px',
-                  borderRadius: 8,
+                  fontSize: 16,
+                  padding: '4px 11px',
+                  borderRadius: 10,
                   whiteSpace: 'nowrap',
                 }}
               >
