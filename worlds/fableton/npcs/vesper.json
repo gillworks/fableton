@@ -60,11 +60,21 @@
       {
         "phase": "hush",
         "child": {
-          "type": "wander",
-          "label": "listening to the bell settle",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "keeping the lantern's last hour",
+          "children": [
+            {
+              "type": "move",
+              "label": "settling by the cooling lantern",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "listening to the bell settle",
+              "with": "lantern",
+              "duration_s": 240
+            }
+          ]
         }
       }
     ]
