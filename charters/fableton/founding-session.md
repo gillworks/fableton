@@ -1,3 +1,17 @@
+# Founding Session
+
+- model: `claude-fable-5`
+- started: 2026-07-03T02:00:19.570Z
+- finished: 2026-07-03T02:00:53.125Z
+- outcome: charter accepted on attempt 1
+
+## The founder speaks
+
+The town where fables retired: every resident is a story that ended, and the town is what happens after happily ever after. Cozy without being saccharine; every corner implies a story; the wink, never the sneer. Founder's ratified identity, not negotiable: the world is named Fableton, its seed is 20260702, and its four day phases are exactly: first light, high sun, lamplighting, hush.
+
+## The god answers
+
+```yaml
 schema_version: 1
 
 identity:
@@ -98,3 +112,4 @@ prime_directives:
 
 amendments:
   rule: constitutional acts only — the god proposes, the founder ratifies, in public
+```
