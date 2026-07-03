@@ -30,3 +30,7 @@ An orchestration control plane (e.g. Paperclip) is deliberately **not** part of 
 - Install cadence: `deploy/crontab.example`. The studio runs from its **own clone** (default `/opt/fableton-studio`, `STUDIO_REPO` to change) — never the auto-deploy clone, which must stay fast-forward-only.
 
 The full loop: sprite files findings → steward PRs world-data through the gate → auto-merge on green → auto-deploy syncs the live world from the repo → council audits every merge, rules petitions, sets direction. The repo is the coordinator; nobody talks live.
+
+### Non-root requirement (learned in production)
+
+Claude Code refuses `--dangerously-skip-permissions` under root — correctly. The pantheon runs as a dedicated `studio` user that owns its own clone; `deploy/crontab.example` documents the full user setup, including the one-time bootstrap pull (the clone must already contain `run.sh` before cron can invoke it) and token handling (`claude setup-token` → the token lives in the studio user's crontab header, never in world-readable `/etc/environment`). The log file needs `chown studio` once: `touch /var/log/fableton-studio.log && chown studio:studio /var/log/fableton-studio.log`.
