@@ -9,6 +9,14 @@ cd deploy && docker compose up -d
 
 First boot founds the world into the `world-data` volume: charters with a committed starter world (`worlds/<name>/` — the flagship's town, Cindervault, Skeinsea) boot it, residents included; any other charter generates a fresh skeleton world. Every boot re-runs the validation gate before serving — an invalid world never comes up. `docker compose down -v` forgets the world; without `-v` it persists.
 
+**Updating a running world** to the latest engine:
+
+```sh
+cd /path/to/fableton && git pull && cd deploy && docker compose up -d --build
+```
+
+Updates never reset the world — `world-data` persists and the gate re-validates it on boot. Instance files (`.env`, a local `compose.override.yaml`) are untracked and survive pulls. The only world-destroying command is `down -v`.
+
 v1 services: `caddy` (client + chunks + API proxy) · `world-sim` · `world-api` · `postgres`.
 Phase B adds: `studio` (agent runtime) · `qa-bot` · orchestration control plane.
 Phase C adds: `streamer` (director-cam client + FFmpeg → RTMP).
