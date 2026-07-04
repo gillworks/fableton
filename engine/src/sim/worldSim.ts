@@ -131,9 +131,11 @@ export class WorldSim {
   #calendar: Charter['calendar'];
   #lastEvent: string | null;
   #expansion: ExpansionRuntime | undefined;
-  // Sites the sim has seen finished. Empty until the builder mechanic that
-  // spends work_units lands (a later issue); expansion prerequisites of type
-  // site_complete read from here, so they simply wait until then.
+  // Sites the sim has seen finished. Populated by the construction runtime as
+  // sites complete (issue #96); expansion prerequisites of type site_complete
+  // read from here. Construction runs AFTER expansion in a tick, so a site that
+  // finishes on tick T becomes visible to expansion on tick T+1 — a completion
+  // opens its dependents on the next day-granular step, deterministically.
   #completedSites = new Set<string>();
 
   constructor(options: WorldSimOptions) {
@@ -278,7 +280,11 @@ export class WorldSim {
     }
     // The town grows: open any planned site whose prerequisites came true this
     // tick (a new day reached, or a dependency finished). Pure and day-granular
-    // — the runtime opens each site once and rides no RNG.
+    // — the runtime opens each site once and rides no RNG. This MUST run before
+    // construction below: a site_complete prerequisite reads #completedSites,
+    // which construction writes later in the same tick, so a finish is seen on
+    // the next step (never the same tick). Reordering the two would introduce a
+    // same-tick race — keep expansion first.
     if (this.#expansion) {
       for (const opened of this.#expansion.step(clock.day, this.#completedSites)) {
         this.#emit({ type: 'expansion', tick: clock.tick, site: opened.site, stage: opened.stage });
@@ -326,6 +332,10 @@ export class WorldSim {
     const finalStagePerSite = new Map<string, ConstructionTransition>();
     for (const t of this.#construction.step(clock.tick, positions)) {
       finalStagePerSite.set(t.site, t);
+      // A finished site becomes a satisfied prerequisite for expansion. It is
+      // read on the next tick (expansion already ran above this one), so the
+      // dependent site's ground breaks on the following day-granular step.
+      if (t.done) this.#completedSites.add(t.site);
       this.#emit({
         type: 'construction',
         tick: clock.tick,
