@@ -89,11 +89,25 @@ export interface NpcSnapshot {
   activity: string;
 }
 
+/** What the client renders. Mirrors the engine's WEATHER_KINDS. */
+export type WeatherKind = 'clear' | 'rain' | 'fog' | 'snow';
+
+export interface WeatherState {
+  season: string;
+  kind: WeatherKind;
+  /** Diegetic — shown verbatim in the HUD/inspect chrome. */
+  label: string;
+  /** VFX strength 0..1. */
+  intensity: number;
+}
+
 export interface SimSnapshot {
   type: 'snapshot';
   tick: number;
   phase: string;
   timeOfDay: number;
+  /** Optional so pre-weather worlds still parse; the sim always sends it. */
+  weather?: WeatherState;
   npcs: NpcSnapshot[];
 }
 
@@ -101,6 +115,8 @@ export interface SimDelta {
   type: 'delta';
   tick: number;
   phase?: string;
+  /** Present only on the tick the weather turns. */
+  weather?: WeatherState;
   npcs: { id: string; pos?: [number, number, number]; ry?: number; activity?: string }[];
 }
 

@@ -12,6 +12,7 @@ import { SimState, connectSim } from './core/interpolator.js';
 import { constructionSites } from './core/hud.js';
 import { parseFollowParam, followSearch } from './core/follow.js';
 import { loadWorld, type WorldBundle } from './core/loadWorld.js';
+import type { WeatherState } from './core/types.js';
 import { Hud } from './hud/Hud.js';
 import { FollowBanner } from './hud/FollowBanner.js';
 import { deriveTheme, phaseLighting } from './core/theme.js';
@@ -29,6 +30,7 @@ export function App(): ReactElement {
   // Follow the resident named in the URL, if any — the shareable deep link.
   const [follow, setFollow] = useState<string | null>(() => parseFollowParam(location.search));
   const [roster, setRoster] = useState<Map<string, string>>(new Map());
+  const [weather, setWeather] = useState<WeatherState | null>(null);
   const sim = useMemo(() => new SimState(), []);
 
   useEffect(() => {
@@ -41,6 +43,7 @@ export function App(): ReactElement {
         setBundle(b);
         setPieces(p);
         sim.onPhase((name) => setPhase(Math.max(0, b.info.phases.indexOf(name))));
+        sim.onWeather(setWeather);
       })
       .catch((e) => setFailure(e instanceof Error ? e.message : String(e)));
     // The resident roster: id→name for the follow banner, and the source
@@ -124,6 +127,7 @@ export function App(): ReactElement {
           onSelect={setSelected}
           construction={sites}
           follow={follow}
+          weather={weather}
         />
       </Canvas>
       <Hud
