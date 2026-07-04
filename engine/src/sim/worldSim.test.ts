@@ -10,6 +10,7 @@ import { ConstructionSiteSchema, type ConstructionSite } from '../schemas/constr
 import { RumorsDocSchema, type RumorsDoc } from '../schemas/rumors.js';
 import { ExpansionPlanSchema, type ExpansionPlan } from '../schemas/expansion.js';
 import { DELTA_ENVELOPE_BUDGET, DELTA_PER_NPC_BUDGET, WorldSim, type SimEvent } from './worldSim.js';
+import type { ConstructionSiteState } from './constructionRuntime.js';
 
 const root = new URL('../../test/fixtures/sample-world/', import.meta.url);
 const loadJson = (rel: string): unknown => JSON.parse(readFileSync(new URL(rel, root), 'utf8'));
@@ -601,6 +602,96 @@ describe('WorldSim', () => {
     expect(r.open).toEqual(['first-forge', 'second-hall']);
 
     // Golden seed: the same charter + seed replays byte-identically.
+    expect(JSON.stringify(run())).toEqual(JSON.stringify(r));
+  });
+
+  // The REVERSE wire (issue #107): opening a site through the plan must produce
+  // a construction site the builders actually raise. Unlike the #96 test above,
+  // the site is NOT pre-placed in `sites` — the ONLY path to it being built is
+  // the expansion→construction spawn this closes the loop on.
+  it('opens a planned site into a workable construction site the builders raise (issue #107)', () => {
+    const lonePlan: ExpansionPlan = ExpansionPlanSchema.parse({
+      schema_version: 1,
+      id: 'lone-plan',
+      queue: [{ site: bakerySite, prerequisites: [{ type: 'day', min_day: 1 }] }],
+    });
+    const run = (): { before: unknown; openedAtTick1: unknown; events: SimEvent[]; finalState: unknown } => {
+      const sim = new WorldSim({ charter, manifest, chunks, npcs, expansionPlan: lonePlan, ticksPerPhase: 600 });
+      // Nothing is under construction before the plan opens the site.
+      const before = sim.construction();
+      const events: SimEvent[] = [];
+      sim.onEvent((e) => (e.type === 'construction' || e.type === 'expansion') && events.push(e));
+      sim.tick(); // day one: ground breaks and the site is spawned into construction
+      const openedAtTick1 = sim.construction();
+      for (let i = 0; i < 60; i++) sim.tick();
+      return { before, openedAtTick1, events, finalState: sim.construction() };
+    };
+
+    const r = run();
+    // No construction site exists until the plan opens it: it is planned, not built.
+    expect(r.before).toEqual([]);
+    // The opening spawned it, sitting at its first authored stage, unworked.
+    expect((r.openedAtTick1 as ConstructionSiteState[])[0]).toMatchObject({
+      id: 'bakery-extension', stageIndex: 0, stageCount: 3, complete: false,
+    });
+    // Ground broke on day one, announced for the chronicle.
+    expect(r.events.find((e) => e.type === 'expansion')).toMatchObject({
+      type: 'expansion', tick: 1, site: 'bakery-extension', stage: 'marked plot',
+    });
+    // Greta's authored schedule brings her onto the oven and she raises it
+    // through every stage to completion — the same ladder the #96 site climbs.
+    const cons = r.events.filter((e) => e.type === 'construction');
+    expect(cons.map((e) => e.type === 'construction' && e.stage)).toEqual(['foundation', 'frame', 'frame']);
+    expect(cons.at(-1)).toMatchObject({ type: 'construction', done: true, site: 'bakery-extension', stageIndex: 3 });
+    expect((r.finalState as ConstructionSiteState[])[0]).toMatchObject({ complete: true, stageIndex: 3, workers: [] });
+
+    // Golden seed: the whole open→spawn→raise sequence replays byte-identically.
+    expect(JSON.stringify(run())).toEqual(JSON.stringify(r));
+  });
+
+  // The full flagship loop, end to end: a plan-opened site is built, its
+  // completion satisfies the next entry's site_complete prerequisite, and THAT
+  // dependent opening is itself spawned into construction. Neither site is
+  // pre-placed — the loop runs entirely off the plan.
+  it('a dependency completion opens and spawns the next planned site (issue #107)', () => {
+    const loopPlan: ExpansionPlan = ExpansionPlanSchema.parse({
+      schema_version: 1,
+      id: 'loop-plan',
+      queue: [
+        // On Greta's oven, so her schedule raises it to completion.
+        { site: ConstructionSiteSchema.parse({ ...bakerySite, id: 'well-house' }), prerequisites: [{ type: 'day', min_day: 1 }] },
+        // Away from any builder; it only needs to OPEN + SPAWN once the well finishes.
+        { site: ConstructionSiteSchema.parse({ ...bakerySite, id: 'guild-hall', position: [12, 0, 4] }), prerequisites: [{ type: 'site_complete', site: 'well-house' }] },
+      ],
+    });
+    const run = (): { wellDone: number | null; guildOpened: number | null; guildSpawned: number | null; state: unknown } => {
+      const sim = new WorldSim({ charter, manifest, chunks, npcs, expansionPlan: loopPlan, ticksPerPhase: 600 });
+      let wellDone: number | null = null;
+      let guildOpened: number | null = null;
+      sim.onEvent((e) => {
+        if (e.type === 'construction' && e.done && e.site === 'well-house') wellDone = e.tick;
+        if (e.type === 'expansion' && e.site === 'guild-hall') guildOpened = e.tick;
+      });
+      let guildSpawned: number | null = null;
+      for (let i = 0; i < 80; i++) {
+        const delta = sim.tick();
+        if (guildSpawned === null && sim.construction().some((s) => s.id === 'guild-hall')) guildSpawned = delta.tick;
+      }
+      return { wellDone, guildOpened, guildSpawned, state: sim.construction() };
+    };
+
+    const r = run();
+    expect(r.wellDone).not.toBeNull();
+    // The dependent opens exactly one tick after the well finishes (expansion
+    // runs before construction each tick, so a completion is seen next step)…
+    expect(r.guildOpened).toBe(r.wellDone! + 1);
+    // …and that opening is spawned into construction the very same tick.
+    expect(r.guildSpawned).toBe(r.guildOpened);
+    const state = r.state as ConstructionSiteState[];
+    expect(state.find((s) => s.id === 'well-house')).toMatchObject({ complete: true, stageIndex: 3 });
+    expect(state.find((s) => s.id === 'guild-hall')).toMatchObject({ stageIndex: 0, complete: false });
+
+    // Golden seed: the closed loop replays byte-identically.
     expect(JSON.stringify(run())).toEqual(JSON.stringify(r));
   });
 });
