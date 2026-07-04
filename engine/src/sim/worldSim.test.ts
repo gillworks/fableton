@@ -550,4 +550,57 @@ describe('WorldSim', () => {
     };
     expect(JSON.stringify(run())).toEqual(JSON.stringify(run()));
   });
+
+  // The closing of the loop (issue #96 wiring): a construction completion must
+  // satisfy an expansion site_complete prerequisite. The first site sits on
+  // Greta's oven with her role as builder, so her authored schedule raises it
+  // (the construction suite proves this exact site finishes). The second site
+  // is gated ONLY on the first completing — no day gate — so it can open no
+  // sooner than the tick after construction reports the finish.
+  const gatedPlan: ExpansionPlan = ExpansionPlanSchema.parse({
+    schema_version: 1,
+    id: 'gated-plan',
+    queue: [
+      {
+        site: ConstructionSiteSchema.parse({ ...bakerySite, id: 'first-forge' }),
+        prerequisites: [{ type: 'day', min_day: 1 }],
+      },
+      {
+        site: ConstructionSiteSchema.parse({ ...bakerySite, id: 'second-hall', position: [12, 0, 4] }),
+        prerequisites: [{ type: 'site_complete', site: 'first-forge' }],
+      },
+    ],
+  });
+
+  it('resolves a site_complete prerequisite from a real construction completion (issue #96)', () => {
+    const forge = ConstructionSiteSchema.parse({ ...bakerySite, id: 'first-forge' });
+    const run = (): { completedTick: number | null; hallOpenedTick: number | null; open: string[] } => {
+      const sim = new WorldSim({
+        charter, manifest, chunks, npcs, sites: [forge], expansionPlan: gatedPlan, ticksPerPhase: 600,
+      });
+      let completedTick: number | null = null;
+      sim.onEvent((e) => {
+        if (e.type === 'construction' && e.done && e.site === 'first-forge') completedTick = e.tick;
+      });
+      let hallOpenedTick: number | null = null;
+      for (let i = 0; i < 60; i++) {
+        const delta = sim.tick();
+        // The hall stays queued until the forge finishes; record the exact tick
+        // its ground first breaks (read straight from the sim's open set).
+        if (hallOpenedTick === null && sim.openSites().includes('second-hall')) hallOpenedTick = delta.tick;
+      }
+      return { completedTick, hallOpenedTick, open: sim.openSites() };
+    };
+
+    const r = run();
+    // Construction did finish the forge, and the hall opened exactly one tick
+    // later — expansion runs before construction each tick, so the completion
+    // is visible on the next day-granular step, never the same tick.
+    expect(r.completedTick).not.toBeNull();
+    expect(r.hallOpenedTick).toBe(r.completedTick! + 1);
+    expect(r.open).toEqual(['first-forge', 'second-hall']);
+
+    // Golden seed: the same charter + seed replays byte-identically.
+    expect(JSON.stringify(run())).toEqual(JSON.stringify(r));
+  });
 });

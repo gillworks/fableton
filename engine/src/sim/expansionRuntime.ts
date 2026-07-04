@@ -11,10 +11,10 @@
 // exactly once and the sweep is stable and terminating. No RNG, no wall clock.
 //
 // The builder mechanic that SPENDS a site's work_units to advance it toward
-// completion lands in a later issue; until then the WorldSim reports no
-// completions, so day-gated sites open on schedule and site_complete-gated
-// sites wait — which is exactly the plan's intent. Feed a completion set in
-// and the whole chain resolves, as the runtime's tests exercise.
+// completion (issue #96) feeds the completed-site set the WorldSim passes here:
+// day-gated sites open on schedule and site_complete-gated sites open once
+// their dependency finishes. This runtime stays pure — it reads the set it is
+// given and never watches construction itself, as the runtime's tests exercise.
 import type { ExpansionPlan } from '../schemas/expansion.js';
 
 // A site whose ground just broke this evaluation. `stage` is the site's first
