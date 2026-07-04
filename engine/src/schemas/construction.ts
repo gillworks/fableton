@@ -96,6 +96,21 @@ export const ConstructionSiteSchema = z
       }
       seen.add(slug);
     });
+    // Builder roles are a set, not a list: a role listed twice is almost
+    // certainly an authoring slip and would double-count downstream.
+    const roles = new Set<string>();
+    ctx.value.builder_roles.forEach((role, i) => {
+      const slug = role.toLowerCase().trim();
+      if (roles.has(slug)) {
+        ctx.issues.push({
+          code: 'custom',
+          message: `duplicate builder role "${role}"`,
+          path: ['builder_roles', i],
+          input: role,
+        });
+      }
+      roles.add(slug);
+    });
   });
 
 export type Footprint = z.infer<typeof FootprintSchema>;

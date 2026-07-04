@@ -286,6 +286,55 @@ describe('validateWorld — construction sites', () => {
     expect(violations.map((v) => v.message).join('\n')).toMatch(/unreachable once the site/);
   });
 
+  it('fails a footprint that a walkway edge runs through, though no node is buried', () => {
+    const world = worldWithSite();
+    const site = world.constructionSites![0]!.doc as AnyDoc;
+    // square-center (8,8) → east-gate (15,8) runs along z=8; this footprint sits
+    // on that segment at x≈11.5 without covering either endpoint.
+    site.position = [11.5, 0, 8];
+    site.footprint = { width: 2, depth: 2 };
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'nav-connectivity');
+    const msg = violations.map((v) => v.message).join('\n');
+    expect(msg).toContain('east-gate');
+    expect(msg).toMatch(/once the site's footprint is placed/);
+  });
+
+  it('charges each site against the chunk draw-call budget', () => {
+    // town-square base = 1 terrain + 4 props = 5 draw calls; the fixture site's
+    // completion (1 building → 6 draw calls) pushes it to 11. Budget 10 passes
+    // the bare chunk but trips once the site is charged.
+    const tight: Charter = {
+      ...charter,
+      generation: {
+        ...charter.generation,
+        caps: { ...charter.generation.caps, chunk_drawcall_budget: 10 },
+      },
+    };
+    const violations = validateWorld(tight, worldWithSite()).filter(
+      (v) => v.rule === 'perf-budget' && v.file === 'chunks/town-square.json',
+    );
+    const msg = violations.map((v) => v.message).join('\n');
+    expect(msg).toContain('draw calls');
+    expect(msg).toContain('construction site(s)');
+  });
+
+  it('rejects a site that lists the same builder role twice', () => {
+    const world = worldWithSite();
+    (world.constructionSites![0]!.doc as AnyDoc).builder_roles = ['master builder', 'master builder'];
+    const messages = validateWorld(charter, world).map((v) => v.message).join('\n');
+    expect(messages).toContain('duplicate builder role "master builder"');
+  });
+
+  it('rejects two sites sharing an id across files', () => {
+    const world = worldWithSite();
+    const dup = loadSite();
+    dup['builder_roles'] = ['master builder'];
+    world.constructionSites!.push({ file: 'construction/bakery-extension-copy.json', doc: dup });
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'duplicate-id');
+    expect(violations).toHaveLength(1);
+    expect(violations[0]!.message).toContain('already defined');
+  });
+
   it('charges staged meshes against the chunk poly budget', () => {
     const tight: Charter = {
       ...charter,

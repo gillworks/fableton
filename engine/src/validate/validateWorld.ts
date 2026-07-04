@@ -20,7 +20,8 @@ export interface Violation {
     | 'asset-refs-resolve'
     | 'nav-connectivity'
     | 'perf-budget'
-    | 'charter-gate-rule';
+    | 'charter-gate-rule'
+    | 'duplicate-id';
   message: string;
 }
 
@@ -54,6 +55,57 @@ function pointInFootprint(
   const localX = dx * cos - dz * sin;
   const localZ = dx * sin + dz * cos;
   return Math.abs(localX) <= width / 2 && Math.abs(localZ) <= depth / 2;
+}
+
+// Does the walk-graph edge from (ax, az) to (bx, bz) pass through the footprint
+// rectangle? Both endpoints may be clear of the site yet the segment between
+// them runs straight under the building — a walkway the finished structure
+// physically blocks. We clip the segment (in the footprint's local frame) to
+// the rectangle with Liang–Barsky; a non-empty clip means it crosses. Pure
+// arithmetic — deterministic.
+function segmentCrossesFootprint(
+  ax: number,
+  az: number,
+  bx: number,
+  bz: number,
+  cx: number,
+  cz: number,
+  width: number,
+  depth: number,
+  rotationY: number,
+): boolean {
+  const cos = Math.cos(-rotationY);
+  const sin = Math.sin(-rotationY);
+  const x0 = (ax - cx) * cos - (az - cz) * sin;
+  const z0 = (ax - cx) * sin + (az - cz) * cos;
+  const x1 = (bx - cx) * cos - (bz - cz) * sin;
+  const z1 = (bx - cx) * sin + (bz - cz) * cos;
+  const hw = width / 2;
+  const hd = depth / 2;
+  const dx = x1 - x0;
+  const dz = z1 - z0;
+  let t0 = 0;
+  let t1 = 1;
+  // Clip against one slab boundary: p·t <= q along the parameter.
+  const clip = (p: number, q: number): boolean => {
+    if (p === 0) return q >= 0; // parallel to this boundary: inside iff q >= 0
+    const r = q / p;
+    if (p < 0) {
+      if (r > t1) return false;
+      if (r > t0) t0 = r;
+    } else {
+      if (r < t0) return false;
+      if (r < t1) t1 = r;
+    }
+    return true;
+  };
+  return (
+    clip(-dx, x0 + hw) &&
+    clip(dx, hw - x0) &&
+    clip(-dz, z0 + hd) &&
+    clip(dz, hd - z0) &&
+    t0 <= t1
+  );
 }
 
 // Gate-enforced charter rules match asset tags on slug equality (ADR-0001).
@@ -138,7 +190,21 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
   // Construction sites grouped by the chunk they rise in — the perf-budget
   // loop below folds each site's cost into its chunk's totals.
   const sitesByChunk = new Map<string, { file: string; site: ConstructionSite }[]>();
+  const siteIdSeen = new Map<string, string>();
   for (const entry of sites) {
+    // Ids must be unique across the whole construction/ collection — two files
+    // sharing an id both load and both count toward perf/placement, matching
+    // how the other world-data collections guard uniqueness.
+    const prior = siteIdSeen.get(entry.site.id);
+    if (prior) {
+      violations.push({
+        file: entry.file,
+        rule: 'duplicate-id',
+        message: `construction site id "${entry.site.id}" is already defined in "${prior}"`,
+      });
+    } else {
+      siteIdSeen.set(entry.site.id, entry.file);
+    }
     const list = sitesByChunk.get(entry.site.chunk) ?? [];
     list.push(entry);
     sitesByChunk.set(entry.site.chunk, list);
@@ -344,14 +410,23 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
   }
 
   // 3b — a construction footprint must not sever the walk graph (issue #91):
-  // nav nodes buried under the site are removed, and the rest of the chunk's
+  // nav nodes buried under the site are removed AND edges whose segment runs
+  // under the footprint are severed (the finished building blocks that
+  // walkway even when both endpoints stay clear); the rest of the chunk's
   // graph must stay connected — and no buried node may be a portal, or the
   // chunk loses a border crossing.
+  //
+  // Known limitation: each site is validated against the chunk's original nav
+  // in isolation. Two sites that each individually preserve connectivity could
+  // together bury complementary nodes (or cross complementary edges) and
+  // disconnect the chunk; site-vs-site interaction is deferred to the
+  // placement issue.
   for (const { file, site } of sites) {
     const target = chunksById.get(site.chunk);
     if (!target) continue; // unknown-chunk already reported in 2b.
     const nav = target.chunk.nav;
     const [cx, , cz] = site.position;
+    const nodePos = new Map(nav.nodes.map((n) => [n.id, n.position]));
     const buried = new Set(
       nav.nodes
         .filter((n) =>
@@ -359,7 +434,21 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
         )
         .map((n) => n.id),
     );
-    if (buried.size === 0) continue;
+    // Edges with both endpoints clear of the site but whose segment still runs
+    // under the footprint — a walkway the building physically blocks.
+    const crossing = nav.edges.filter(([a, b]) => {
+      if (buried.has(a) || buried.has(b)) return false;
+      const pa = nodePos.get(a);
+      const pb = nodePos.get(b);
+      return (
+        !!pa &&
+        !!pb &&
+        segmentCrossesFootprint(
+          pa[0], pa[2], pb[0], pb[2], cx, cz, site.footprint.width, site.footprint.depth, site.rotation_y,
+        )
+      );
+    });
+    if (buried.size === 0 && crossing.length === 0) continue;
     const buriedPortals = nav.portals.filter((p) => buried.has(p.node));
     if (buriedPortals.length > 0) {
       violations.push({
@@ -377,9 +466,11 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
       });
       continue;
     }
+    const crossingSet = new Set(crossing.map(([a, b]) => `${a} ${b}`));
     const adjacency = new Map<string, string[]>(remaining.map((n) => [n.id, []]));
     for (const [a, b] of nav.edges) {
       if (buried.has(a) || buried.has(b)) continue;
+      if (crossingSet.has(`${a} ${b}`)) continue; // severed by the footprint
       adjacency.get(a)?.push(b);
       adjacency.get(b)?.push(a);
     }
@@ -399,7 +490,7 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
       violations.push({
         file,
         rule: 'nav-connectivity',
-        message: `site "${site.id}" footprint disconnects chunk "${site.chunk}": ${cut.map((n) => `"${n.id}"`).join(', ')} unreachable once the site's nav nodes are buried`,
+        message: `site "${site.id}" footprint disconnects chunk "${site.chunk}": ${cut.map((n) => `"${n.id}"`).join(', ')} unreachable once the site's footprint is placed`,
       });
     }
   }
