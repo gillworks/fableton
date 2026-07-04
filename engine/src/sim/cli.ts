@@ -7,6 +7,7 @@ import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { parseCharter } from '../charter/parse.js';
 import { ChunkSchema } from '../schemas/chunk.js';
+import { ConstructionSiteSchema } from '../schemas/construction.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema } from '../schemas/npc.js';
 import { RumorsDocSchema } from '../schemas/rumors.js';
@@ -41,8 +42,15 @@ const npcs = existsSync(npcsDir)
 const rumors = existsSync(join(worldDir, 'rumors.json'))
   ? RumorsDocSchema.parse(readJson('rumors.json'))
   : undefined;
+const constructionDir = join(worldDir, 'construction');
+const sites = existsSync(constructionDir)
+  ? readdirSync(constructionDir)
+      .filter((f) => f.endsWith('.json'))
+      .sort()
+      .map((f) => ConstructionSiteSchema.parse(readJson(join('construction', f))))
+  : [];
 
-const sim = new WorldSim({ charter, manifest, chunks, npcs, ...(rumors && { rumors }) });
+const sim = new WorldSim({ charter, manifest, chunks, npcs, ...(rumors && { rumors }), sites });
 // The decision log's v1 surface: every notable sim event, legible.
 sim.onEvent((event) => {
   if (event.type === 'phase') console.log(`[tick ${event.tick}] the world turns: ${event.phase}`);
@@ -51,6 +59,8 @@ sim.onEvent((event) => {
   else if (event.type === 'rumor')
     console.log(`[tick ${event.tick}] rumor — ${event.from} → ${event.to}: ${event.text}`);
   else if (event.type === 'event') console.log(`[tick ${event.tick}] the ${event.event} begins`);
+  else if (event.type === 'construction')
+    console.log(`[tick ${event.tick}] construction — ${event.text}`);
   else console.log(`[tick ${event.tick}] ${event.npc} — ${event.activity}`);
 });
 

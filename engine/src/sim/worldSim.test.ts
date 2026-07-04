@@ -6,6 +6,7 @@ import type { Charter } from '../schemas/charter.js';
 import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
+import { ConstructionSiteSchema, type ConstructionSite } from '../schemas/construction.js';
 import { RumorsDocSchema, type RumorsDoc } from '../schemas/rumors.js';
 import { DELTA_ENVELOPE_BUDGET, DELTA_PER_NPC_BUDGET, WorldSim, type SimEvent } from './worldSim.js';
 
@@ -378,5 +379,78 @@ describe('WorldSim', () => {
       return { heard: npcs.map((n) => sim.heard(n.id)), rumors };
     };
     expect(JSON.stringify(run())).toEqual(JSON.stringify(run()));
+  });
+
+  // Greta's tree walks her to the oven at (4,0,4); a site placed there with
+  // her role as its builder means her authored schedule brings her onto the
+  // job — the interpreter spends the work units while she stands on it. The
+  // unit tests in constructionRuntime.test.ts cover presence, role matching,
+  // and the seeded effort directly.
+  const bakerySite: ConstructionSite = ConstructionSiteSchema.parse({
+    schema_version: 1,
+    id: 'bakery-extension',
+    chunk: 'town-square',
+    position: [4, 0, 4],
+    footprint: { width: 4, depth: 4 },
+    builder_roles: ['witch-gone-respectable'], // Greta's identity.kind
+    stages: [
+      { name: 'marked plot', asset: 'stakes', work_units: 2 },
+      { name: 'foundation', asset: 'foundation-mesh', work_units: 3 },
+      { name: 'frame', asset: 'frame-mesh', work_units: 5 },
+    ],
+    completion: { props: [{ asset: 'bakery', position: [4, 0, 4] }] },
+  });
+
+  it('builders raise a site through its stages: chronicle events + compact deltas', () => {
+    const sim = new WorldSim({ charter, manifest, chunks, npcs, sites: [bakerySite], ticksPerPhase: 600 });
+    const events: SimEvent[] = [];
+    sim.onEvent((e) => e.type === 'construction' && events.push(e));
+    // Snapshot before any tick: the site sits at its first authored stage.
+    expect(sim.snapshot().construction).toEqual([
+      { id: 'bakery-extension', chunk: 'town-square', stage: 'marked plot', stageIndex: 0, stageCount: 3, progress: 0, required: 2, workers: [], complete: false },
+    ]);
+
+    const constructionDeltas: number[] = [];
+    for (let i = 0; i < 40; i++) {
+      const delta = sim.tick();
+      if (delta.construction) constructionDeltas.push(delta.tick);
+    }
+
+    // She climbs the ladder in order and finishes; the chronicle sees each
+    // rung as a diegetic line, ending on completion.
+    expect(events.map((e) => e.type === 'construction' && e.stage)).toEqual(['foundation', 'frame', 'frame']);
+    expect(events.map((e) => e.type === 'construction' && e.text)).toEqual([
+      'the bakery extension — foundation',
+      'the bakery extension — frame',
+      'the bakery extension is complete',
+    ]);
+    expect(events.at(-1)).toMatchObject({ type: 'construction', done: true, stageIndex: 3 });
+    // Deltas carry construction only on the ticks a stage actually turns —
+    // one entry per transition, not every accruing tick.
+    expect(constructionDeltas.length).toBe(events.length);
+    expect(sim.construction()[0]).toMatchObject({ complete: true, stageIndex: 3, workers: [] });
+  });
+
+  it('construction is deterministic: two sims produce identical site state and deltas', () => {
+    const run = (): { deltas: string; state: unknown } => {
+      const sim = new WorldSim({ charter, manifest, chunks, npcs, sites: [bakerySite], ticksPerPhase: 50 });
+      const deltas = [];
+      for (let i = 0; i < 60; i++) deltas.push(sim.tick());
+      return { deltas: JSON.stringify(deltas.map((d) => d.construction ?? null)), state: sim.construction() };
+    };
+    const a = run();
+    const b = run();
+    expect(a.deltas).toEqual(b.deltas);
+    expect(JSON.stringify(a.state)).toEqual(JSON.stringify(b.state));
+  });
+
+  it('a site whose builder role matches no resident never progresses', () => {
+    const orphan = ConstructionSiteSchema.parse({ ...bakerySite, id: 'ghost-hall', builder_roles: ['stonemason'] });
+    const sim = new WorldSim({ charter, manifest, chunks, npcs, sites: [orphan], ticksPerPhase: 600 });
+    const events: SimEvent[] = [];
+    sim.onEvent((e) => e.type === 'construction' && events.push(e));
+    for (let i = 0; i < 100; i++) sim.tick();
+    expect(events).toEqual([]);
+    expect(sim.construction()[0]).toMatchObject({ stageIndex: 0, progress: 0, complete: false, workers: [] });
   });
 });

@@ -93,7 +93,13 @@ export { activeEvent, eventActiveAt, eventOccursOnDay } from './sim/calendar.js'
 export { NpcRuntime, type NpcState, type StepContext } from './sim/npcRuntime.js';
 export { GossipRuntime, type Heard, type Spread } from './sim/gossipRuntime.js';
 export {
+  ConstructionRuntime,
+  type ConstructionSiteState,
+  type ConstructionTransition,
+} from './sim/constructionRuntime.js';
+export {
   WorldSim,
+  type ConstructionDelta,
   type Delta,
   type NpcDelta,
   type SimEvent,

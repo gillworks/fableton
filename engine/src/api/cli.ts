@@ -10,6 +10,7 @@ import { parseArgs } from 'node:util';
 import { parseCharter } from '../charter/parse.js';
 import { AssetRegistrySchema } from '../schemas/assets.js';
 import { ChunkSchema } from '../schemas/chunk.js';
+import { ConstructionSiteSchema } from '../schemas/construction.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema } from '../schemas/npc.js';
 import { RumorsDocSchema } from '../schemas/rumors.js';
@@ -50,11 +51,18 @@ const registry = AssetRegistrySchema.parse(
 const rumors = existsSync(join(worldDir, 'rumors.json'))
   ? RumorsDocSchema.parse(readJson('rumors.json'))
   : undefined;
+const constructionDir = join(worldDir, 'construction');
+const sites = existsSync(constructionDir)
+  ? readdirSync(constructionDir)
+      .filter((f) => f.endsWith('.json'))
+      .sort()
+      .map((f) => ConstructionSiteSchema.parse(readJson(join('construction', f))))
+  : [];
 
 // Wall time lives here in the server layer: a founded world resumes the
 // day/phase it should be on, so deploys never reset the town to day 1.
 const startTick = manifest.founded_at ? startTickAt(Date.parse(manifest.founded_at), Date.now()) : 0;
-const sim = new WorldSim({ charter, manifest, chunks, npcs, ...(rumors && { rumors }), startTick });
+const sim = new WorldSim({ charter, manifest, chunks, npcs, ...(rumors && { rumors }), sites, startTick });
 const { day, phase } = sim.clock();
 console.log(
   manifest.founded_at
@@ -68,6 +76,8 @@ sim.onEvent((event) => {
   else if (event.type === 'rumor')
     console.log(`[tick ${event.tick}] rumor — ${event.from} → ${event.to}: ${event.text}`);
   else if (event.type === 'event') console.log(`[tick ${event.tick}] the ${event.event} begins`);
+  else if (event.type === 'construction')
+    console.log(`[tick ${event.tick}] construction — ${event.text}`);
   else console.log(`[tick ${event.tick}] ${event.npc} — ${event.activity}`);
 });
 

@@ -14,8 +14,10 @@ import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import type { Npc } from '../schemas/npc.js';
 import { EMPTY_RUMORS, type RumorsDoc } from '../schemas/rumors.js';
+import type { ConstructionSite } from '../schemas/construction.js';
 import { activeEvent } from './calendar.js';
 import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
+import { ConstructionRuntime, type ConstructionSiteState } from './constructionRuntime.js';
 import { GossipRuntime, type Heard } from './gossipRuntime.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
 import { weatherAt, type WeatherState } from './weather.js';
@@ -30,6 +32,8 @@ export interface Snapshot {
   timeOfDay: number;
   weather: WeatherState;
   npcs: NpcState[];
+  /** Live construction sites: stage, progress, and current workers. */
+  construction: ConstructionSiteState[];
 }
 
 export interface NpcDelta {
@@ -46,6 +50,20 @@ export interface Delta {
   /** Present only on the tick the weather turns (a new world day). */
   weather?: WeatherState;
   npcs: NpcDelta[];
+  /** Present only on ticks a site changes stage or completes — compact by
+   *  construction, so per-tick work accrual never rides the wire. */
+  construction?: ConstructionDelta[];
+}
+
+export interface ConstructionDelta {
+  /** Site id. */
+  id: string;
+  /** Diegetic name of the stage now shown. */
+  stage: string;
+  /** New stage index; equals the stage count when the site is complete. */
+  stageIndex: number;
+  /** Present and true only on the tick the site finishes. */
+  done?: boolean;
 }
 
 export type SimEvent =
@@ -56,7 +74,11 @@ export type SimEvent =
   // A notable rumor jumped from one resident to another this tick — the
   // chronicle's "who told Greta?" line. Quiet rumors still spread (the
   // inspect panel shows them) but don't emit, keeping the chronicle sparse.
-  | { type: 'rumor'; tick: number; from: string; to: string; rumor: string; text: string };
+  | { type: 'rumor'; tick: number; from: string; to: string; rumor: string; text: string }
+  // A construction site climbed a stage (or finished) this tick — the
+  // chronicle's "the bakery's frame went up" line. `text` is the diegetic
+  // line; `done` marks the tick the building stands.
+  | { type: 'construction'; tick: number; site: string; stage: string; stageIndex: number; done: boolean; text: string };
 
 export interface WorldSimOptions {
   charter: Charter;
@@ -65,6 +87,9 @@ export interface WorldSimOptions {
   npcs: Npc[];
   /** Rumors this world seeds (world-DATA). Absent means a quiet town. */
   rumors?: RumorsDoc;
+  /** Construction sites this world seeds (world-DATA). Absent means nothing
+   *  is being built. */
+  sites?: ConstructionSite[];
   /** Overrides the charter-derived pace (tests shrink it). */
   ticksPerPhase?: number;
   /**
@@ -82,6 +107,7 @@ export class WorldSim {
   #ticksPerPhase: number;
   #runtimes: NpcRuntime[];
   #gossip: GossipRuntime;
+  #construction: ConstructionRuntime;
   #listeners: ((event: SimEvent) => void)[] = [];
   #lastSent = new Map<string, { pos: string; ry: number; activity: string }>();
   #lastPhase: string;
@@ -109,6 +135,12 @@ export class WorldSim {
     this.#gossip = new GossipRuntime(
       options.rumors ?? EMPTY_RUMORS,
       this.#runtimes.map((r) => r.state.id),
+      options.charter.identity.seed,
+    );
+    this.#construction = new ConstructionRuntime(
+      options.sites ?? [],
+      originOf,
+      new Map(options.npcs.map((n) => [n.id, n.identity.kind])),
       options.charter.identity.seed,
     );
     this.#lastPhase = this.clock().phase;
@@ -156,7 +188,14 @@ export class WorldSim {
       timeOfDay: clock.timeOfDay,
       weather: this.#weather,
       npcs: this.#runtimes.map((r) => ({ ...r.state, pos: [...r.state.pos] as [number, number, number] })),
+      construction: this.#construction.state(),
     };
+  }
+
+  /** Every construction site's live stage, progress, and current workers —
+   *  the inspect panel's source, exposed read-only by world-api. */
+  construction(): ConstructionSiteState[] {
+    return this.#construction.state();
   }
 
   /**
@@ -233,6 +272,27 @@ export class WorldSim {
           text: spread.text,
         });
       }
+    }
+    // Construction reads the same positions the trees just produced: a site
+    // advances only while eligible builders stand on it. Stage transitions
+    // ride the delta (compact — only on the tick they happen) and reach the
+    // chronicle.
+    for (const t of this.#construction.step(clock.tick, positions)) {
+      (delta.construction ??= []).push({
+        id: t.site,
+        stage: t.stage,
+        stageIndex: t.stageIndex,
+        ...(t.done && { done: true }),
+      });
+      this.#emit({
+        type: 'construction',
+        tick: clock.tick,
+        site: t.site,
+        stage: t.stage,
+        stageIndex: t.stageIndex,
+        done: t.done,
+        text: t.text,
+      });
     }
     return delta;
   }
