@@ -6,6 +6,7 @@ import { AssetRegistrySchema } from '../schemas/assets.js';
 import { ChunkSchema } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema } from '../schemas/npc.js';
+import { RumorsDocSchema } from '../schemas/rumors.js';
 import { WorldSim } from '../sim/worldSim.js';
 import { startWorldApi, type WorldApi } from './worldApi.js';
 
@@ -143,5 +144,45 @@ describe('world-api', () => {
       body: JSON.stringify({ audit_sample_percent: 250, escalation_cap: -1 }),
     });
     expect(bad.status).toBe(400);
+  });
+});
+
+describe('world-api gossip (issue #81)', () => {
+  let gossipApi: WorldApi;
+  let gossipBase: string;
+
+  const rumors = RumorsDocSchema.parse({
+    schema_version: 1,
+    spread_radius: 1000, // town-wide so co-location is guaranteed this run
+    spread_chance: 1,
+    rumors: [{ id: 'the-cold-oven', text: 'the oven knocked back', origin: 'greta-the-baker', notable: true }],
+  });
+
+  beforeAll(async () => {
+    const gossipSim = new WorldSim({ charter, manifest, chunks, npcs, rumors, ticksPerPhase: 600 });
+    gossipApi = await startWorldApi(
+      { sim: gossipSim, charter, manifest, chunks, npcs, registry, rumors },
+      { port: 0 },
+    );
+    gossipBase = `http://localhost:${gossipApi.port}`;
+    gossipSim.tick(); // everyone overhears greta
+  });
+  afterAll(async () => gossipApi.close());
+
+  it('GET /api/npcs/:id reports what a resident has heard and from whom', async () => {
+    const tam = await (await fetch(`${gossipBase}/api/npcs/tam-the-lamplighter`)).json();
+    expect(tam.heard).toEqual([
+      { text: 'the oven knocked back', from: 'greta-the-baker', tick: 1 },
+    ]);
+    // The origin doesn't hear its own rumor.
+    const greta = await (await fetch(`${gossipBase}/api/npcs/greta-the-baker`)).json();
+    expect(greta.heard).toEqual([]);
+  });
+
+  it('records notable spread in the chronicle, resolving ids to names and text', async () => {
+    const { entries } = await (await fetch(`${gossipBase}/api/chronicle`)).json();
+    expect(
+      entries.some((e: { entry: string }) => e.entry === 'Tam heard from Greta: “the oven knocked back”'),
+    ).toBe(true);
   });
 });

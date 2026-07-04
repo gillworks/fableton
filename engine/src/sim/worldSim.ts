@@ -13,7 +13,9 @@ import type { Charter } from '../schemas/charter.js';
 import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import type { Npc } from '../schemas/npc.js';
+import type { RumorsDoc } from '../schemas/rumors.js';
 import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
+import { GossipRuntime, type Heard } from './gossipRuntime.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
 
 export const DELTA_ENVELOPE_BUDGET = 64;
@@ -43,13 +45,19 @@ export interface Delta {
 
 export type SimEvent =
   | { type: 'phase'; tick: number; phase: string }
-  | { type: 'activity'; tick: number; npc: string; activity: string };
+  | { type: 'activity'; tick: number; npc: string; activity: string }
+  // A notable rumor jumped from one resident to another this tick — the
+  // chronicle's "who told Greta?" line. Quiet rumors still spread (the
+  // inspect panel shows them) but don't emit, keeping the chronicle sparse.
+  | { type: 'rumor'; tick: number; from: string; to: string; rumor: string; text: string };
 
 export interface WorldSimOptions {
   charter: Charter;
   manifest: WorldManifest;
   chunks: Chunk[];
   npcs: Npc[];
+  /** Rumors this world seeds (world-DATA). Absent means a quiet town. */
+  rumors?: RumorsDoc;
   /** Overrides the charter-derived pace (tests shrink it). */
   ticksPerPhase?: number;
   /**
@@ -65,6 +73,7 @@ export class WorldSim {
   #phases: readonly string[];
   #ticksPerPhase: number;
   #runtimes: NpcRuntime[];
+  #gossip: GossipRuntime;
   #listeners: ((event: SimEvent) => void)[] = [];
   #lastSent = new Map<string, { pos: string; ry: number; activity: string }>();
   #lastPhase: string;
@@ -84,6 +93,11 @@ export class WorldSim {
         if (!chunk) throw new Error(`npc "${npc.id}" is not placed in any chunk`);
         return new NpcRuntime(npc, chunk, originOf.get(chunk.id)!, options.charter.identity.seed);
       });
+    this.#gossip = new GossipRuntime(
+      options.rumors ?? { schema_version: 1, spread_radius: 2.5, spread_chance: 0.35, rumors: [] },
+      this.#runtimes.map((r) => r.state.id),
+      options.charter.identity.seed,
+    );
     this.#lastPhase = this.clock().phase;
   }
 
@@ -153,6 +167,27 @@ export class WorldSim {
         this.#lastSent.set(state.id, { pos: posKey, ry: state.ry, activity: state.activity });
       }
     }
+    // Rumors ride on top of the movement the trees produced: where residents
+    // ended up this tick decides who overhears whom. Notable jumps reach the
+    // chronicle; the delta itself stays position-only (byte budget unchanged).
+    const positions = new Map(this.#runtimes.map((r) => [r.state.id, r.state.pos] as const));
+    for (const spread of this.#gossip.step(clock.tick, positions)) {
+      if (spread.notable) {
+        this.#emit({
+          type: 'rumor',
+          tick: clock.tick,
+          from: spread.from,
+          to: spread.to,
+          rumor: spread.rumor,
+          text: spread.text,
+        });
+      }
+    }
     return delta;
+  }
+
+  /** What a resident has heard, and from whom — the inspect panel's source. */
+  heard(npcId: string): Heard[] {
+    return this.#gossip.heardBy(npcId);
   }
 }

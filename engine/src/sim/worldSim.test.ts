@@ -5,6 +5,7 @@ import { parseCharter } from '../charter/parse.js';
 import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
+import { RumorsDocSchema, type RumorsDoc } from '../schemas/rumors.js';
 import { DELTA_ENVELOPE_BUDGET, DELTA_PER_NPC_BUDGET, WorldSim, type SimEvent } from './worldSim.js';
 
 const root = new URL('../../test/fixtures/sample-world/', import.meta.url);
@@ -185,5 +186,42 @@ describe('WorldSim', () => {
     const expectedDayTicks = charter.generation.day_length_hours * 3600 * 2; // TICK_HZ
     expect(sim.pace().ticks_per_day).toBe(expectedDayTicks);
     expect(sim.pace().seconds_per_day).toBe(charter.generation.day_length_hours * 3600);
+  });
+
+  // A town-wide radius + certain chance so the mechanic fires regardless of
+  // where the day's trees happen to put people — the unit tests in
+  // gossipRuntime.test.ts cover realistic proximity and the seeded roll.
+  const gossipDoc: RumorsDoc = RumorsDocSchema.parse({
+    schema_version: 1,
+    spread_radius: 1000,
+    spread_chance: 1,
+    rumors: [{ id: 'the-cold-oven', text: 'the oven knocked back', origin: 'greta-the-baker', notable: true }],
+  });
+
+  it('threads rumors through the sim: residents hear the origin, chronicle-notable', () => {
+    const sim = new WorldSim({ charter, manifest, chunks, npcs, rumors: gossipDoc, ticksPerPhase: 600 });
+    const events: SimEvent[] = [];
+    sim.onEvent((e) => events.push(e));
+    sim.tick(); // co-located with greta at town-wide radius → everyone overhears
+
+    const heardByTam = sim.heard('tam-the-lamplighter');
+    expect(heardByTam).toEqual([{ rumor: 'the-cold-oven', from: 'greta-the-baker', tick: 1 }]);
+    // The origin never "hears" its own rumor.
+    expect(sim.heard('greta-the-baker')).toEqual([]);
+    // Notable spread surfaced as a sim event for the chronicle.
+    expect(
+      events.some((e) => e.type === 'rumor' && e.from === 'greta-the-baker' && e.to === 'tam-the-lamplighter'),
+    ).toBe(true);
+  });
+
+  it('gossip is deterministic: two sims spread identically', () => {
+    const run = (): { heard: unknown; rumors: SimEvent[] } => {
+      const sim = new WorldSim({ charter, manifest, chunks, npcs, rumors: gossipDoc, ticksPerPhase: 50 });
+      const rumors: SimEvent[] = [];
+      sim.onEvent((e) => e.type === 'rumor' && rumors.push(e));
+      for (let i = 0; i < 20; i++) sim.tick();
+      return { heard: npcs.map((n) => sim.heard(n.id)), rumors };
+    };
+    expect(JSON.stringify(run())).toEqual(JSON.stringify(run()));
   });
 });

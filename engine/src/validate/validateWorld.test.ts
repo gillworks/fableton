@@ -165,4 +165,30 @@ describe('validateWorld', () => {
     const messages = validateWorld(charter, world).map((v) => v.message).join('\n');
     expect(messages).toContain('not placed in any chunk');
   });
+
+  it('passes a valid rumors doc whose origins are all residents (issue #81)', () => {
+    const world = sampleWorld();
+    world.rumors = { file: 'rumors.json', doc: loadJson('rumors.json') };
+    expect(validateWorld(charter, world)).toEqual([]);
+  });
+
+  it('flags a rumor whose origin is not a resident, naming rumor and NPC', () => {
+    const world = sampleWorld();
+    world.rumors = { file: 'rumors.json', doc: loadJson('rumors.json') };
+    (world.rumors.doc as AnyDoc).rumors[0].origin = 'a-stranger';
+    const violations = validateWorld(charter, world);
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toMatchObject({ rule: 'asset-refs-resolve', file: 'rumors.json' });
+    expect(violations[0]!.message).toContain('a-stranger');
+    expect(violations[0]!.message).toContain('the-cold-oven');
+  });
+
+  it('flags a schema-invalid rumors doc against its file', () => {
+    const world = sampleWorld();
+    world.rumors = { file: 'rumors.json', doc: loadJson('rumors.json') };
+    (world.rumors.doc as AnyDoc).spread_chance = 5; // out of [0,1]
+    const schema = validateWorld(charter, world).filter((v) => v.rule === 'schema-valid');
+    expect(schema).toHaveLength(1);
+    expect(schema[0]).toMatchObject({ file: 'rumors.json' });
+  });
 });

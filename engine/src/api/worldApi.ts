@@ -12,6 +12,7 @@ import type { Charter } from '../schemas/charter.js';
 import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
+import type { RumorsDoc } from '../schemas/rumors.js';
 import { validateWorld } from '../validate/validateWorld.js';
 import type { SimEvent } from '../sim/worldSim.js';
 import type { WorldSim } from '../sim/worldSim.js';
@@ -34,6 +35,8 @@ export interface WorldApiDeps {
   chunks: Chunk[];
   npcs: Npc[];
   registry: AssetRegistry;
+  /** Rumors this world seeds — resolves rumor ids to their diegetic text. */
+  rumors?: RumorsDoc;
 }
 
 export interface WorldApi {
@@ -43,17 +46,25 @@ export interface WorldApi {
 
 export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {}): Promise<WorldApi> {
   const npcs = new Map(deps.npcs.map((n) => [n.id, n]));
+  const rumorText = new Map((deps.rumors?.rumors ?? []).map((r) => [r.id, r.text]));
+  const nameOf = (id: string): string => npcs.get(id)?.identity.name ?? id;
   const adminConfig: AdminConfig = { ...DEFAULT_ADMIN_CONFIG };
   const chronicle: { tick: number; entry: string }[] = [];
 
+  const entryFor = (event: SimEvent): string => {
+    switch (event.type) {
+      case 'phase':
+        return `the world turns: ${event.phase}`;
+      case 'rumor':
+        // The "who told Greta?" line, in plain sight.
+        return `${nameOf(event.to)} heard from ${nameOf(event.from)}: “${event.text}”`;
+      default:
+        return `${event.npc} — ${event.activity}`;
+    }
+  };
+
   deps.sim.onEvent((event: SimEvent) => {
-    chronicle.push({
-      tick: event.tick,
-      entry:
-        event.type === 'phase'
-          ? `the world turns: ${event.phase}`
-          : `${event.npc} — ${event.activity}`,
-    });
+    chronicle.push({ tick: event.tick, entry: entryFor(event) });
     if (chronicle.length > CHRONICLE_CAP) chronicle.shift();
   });
 
@@ -160,6 +171,15 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         lore: npc.lore,
         // The tree's own name — the inspect panel's footer line.
         tree: npc.behavior.label,
+        // What this resident has picked up, and from whom (issue #81). Live
+        // sim state, not authored data; `from` is an NPC id the client maps
+        // to a name, like relationships. Unknown rumor ids fall back to the
+        // id so the panel never silently drops a line.
+        heard: deps.sim.heard(npc.id).map((h) => ({
+          text: rumorText.get(h.rumor) ?? h.rumor,
+          from: h.from,
+          tick: h.tick,
+        })),
       });
     }
     if (npcMatch && npcMatch[2] && req.method === 'POST') {
