@@ -58,6 +58,8 @@ console.log(
 );
 sim.onEvent((event) => {
   if (event.type === 'phase') console.log(`[tick ${event.tick}] the world turns: ${event.phase}`);
+  else if (event.type === 'weather')
+    console.log(`[tick ${event.tick}] the weather turns: ${event.weather.label}`);
   else console.log(`[tick ${event.tick}] ${event.npc} — ${event.activity}`);
 });
 

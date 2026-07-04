@@ -52,7 +52,9 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
       entry:
         event.type === 'phase'
           ? `the world turns: ${event.phase}`
-          : `${event.npc} — ${event.activity}`,
+          : event.type === 'weather'
+            ? `the weather turns: ${event.weather.label}`
+            : `${event.npc} — ${event.activity}`,
     });
     if (chronicle.length > CHRONICLE_CAP) chronicle.shift();
   });

@@ -9,10 +9,17 @@
 // v1 ambient-life node set: schedule (branch by day phase), sequence (the
 // one composite), and the leaves move / interact / idle.
 import { z } from 'zod';
+import { WeatherKindSchema, type WeatherKind } from './charter.js';
 import { finite, idSlug, nonEmpty } from './common.js';
 
 export type BehaviorNode =
   | { type: 'schedule'; label: string; entries: { phase: string; child: BehaviorNode }[] }
+  | {
+      type: 'weather';
+      label: string;
+      entries: { kind: WeatherKind; child: BehaviorNode }[];
+      fallback?: BehaviorNode | undefined;
+    }
   | { type: 'sequence'; label: string; children: BehaviorNode[] }
   | { type: 'move'; label: string; to: string }
   | { type: 'interact'; label: string; with: string; duration_s: number }
@@ -32,6 +39,18 @@ export const BehaviorNodeSchema: z.ZodType<BehaviorNode> = z.lazy(() =>
       entries: z
         .array(z.strictObject({ phase: nonEmpty, child: BehaviorNodeSchema }))
         .min(1),
+    }),
+    // Branch on the day's weather (deterministic, sim/weather.ts). The
+    // runtime picks the entry matching the current weather kind, else the
+    // fallback. Labels stay diegetic — "waiting out the rain under the
+    // awning" — so the inspect panel reads the branch as narration.
+    z.strictObject({
+      type: z.literal('weather'),
+      label,
+      entries: z
+        .array(z.strictObject({ kind: WeatherKindSchema, child: BehaviorNodeSchema }))
+        .min(1),
+      fallback: z.optional(BehaviorNodeSchema),
     }),
     z.strictObject({
       type: z.literal('sequence'),
