@@ -23,6 +23,8 @@ case "$ROLE" in
   *) echo "unknown role: $ROLE" >&2; exit 2 ;;
 esac
 
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
 cd "$REPO"
 # Sessions always start from fresh main; work happens on branches via PRs.
 git checkout -q main && git pull -q origin main
@@ -45,33 +47,24 @@ USAGE_CSV="studio/logs/usage.csv"
 
 {
   echo "=== $ROLE session · world=$WORLD · model=$MODEL · $(date -u +%FT%TZ) ==="
-  OUT=$($RUN -p "World: $WORLD. Live URL: $LIVE_URL.
+  # Capture the runner's exit so append-usage-row.mjs can tell a timeout
+  # (GNU timeout → 124/137) from a crash. Guarded so `set -e` doesn't abort.
+  if OUT=$($RUN -p "World: $WORLD. Live URL: $LIVE_URL.
 
 $(cat "$BRIEF")" \
     --model "$MODEL" \
     --output-format json \
-    --dangerously-skip-permissions) || echo "!! session exited nonzero ($?)"
-  printf '%s\n' "$OUT" | ROLE="$ROLE" MODEL="$MODEL" USAGE_CSV="$USAGE_CSV" node -e '
-    let raw = "";
-    process.stdin.on("data", (c) => (raw += c));
-    process.stdin.on("end", () => {
-      try {
-        const r = JSON.parse(raw);
-        console.log(r.result ?? raw);
-        const u = r.usage ?? {};
-        const row = [
-          new Date().toISOString(), process.env.ROLE, process.env.MODEL,
-          u.input_tokens ?? 0, u.cache_creation_input_tokens ?? 0,
-          u.cache_read_input_tokens ?? 0, u.output_tokens ?? 0,
-          r.total_cost_usd ?? 0, r.duration_ms ?? 0, r.num_turns ?? 0,
-          r.is_error ? "error" : "ok",
-        ];
-        require("fs").appendFileSync(process.env.USAGE_CSV, row.join(",") + "\n");
-      } catch {
-        console.log(raw); // not JSON (crash, timeout) — keep the evidence, skip the row
-      }
-    });
-  '
+    --dangerously-skip-permissions); then
+    STATUS=0
+  else
+    STATUS=$?
+    echo "!! session exited nonzero ($STATUS)"
+  fi
+  # Every session appends one row — including a zeroed exit=timeout|crash row
+  # when it misbehaves, so spend stays countable exactly then (#78, #42).
+  printf '%s\n' "$OUT" \
+    | ROLE="$ROLE" MODEL="$MODEL" USAGE_CSV="$USAGE_CSV" STATUS="$STATUS" \
+      node "$SCRIPT_DIR/append-usage-row.mjs"
   echo "=== end · $(date -u +%FT%TZ) ==="
 } >> "$LOG" 2>&1
 
