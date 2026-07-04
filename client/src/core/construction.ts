@@ -7,7 +7,7 @@
 // mesh climb the ladder, then the finished building stand. Pure three +
 // strings; no React, no loaders, testable headless.
 import { Group, Matrix4, Mesh, Quaternion, Vector3 } from 'three';
-import { buildBuilding } from './buildings.js';
+import { buildBuilding, buildRisingBuilding } from './buildings.js';
 import type { AssetPiece } from './chunkMeshes.js';
 import type { ConstructionSiteState, ConstructionSiteView } from './types.js';
 
@@ -26,15 +26,20 @@ export function siteWorldPosition(
  * its completion chunk-data. A stage index past the ladder is treated as
  * complete, so a stray delta never indexes out of range.
  */
-export type SiteRender = { kind: 'stage'; asset: string } | { kind: 'complete' };
+export type SiteRender =
+  | { kind: 'stage'; asset: string }
+  | { kind: 'rising'; fraction: number }
+  | { kind: 'complete' };
 
 export function siteRenderModel(site: {
   stageIndex: number;
   complete: boolean;
-  stages: readonly { asset: string }[];
+  stages: readonly { asset?: string; rise?: number }[];
 }): SiteRender {
   if (site.complete || site.stageIndex >= site.stages.length) return { kind: 'complete' };
-  return { kind: 'stage', asset: site.stages[site.stageIndex]!.asset };
+  const stage = site.stages[site.stageIndex]!;
+  if (stage.asset !== undefined) return { kind: 'stage', asset: stage.asset };
+  return { kind: 'rising', fraction: stage.rise ?? 1 };
 }
 
 /** Place one kit asset's pieces as plain meshes at a local transform. Sites
@@ -79,6 +84,14 @@ export function buildSiteGroup(
   const model = siteRenderModel(site);
   if (model.kind === 'stage') {
     placeAsset(group, pieces, model.asset, site.position, site.rotation_y);
+    return group;
+  }
+  if (model.kind === 'rising') {
+    // The completion buildings, mid-rise (issue #117). Completion props
+    // (furnishings, planting) arrive only when the build finishes.
+    for (const building of site.completion.buildings) {
+      group.add(buildRisingBuilding(building, model.fraction));
+    }
     return group;
   }
   for (const building of site.completion.buildings) group.add(buildBuilding(building).group);

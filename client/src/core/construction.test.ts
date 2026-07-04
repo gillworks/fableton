@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 // Citizen-construction render + panel logic, tested headless (ADR-0002).
-import { BoxGeometry, Matrix4, MeshLambertMaterial } from 'three';
+import { BoxGeometry, Matrix4, Mesh, MeshLambertMaterial } from 'three';
 import { describe, expect, it } from 'vitest';
+import { buildRisingBuilding } from './buildings.js';
 import {
   buildSiteGroup,
   buildSitePanelData,
@@ -126,5 +127,59 @@ describe('buildSitePanelData', () => {
   it('falls back to the id when a worker is not in the roster', () => {
     const panel = buildSitePanelData(state({ workers: ['unknown'] }), roster, () => 'hauling timber');
     expect(panel.workers[0]).toEqual({ id: 'unknown', name: 'unknown', activity: 'hauling timber' });
+  });
+});
+
+describe('rising stages (issue #117)', () => {
+  const building = {
+    position: [5, 0.8, 5] as [number, number, number],
+    rotation_y: 0,
+    width: 3,
+    depth: 2.5,
+    height: 2.4,
+    wall_color: '#e8e0d0',
+    roof_color: '#5a7a4a',
+    windows: 2,
+    chimney: false,
+  };
+  const site = {
+    id: 'the-new-house',
+    chunk: 'chunk-3-3',
+    position: [5, 0.8, 5] as [number, number, number],
+    rotation_y: 0,
+    stageIndex: 1,
+    stageCount: 3,
+    progress: 0,
+    required: 10,
+    workers: [],
+    complete: false,
+    stages: [
+      { name: 'marked plot', asset: 'lantern' },
+      { name: 'walls waist-high', rise: 0.4 },
+      { name: 'walls to the eaves', rise: 0.95 },
+    ],
+    completion: { buildings: [building], props: [] },
+  };
+
+  it('siteRenderModel maps a rise stage to the rising variant', () => {
+    expect(siteRenderModel(site)).toEqual({ kind: 'rising', fraction: 0.4 });
+    expect(siteRenderModel({ ...site, stageIndex: 0 })).toEqual({ kind: 'stage', asset: 'lantern' });
+    expect(siteRenderModel({ ...site, complete: true })).toEqual({ kind: 'complete' });
+  });
+
+  it('buildRisingBuilding raises bare walls to the fraction; the door waits for half height', () => {
+    const low = buildRisingBuilding(building, 0.4);
+    expect(low.children).toHaveLength(1); // walls only, no door/roof/windows
+    const walls = low.children[0] as Mesh;
+    const box = (walls.geometry as BoxGeometry).parameters;
+    expect(box.height).toBeCloseTo(building.height * 0.4);
+    const high = buildRisingBuilding(building, 0.95);
+    expect(high.children).toHaveLength(2); // walls + door
+  });
+
+  it('buildSiteGroup renders the completion building mid-rise, without props', () => {
+    const group = buildSiteGroup(site as never, new Map());
+    expect(group.children).toHaveLength(1);
+    expect(group.children[0]!.children.length).toBeGreaterThan(0);
   });
 });
