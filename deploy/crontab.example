@@ -21,3 +21,8 @@
 0 */4 * * * flock -n /run/fableton-steward.lock /opt/fableton-studio/studio/bin/run.sh steward >> /var/log/fableton-studio.log 2>&1
 30 8,18 * * * flock -n /run/fableton-qa.lock /opt/fableton-studio/studio/bin/run.sh qa >> /var/log/fableton-studio.log 2>&1
 0 9 * * * flock -n /run/fableton-council.lock /opt/fableton-studio/studio/bin/run.sh council >> /var/log/fableton-studio.log 2>&1
+
+# Ledger surface: publish redacted per-tier token totals to the `ledger`
+# branch so #42's "tokens per tier" is readable off-box (no SSH). Runs after
+# council, off `main`; Contents-write token, never touches branch protection.
+30 9 * * * flock -n /run/fableton-ledger.lock /opt/fableton-studio/studio/bin/publish-ledger.sh >> /var/log/fableton-studio.log 2>&1

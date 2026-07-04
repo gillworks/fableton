@@ -26,6 +26,8 @@ An orchestration control plane (e.g. Paperclip) is deliberately **not** part of 
 
 - `prompts/steward.md` · `prompts/qa.md` · `prompts/council.md` — the three role briefs. Self-contained: a fresh headless session given only the brief + this repo performs its cycle.
 - `bin/run.sh <role> [world]` — the headless runner: fresh `main`, role model from env, brief injected, transcript to `studio/logs/<role>/` (gitignored).
+- `bin/usage-ledger.mjs` — token-ledger helpers (plain node, no build): builds the per-session ledger row and aggregates `usage.csv` into redacted per-tier totals. `bin/append-usage-row.mjs` / `bin/ledger-snapshot.mjs` are its two CLIs.
+- **Token ledger (#42, protects #78).** Every session appends one row to `studio/logs/usage.csv` (gitignored) — `utc,role,model,input/cache/output tokens,cost,duration,turns,exit`. A timed-out or crashed session (stdout isn't the JSON envelope) still appends a **zeroed row** tagged `exit=timeout|crash`, so spend stays countable exactly when sessions misbehave. `bin/publish-ledger.sh` (cron, after council) republishes redacted per-tier totals to the **`ledger` branch** (`studio/ledger/tokens-per-tier.{md,csv}`), so #42's week-close "tokens per tier" is readable off-box without SSH.
 - `bin/validate-artifacts.ts [world]` — divine artifacts vs engine schemas (absent = valid; invalid = fail). No argument = every world; `pnpm validate` runs that form, so an invalid decree log fails the same gate as an invalid chunk (#41).
 - Install cadence: `deploy/crontab.example`. The studio runs from its **own clone** (default `/opt/fableton-studio`, `STUDIO_REPO` to change) — never the auto-deploy clone, which must stay fast-forward-only.
 
