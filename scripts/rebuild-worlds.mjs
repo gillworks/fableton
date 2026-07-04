@@ -140,3 +140,4 @@ for (const [name, config] of Object.entries(WORLDS)) {
   console.log(`✓ ${name} rebuilt — ${manifest.chunks.length} chunks, ${placed} residents kept in place`);
 }
 console.log('starter worlds rebuilt — run pnpm validate and REVIEW THE DIFF (see #64)');
+
