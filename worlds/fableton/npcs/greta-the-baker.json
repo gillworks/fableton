@@ -83,9 +83,21 @@
       {
         "phase": "hush",
         "child": {
-          "type": "idle",
-          "label": "sleeping above the bakery",
-          "duration_s": 240
+          "type": "sequence",
+          "label": "the nightly game",
+          "children": [
+            {
+              "type": "move",
+              "label": "carrying the deck out back",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "losing at cards, on purpose",
+              "with": "marigold-crumb",
+              "duration_s": 240
+            }
+          ]
         }
       }
     ]

@@ -45,7 +45,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "wander",
-          "label": "playing cards against Greta, evenly",
+          "label": "waiting for the ovens to cool",
           "radius": 5,
           "min_pause_s": 2,
           "max_pause_s": 12
@@ -54,11 +54,21 @@
       {
         "phase": "hush",
         "child": {
-          "type": "wander",
-          "label": "sleeping with the window cracked",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the nightly game",
+          "children": [
+            {
+              "type": "move",
+              "label": "slipping out for cards",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "beating Greta, gently",
+              "with": "greta-the-baker",
+              "duration_s": 240
+            }
+          ]
         }
       }
     ]
