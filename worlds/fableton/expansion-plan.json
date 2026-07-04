@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "fableton-starter-plan",
+  "queue": [
+    {
+      "site": {
+        "schema_version": 1,
+        "id": "the-wishing-well",
+        "chunk": "chunk-3-3",
+        "position": [5, 0.8, 5],
+        "rotation_y": 0,
+        "footprint": { "width": 2.6, "depth": 2.6 },
+        "builder_roles": ["wishing-well attendant"],
+        "stages": [
+          { "name": "marked plot", "asset": "lantern", "work_units": 4 },
+          { "name": "digging the shaft", "asset": "rock-large", "work_units": 18 },
+          { "name": "raising the wellhead", "asset": "tree", "work_units": 12 }
+        ],
+        "completion": {
+          "buildings": [],
+          "props": [{ "asset": "fountain-round", "position": [5, 0.8, 5], "rotation_y": 0, "scale": 1 }]
+        }
+      },
+      "prerequisites": [{ "type": "day", "min_day": 1 }]
+    },
+    {
+      "site": {
+        "schema_version": 1,
+        "id": "the-hedge-arbor",
+        "chunk": "chunk-3-3",
+        "position": [5, 0.8, 12],
+        "rotation_y": 0,
+        "footprint": { "width": 3, "depth": 3 },
+        "builder_roles": ["hedge, semi-retired", "briar warden"],
+        "stages": [
+          { "name": "marked plot", "asset": "lantern", "work_units": 4 },
+          { "name": "planting the quickthorn", "asset": "hedge", "work_units": 10 },
+          { "name": "training the arch", "asset": "hedge", "work_units": 14 }
+        ],
+        "completion": {
+          "buildings": [],
+          "props": [
+            { "asset": "hedge", "position": [4, 0.8, 12], "rotation_y": 0, "scale": 1 },
+            { "asset": "hedge", "position": [6, 0.8, 12], "rotation_y": 0, "scale": 1 },
+            { "asset": "tree", "position": [5, 0.8, 12], "rotation_y": 0, "scale": 1 }
+          ]
+        }
+      },
+      "prerequisites": [
+        { "type": "site_complete", "site": "the-wishing-well" },
+        { "type": "day", "min_day": 2 }
+      ]
+    }
+  ]
+}
