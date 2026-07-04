@@ -7,12 +7,14 @@
 // not a style nit.
 //
 // v1 ambient-life node set: schedule (branch by day phase), sequence (the
-// one composite), and the leaves move / interact / idle.
+// one composite), and the leaves move / interact / idle. on_event adds the
+// town-calendar branch (issue #62): gather for a festival, otherwise carry on.
 import { z } from 'zod';
 import { finite, idSlug, nonEmpty } from './common.js';
 
 export type BehaviorNode =
   | { type: 'schedule'; label: string; entries: { phase: string; child: BehaviorNode }[] }
+  | { type: 'on_event'; label: string; event: string; child: BehaviorNode; otherwise?: BehaviorNode | undefined }
   | { type: 'sequence'; label: string; children: BehaviorNode[] }
   | { type: 'move'; label: string; to: string }
   | { type: 'interact'; label: string; with: string; duration_s: number }
@@ -32,6 +34,16 @@ export const BehaviorNodeSchema: z.ZodType<BehaviorNode> = z.lazy(() =>
       entries: z
         .array(z.strictObject({ phase: nonEmpty, child: BehaviorNodeSchema }))
         .min(1),
+    }),
+    z.strictObject({
+      type: z.literal('on_event'),
+      label,
+      // A charter calendar event name to gather for; '*' matches whatever
+      // event is in effect. The runtime runs `child` while that event is
+      // active and `otherwise` (if given) the rest of the time.
+      event: nonEmpty,
+      child: BehaviorNodeSchema,
+      otherwise: BehaviorNodeSchema.optional(),
     }),
     z.strictObject({
       type: z.literal('sequence'),

@@ -39,6 +39,7 @@ const slugify = (s: string): string =>
 
 interface BehaviorRefs {
   phases: Set<string>;
+  events: Set<string>;
   moveTargets: Set<string>;
   interactTargets: Set<string>;
 }
@@ -50,6 +51,11 @@ function collectBehaviorRefs(node: BehaviorNode, refs: BehaviorRefs): void {
         refs.phases.add(entry.phase);
         collectBehaviorRefs(entry.child, refs);
       }
+      break;
+    case 'on_event':
+      refs.events.add(node.event);
+      collectBehaviorRefs(node.child, refs);
+      if (node.otherwise) collectBehaviorRefs(node.otherwise, refs);
       break;
     case 'sequence':
       for (const child of node.children) collectBehaviorRefs(child, refs);
@@ -126,6 +132,8 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
 
   // NPC behavior refs resolve against the chunks the NPC is placed in.
   const dayPhases = new Set(charter.aesthetic.day_phases);
+  // on_event nodes may reference '*' (any event) or a declared calendar event.
+  const eventNames = new Set(charter.calendar.events.map((e) => e.name));
   for (const { file, npc } of npcs) {
     const home = chunks.filter((c) => c.chunk.npcs.includes(npc.id));
     if (home.length === 0) {
@@ -136,7 +144,7 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
       });
       continue;
     }
-    const refs: BehaviorRefs = { phases: new Set(), moveTargets: new Set(), interactTargets: new Set() };
+    const refs: BehaviorRefs = { phases: new Set(), events: new Set(), moveTargets: new Set(), interactTargets: new Set() };
     collectBehaviorRefs(npc.behavior, refs);
     const navNodes = new Set(home.flatMap((c) => c.chunk.nav.nodes.map((n) => n.id)));
     const placedAssets = new Set(home.flatMap((c) => c.chunk.props.map((p) => p.asset)));
@@ -165,6 +173,15 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
           file,
           rule: 'asset-refs-resolve',
           message: `behavior schedule phase "${phase}" is not one of the charter's day_phases (${[...dayPhases].join(', ')})`,
+        });
+      }
+    }
+    for (const event of refs.events) {
+      if (event !== '*' && !eventNames.has(event)) {
+        violations.push({
+          file,
+          rule: 'asset-refs-resolve',
+          message: `behavior on_event "${event}" is not a charter calendar event (${[...eventNames].join(', ') || 'none declared'})`,
         });
       }
     }

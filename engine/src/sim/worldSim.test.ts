@@ -134,6 +134,74 @@ describe('WorldSim', () => {
     expect(again.snapshot()).toEqual(sim.snapshot());
   });
 
+  it('gathers residents for a charter town event, and records the occurrence', () => {
+    // A festival every other day (days 1, 3, 5…), all day.
+    const festive = {
+      ...charter,
+      calendar: {
+        events: [{ name: 'Lantern Festival', cadence: { every_days: 2, offset_days: 0 }, phases: [] }],
+      },
+    };
+    // A townsperson who minds the shop until the festival, then streams to the
+    // square to light a lantern — the on_event branch is their event context.
+    const reveler: Npc = {
+      ...npcs[0]!,
+      id: 'reveler',
+      relationships: [],
+      behavior: {
+        type: 'on_event',
+        label: 'a quiet evening in',
+        event: 'Lantern Festival',
+        child: {
+          type: 'sequence',
+          label: 'to the lanterns',
+          children: [
+            { type: 'move', label: 'streaming toward the lanterns', to: 'lamp-corner' },
+            { type: 'interact', label: 'lighting a lantern', with: 'lantern', duration_s: 30 },
+          ],
+        },
+        otherwise: { type: 'idle', label: 'minding the shop', duration_s: 60 },
+      },
+    };
+    const chunksWith = chunks.map((c) =>
+      c.id === 'town-square' ? { ...c, npcs: [...c.npcs, 'reveler'] } : c,
+    );
+    // 10 ticks/phase ⇒ 40-tick days. startTick 79 is one tick shy of day 3.
+    const make = (startTick: number): WorldSim =>
+      new WorldSim({ charter: festive, manifest, chunks: chunksWith, npcs: [reveler], ticksPerPhase: 10, startTick });
+
+    // Ordinary day (day 2): no event, so the reveler keeps to the shop.
+    const ordinary = make(40);
+    ordinary.tick();
+    expect(ordinary.clock().day).toBe(2);
+    expect(ordinary.snapshot().npcs[0]!.activity).toBe('minding the shop');
+
+    // Cross into day 3: the festival comes into effect.
+    const eve = make(79);
+    const events: SimEvent[] = [];
+    eve.onEvent((e) => events.push(e));
+    const restingPos = eve.snapshot().npcs[0]!.pos.join(',');
+    eve.tick();
+    expect(eve.clock().day).toBe(3);
+    // The occurrence is announced once, as the event begins (chronicle reads this).
+    expect(events).toContainEqual({ type: 'event', tick: 80, event: 'Lantern Festival' });
+    expect(eve.snapshot().npcs[0]!.activity).toBe('streaming toward the lanterns');
+    for (let i = 0; i < 20; i++) eve.tick();
+    const gathered = eve.snapshot().npcs[0]!;
+    expect(gathered.pos.join(',')).not.toBe(restingPos); // they left the shop to gather
+    expect(['streaming toward the lanterns', 'lighting a lantern']).toContain(gathered.activity);
+
+    // Deterministic: the same founding and clock replay identically.
+    const a2 = make(79);
+    const b2 = make(79);
+    for (let i = 0; i < 40; i++) {
+      a2.tick();
+      b2.tick();
+    }
+    expect(a2.snapshot()).toEqual(b2.snapshot());
+    expect(a2.event()).toBe(b2.event());
+  });
+
   it('is deterministic: two sims produce identical delta streams and snapshots', () => {
     const a = makeSim(50);
     const b = makeSim(50);

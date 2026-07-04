@@ -1,9 +1,26 @@
 // SPDX-License-Identifier: Apache-2.0
 import { z } from 'zod';
 
-export const CHARTER_SCHEMA_VERSION = 1;
+export const CHARTER_SCHEMA_VERSION = 2;
 
 const nonEmpty = z.string().min(1);
+
+// A recurring town event the sim schedules off the world clock (issues #62,
+// #57). DATA, not code: the engine interprets this calendar, no festival is
+// hardcoded (CLAUDE.md invariant 1). Occurs on 1-based day D when
+// (D-1) >= offset_days && (D-1-offset_days) % every_days === 0.
+export const CalendarEventSchema = z.strictObject({
+  // Diegetic, viewer-facing — shown verbatim in the HUD and chronicle
+  // ("Lantern Festival", "Market Day").
+  name: nonEmpty,
+  cadence: z.strictObject({
+    every_days: z.number().int().positive(),
+    offset_days: z.number().int().min(0).default(0),
+  }),
+  // Which day phases the event runs during — a subset of
+  // aesthetic.day_phases. Empty means all day (the gate checks membership).
+  phases: z.array(nonEmpty).default([]),
+});
 
 // gate = machine-checked by the CI validation gate (matched against
 // asset-registry tags); prompt = law carried in agent context, caught by
@@ -70,7 +87,16 @@ export const CharterSchema = z.strictObject({
   amendments: z.strictObject({
     rule: nonEmpty,
   }),
+  // Recurring town events (festivals, market days, feasts) the sim schedules
+  // off the world clock. Defaulted empty so charters authored before the
+  // calendar existed parse unchanged (migrateV1toV2).
+  calendar: z
+    .strictObject({
+      events: z.array(CalendarEventSchema).default([]),
+    })
+    .default({ events: [] }),
 });
 
 export type Charter = z.infer<typeof CharterSchema>;
 export type EnforcedRule = z.infer<typeof EnforcedRuleSchema>;
+export type CalendarEvent = z.infer<typeof CalendarEventSchema>;

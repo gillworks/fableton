@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 export {
   CHARTER_SCHEMA_VERSION,
+  CalendarEventSchema,
   CharterSchema,
   EnforcedRuleSchema,
+  type CalendarEvent,
   type Charter,
   type EnforcedRule,
 } from './schemas/charter.js';
@@ -62,7 +64,8 @@ export { deriveSeed, mulberry32, pick, randInt, type Rng } from './generate/rng.
 export { colorFor, hslToHex } from './color.js';
 export { generateWorld, type GeneratedWorld } from './generate/generateWorld.js';
 export { TICK_HZ, clockAt, type ClockState } from './sim/clock.js';
-export { NpcRuntime, type NpcState } from './sim/npcRuntime.js';
+export { activeEvent, eventActiveAt, eventOccursOnDay } from './sim/calendar.js';
+export { NpcRuntime, type NpcState, type StepContext } from './sim/npcRuntime.js';
 export {
   WorldSim,
   type Delta,

@@ -88,6 +88,21 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
           DAY {dayOf(tick, ticksPerDay)} · {info.phases[shownPhase] ?? '—'}
           {shownPhase !== livePhase ? ' · preview' : ''}
         </div>
+        {/* Today's charter-defined town event, when one is in effect (issue #62). */}
+        {info.event && (
+          <div
+            style={{
+              fontFamily: display,
+              fontStyle: 'italic',
+              fontSize: 14,
+              color: fg,
+              textShadow: fgShadow,
+              marginTop: 6,
+            }}
+          >
+            Today: {info.event}
+          </div>
+        )}
         {/* The world clock: progress through today, and how fast a day passes */}
         <div
           title={`time of day: ${Math.round(((tick % ticksPerDay) / ticksPerDay) * 100)}%`}
