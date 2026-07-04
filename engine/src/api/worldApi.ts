@@ -46,14 +46,18 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
   const adminConfig: AdminConfig = { ...DEFAULT_ADMIN_CONFIG };
   const chronicle: { tick: number; entry: string }[] = [];
 
+  const narrate = (event: SimEvent): string => {
+    switch (event.type) {
+      case 'phase':
+        return `the world turns: ${event.phase}`;
+      case 'event':
+        return `the ${event.event} begins`;
+      case 'activity':
+        return `${event.npc} — ${event.activity}`;
+    }
+  };
   deps.sim.onEvent((event: SimEvent) => {
-    chronicle.push({
-      tick: event.tick,
-      entry:
-        event.type === 'phase'
-          ? `the world turns: ${event.phase}`
-          : `${event.npc} — ${event.activity}`,
-    });
+    chronicle.push({ tick: event.tick, entry: narrate(event) });
     if (chronicle.length > CHRONICLE_CAP) chronicle.shift();
   });
 
@@ -141,6 +145,9 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         npcs: npcs.size,
         clock,
         pace: deps.sim.pace(),
+        // The town event in effect right now (issue #62); null on an ordinary
+        // day. The HUD renders it as "Today: <event>".
+        event: deps.sim.event(),
       });
     }
     if (req.method === 'GET' && path === '/api/npcs') {

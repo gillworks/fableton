@@ -34,6 +34,33 @@ describe('NpcSchema', () => {
     expect(() => NpcSchema.parse(npc)).toThrow(/label/);
   });
 
+  it('accepts and round-trips an on_event node with an optional otherwise branch', () => {
+    const npc = validNpc();
+    const withEvent: unknown = {
+      ...JSON.parse(JSON.stringify(npc)),
+      behavior: {
+        type: 'on_event',
+        label: 'festival or not',
+        event: 'Lantern Festival',
+        child: { type: 'idle', label: 'lighting a lantern', duration_s: 30 },
+        otherwise: { type: 'idle', label: 'minding the oven', duration_s: 30 },
+      },
+    };
+    const parsed = NpcSchema.parse(withEvent);
+    expect(parsed.behavior.type).toBe('on_event');
+    expect(NpcSchema.parse(JSON.parse(JSON.stringify(parsed)))).toEqual(parsed);
+  });
+
+  it('rejects an on_event missing its event name or child', () => {
+    const npc = validNpc();
+    expect(() =>
+      NpcSchema.parse({ ...npc, behavior: { type: 'on_event', label: 'x', child: { type: 'idle', label: 'y', duration_s: 1 } } }),
+    ).toThrow(/event/);
+    expect(() =>
+      NpcSchema.parse({ ...npc, behavior: { type: 'on_event', label: 'x', event: 'Fest' } }),
+    ).toThrow(/child/);
+  });
+
   it('rejects unknown behavior node types', () => {
     const npc = validNpc();
     expect(() =>

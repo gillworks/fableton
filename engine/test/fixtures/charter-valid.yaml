@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
-# A valid schema_version 1 charter that is NOT the template — proves the
+# A valid schema_version 2 charter that is NOT the template — proves the
 # schema isn't coupled to the flagship's values.
-schema_version: 1
+schema_version: 2
 
 identity:
   name: Cindervault
@@ -60,3 +60,17 @@ prime_directives:
 
 amendments:
   rule: constitutional acts only — the god proposes, the founder ratifies, in public
+
+calendar:
+  events:
+    # A quarter-wide market every third day, only while the forges run.
+    - name: Coal Market
+      cadence:
+        every_days: 3
+      phases:
+        - forge-day
+    # The banked-fire remembrance, weekly, offset two days from founding.
+    - name: Emberwake
+      cadence:
+        every_days: 7
+        offset_days: 2
