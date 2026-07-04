@@ -176,6 +176,9 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         // to a name, like relationships. Unknown rumor ids fall back to the
         // id so the panel never silently drops a line.
         heard: deps.sim.heard(npc.id).map((h) => ({
+          // The rumor id travels with the line so the client has a stable,
+          // collision-proof key even if two rumors share text + source.
+          rumor: h.rumor,
           text: rumorText.get(h.rumor) ?? h.rumor,
           from: h.from,
           tick: h.tick,

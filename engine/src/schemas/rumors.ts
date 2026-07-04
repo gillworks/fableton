@@ -49,3 +49,13 @@ export const RumorsDocSchema = z
 
 export type Rumor = z.infer<typeof RumorSchema>;
 export type RumorsDoc = z.infer<typeof RumorsDocSchema>;
+
+/**
+ * A world with no rumors authored. Parsed through the schema so the defaults
+ * (spread_radius/spread_chance) and `schema_version` come from one source of
+ * truth — never a hand-copied literal that can drift when the schema changes.
+ */
+export const EMPTY_RUMORS: RumorsDoc = RumorsDocSchema.parse({
+  schema_version: WORLD_DATA_SCHEMA_VERSION,
+  rumors: [],
+});

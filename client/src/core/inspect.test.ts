@@ -40,8 +40,8 @@ describe('buildPanelData', () => {
       {
         ...detail,
         heard: [
-          { text: 'the oven knocked back', from: 'reynard-the-retired', tick: 3 },
-          { text: 'the apples are honest', from: 'tam-the-lamplighter', tick: 9 },
+          { rumor: 'oven-knock', text: 'the oven knocked back', from: 'reynard-the-retired', tick: 3 },
+          { rumor: 'honest-apples', text: 'the apples are honest', from: 'tam-the-lamplighter', tick: 9 },
         ],
       },
       new Map([
@@ -51,8 +51,8 @@ describe('buildPanelData', () => {
     );
     // Reversed to newest-first, and ids resolved like relationships.
     expect(panel.heard).toEqual([
-      { text: 'the apples are honest', from: 'Tam' },
-      { text: 'the oven knocked back', from: 'Reynard' },
+      { rumor: 'honest-apples', text: 'the apples are honest', from: 'Tam' },
+      { rumor: 'oven-knock', text: 'the oven knocked back', from: 'Reynard' },
     ]);
   });
 });

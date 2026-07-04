@@ -12,7 +12,7 @@ export interface NpcDetail {
   tree: string;
   // What this resident has overheard, and from whom (issue #81). Optional so
   // a world-api without gossip (or an older one) still renders.
-  heard?: { text: string; from: string; tick: number }[];
+  heard?: { rumor: string; text: string; from: string; tick: number }[];
 }
 
 export interface PanelData {
@@ -22,7 +22,7 @@ export interface PanelData {
   role: string;
   bio: string;
   relationships: { name: string; clause: string }[];
-  heard: { text: string; from: string }[];
+  heard: { rumor: string; text: string; from: string }[];
   footer: string;
 }
 
@@ -50,7 +50,7 @@ export function buildPanelData(
     heard: (detail.heard ?? [])
       .slice()
       .reverse()
-      .map((h) => ({ text: h.text, from: nameById.get(h.from) ?? h.from })),
+      .map((h) => ({ rumor: h.rumor, text: h.text, from: nameById.get(h.from) ?? h.from })),
     footer: `lore/${detail.id}.json · tree: ${slug(detail.tree)}`,
   };
 }

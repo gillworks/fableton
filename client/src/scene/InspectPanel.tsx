@@ -194,7 +194,7 @@ export function InspectPanel({ npcId, sim, theme, onClose }: InspectPanelProps):
                 HAS HEARD…
               </div>
               {panel.heard.map((h) => (
-                <div key={h.text + h.from} style={{ fontSize: 13.5, marginBottom: 4 }}>
+                <div key={h.rumor} style={{ fontSize: 13.5, marginBottom: 4 }}>
                   <em>“{h.text}”</em>
                   {' — from '}
                   <strong>{h.from}</strong>

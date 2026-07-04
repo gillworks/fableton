@@ -29,6 +29,9 @@ export interface Spread {
   notable: boolean;
 }
 
+// Full 3D distance, y included. Intentional for v1's flat worlds — if
+// verticality ever matters (multi-floor buildings), two residents one floor
+// apart won't gossip, and this is where you'd drop the dy term.
 const dist2 = (a: readonly [number, number, number], b: readonly [number, number, number]): number => {
   const dx = a[0] - b[0];
   const dy = a[1] - b[1];

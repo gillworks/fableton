@@ -172,7 +172,7 @@ describe('world-api gossip (issue #81)', () => {
   it('GET /api/npcs/:id reports what a resident has heard and from whom', async () => {
     const tam = await (await fetch(`${gossipBase}/api/npcs/tam-the-lamplighter`)).json();
     expect(tam.heard).toEqual([
-      { text: 'the oven knocked back', from: 'greta-the-baker', tick: 1 },
+      { rumor: 'the-cold-oven', text: 'the oven knocked back', from: 'greta-the-baker', tick: 1 },
     ]);
     // The origin doesn't hear its own rumor.
     const greta = await (await fetch(`${gossipBase}/api/npcs/greta-the-baker`)).json();

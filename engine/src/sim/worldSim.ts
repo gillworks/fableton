@@ -13,7 +13,7 @@ import type { Charter } from '../schemas/charter.js';
 import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import type { Npc } from '../schemas/npc.js';
-import type { RumorsDoc } from '../schemas/rumors.js';
+import { EMPTY_RUMORS, type RumorsDoc } from '../schemas/rumors.js';
 import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
 import { GossipRuntime, type Heard } from './gossipRuntime.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
@@ -94,7 +94,7 @@ export class WorldSim {
         return new NpcRuntime(npc, chunk, originOf.get(chunk.id)!, options.charter.identity.seed);
       });
     this.#gossip = new GossipRuntime(
-      options.rumors ?? { schema_version: 1, spread_radius: 2.5, spread_chance: 0.35, rumors: [] },
+      options.rumors ?? EMPTY_RUMORS,
       this.#runtimes.map((r) => r.state.id),
       options.charter.identity.seed,
     );
