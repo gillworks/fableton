@@ -177,7 +177,26 @@ export class WorldSim {
     // its own ticks, so the chronicle records the first day's groundbreaking.
     if (options.expansionPlan) {
       this.#expansion = new ExpansionRuntime(options.expansionPlan);
-      if (this.#tick > 0) this.#expansion.seed(this.clock().day, this.#completedSites);
+      // On a RESUME, replay the openings whose prerequisites already came true
+      // so the construction runtime holds every site whose ground broke on an
+      // earlier run — silently (no chronicle re-announcement), matching how the
+      // sim seeds its other last-event markers.
+      if (this.#tick > 0) this.#growTown(this.clock().day, null);
+    }
+  }
+
+  /**
+   * Open every planned site whose prerequisites now hold and hand each to the
+   * construction runtime so builders can raise it — the reverse wire of the
+   * completion→prerequisite loop (issue #107). Pass the current `tick` to
+   * announce each groundbreaking to the chronicle; pass `null` to open
+   * silently (the resume seed). A no-op when the town has no expansion plan.
+   */
+  #growTown(day: number, tick: number | null): void {
+    if (!this.#expansion) return;
+    for (const opened of this.#expansion.step(day, this.#completedSites)) {
+      this.#construction.openSite(opened.def);
+      if (tick !== null) this.#emit({ type: 'expansion', tick, site: opened.site, stage: opened.stage });
     }
   }
 
@@ -279,17 +298,16 @@ export class WorldSim {
       if (eventName !== null) this.#emit({ type: 'event', tick: clock.tick, event: eventName });
     }
     // The town grows: open any planned site whose prerequisites came true this
-    // tick (a new day reached, or a dependency finished). Pure and day-granular
-    // — the runtime opens each site once and rides no RNG. This MUST run before
-    // construction below: a site_complete prerequisite reads #completedSites,
-    // which construction writes later in the same tick, so a finish is seen on
-    // the next step (never the same tick). Reordering the two would introduce a
-    // same-tick race — keep expansion first.
-    if (this.#expansion) {
-      for (const opened of this.#expansion.step(clock.day, this.#completedSites)) {
-        this.#emit({ type: 'expansion', tick: clock.tick, site: opened.site, stage: opened.stage });
-      }
-    }
+    // tick (a new day reached, or a dependency finished) and hand it to the
+    // construction runtime so builders can start raising it THIS tick. Pure and
+    // day-granular — the runtime opens each site once and rides no RNG. This
+    // MUST run before construction below: a site_complete prerequisite reads
+    // #completedSites, which construction writes later in the same tick, so a
+    // finish is seen on the next step (never the same tick). Reordering the two
+    // would introduce a same-tick race — keep expansion first. Opening a site
+    // here also makes it constructible from this tick, so a builder already
+    // standing on the plot works it the moment its ground breaks.
+    this.#growTown(clock.day, clock.tick);
     for (const runtime of this.#runtimes) {
       const state = runtime.step({ phase: clock.phase, event: eventName, weather: this.#weather.kind });
       const posKey = state.pos.join(',');

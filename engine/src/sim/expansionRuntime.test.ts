@@ -15,7 +15,9 @@ describe('ExpansionRuntime', () => {
   it('opens a day-gated site once its day arrives, and only once', () => {
     const rt = new ExpansionRuntime(plan());
     // town-well needs day ≥ 1; market-hall needs town-well complete AND day ≥ 2.
-    expect(rt.step(1, new Set())).toEqual([{ site: 'town-well', stage: 'marked plot' }]);
+    // Each opening also carries the site's full authored def (issue #107); the
+    // chronicle only reads site + stage, so match those.
+    expect(rt.step(1, new Set())).toMatchObject([{ site: 'town-well', stage: 'marked plot' }]);
     expect(rt.step(2, new Set())).toEqual([]); // town-well already open; market-hall waits on completion
     expect(rt.openSites()).toEqual(['town-well']);
   });
@@ -27,8 +29,12 @@ describe('ExpansionRuntime', () => {
     expect(rt.step(1, new Set(['town-well']))).toEqual([]);
     // Day reached but dependency not complete: still waits.
     expect(rt.step(2, new Set())).toEqual([]);
-    // Both met: it opens.
-    expect(rt.step(2, new Set(['town-well']))).toEqual([{ site: 'market-hall', stage: 'marked plot' }]);
+    // Both met: it opens, and the opening carries the full construction_site
+    // def so the consumer can raise it (issue #107).
+    const opened = rt.step(2, new Set(['town-well']));
+    expect(opened).toMatchObject([{ site: 'market-hall', stage: 'marked plot' }]);
+    expect(opened[0]!.def).toMatchObject({ id: 'market-hall', builder_roles: ['master builder'] });
+    expect(opened[0]!.def.stages[0]!.name).toBe('marked plot');
     expect(rt.step(3, new Set(['town-well']))).toEqual([]); // opens exactly once
     expect(rt.openSites()).toEqual(['town-well', 'market-hall']);
   });
@@ -51,9 +57,13 @@ describe('ExpansionRuntime', () => {
     expect(JSON.stringify(run())).toEqual(JSON.stringify(run()));
   });
 
-  it('seed() marks sites open without emitting — a resumed world does not re-announce', () => {
+  it('a resumed world re-derives its open set without re-announcing (step is idempotent)', () => {
+    // The sim seeds a resumed world by stepping the runtime to its start day
+    // (WorldSim.#growTown with no tick, issue #107): sites whose prerequisites
+    // already held come back marked open, and stepping the same day again
+    // yields nothing new — so a redeploy never re-breaks ground.
     const rt = new ExpansionRuntime(plan());
-    rt.seed(5, new Set()); // resume on day 5: town-well is already up
+    expect(rt.step(5, new Set())).toMatchObject([{ site: 'town-well', stage: 'marked plot' }]);
     expect(rt.openSites()).toEqual(['town-well']);
     expect(rt.step(5, new Set())).toEqual([]); // nothing re-announced
   });

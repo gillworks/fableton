@@ -91,6 +91,10 @@ export class ConstructionRuntime {
   #seed: number;
   // Resident id → role slug (identity.kind, slugified). Built once.
   #roleOf: Map<string, string>;
+  // Chunk id → world-space origin, kept so sites the expansion runtime opens
+  // mid-run (openSite) resolve their footprint centre the same way seeded
+  // sites do.
+  #originOf: ReadonlyMap<string, readonly [number, number]>;
   // Sites keyed by id, walked in sorted order for stable output.
   #sites: SiteRuntime[];
 
@@ -102,32 +106,57 @@ export class ConstructionRuntime {
   ) {
     this.#seed = worldSeed;
     this.#roleOf = new Map([...roleOf].map(([id, kind]) => [id, slugify(kind)]));
-    this.#sites = [...sites]
-      .sort((a, b) => a.id.localeCompare(b.id))
-      .map((site) => {
-        const origin = originOf.get(site.chunk) ?? ([0, 0] as const);
-        // Bounding-circle approximation of the work zone: half the larger
-        // footprint dimension plus the margin. Rotation-invariant (so
-        // `rotation_y` needs no handling here) and deliberately fuzzy —
-        // presence, not exact rectangle containment. For a long, thin plot it
-        // over-admits along the short axis, which only ever lets a builder who
-        // is standing slightly off the footprint pitch in; harmless.
-        const reach = Math.max(site.footprint.width, site.footprint.depth) / 2 + WORK_MARGIN;
-        return {
-          site,
-          centre: [origin[0] + site.position[0], site.position[1], origin[1] + site.position[2]] as [
-            number,
-            number,
-            number,
-          ],
-          radius2: reach * reach,
-          roles: new Set(site.builder_roles.map(slugify)),
-          stageIndex: 0,
-          progress: 0,
-          complete: false,
-          workers: [],
-        };
-      });
+    this.#originOf = originOf;
+    this.#sites = [...sites].sort((a, b) => a.id.localeCompare(b.id)).map((site) => this.#build(site));
+  }
+
+  // Build a site's runtime record — the fresh, stage-0 state for a site that
+  // is now on the board. Shared by the constructor (seeded sites) and
+  // openSite (sites the town's expansion plan opens at run time).
+  #build(site: ConstructionSite): SiteRuntime {
+    const origin = this.#originOf.get(site.chunk) ?? ([0, 0] as const);
+    // Bounding-circle approximation of the work zone: half the larger
+    // footprint dimension plus the margin. Rotation-invariant (so
+    // `rotation_y` needs no handling here) and deliberately fuzzy —
+    // presence, not exact rectangle containment. For a long, thin plot it
+    // over-admits along the short axis, which only ever lets a builder who
+    // is standing slightly off the footprint pitch in; harmless.
+    const reach = Math.max(site.footprint.width, site.footprint.depth) / 2 + WORK_MARGIN;
+    return {
+      site,
+      centre: [origin[0] + site.position[0], site.position[1], origin[1] + site.position[2]] as [
+        number,
+        number,
+        number,
+      ],
+      radius2: reach * reach,
+      roles: new Set(site.builder_roles.map(slugify)),
+      stageIndex: 0,
+      progress: 0,
+      complete: false,
+      workers: [],
+    };
+  }
+
+  /**
+   * Put a newly opened site on the board so builders can raise it — the reverse
+   * of the completion→prerequisite wire (issue #107). Called by WorldSim when
+   * the expansion runtime breaks ground on a planned site. Idempotent: a site
+   * id already present is left untouched (its progress is not reset), so a
+   * site seeded at boot AND named by the plan opens exactly once. Returns true
+   * only when the site was newly added.
+   *
+   * Insertion keeps `#sites` in sorted-id order — the same invariant the
+   * constructor and every walk below rely on — so step/state output stays
+   * deterministic regardless of the order sites open in. Effort rolls are
+   * keyed by site id (order-free), so a mid-run insert never shifts another
+   * site's outcome.
+   */
+  openSite(site: ConstructionSite): boolean {
+    if (this.#sites.some((rt) => rt.site.id === site.id)) return false;
+    this.#sites.push(this.#build(site));
+    this.#sites.sort((a, b) => a.site.id.localeCompare(b.site.id));
+    return true;
   }
 
   // One worker's effort this tick: 1 or 2 units, an independent seeded roll

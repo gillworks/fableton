@@ -13,6 +13,7 @@ import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
 import type { ConstructionSite } from '../schemas/construction.js';
+import type { ExpansionPlan } from '../schemas/expansion.js';
 import type { RumorsDoc } from '../schemas/rumors.js';
 import { validateWorld } from '../validate/validateWorld.js';
 import type { SimEvent } from '../sim/worldSim.js';
@@ -59,6 +60,12 @@ export interface WorldApiDeps {
    *  gives the client everything it needs to render the site AND swap its mesh
    *  as the stage climbs. Absent means the world seeds no sites. */
   sites?: ConstructionSite[];
+  /** The town's expansion plan (issue #95). Its queued entries each carry a
+   *  full construction_site def, so /api/construction can render a site the
+   *  plan opens mid-run (issue #107) exactly like a boot-seeded one — otherwise
+   *  a plan-opened site would reach the client with live state but no
+   *  position, stage meshes, or completion payload. */
+  expansionPlan?: ExpansionPlan;
 }
 
 export interface WorldApi {
@@ -92,8 +99,15 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
   const rumorText = new Map((deps.rumors?.rumors ?? []).map((r) => [r.id, r.text]));
   // Static site definitions keyed by id — paired with the live sim state on
   // the /api/construction route so the client can place the site and map its
-  // stage index to a mesh (issue #99). Static: sites are fixed at boot.
-  const siteDefs = new Map((deps.sites ?? []).map((s) => [s.id, s]));
+  // stage index to a mesh (issue #99). Boot-seeded sites AND every site the
+  // expansion plan may open (issue #107) are registered up front: the plan's
+  // defs are fixed data even though the sim opens them over time, so a
+  // plan-opened site renders the moment its ground breaks. A boot-seeded def
+  // wins over a same-id plan entry (last-in-map), matching how the sim keeps
+  // the already-open site rather than re-adding it.
+  const siteDefs = new Map(
+    [...(deps.expansionPlan?.queue ?? []).map((e) => e.site), ...(deps.sites ?? [])].map((s) => [s.id, s]),
+  );
   const nameOf = (id: string): string => npcs.get(id)?.identity.name ?? id;
   const adminConfig: AdminConfig = { ...DEFAULT_ADMIN_CONFIG };
   const chronicle: { tick: number; entry: string }[] = [];

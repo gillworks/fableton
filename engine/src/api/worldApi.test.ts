@@ -7,6 +7,7 @@ import { ChunkSchema } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema } from '../schemas/npc.js';
 import { ConstructionSiteSchema } from '../schemas/construction.js';
+import { ExpansionPlanSchema } from '../schemas/expansion.js';
 import { RumorsDocSchema } from '../schemas/rumors.js';
 import { WorldSim } from '../sim/worldSim.js';
 import { startWorldApi, type WorldApi } from './worldApi.js';
@@ -361,5 +362,65 @@ describe('world-api construction (issue #94)', () => {
     const lines = entries.map((e: { entry: string }) => e.entry);
     expect(lines).toContain('the bakery extension — foundation');
     expect(lines).toContain('the bakery extension is complete');
+  });
+});
+
+// A site the world never boot-seeds — it exists only in the expansion plan and
+// is opened mid-run (issue #107). Its render def must still reach the client:
+// the plan's queue entries carry the full construction_site, so /api/construction
+// pairs the live state with position, stage meshes, and completion payload.
+describe('world-api construction from an expansion plan (issue #107)', () => {
+  let planApi: WorldApi;
+  let planBase: string;
+
+  const planned = ConstructionSiteSchema.parse({
+    schema_version: 1,
+    id: 'bakery-extension',
+    chunk: 'town-square',
+    position: [4, 0, 4],
+    footprint: { width: 4, depth: 4 },
+    builder_roles: ['witch-gone-respectable'], // Greta's kind — her tree raises it
+    stages: [
+      { name: 'marked plot', asset: 'stakes', work_units: 2 },
+      { name: 'foundation', asset: 'foundation-mesh', work_units: 3 },
+      { name: 'frame', asset: 'frame-mesh', work_units: 5 },
+    ],
+    completion: { props: [{ asset: 'bakery', position: [4, 0, 4] }] },
+  });
+  const expansionPlan = ExpansionPlanSchema.parse({
+    schema_version: 1,
+    id: 'render-plan',
+    queue: [{ site: planned, prerequisites: [{ type: 'day', min_day: 1 }] }],
+  });
+
+  beforeAll(async () => {
+    // Note: no `sites` — the site reaches construction ONLY via the plan.
+    const planSim = new WorldSim({ charter, manifest, chunks, npcs, expansionPlan, ticksPerPhase: 600 });
+    planApi = await startWorldApi(
+      { sim: planSim, charter, manifest, chunks, npcs, registry, expansionPlan },
+      { port: 0 },
+    );
+    planBase = `http://localhost:${planApi.port}`;
+    for (let i = 0; i < 40; i++) planSim.tick(); // open it, then raise it to completion
+  });
+  afterAll(async () => planApi.close());
+
+  it('pairs a plan-opened site with its authored render def', async () => {
+    const { sites } = await (await fetch(`${planBase}/api/construction`)).json();
+    expect(sites).toHaveLength(1);
+    // Live state AND static def both present — proving deps.expansionPlan seeded
+    // the def map, not deps.sites (which is empty here).
+    expect(sites[0]).toMatchObject({
+      id: 'bakery-extension',
+      complete: true,
+      position: [4, 0, 4],
+      rotation_y: 0,
+      stages: [
+        { name: 'marked plot', asset: 'stakes' },
+        { name: 'foundation', asset: 'foundation-mesh' },
+        { name: 'frame', asset: 'frame-mesh' },
+      ],
+      completion: { props: [{ asset: 'bakery', position: [4, 0, 4] }] },
+    });
   });
 });

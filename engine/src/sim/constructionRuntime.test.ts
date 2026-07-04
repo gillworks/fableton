@@ -111,4 +111,31 @@ describe('ConstructionRuntime', () => {
     expect(more).toEqual([]);
     expect(rt.state()[0]!.workers).toEqual([]);
   });
+
+  // openSite puts a site the expansion plan opened onto the board mid-run
+  // (issue #107) — the reverse wire of the completion→prerequisite loop.
+  it('openSite makes a mid-run site constructible and keeps sorted order', () => {
+    // Start with one site; open a second whose id sorts BEFORE it. Both must
+    // then walk in sorted-id order (state and step iterate that order).
+    const rt = new ConstructionRuntime([site({ id: 'zed-tower' })], origins, roles, 5);
+    expect(rt.openSite(site({ id: 'aardvark-hall' }))).toBe(true);
+    expect(rt.state().map((s) => s.id)).toEqual(['aardvark-hall', 'zed-tower']);
+    // The freshly opened site is workable immediately: a builder on its plot
+    // accrues and it climbs off stage 0.
+    const onBoth = new Map<string, readonly [number, number, number]>([['mabel', [4, 0, 4]]]);
+    for (let t = 1; t <= 200; t++) rt.step(t, onBoth);
+    expect(rt.state().find((s) => s.id === 'aardvark-hall')).toMatchObject({ complete: true });
+  });
+
+  it('openSite is idempotent by id: an already-present site is left untouched', () => {
+    const rt = new ConstructionRuntime([site()], origins, roles, 5);
+    // Advance the site a little so it holds real progress.
+    rt.step(1, onSite);
+    const before = JSON.stringify(rt.state());
+    // Re-opening the same id (e.g. a site both boot-seeded AND named by the
+    // plan) is a no-op: it returns false and does not reset progress.
+    expect(rt.openSite(site())).toBe(false);
+    expect(rt.state()).toHaveLength(1);
+    expect(JSON.stringify(rt.state())).toBe(before);
+  });
 });

@@ -603,4 +603,53 @@ describe('WorldSim', () => {
     // Golden seed: the same charter + seed replays byte-identically.
     expect(JSON.stringify(run())).toEqual(JSON.stringify(r));
   });
+
+  it('feeds an expansion-opened site into construction so builders raise it (issue #107)', () => {
+    // One day-one entry and NO pre-placed `sites`: the ONLY path the
+    // bakery-extension can reach the construction runtime is the reverse wire —
+    // expansion opens it, WorldSim hands the opened def to construction, and
+    // Greta (whose role matches and whose authored tree walks her onto the
+    // plot) raises it stage by stage. This closes the flagship loop: a
+    // plan-opened site is a workable site, not merely an announced one.
+    const plan: ExpansionPlan = ExpansionPlanSchema.parse({
+      schema_version: 1,
+      id: 'reverse-wire-plan',
+      queue: [{ site: bakerySite, prerequisites: [{ type: 'day', min_day: 1 }] }],
+    });
+    const run = (): { events: SimEvent[]; openedTick: number | null; state: unknown } => {
+      const sim = new WorldSim({ charter, manifest, chunks, npcs, expansionPlan: plan, ticksPerPhase: 600 });
+      // Nothing is under construction until the plan opens it — the site is not
+      // pre-seeded, so this proves the opening itself makes it constructible.
+      expect(sim.construction()).toEqual([]);
+      const events: SimEvent[] = [];
+      sim.onEvent((e) => (e.type === 'expansion' || e.type === 'construction') && events.push(e));
+      let openedTick: number | null = null;
+      for (let i = 0; i < 40; i++) {
+        const delta = sim.tick();
+        if (openedTick === null && sim.construction().some((s) => s.id === 'bakery-extension')) {
+          openedTick = delta.tick;
+        }
+      }
+      return { events, openedTick, state: sim.construction() };
+    };
+
+    const r = run();
+    // Ground breaks on tick 1 (day-one prerequisite) and the site becomes a
+    // live construction site that very tick.
+    expect(r.openedTick).toBe(1);
+    expect(r.events[0]).toEqual({ type: 'expansion', tick: 1, site: 'bakery-extension', stage: 'marked plot' });
+    // Greta then raised it through every authored stage to completion — the
+    // same ladder the pre-seeded-site test proves, reached purely via the plan.
+    expect(
+      r.events.filter((e) => e.type === 'construction').map((e) => (e.type === 'construction' ? e.text : '')),
+    ).toEqual(['the bakery extension — foundation', 'the bakery extension — frame', 'the bakery extension is complete']);
+    expect((r.state as { id: string; complete: boolean; stageIndex: number }[])[0]).toMatchObject({
+      id: 'bakery-extension',
+      complete: true,
+      stageIndex: 3,
+    });
+
+    // Golden seed: the same charter + seed replays byte-identically.
+    expect(JSON.stringify(run())).toEqual(JSON.stringify(r));
+  });
 });
