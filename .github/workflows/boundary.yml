@@ -1,0 +1,46 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# The EP review boundary, as a required status check (issue #101).
+# worlds/** is the pantheon's lane: PRs touching only world data pass and
+# auto-merge on green. Any PR touching anything else (engine, client,
+# studio briefs, deploy, CI — including this file) fails until the owner
+# approves at the current head, so a hijacked agent cannot merge code no
+# matter what it decides. pull_request_target runs the BASE branch's
+# version of this workflow, so a PR cannot rewrite the boundary to let
+# itself through; no PR code is checked out here.
+name: boundary
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted, dismissed]
+permissions:
+  pull-requests: read
+  contents: read
+jobs:
+  boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: worlds/ flows free; owned paths need the EP
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          files=$(gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename')
+          outside=$(printf '%s\n' "$files" | grep -v '^worlds/' || true)
+          if [ -z "$outside" ]; then
+            echo "world-data only — the pantheon's lane, no review required"
+            exit 0
+          fi
+          echo "paths outside worlds/:"
+          printf '%s\n' "$outside" | head -20
+          head_sha=$(gh api "repos/$REPO/pulls/$PR" --jq .head.sha)
+          approved=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate --jq \
+            "[.[] | select(.state == \"APPROVED\" and .author_association == \"OWNER\" and .commit_id == \"$head_sha\")] | length")
+          if [ "$approved" -gt 0 ]; then
+            echo "EP approved at the current head — boundary open"
+            exit 0
+          fi
+          echo "::error::Touches paths outside worlds/ with no owner approval at the current head — executive-producer review required (issue #101)."
+          exit 1
