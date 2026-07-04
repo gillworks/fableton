@@ -231,10 +231,11 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
         // PR references as links to it (issue #59). Instance config, not
         // charter data; absent means plain text.
         ...(process.env['FABLETON_REPO_URL'] && { repo_url: process.env['FABLETON_REPO_URL'] }),
-        // Studio construction sites: live stage, progress, and current
-        // workers (issue #94). The client renders markers for whatever
-        // appears here; the dedicated /api/construction route serves the
-        // inspect panel the same payload.
+        // Live construction summary — each site's stage, progress, and
+        // current workers (issue #94). A convenience snapshot for third-party
+        // consumers of this world; the first-party client does NOT read it,
+        // taking site render defs from the dedicated /api/construction route
+        // (issue #99) and stage-change deltas from the sim socket instead.
         construction: deps.sim.construction(),
         phases: deps.charter.aesthetic.day_phases,
         // Charter theme tokens (docs/design.md): the client derives its
