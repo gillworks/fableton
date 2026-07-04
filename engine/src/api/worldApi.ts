@@ -130,6 +130,8 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
     switch (event.type) {
       case 'phase':
         return `the world turns: ${event.phase}`;
+      case 'weather':
+        return `the weather turns: ${event.weather.label}`;
       case 'rumor':
         // The "who told Greta?" line, in plain sight.
         return `${nameOf(event.to)} heard from ${nameOf(event.from)}: “${event.text}”`;

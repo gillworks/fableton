@@ -2,6 +2,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { parseCharter } from '../charter/parse.js';
+import type { Charter } from '../schemas/charter.js';
 import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
@@ -247,6 +248,92 @@ describe('WorldSim', () => {
     // The resumed sim keeps ticking from there — no reset to day 1.
     resumed.tick();
     expect(resumed.snapshot().tick).toBe(93);
+  });
+
+  it('carries the day\'s weather in the snapshot with a diegetic label', () => {
+    const snapshot = makeSim().snapshot();
+    expect(snapshot.weather.season.length).toBeGreaterThan(0);
+    expect(snapshot.weather.label.length).toBeGreaterThan(0);
+    expect(['clear', 'rain', 'fog', 'snow']).toContain(snapshot.weather.kind);
+  });
+
+  it('a weather node branches on the day\'s weather with a diegetic label', () => {
+    // Force rain so the branch is deterministic, no matter the seed's draw.
+    const rainy: Charter = {
+      ...charter,
+      climate: {
+        season_length_days: 999,
+        seasons: [{ name: 'monsoon', weather: [{ kind: 'rain', label: 'rain', weight: 1, intensity: 0.8 }] }],
+      },
+    };
+    const keeper: Npc = {
+      ...npcs[0]!,
+      id: 'awning-keeper',
+      relationships: [],
+      behavior: {
+        type: 'schedule',
+        label: 'minding the shopfront',
+        entries: charter.aesthetic.day_phases.map((phase) => ({
+          phase,
+          child: {
+            type: 'weather' as const,
+            label: 'reading the sky',
+            entries: [
+              {
+                kind: 'rain' as const,
+                child: { type: 'idle' as const, label: 'waiting out the rain under the awning', duration_s: 60 },
+              },
+            ],
+            fallback: { type: 'idle' as const, label: 'sweeping the step', duration_s: 60 },
+          },
+        })),
+      },
+    };
+    const chunksWith = chunks.map((c) =>
+      c.id === 'town-square' ? { ...c, npcs: [...c.npcs, 'awning-keeper'] } : c,
+    );
+    const rainSim = new WorldSim({ charter: rainy, manifest, chunks: chunksWith, npcs: [keeper], ticksPerPhase: 600 });
+    rainSim.tick();
+    expect(rainSim.weather().kind).toBe('rain');
+    expect(rainSim.snapshot().npcs[0]!.activity).toBe('waiting out the rain under the awning');
+
+    // A clear charter takes the fallback branch instead.
+    const clear: Charter = {
+      ...charter,
+      climate: {
+        season_length_days: 999,
+        seasons: [{ name: 'the dry', weather: [{ kind: 'clear', label: 'clear', weight: 1, intensity: 0 }] }],
+      },
+    };
+    const clearSim = new WorldSim({ charter: clear, manifest, chunks: chunksWith, npcs: [keeper], ticksPerPhase: 600 });
+    clearSim.tick();
+    expect(clearSim.snapshot().npcs[0]!.activity).toBe('sweeping the step');
+  });
+
+  it('weather turns on the day boundary: it rides the delta and fires an event', () => {
+    // Two one-day seasons with distinct weather, so day 2 is guaranteed to
+    // differ from day 1 — no reliance on the weighted draw.
+    const turning: Charter = {
+      ...charter,
+      climate: {
+        season_length_days: 1,
+        seasons: [
+          { name: 'wet', weather: [{ kind: 'rain', label: 'the first rain', weight: 1, intensity: 0.6 }] },
+          { name: 'white', weather: [{ kind: 'snow', label: 'the first snow', weight: 1, intensity: 0.7 }] },
+        ],
+      },
+    };
+    const ticksPerPhase = 2; // an 8-tick day (4 phases)
+    const sim = new WorldSim({ charter: turning, manifest, chunks, npcs, ticksPerPhase });
+    const events: SimEvent[] = [];
+    sim.onEvent((e) => events.push(e));
+    expect(sim.weather()).toMatchObject({ kind: 'rain', label: 'the first rain' });
+    let dayTwoDelta;
+    for (let i = 0; i < 8; i++) dayTwoDelta = sim.tick(); // tick 8 lands on day 2
+    expect(sim.clock().day).toBe(2);
+    expect(sim.weather()).toMatchObject({ kind: 'snow', label: 'the first snow' });
+    expect(dayTwoDelta!.weather).toMatchObject({ kind: 'snow', label: 'the first snow' });
+    expect(events.some((e) => e.type === 'weather' && e.weather.kind === 'snow')).toBe(true);
   });
 
   it('derives its pace from the charter day length when no override is given', () => {

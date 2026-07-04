@@ -3,7 +3,7 @@
 // Client-side interpolation between sim deltas (docs/architecture.md:
 // slow ticks + interpolation). Pure TS, no three, no React — testable
 // with plain numbers.
-import type { SimMessage } from './types.js';
+import type { SimMessage, WeatherState } from './types.js';
 
 interface Track {
   from: [number, number, number];
@@ -19,8 +19,10 @@ export class SimState {
   #intervalMs: number;
   #lastArrival = 0;
   clock = { tick: 0, phase: '', timeOfDay: 0 };
+  weather: WeatherState | null = null;
   #activityListeners: ((npc: string, activity: string) => void)[] = [];
   #phaseListeners: ((phase: string) => void)[] = [];
+  #weatherListeners: ((weather: WeatherState) => void)[] = [];
 
   constructor(expectedIntervalMs = 500) {
     this.#intervalMs = expectedIntervalMs;
@@ -35,6 +37,10 @@ export class SimState {
   onPhase(cb: (phase: string) => void): void {
     this.#phaseListeners.push(cb);
     if (this.clock.phase) cb(this.clock.phase);
+  }
+  onWeather(cb: (weather: WeatherState) => void): void {
+    this.#weatherListeners.push(cb);
+    if (this.weather) cb(this.weather);
   }
 
   npcIds(): string[] {
@@ -76,6 +82,10 @@ export class SimState {
 
     if (message.type === 'snapshot') {
       this.clock = { tick: message.tick, phase: message.phase, timeOfDay: message.timeOfDay };
+      if (message.weather) {
+        this.weather = message.weather;
+        for (const cb of this.#weatherListeners) cb(message.weather);
+      }
       this.#tracks.clear();
       for (const npc of message.npcs) {
         this.#tracks.set(npc.id, {
@@ -96,6 +106,10 @@ export class SimState {
     if (message.phase) {
       this.clock.phase = message.phase;
       for (const cb of this.#phaseListeners) cb(message.phase);
+    }
+    if (message.weather) {
+      this.weather = message.weather;
+      for (const cb of this.#weatherListeners) cb(message.weather);
     }
     for (const change of message.npcs) {
       const track = this.#tracks.get(change.id);

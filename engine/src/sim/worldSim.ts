@@ -18,6 +18,7 @@ import { activeEvent } from './calendar.js';
 import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
 import { GossipRuntime, type Heard } from './gossipRuntime.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
+import { weatherAt, type WeatherState } from './weather.js';
 
 export const DELTA_ENVELOPE_BUDGET = 64;
 export const DELTA_PER_NPC_BUDGET = 120;
@@ -27,6 +28,7 @@ export interface Snapshot {
   tick: number;
   phase: string;
   timeOfDay: number;
+  weather: WeatherState;
   npcs: NpcState[];
 }
 
@@ -41,11 +43,14 @@ export interface Delta {
   type: 'delta';
   tick: number;
   phase?: string;
+  /** Present only on the tick the weather turns (a new world day). */
+  weather?: WeatherState;
   npcs: NpcDelta[];
 }
 
 export type SimEvent =
   | { type: 'phase'; tick: number; phase: string }
+  | { type: 'weather'; tick: number; weather: WeatherState }
   | { type: 'event'; tick: number; event: string }
   | { type: 'activity'; tick: number; npc: string; activity: string }
   // A notable rumor jumped from one resident to another this tick — the
@@ -72,6 +77,7 @@ export interface WorldSimOptions {
 
 export class WorldSim {
   #tick = 0;
+  #charter: Charter;
   #phases: readonly string[];
   #ticksPerPhase: number;
   #runtimes: NpcRuntime[];
@@ -79,10 +85,12 @@ export class WorldSim {
   #listeners: ((event: SimEvent) => void)[] = [];
   #lastSent = new Map<string, { pos: string; ry: number; activity: string }>();
   #lastPhase: string;
+  #weather: WeatherState;
   #calendar: Charter['calendar'];
   #lastEvent: string | null;
 
   constructor(options: WorldSimOptions) {
+    this.#charter = options.charter;
     this.#phases = options.charter.aesthetic.day_phases;
     this.#calendar = options.charter.calendar;
     this.#ticksPerPhase =
@@ -104,6 +112,7 @@ export class WorldSim {
       options.charter.identity.seed,
     );
     this.#lastPhase = this.clock().phase;
+    this.#weather = weatherAt(this.#charter, this.clock().day);
     // Seed from the resume tick so a redeploy mid-festival doesn't re-announce
     // an event already underway (issue #57).
     this.#lastEvent = activeEvent(this.#calendar, this.clock())?.name ?? null;
@@ -111,6 +120,11 @@ export class WorldSim {
 
   clock(): ClockState {
     return clockAt(this.#tick, this.#phases, this.#ticksPerPhase);
+  }
+
+  /** The current weather — a pure function of the charter and world day. */
+  weather(): WeatherState {
+    return this.#weather;
   }
 
   /** The town event in effect right now, or null on an ordinary day. Drives
@@ -140,6 +154,7 @@ export class WorldSim {
       tick: clock.tick,
       phase: clock.phase,
       timeOfDay: clock.timeOfDay,
+      weather: this.#weather,
       npcs: this.#runtimes.map((r) => ({ ...r.state, pos: [...r.state.pos] as [number, number, number] })),
     };
   }
@@ -165,6 +180,21 @@ export class WorldSim {
       delta.phase = clock.phase;
       this.#emit({ type: 'phase', tick: clock.tick, phase: clock.phase });
     }
+    // Weather turns on day boundaries. Recompute every tick (a cheap
+    // weighted draw) and broadcast only when it actually changes — like
+    // phase, it rides the delta and fires an event.
+    const weather = weatherAt(this.#charter, clock.day);
+    const prev = this.#weather;
+    if (
+      weather.kind !== prev.kind ||
+      weather.label !== prev.label ||
+      weather.season !== prev.season ||
+      weather.intensity !== prev.intensity
+    ) {
+      this.#weather = weather;
+      delta.weather = weather;
+      this.#emit({ type: 'weather', tick: clock.tick, weather });
+    }
     // The town event in effect this tick: behavior context for the runtimes,
     // and a chronicle occurrence when a new one comes into effect.
     const eventName = activeEvent(this.#calendar, clock)?.name ?? null;
@@ -173,7 +203,7 @@ export class WorldSim {
       if (eventName !== null) this.#emit({ type: 'event', tick: clock.tick, event: eventName });
     }
     for (const runtime of this.#runtimes) {
-      const state = runtime.step({ phase: clock.phase, event: eventName });
+      const state = runtime.step({ phase: clock.phase, event: eventName, weather: this.#weather.kind });
       const posKey = state.pos.join(',');
       const last = this.#lastSent.get(state.id);
       const entry: NpcDelta = { id: state.id };

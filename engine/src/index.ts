@@ -3,10 +3,19 @@ export {
   CHARTER_SCHEMA_VERSION,
   CalendarEventSchema,
   CharterSchema,
+  ClimateSchema,
   EnforcedRuleSchema,
+  SeasonSchema,
+  WEATHER_KINDS,
+  WeatherConditionSchema,
+  WeatherKindSchema,
   type CalendarEvent,
   type Charter,
+  type Climate,
   type EnforcedRule,
+  type Season,
+  type WeatherCondition,
+  type WeatherKind,
 } from './schemas/charter.js';
 export {
   ARTIFACT_SCHEMA_VERSION,
@@ -82,6 +91,7 @@ export {
   type WorldSimOptions,
 } from './sim/worldSim.js';
 export { startSimServer, type SimServer } from './sim/server.js';
+export { weatherAt, type WeatherState } from './sim/weather.js';
 export {
   AdminConfigSchema,
   startWorldApi,

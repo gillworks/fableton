@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
 import {
   CapsuleGeometry,
   Color,
+  FogExp2,
   Frustum,
   Group,
   Matrix4,
@@ -26,8 +27,9 @@ import { buildChunkGroup, coinFor } from '../core/chunkMeshes.js';
 import type { SimState } from '../core/interpolator.js';
 import { ChunkStreamer } from '../core/streamer.js';
 import { phaseLighting, type WorldTheme } from '../core/theme.js';
+import { WeatherField, weatherVfx } from '../core/weatherVfx.js';
 import { fetchChunk, type WorldBundle } from '../core/loadWorld.js';
-import type { Chunk } from '../core/types.js';
+import type { Chunk, WeatherState } from '../core/types.js';
 import { DEFAULT_FOLLOW, followStep, type FollowCam } from '../core/follow.js';
 
 export interface WorldSceneProps {
@@ -40,12 +42,20 @@ export interface WorldSceneProps {
   construction: ConstructionSite[];
   /** The resident the camera is following, or null for explore. */
   follow: string | null;
+  /** The day's weather, or null before the first snapshot / on old worlds. */
+  weather: WeatherState | null;
 }
 
 const damp = (from: number, to: number, dt: number): number =>
   from + (to - from) * Math.min(1, dt * 3);
 
-export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction, follow }: WorldSceneProps): ReactElement {
+// Per-frame scratch: reused via .set() so the useFrame relight loop allocates
+// no Color/Vector3 each frame (this is a hot path — keep it GC-quiet).
+const _sunColor = new Color();
+const _sunPos = new Vector3();
+const _fogColor = new Color();
+
+export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction, follow, weather }: WorldSceneProps): ReactElement {
   const worldRef = useRef<Group>(new Group());
   const chunkGroups = useRef(new Map<string, Group>());
   const windowMaterials = useRef<import('../core/buildings.js').BuiltBuilding['windowMaterials']>([]);
@@ -72,10 +82,27 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
   }, []);
 
   const lighting = phaseLighting(phaseIndex, theme);
+  const vfx = weatherVfx(weather);
   const sunRef = useRef<never>(null);
+  const ambientRef = useRef<never>(null);
   const frustum = useMemo(() => new Frustum(), []);
   const matrix = useMemo(() => new Matrix4(), []);
-  const { camera } = useThree();
+  const { camera, scene } = useThree();
+
+  // A single exponential fog and a single precipitation field, both driven
+  // by the weather. The field is one draw call (core/weatherVfx), so it
+  // never threatens the charter's draw-call budget.
+  const fog = useMemo(() => new FogExp2(0xffffff, 0), []);
+  const weatherField = useMemo(() => new WeatherField(), []);
+  useEffect(() => {
+    scene.fog = fog;
+    scene.add(weatherField.points);
+    return () => {
+      if (scene.fog === fog) scene.fog = null;
+      scene.remove(weatherField.points);
+      weatherField.dispose();
+    };
+  }, [scene, fog, weatherField]);
 
   useFrame((state, dt) => {
     streamer.update(camera.position);
@@ -89,17 +116,28 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
     for (const material of windowMaterials.current) {
       material.emissiveIntensity = damp(material.emissiveIntensity, lighting.windowGlow, dt);
     }
+    // Weather relights on top of the phase: overcast dims the sun and
+    // flattens shadow; the phase still owns the hue and the sun's arc.
     const sun = sunRef.current as { intensity: number; color: Color; position: Vector3 } | null;
     if (sun) {
-      sun.intensity = damp(sun.intensity, lighting.sunIntensity, dt);
-      sun.color.lerp(new Color(lighting.sunColor), Math.min(1, dt * 3));
-      sun.position.lerp(new Vector3(...lighting.sunPosition), Math.min(1, dt * 3));
+      sun.intensity = damp(sun.intensity, lighting.sunIntensity * vfx.sunFactor, dt);
+      sun.color.lerp(_sunColor.set(lighting.sunColor), Math.min(1, dt * 3));
+      sun.position.lerp(_sunPos.set(...lighting.sunPosition), Math.min(1, dt * 3));
     }
+    const ambient = ambientRef.current as { intensity: number } | null;
+    if (ambient) {
+      ambient.intensity = damp(ambient.intensity, lighting.ambientIntensity * vfx.ambientFactor, dt);
+    }
+    // Fog eases toward the phase's fog color at the weather's density, so
+    // rolling fog thickens smoothly rather than snapping in.
+    fog.color.lerp(_fogColor.set(lighting.fogColor), Math.min(1, dt * 3));
+    fog.density = damp(fog.density, vfx.fogDensity, dt);
+    weatherField.update(dt, vfx, [camera.position.x, 0, camera.position.z]);
   });
 
   return (
     <>
-      <ambientLight intensity={lighting.ambientIntensity} />
+      <ambientLight ref={ambientRef} intensity={lighting.ambientIntensity} />
       <directionalLight ref={sunRef} position={lighting.sunPosition} intensity={lighting.sunIntensity} color={lighting.sunColor} castShadow />
       {/* The diorama coin the world sits on */}
       <mesh position={[coin.center[0], -0.52, coin.center[1]]} scale={[coin.rx, 1, coin.rz]}>

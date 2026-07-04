@@ -5,6 +5,7 @@
 // this runs it. The active leaf's diegetic label IS the NPC's current
 // activity; the inspect panel and the deltas read it verbatim.
 import type { BehaviorNode } from '../schemas/behavior.js';
+import type { WeatherKind } from '../schemas/charter.js';
 import type { Chunk } from '../schemas/chunk.js';
 import { deriveSeed, mulberry32, type Rng } from '../generate/rng.js';
 import type { Npc } from '../schemas/npc.js';
@@ -28,21 +29,29 @@ export interface NpcState {
 const round2 = (x: number): number => Math.round(x * 100) / 100;
 const round3 = (x: number): number => Math.round(x * 1000) / 1000;
 
-/** The world-clock context a tree plans against: the current day phase and
- *  the town event in effect (null on an ordinary day). */
+/** The world-clock context a tree plans against: the current day phase, the
+ *  town event in effect (null on an ordinary day), and the day's weather. */
 export interface StepContext {
   phase: string;
   event: string | null;
+  weather: WeatherKind;
 }
 
 // Flatten the tree to the leaf run for the current context: schedules pick
-// their matching phase, on_event branches on the active town event, sequences
-// concatenate. Empty when nothing matches.
+// their matching phase, weather nodes pick the entry matching the day's
+// weather (or their fallback), on_event branches on the active town event,
+// sequences concatenate. Empty when nothing matches — the tree's own label
+// narrates the lull.
 function leavesFor(node: BehaviorNode, ctx: StepContext): Leaf[] {
   switch (node.type) {
     case 'schedule': {
       const entry = node.entries.find((e) => e.phase === ctx.phase);
       return entry ? leavesFor(entry.child, ctx) : [];
+    }
+    case 'weather': {
+      const entry = node.entries.find((e) => e.kind === ctx.weather);
+      if (entry) return leavesFor(entry.child, ctx);
+      return node.fallback ? leavesFor(node.fallback, ctx) : [];
     }
     case 'on_event': {
       const match = ctx.event !== null && (node.event === '*' || node.event === ctx.event);
@@ -62,6 +71,7 @@ export class NpcRuntime {
   #origin: [number, number];
   #navNodes: Map<string, [number, number, number]>;
   #phase = '';
+  #weather: WeatherKind = 'clear';
   #event: string | null = null;
   #leaves: Leaf[] = [];
   #cursor = 0;
@@ -99,7 +109,9 @@ export class NpcRuntime {
   /** Hot-swap the tree (the L1 seam): re-plans on the next step, position kept. */
   replaceTree(behavior: BehaviorNode): void {
     this.#npc = { ...this.#npc, behavior };
-    this.#phase = ''; // forces re-resolution against the current phase
+    this.#phase = ''; // empty phase never matches — forces a re-plan on next step
+    this.#event = null;
+    this.#weather = 'clear';
   }
 
   #enterLeaf(): void {
@@ -132,12 +144,13 @@ export class NpcRuntime {
     this.#enterLeaf();
   }
 
-  /** One deterministic tick. Mutates and returns this.state. */
+  /** One deterministic tick. Mutates and returns this.state. Re-plans when
+   *  the phase turns, a town event comes/goes, or the day's weather changes. */
   step(ctx: StepContext): NpcState {
-    // Re-plan when the phase turns or a town event comes/goes.
-    if (ctx.phase !== this.#phase || ctx.event !== this.#event) {
+    if (ctx.phase !== this.#phase || ctx.event !== this.#event || ctx.weather !== this.#weather) {
       this.#phase = ctx.phase;
       this.#event = ctx.event;
+      this.#weather = ctx.weather;
       this.#leaves = leavesFor(this.#npc.behavior, ctx);
       this.#cursor = 0;
       if (this.#leaves.length === 0) {

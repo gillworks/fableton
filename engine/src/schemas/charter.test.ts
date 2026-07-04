@@ -108,6 +108,63 @@ describe('CharterSchema', () => {
     }
   });
 
+  it('defaults climate to a temperate four-season year when omitted', () => {
+    const charter = validCharter(); // the fixture declares no climate
+    expect(charter.climate.season_length_days).toBe(28);
+    expect(charter.climate.seasons.map((s) => s.name)).toEqual([
+      'spring',
+      'summer',
+      'autumn',
+      'winter',
+    ]);
+    // Every weather condition carries a diegetic label (invariant 4).
+    for (const season of charter.climate.seasons) {
+      for (const condition of season.weather) expect(condition.label.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('accepts an authored climate and round-trips it', () => {
+    const base = validCharter();
+    const authored = CharterSchema.parse({
+      ...base,
+      climate: {
+        season_length_days: 40,
+        seasons: [
+          {
+            name: 'the long ember',
+            weather: [
+              { kind: 'clear', label: 'forge-bright and dry', weight: 6, intensity: 0 },
+              { kind: 'fog', label: 'ash-smoke settling in the streets', weight: 2 },
+            ],
+          },
+        ],
+      },
+    });
+    expect(authored.climate.seasons[0]!.name).toBe('the long ember');
+    // intensity defaults to 0.6 when the author omits it.
+    expect(authored.climate.seasons[0]!.weather[1]!.intensity).toBe(0.6);
+    const reparsed = CharterSchema.parse(JSON.parse(JSON.stringify(authored)));
+    expect(reparsed).toEqual(authored);
+  });
+
+  it('rejects an unknown weather kind and an empty season table', () => {
+    const base = validCharter();
+    expect(() =>
+      CharterSchema.parse({
+        ...base,
+        climate: {
+          seasons: [{ name: 'drizzle', weather: [{ kind: 'hail', label: 'x', weight: 1 }] }],
+        },
+      }),
+    ).toThrow();
+    expect(() =>
+      CharterSchema.parse({
+        ...base,
+        climate: { seasons: [{ name: 'void', weather: [] }] },
+      }),
+    ).toThrow();
+  });
+
   it('defaults day_length_hours to 6 and accepts a founder-tuned value', () => {
     expect(validCharter().generation.day_length_hours).toBe(6);
     const charter = validCharter();
