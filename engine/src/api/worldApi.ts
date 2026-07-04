@@ -15,6 +15,8 @@ import { NpcSchema, type Npc } from '../schemas/npc.js';
 import { validateWorld } from '../validate/validateWorld.js';
 import type { SimEvent } from '../sim/worldSim.js';
 import type { WorldSim } from '../sim/worldSim.js';
+import { WISH_MIN_LEN, WISH_MAX_LEN } from '../wish.js';
+import type { WishIntake } from './wishIntake.js';
 
 // Stored, not yet consumed (issue #9): the audit slider and escalation
 // cap the Phase B escalation contract reads (docs/architecture.md).
@@ -26,6 +28,16 @@ export type AdminConfig = z.infer<typeof AdminConfigSchema>;
 
 const DEFAULT_ADMIN_CONFIG: AdminConfig = { audit_sample_percent: 10, escalation_cap: 5 };
 const CHRONICLE_CAP = 100;
+
+// Wish intake (issue #79): capped short (bounds in ../wish.js, shared
+// with the client) and rate-limited at the API so a visitor's wish can't
+// spam the backlog. A wish is a sentence, not a doc.
+const WISH_RATE_MAX = 3;
+const WISH_RATE_WINDOW_MS = 10 * 60_000;
+
+export const WishRequestSchema = z.strictObject({
+  wish: z.string().trim().min(WISH_MIN_LEN, 'a wish needs a few more words').max(WISH_MAX_LEN, 'keep the wish short'),
+});
 
 export interface WorldApiDeps {
   sim: WorldSim;
@@ -41,10 +53,45 @@ export interface WorldApi {
   close: () => Promise<void>;
 }
 
-export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {}): Promise<WorldApi> {
+export interface WorldApiOptions {
+  port?: number;
+  /**
+   * The viewer wish source of the feedback funnel (issue #79). Absent/null
+   * means this instance has no wish token configured — the endpoint then
+   * reports that wishes are closed rather than erroring.
+   */
+  wishIntake?: WishIntake | null;
+  /** Injectable clock for the wish rate limiter; defaults to Date.now. */
+  now?: () => number;
+}
+
+export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {}): Promise<WorldApi> {
   const npcs = new Map(deps.npcs.map((n) => [n.id, n]));
   const adminConfig: AdminConfig = { ...DEFAULT_ADMIN_CONFIG };
   const chronicle: { tick: number; entry: string }[] = [];
+  const wishIntake = options.wishIntake ?? null;
+  const now = options.now ?? (() => Date.now());
+
+  // Per-IP sliding window: cheap in-memory rate limit for the wish box.
+  // Behind caddy the real client is the first X-Forwarded-For hop.
+  const wishHits = new Map<string, number[]>();
+  const clientIp = (req: IncomingMessage): string => {
+    const xff = req.headers['x-forwarded-for'];
+    const forwarded = Array.isArray(xff) ? xff[0] : xff;
+    if (forwarded) return forwarded.split(',')[0]!.trim();
+    return req.socket.remoteAddress ?? 'unknown';
+  };
+  const wishRateLimited = (ip: string): boolean => {
+    const cutoff = now() - WISH_RATE_WINDOW_MS;
+    const recent = (wishHits.get(ip) ?? []).filter((t) => t > cutoff);
+    if (recent.length >= WISH_RATE_MAX) {
+      wishHits.set(ip, recent);
+      return true;
+    }
+    recent.push(now());
+    wishHits.set(ip, recent);
+    return false;
+  };
 
   deps.sim.onEvent((event: SimEvent) => {
     chronicle.push({
@@ -176,6 +223,37 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
     }
     if (req.method === 'GET' && path === '/api/chronicle') {
       return json(res, 200, { entries: chronicle });
+    }
+    // The viewer source of the feedback funnel (issue #79): a wish lands
+    // in the world repo's backlog as a GH issue labeled `wish`. Disabled
+    // gracefully when the instance has no token; capped and rate-limited
+    // so it can't spam the backlog.
+    if (req.method === 'POST' && path === '/api/wishes') {
+      if (!wishIntake) return json(res, 503, { error: 'the wishing well is quiet in this world' });
+      let body: unknown;
+      try {
+        body = JSON.parse(await readBody(req));
+      } catch (e) {
+        return error(res, 400, `body is not JSON: ${e instanceof Error ? e.message : e}`);
+      }
+      const parsed = WishRequestSchema.safeParse(body);
+      if (!parsed.success) {
+        return json(res, 400, { error: 'that wish will not do', detail: z.prettifyError(parsed.error) });
+      }
+      if (wishRateLimited(clientIp(req))) {
+        return json(res, 429, { error: 'the well needs a moment — make another wish shortly' });
+      }
+      try {
+        const filed = await wishIntake.file(parsed.data.wish);
+        return json(res, 201, {
+          ok: true,
+          url: filed.url,
+          number: filed.number,
+          note: 'your wish drifts toward the stewards',
+        });
+      } catch {
+        return json(res, 502, { error: 'the wish could not be carried to the stewards — try again' });
+      }
     }
     if (path === '/api/admin/config') {
       if (req.method === 'GET') return json(res, 200, adminConfig);
