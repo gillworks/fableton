@@ -224,4 +224,22 @@ describe('world-api wish intake (issue #79)', () => {
     clock += 11 * 60_000;
     expect((await post()).status).toBe(201);
   });
+
+  it('counts the trusted rightmost XFF hop, not the spoofable leftmost', async () => {
+    // Move well past any earlier window so this client starts fresh.
+    clock += 60 * 60_000;
+    // caddy appends the real peer (198.51.100.7) to whatever the client
+    // sent; rotating the leftmost value must NOT mint a fresh bucket, or the
+    // rate limit is trivially bypassed.
+    const post = (spoofed: string): Promise<Response> =>
+      fetch(`${wishBase}/api/wishes`, {
+        method: 'POST',
+        headers: { 'x-forwarded-for': `${spoofed}, 198.51.100.7` },
+        body: JSON.stringify({ wish: 'raise a festival in the square' }),
+      });
+    expect((await post('1.1.1.1')).status).toBe(201);
+    expect((await post('2.2.2.2')).status).toBe(201);
+    expect((await post('3.3.3.3')).status).toBe(201);
+    expect((await post('4.4.4.4')).status).toBe(429);
+  });
 });

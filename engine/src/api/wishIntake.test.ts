@@ -38,6 +38,27 @@ describe('createGithubWishIntake', () => {
     expect((calls[0]!.init.headers as Record<string, string>).authorization).toBe('Bearer tok');
   });
 
+  it('files the visitor text inside a code fence so @mentions/#refs/markdown are inert', async () => {
+    let sent: { title: string; body: string; labels: string[] } | undefined;
+    const fetchImpl = (async (_url: string | URL | Request, init?: RequestInit) => {
+      sent = JSON.parse(init!.body as string);
+      return new Response(JSON.stringify({ html_url: 'https://gh/issues/1', number: 1 }), { status: 201 });
+    }) as unknown as typeof fetch;
+    const intake = createGithubWishIntake({ token: 't', owner: 'o', repo: 'r', fetchImpl });
+
+    // A wish that tries to ping a user, cross-ref an issue, and break out of
+    // its own fence with a triple-backtick run.
+    await intake.file('ping @octocat re #123 ```escape```');
+
+    // The text is present but wrapped in a fence longer than its own run,
+    // so GitHub renders it verbatim (no ping, no cross-ref, no breakout).
+    expect(sent!.body).toContain('ping @octocat re #123 ```escape```');
+    const fenceMatch = /(`{4,})\nping @octocat/.exec(sent!.body);
+    expect(fenceMatch).not.toBeNull();
+    const fence = fenceMatch![1]!;
+    expect(sent!.body).toContain(`${fence}\nping @octocat re #123 \`\`\`escape\`\`\`\n${fence}`);
+  });
+
   it('throws when the GitHub API rejects — the endpoint maps this to a graceful failure', async () => {
     const fetchImpl = (async () => new Response('nope', { status: 401, statusText: 'Unauthorized' })) as unknown as typeof fetch;
     const intake = createGithubWishIntake({ token: 'bad', owner: 'o', repo: 'r', fetchImpl });

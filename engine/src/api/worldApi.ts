@@ -34,6 +34,9 @@ const CHRONICLE_CAP = 100;
 // spam the backlog. A wish is a sentence, not a doc.
 const WISH_RATE_MAX = 3;
 const WISH_RATE_WINDOW_MS = 10 * 60_000;
+// Once the per-IP window map grows past this many keys, sweep the buckets
+// that have fully expired so a public endpoint can't leak memory forever.
+const WISH_BUCKET_SWEEP_AT = 1024;
 
 export const WishRequestSchema = z.strictObject({
   wish: z.string().trim().min(WISH_MIN_LEN, 'a wish needs a few more words').max(WISH_MAX_LEN, 'keep the wish short'),
@@ -63,6 +66,15 @@ export interface WorldApiOptions {
   wishIntake?: WishIntake | null;
   /** Injectable clock for the wish rate limiter; defaults to Date.now. */
   now?: () => number;
+  /**
+   * How many proxy hops in front of world-api are trusted for reading the
+   * client IP from `X-Forwarded-For`. Behind the single caddy of the v1
+   * deploy (deploy/Caddyfile) this is 1: caddy *appends* the real peer, so
+   * the trusted client is the rightmost hop and everything to its left is
+   * client-supplied (spoofable). Raise it only if more trusted proxies sit
+   * in front. Defaults to 1.
+   */
+  trustedProxyHops?: number;
 }
 
 export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {}): Promise<WorldApi> {
@@ -71,18 +83,34 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
   const chronicle: { tick: number; entry: string }[] = [];
   const wishIntake = options.wishIntake ?? null;
   const now = options.now ?? (() => Date.now());
+  const trustedProxyHops = Math.max(1, Math.trunc(options.trustedProxyHops ?? 1));
 
   // Per-IP sliding window: cheap in-memory rate limit for the wish box.
-  // Behind caddy the real client is the first X-Forwarded-For hop.
   const wishHits = new Map<string, number[]>();
   const clientIp = (req: IncomingMessage): string => {
     const xff = req.headers['x-forwarded-for'];
-    const forwarded = Array.isArray(xff) ? xff[0] : xff;
-    if (forwarded) return forwarded.split(',')[0]!.trim();
+    const raw = Array.isArray(xff) ? xff.join(',') : xff;
+    if (raw) {
+      // Count from the RIGHT: the trusted proxy appends the real peer, so
+      // the rightmost hop is trustworthy and the leftmost is whatever the
+      // client sent. Reading the leftmost would let a visitor rotate the
+      // header to mint unlimited rate-limit buckets and defeat the cap.
+      const hops = raw.split(',').map((h) => h.trim()).filter(Boolean);
+      const trusted = hops[hops.length - trustedProxyHops];
+      if (trusted) return trusted;
+    }
     return req.socket.remoteAddress ?? 'unknown';
   };
   const wishRateLimited = (ip: string): boolean => {
     const cutoff = now() - WISH_RATE_WINDOW_MS;
+    // Keep the map bounded: once it grows large, drop every bucket whose
+    // timestamps have all aged out of the window. Buckets we keep always
+    // hold at least one live timestamp, so idle IPs don't accumulate.
+    if (wishHits.size > WISH_BUCKET_SWEEP_AT) {
+      for (const [key, hits] of wishHits) {
+        if (hits.every((t) => t <= cutoff)) wishHits.delete(key);
+      }
+    }
     const recent = (wishHits.get(ip) ?? []).filter((t) => t > cutoff);
     if (recent.length >= WISH_RATE_MAX) {
       wishHits.set(ip, recent);

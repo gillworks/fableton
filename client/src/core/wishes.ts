@@ -4,9 +4,9 @@
 // world-api, which files it as a GH issue labeled `wish`. Every failure
 // mode maps to a diegetic outcome so the wish box degrades gracefully —
 // a closed well, a full well, a rejected wish, or a lost one.
-import { WISH_MAX_LEN } from '@fableton/engine/wish';
+import { WISH_MIN_LEN, WISH_MAX_LEN } from '@fableton/engine/wish';
 
-export { WISH_MAX_LEN };
+export { WISH_MIN_LEN, WISH_MAX_LEN };
 
 export type WishResult =
   | { status: 'filed'; url?: string; number?: number }

@@ -10,7 +10,7 @@
 // trace.
 import { useEffect, useState, type ReactElement } from 'react';
 import { PANEL_Z, HUD_ZOOM } from '../core/hud.js';
-import { WISH_MAX_LEN, submitWish, type WishResult } from '../core/wishes.js';
+import { WISH_MIN_LEN, WISH_MAX_LEN, submitWish, type WishResult } from '../core/wishes.js';
 import type { WorldTheme } from '../core/theme.js';
 
 const PARCHMENT = '#f6efe0';
@@ -54,7 +54,7 @@ export function WishBox({ theme, onClose }: WishBoxProps): ReactElement {
   const mono = `"${theme.mono}", ui-monospace, monospace`;
   const display = `"${theme.display}", Georgia, serif`;
   const trimmed = wish.trim();
-  const canSend = trimmed.length >= 3 && !pending && result?.status !== 'filed';
+  const canSend = trimmed.length >= WISH_MIN_LEN && !pending && result?.status !== 'filed';
 
   const send = async (): Promise<void> => {
     if (!canSend) return;

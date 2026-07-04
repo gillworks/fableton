@@ -33,11 +33,24 @@ function wishTitle(wish: string): string {
   return `Wish: ${clipped}`;
 }
 
+/**
+ * Wrap arbitrary visitor text in a fenced code block so GitHub renders it
+ * verbatim: no `@mention` notification pings, no `#123` cross-references
+ * onto other issues, and no markdown/HTML injection from an anonymous
+ * public write path. The fence is grown longer than the longest backtick
+ * run in the text so the visitor can't close it early and break out.
+ */
+function fencedVerbatim(text: string): string {
+  const longestRun = (text.match(/`+/g) ?? []).reduce((max, run) => Math.max(max, run.length), 0);
+  const fence = '`'.repeat(Math.max(3, longestRun + 1));
+  return `${fence}\n${text}\n${fence}`;
+}
+
 function wishBody(wish: string): string {
   return [
     '> A visitor made this wish through the in-world wish box.',
     '',
-    wish,
+    fencedVerbatim(wish),
     '',
     '_Filed by world-api wish intake (docs/architecture.md § The feedback funnel). Triage like any other backlog item._',
   ].join('\n');
