@@ -16,20 +16,18 @@
 // The interpreter spends work units while builders are present and advances
 // the stages they climb.
 import { deriveSeed, mulberry32 } from '../generate/rng.js';
+import { slugify } from '../schemas/common.js';
 import type { ConstructionSite } from '../schemas/construction.js';
 
 // A builder counts as "on the job" when they stand within this margin of the
-// site's footprint edge — close enough to be raising it, not merely passing.
+// site's work zone — close enough to be raising it, not merely passing. See
+// `reach` below: the zone is a rotation-invariant bounding circle, not the
+// authored rectangle.
 const WORK_MARGIN = 2;
 
-// Mirrors validateWorld's role matching (ADR-0001): builder_roles reuse NPC
-// identity.kind by slug equality, so the residents the gate accepted as
-// possible builders are exactly the ones who can work here.
-const slugify = (s: string): string =>
-  s
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+// Role matching reuses the shared `slugify` (schemas/common) — the same
+// normalizer the validation gate applies (ADR-0001), so the residents the gate
+// accepted as possible builders are exactly the ones who can work here.
 
 /** Full 3D distance (y included), matching gossip's co-location test. */
 const dist2 = (a: readonly [number, number, number], b: readonly [number, number, number]): number => {
@@ -108,6 +106,12 @@ export class ConstructionRuntime {
       .sort((a, b) => a.id.localeCompare(b.id))
       .map((site) => {
         const origin = originOf.get(site.chunk) ?? ([0, 0] as const);
+        // Bounding-circle approximation of the work zone: half the larger
+        // footprint dimension plus the margin. Rotation-invariant (so
+        // `rotation_y` needs no handling here) and deliberately fuzzy —
+        // presence, not exact rectangle containment. For a long, thin plot it
+        // over-admits along the short axis, which only ever lets a builder who
+        // is standing slightly off the footprint pitch in; harmless.
         const reach = Math.max(site.footprint.width, site.footprint.depth) / 2 + WORK_MARGIN;
         return {
           site,

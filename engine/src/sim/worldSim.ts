@@ -17,7 +17,11 @@ import { EMPTY_RUMORS, type RumorsDoc } from '../schemas/rumors.js';
 import type { ConstructionSite } from '../schemas/construction.js';
 import { activeEvent } from './calendar.js';
 import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
-import { ConstructionRuntime, type ConstructionSiteState } from './constructionRuntime.js';
+import {
+  ConstructionRuntime,
+  type ConstructionSiteState,
+  type ConstructionTransition,
+} from './constructionRuntime.js';
 import { GossipRuntime, type Heard } from './gossipRuntime.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
 import { weatherAt, type WeatherState } from './weather.js';
@@ -274,16 +278,15 @@ export class WorldSim {
       }
     }
     // Construction reads the same positions the trees just produced: a site
-    // advances only while eligible builders stand on it. Stage transitions
-    // ride the delta (compact — only on the tick they happen) and reach the
-    // chronicle.
+    // advances only while eligible builders stand on it. Every stage crossing
+    // reaches the chronicle, but the delta stays strictly minimal — if a crew
+    // clears several stages in one tick, only the site's final stage rides the
+    // wire (the client is last-writer-wins, so intermediate stages would be
+    // redundant same-id entries). Transitions arrive grouped by site in sorted
+    // order, so last-write-per-site keeps the delta deterministic.
+    const finalStagePerSite = new Map<string, ConstructionTransition>();
     for (const t of this.#construction.step(clock.tick, positions)) {
-      (delta.construction ??= []).push({
-        id: t.site,
-        stage: t.stage,
-        stageIndex: t.stageIndex,
-        ...(t.done && { done: true }),
-      });
+      finalStagePerSite.set(t.site, t);
       this.#emit({
         type: 'construction',
         tick: clock.tick,
@@ -292,6 +295,14 @@ export class WorldSim {
         stageIndex: t.stageIndex,
         done: t.done,
         text: t.text,
+      });
+    }
+    for (const t of finalStagePerSite.values()) {
+      (delta.construction ??= []).push({
+        id: t.site,
+        stage: t.stage,
+        stageIndex: t.stageIndex,
+        ...(t.done && { done: true }),
       });
     }
     return delta;

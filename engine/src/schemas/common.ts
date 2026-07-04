@@ -17,6 +17,20 @@ export const idSlug = z
   .string()
   .regex(/^[a-z0-9][a-z0-9_-]*$/, 'ids are lowercase slugs: [a-z0-9][a-z0-9_-]*');
 
+// Normalize free text to a slug for equality matching. ADR-0001's charter/role
+// gate decides *who may* build a site (slugify(identity.kind) vs
+// slugify(builder_role)); the construction runtime independently decides *who
+// does*. Both MUST slugify identically, or a gate-accepted builder could
+// silently never work a site with no test catching the drift — so this is the
+// single shared implementation, not a per-module copy. Distinct from `idSlug`,
+// which validates an already-authored id; this derives a comparison key from
+// arbitrary text.
+export const slugify = (s: string): string =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
 export const finite = z.number().finite();
 
 // Local-space position, y-up, world units.
