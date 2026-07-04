@@ -20,21 +20,39 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "negotiating with the morning thorns",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "training thorns that don't exist yet",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the marked plot",
+              "to": "hedge-arbor-plot"
+            },
+            {
+              "type": "idle",
+              "label": "practicing the arch's shape on air, for when the quickthorn's ready",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "training roses along the fence line",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "keeping the future hedge in line",
+          "children": [
+            {
+              "type": "move",
+              "label": "back to the plot, same as this morning",
+              "to": "hedge-arbor-plot"
+            },
+            {
+              "type": "idle",
+              "label": "training roses along a fence line that hasn't been planted",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {

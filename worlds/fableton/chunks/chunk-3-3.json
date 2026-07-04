@@ -234,6 +234,22 @@
           0.886,
           1
         ]
+      },
+      {
+        "id": "wishing-well-plot",
+        "position": [
+          5,
+          0.796,
+          6.9
+        ]
+      },
+      {
+        "id": "hedge-arbor-plot",
+        "position": [
+          5,
+          0.762,
+          9.9
+        ]
       }
     ],
     "edges": [
@@ -252,6 +268,14 @@
       [
         "heart",
         "gate-chunk-3-2"
+      ],
+      [
+        "wander",
+        "wishing-well-plot"
+      ],
+      [
+        "wander",
+        "hedge-arbor-plot"
       ]
     ],
     "portals": [
@@ -273,7 +297,10 @@
     "greta-the-baker",
     "marigold-crumb",
     "tam-the-lamplighter",
-    "vesper"
+    "vesper",
+    "winsome",
+    "old-thorn",
+    "bramble-rose"
   ],
   "lore": []
 }

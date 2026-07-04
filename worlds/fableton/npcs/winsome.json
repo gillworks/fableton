@@ -20,21 +20,39 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "dredging the morning wishes",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "answering the shaft before the wishes do",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking down to the plot everyone's been stepping around",
+              "to": "wishing-well-plot"
+            },
+            {
+              "type": "idle",
+              "label": "sinking the well's shaft, one careful foot at a time",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "filing wishes by sincerity",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "raising what she's tended in spirit for years",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing back to the marked plot",
+              "to": "wishing-well-plot"
+            },
+            {
+              "type": "idle",
+              "label": "setting stone for a wellhead she's been imagining since before it existed",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {
