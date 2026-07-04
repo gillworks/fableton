@@ -12,6 +12,7 @@ import type { Charter } from '../schemas/charter.js';
 import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
+import type { ConstructionSite } from '../schemas/construction.js';
 import type { RumorsDoc } from '../schemas/rumors.js';
 import { validateWorld } from '../validate/validateWorld.js';
 import type { SimEvent } from '../sim/worldSim.js';
@@ -52,6 +53,12 @@ export interface WorldApiDeps {
   registry: AssetRegistry;
   /** Rumors this world seeds — resolves rumor ids to their diegetic text. */
   rumors?: RumorsDoc;
+  /** The authored construction sites this world seeds (issue #99). The live
+   *  sim owns each site's stage/progress; these carry the static definition —
+   *  where the site stands and the mesh at each stage — so /api/construction
+   *  gives the client everything it needs to render the site AND swap its mesh
+   *  as the stage climbs. Absent means the world seeds no sites. */
+  sites?: ConstructionSite[];
 }
 
 export interface WorldApi {
@@ -83,6 +90,10 @@ export interface WorldApiOptions {
 export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {}): Promise<WorldApi> {
   const npcs = new Map(deps.npcs.map((n) => [n.id, n]));
   const rumorText = new Map((deps.rumors?.rumors ?? []).map((r) => [r.id, r.text]));
+  // Static site definitions keyed by id — paired with the live sim state on
+  // the /api/construction route so the client can place the site and map its
+  // stage index to a mesh (issue #99). Static: sites are fixed at boot.
+  const siteDefs = new Map((deps.sites ?? []).map((s) => [s.id, s]));
   const nameOf = (id: string): string => npcs.get(id)?.identity.name ?? id;
   const adminConfig: AdminConfig = { ...DEFAULT_ADMIN_CONFIG };
   const chronicle: { tick: number; entry: string }[] = [];
@@ -289,10 +300,28 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
     if (req.method === 'GET' && path === '/api/chronicle') {
       return json(res, 200, { entries: chronicle });
     }
-    // Live construction state for the inspect panel (issue #94): each site's
-    // current stage, work accrued toward the next, and who is working it now.
+    // Construction sites for the client (issues #94, #99): each site's live
+    // stage, work accrued toward the next, and who is working it now — paired
+    // with its static definition so the client can place the site and swap in
+    // the mesh for the stage it has reached. The stage ladder rides along
+    // (name + asset per rung) so a stage-change delta on the socket is all the
+    // client needs to swap the mesh; the completion payload lets it stand the
+    // finished building. Sites with no authored def (shouldn't happen) fall
+    // back to live-state-only so the route never drops one.
     if (req.method === 'GET' && path === '/api/construction') {
-      return json(res, 200, { sites: deps.sim.construction() });
+      const sites = deps.sim.construction().map((state) => {
+        const def = siteDefs.get(state.id);
+        return def
+          ? {
+              ...state,
+              position: def.position,
+              rotation_y: def.rotation_y,
+              stages: def.stages.map((s) => ({ name: s.name, asset: s.asset })),
+              completion: def.completion,
+            }
+          : state;
+      });
+      return json(res, 200, { sites });
     }
     // The viewer source of the feedback funnel (issue #79): a wish lands
     // in the world repo's backlog as a GH issue labeled `wish`. Disabled
