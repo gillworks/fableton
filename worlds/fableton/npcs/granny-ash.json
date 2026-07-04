@@ -11,6 +11,10 @@
     {
       "to": "dame-spindle",
       "kind": "they trade lock recommendations and reveal nothing"
+    },
+    {
+      "to": "reynard-the-retired",
+      "kind": "sweeps under his tree at first light and has stopped asking where the extra apples come from"
     }
   ],
   "behavior": {
@@ -30,11 +34,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "airing the story's other side",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "an honest morning's sweep, or so she claims",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the old apple tree",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "sweeping where the extra apples always land",
+              "with": "tree",
+              "duration_s": 90
+            }
+          ]
         }
       },
       {
