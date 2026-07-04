@@ -44,11 +44,21 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "salting the evening stew pots",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "seasoning table-side",
+          "children": [
+            {
+              "type": "move",
+              "label": "carrying the seasoning crate to the stall",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "salting whatever Stilts just plated",
+              "with": "stilts",
+              "duration_s": 90
+            }
+          ]
         }
       },
       {

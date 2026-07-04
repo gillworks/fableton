@@ -53,14 +53,17 @@ if (charter) {
           .sort()
           .map((f) => readJson(join(dir, f)))
       : [];
+  const rumorsPath = join(worldDir, 'rumors.json');
   const world: WorldDocs = {
     manifest,
     registry: readJson(join(worldDir, 'assets.json')),
     chunks: chunkPaths.map((p) => readJson(join(worldDir, p))),
     npcs: readDirJson(join(worldDir, 'npcs')),
     // Construction sites are optional world-data (issue #91); worlds without
-    // an `construction/` dir simply carry none.
+    // a `construction/` dir simply carry none.
     constructionSites: readDirJson(join(worldDir, 'construction')),
+    // Optional (issue #81): validate rumors when the world seeds any.
+    ...(existsSync(rumorsPath) && { rumors: readJson(rumorsPath) }),
   };
   violations.push(...validateWorld(charter, world));
 

@@ -12,6 +12,7 @@ import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
 import { ConstructionSiteSchema, type ConstructionSite } from '../schemas/construction.js';
 import { WorldManifestSchema, type WorldManifest } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
+import { RumorsDocSchema } from '../schemas/rumors.js';
 
 export interface Violation {
   file: string;
@@ -34,6 +35,9 @@ export interface WorldDocs {
   // charters, today) simply omit this. Part 1 of the citizen-construction
   // feature (issue #91).
   constructionSites?: { file: string; doc: unknown }[];
+  // Optional (issue #81): a world with no rumors.json is simply a quiet
+  // town. Present ⇒ schema-valid and every origin resolves to a resident.
+  rumors?: { file: string; doc: unknown };
 }
 
 // Is chunk-local point (px, pz) inside a rectangular footprint centred at
@@ -235,6 +239,24 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
           rule: 'asset-refs-resolve',
           message: `chunk "${chunk.id}" places unknown NPC "${npcId}" (no NPC file with that id)`,
         });
+      }
+    }
+  }
+
+  // Rumors (issue #81): schema-valid, and every origin is a real resident —
+  // a rumor with no carrier would never spread. Optional file.
+  if (world.rumors) {
+    const result = RumorsDocSchema.safeParse(world.rumors.doc);
+    if (!result.success) invalid(world.rumors.file, result.error);
+    else {
+      for (const rumor of result.data.rumors) {
+        if (!npcIds.has(rumor.origin)) {
+          violations.push({
+            file: world.rumors.file,
+            rule: 'asset-refs-resolve',
+            message: `rumor "${rumor.id}" originates with unknown NPC "${rumor.origin}" (no NPC file with that id)`,
+          });
+        }
       }
     }
   }
