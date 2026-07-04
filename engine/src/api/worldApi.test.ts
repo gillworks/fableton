@@ -310,7 +310,7 @@ describe('world-api construction (issue #94)', () => {
   beforeAll(async () => {
     const siteSim = new WorldSim({ charter, manifest, chunks, npcs, sites: [site], ticksPerPhase: 600 });
     siteApi = await startWorldApi(
-      { sim: siteSim, charter, manifest, chunks, npcs, registry },
+      { sim: siteSim, charter, manifest, chunks, npcs, registry, sites: [site] },
       { port: 0 },
     );
     siteBase = `http://localhost:${siteApi.port}`;
@@ -330,6 +330,23 @@ describe('world-api construction (issue #94)', () => {
       stageIndex: 3,
       stageCount: 3,
       complete: true,
+    });
+  });
+
+  it('pairs each site with its static definition so the client can render it (issue #99)', async () => {
+    const { sites } = await (await fetch(`${siteBase}/api/construction`)).json();
+    // Position + the stage ladder (name + mesh per rung) + the completion
+    // payload ride along: the client places the site, maps a stage-change
+    // delta to a mesh, and stands the finished building — all from this.
+    expect(sites[0]).toMatchObject({
+      position: [4, 0, 4],
+      rotation_y: 0,
+      stages: [
+        { name: 'marked plot', asset: 'stakes' },
+        { name: 'foundation', asset: 'foundation-mesh' },
+        { name: 'frame', asset: 'frame-mesh' },
+      ],
+      completion: { props: [{ asset: 'bakery', position: [4, 0, 4] }] },
     });
   });
 

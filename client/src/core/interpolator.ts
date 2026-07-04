@@ -3,7 +3,7 @@
 // Client-side interpolation between sim deltas (docs/architecture.md:
 // slow ticks + interpolation). Pure TS, no three, no React — testable
 // with plain numbers.
-import type { SimMessage, WeatherState } from './types.js';
+import type { ConstructionSiteState, SimMessage, WeatherState } from './types.js';
 
 interface Track {
   from: [number, number, number];
@@ -20,9 +20,14 @@ export class SimState {
   #lastArrival = 0;
   clock = { tick: 0, phase: '', timeOfDay: 0 };
   weather: WeatherState | null = null;
+  // Live construction sites keyed by id — the snapshot seeds them, deltas
+  // climb their stages. Progress/workers here are last-known (the delta omits
+  // them); the inspect panel polls /api/construction for fresh values.
+  #sites = new Map<string, ConstructionSiteState>();
   #activityListeners: ((npc: string, activity: string) => void)[] = [];
   #phaseListeners: ((phase: string) => void)[] = [];
   #weatherListeners: ((weather: WeatherState) => void)[] = [];
+  #siteListeners: ((sites: ConstructionSiteState[]) => void)[] = [];
 
   constructor(expectedIntervalMs = 500) {
     this.#intervalMs = expectedIntervalMs;
@@ -41,6 +46,24 @@ export class SimState {
   onWeather(cb: (weather: WeatherState) => void): void {
     this.#weatherListeners.push(cb);
     if (this.weather) cb(this.weather);
+  }
+  // The scene subscribes to swap a site's mesh when its stage changes; the
+  // current sites replay so a late mount still renders what's already up.
+  onSites(cb: (sites: ConstructionSiteState[]) => void): void {
+    this.#siteListeners.push(cb);
+    if (this.#sites.size > 0) cb(this.sites());
+  }
+  #emitSites(): void {
+    const sites = this.sites();
+    for (const cb of this.#siteListeners) cb(sites);
+  }
+
+  /** Every tracked construction site, sorted by id for stable rendering. */
+  sites(): ConstructionSiteState[] {
+    return [...this.#sites.values()].sort((a, b) => a.id.localeCompare(b.id));
+  }
+  siteOf(id: string): ConstructionSiteState | undefined {
+    return this.#sites.get(id);
   }
 
   npcIds(): string[] {
@@ -98,6 +121,9 @@ export class SimState {
         });
         for (const cb of this.#activityListeners) cb(npc.id, npc.activity);
       }
+      this.#sites.clear();
+      for (const site of message.construction ?? []) this.#sites.set(site.id, { ...site });
+      this.#emitSites();
       for (const cb of this.#phaseListeners) cb(message.phase);
       return;
     }
@@ -124,6 +150,24 @@ export class SimState {
         track.activity = change.activity;
         for (const cb of this.#activityListeners) cb(change.id, change.activity);
       }
+    }
+    // A site climbed a stage (or finished): swap its mesh. The delta omits
+    // progress/workers, so a new stage restarts the accrual bar at zero until
+    // the inspect panel's next poll fills in the live figures.
+    if (message.construction && message.construction.length > 0) {
+      for (const change of message.construction) {
+        const site = this.#sites.get(change.id);
+        if (!site) continue;
+        site.stage = change.stage;
+        site.stageIndex = change.stageIndex;
+        site.complete = change.done ?? change.stageIndex >= site.stageCount;
+        site.progress = 0;
+        if (site.complete) {
+          site.required = 0;
+          site.workers = [];
+        }
+      }
+      this.#emitSites();
     }
   }
 }

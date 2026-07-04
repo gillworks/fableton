@@ -101,7 +101,7 @@ if (wishIntake) {
 
 const simServer = await startSimServer(sim, { port: Number(values['sim-port'] ?? 8090) });
 const api = await startWorldApi(
-  { sim, charter, manifest, chunks, npcs, registry, ...(rumors && { rumors }) },
+  { sim, charter, manifest, chunks, npcs, registry, ...(rumors && { rumors }), sites },
   { port: Number(values['api-port'] ?? 8091), wishIntake },
 );
 console.log(
