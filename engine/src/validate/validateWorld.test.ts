@@ -200,3 +200,105 @@ describe('validateWorld', () => {
     expect(messages).toContain('not placed in any chunk');
   });
 });
+
+// A resident who can work a site, placed in the square (idle behaviour: no
+// refs to resolve). identity.kind "master builder" is the role a site's
+// builder_roles reuse (issue #91).
+const builderNpc = (): { file: string; doc: AnyDoc } => ({
+  file: 'npcs/mabel-the-mason.json',
+  doc: {
+    schema_version: 1,
+    id: 'mabel-the-mason',
+    identity: { name: 'Mabel', kind: 'master builder', story: 'raises the town beam by beam' },
+    lore: [],
+    relationships: [],
+    behavior: { type: 'idle', label: 'laying stone', duration_s: 10 },
+  },
+});
+
+const loadSite = (): AnyDoc =>
+  JSON.parse(
+    readFileSync(new URL('../../test/fixtures/construction/valid-bakery-extension.json', import.meta.url), 'utf8'),
+  );
+
+// sampleWorld() + a resident who can build + the fixture site, its roles
+// trimmed to the one role that resident fills so refs resolve.
+const worldWithSite = (): WorldDocs => {
+  const world = sampleWorld();
+  world.npcs.push(builderNpc());
+  (world.chunks[0]!.doc as AnyDoc).npcs.push('mabel-the-mason'); // town-square
+  const site = loadSite();
+  site['builder_roles'] = ['master builder'];
+  world.constructionSites = [{ file: 'construction/bakery-extension.json', doc: site }];
+  return world;
+};
+
+describe('validateWorld — construction sites', () => {
+  it('passes a valid site whose refs, footprint, and budget all hold', () => {
+    expect(validateWorld(charter, worldWithSite())).toEqual([]);
+  });
+
+  it('fails a stage that shows an unknown asset, naming it and the site file', () => {
+    const world = worldWithSite();
+    (world.constructionSites![0]!.doc as AnyDoc).stages[0].asset = 'chrome-scaffold';
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'asset-refs-resolve');
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toMatchObject({ file: 'construction/bakery-extension.json' });
+    expect(violations[0]!.message).toContain('chrome-scaffold');
+  });
+
+  it('fails a completion prop that places an unknown asset', () => {
+    const world = worldWithSite();
+    (world.constructionSites![0]!.doc as AnyDoc).completion.props.push({ asset: 'hover-drone', position: [11, 0, 11] });
+    const messages = validateWorld(charter, world).map((v) => v.message).join('\n');
+    expect(messages).toContain('hover-drone');
+  });
+
+  it('fails a site that rises in an unknown chunk', () => {
+    const world = worldWithSite();
+    (world.constructionSites![0]!.doc as AnyDoc).chunk = 'atlantis';
+    const messages = validateWorld(charter, world).map((v) => v.message).join('\n');
+    expect(messages).toContain('unknown chunk "atlantis"');
+  });
+
+  it('fails a builder role that matches no resident', () => {
+    const world = worldWithSite();
+    (world.constructionSites![0]!.doc as AnyDoc).builder_roles = ['dragon'];
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'asset-refs-resolve');
+    expect(violations.map((v) => v.message).join('\n')).toContain('builder role "dragon"');
+  });
+
+  it('fails a footprint that buries a portal node — a border crossing lost', () => {
+    const world = worldWithSite();
+    const site = world.constructionSites![0]!.doc as AnyDoc;
+    site.position = [15, 0, 8]; // town-square east-gate → orchard-row portal
+    site.footprint = { width: 2, depth: 2 };
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'nav-connectivity');
+    expect(violations.map((v) => v.message).join('\n')).toContain('east-gate');
+  });
+
+  it('fails a footprint that disconnects the walk graph by burying the hub', () => {
+    const world = worldWithSite();
+    const site = world.constructionSites![0]!.doc as AnyDoc;
+    site.position = [8, 0, 8]; // square-center — every edge runs through it
+    site.footprint = { width: 2, depth: 2 };
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'nav-connectivity');
+    expect(violations.map((v) => v.message).join('\n')).toMatch(/unreachable once the site/);
+  });
+
+  it('charges staged meshes against the chunk poly budget', () => {
+    const tight: Charter = {
+      ...charter,
+      generation: {
+        ...charter.generation,
+        caps: { ...charter.generation.caps, chunk_poly_budget: 500 },
+      },
+    };
+    const violations = validateWorld(tight, worldWithSite()).filter(
+      (v) => v.rule === 'perf-budget' && v.file === 'chunks/town-square.json',
+    );
+    // Heaviest stage mesh (cart, 608) beats the completion building (200), so
+    // the site adds 608 tris to town-square's line item.
+    expect(violations.map((v) => v.message).join('\n')).toContain('construction 608');
+  });
+});

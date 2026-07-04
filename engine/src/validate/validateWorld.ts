@@ -9,6 +9,7 @@ import { AssetRegistrySchema } from '../schemas/assets.js';
 import type { BehaviorNode } from '../schemas/behavior.js';
 import type { Charter } from '../schemas/charter.js';
 import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
+import { ConstructionSiteSchema, type ConstructionSite } from '../schemas/construction.js';
 import { WorldManifestSchema, type WorldManifest } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
 
@@ -28,6 +29,31 @@ export interface WorldDocs {
   registry: { file: string; doc: unknown };
   chunks: { file: string; doc: unknown }[];
   npcs: { file: string; doc: unknown }[];
+  // Optional: worlds without any construction sites (all three flagship
+  // charters, today) simply omit this. Part 1 of the citizen-construction
+  // feature (issue #91).
+  constructionSites?: { file: string; doc: unknown }[];
+}
+
+// Is chunk-local point (px, pz) inside a rectangular footprint centred at
+// (cx, cz), of the given width (local x) and depth (local z), rotated by
+// rotation_y (radians, CCW about the centre)? Pure trig — deterministic.
+function pointInFootprint(
+  px: number,
+  pz: number,
+  cx: number,
+  cz: number,
+  width: number,
+  depth: number,
+  rotationY: number,
+): boolean {
+  const dx = px - cx;
+  const dz = pz - cz;
+  const cos = Math.cos(-rotationY);
+  const sin = Math.sin(-rotationY);
+  const localX = dx * cos - dz * sin;
+  const localZ = dx * sin + dz * cos;
+  return Math.abs(localX) <= width / 2 && Math.abs(localZ) <= depth / 2;
 }
 
 // Gate-enforced charter rules match asset tags on slug equality (ADR-0001).
@@ -95,6 +121,12 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
     if (result.success) npcs.push({ file, npc: result.data });
     else invalid(file, result.error);
   }
+  const sites: { file: string; site: ConstructionSite }[] = [];
+  for (const { file, doc } of world.constructionSites ?? []) {
+    const result = ConstructionSiteSchema.safeParse(doc);
+    if (result.success) sites.push({ file, site: result.data });
+    else invalid(file, result.error);
+  }
 
   const registry = registryResult.success ? registryResult.data : undefined;
   const manifest: WorldManifest | undefined = manifestResult.success
@@ -103,6 +135,17 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
   const assetsById = new Map(registry?.assets.map((a) => [a.id, a]) ?? []);
   const chunksById = new Map(chunks.map((c) => [c.chunk.id, c]));
   const npcIds = new Set(npcs.map((n) => n.npc.id));
+  // Construction sites grouped by the chunk they rise in — the perf-budget
+  // loop below folds each site's cost into its chunk's totals.
+  const sitesByChunk = new Map<string, { file: string; site: ConstructionSite }[]>();
+  for (const entry of sites) {
+    const list = sitesByChunk.get(entry.site.chunk) ?? [];
+    list.push(entry);
+    sitesByChunk.set(entry.site.chunk, list);
+  }
+  // A site's builder_roles reuse NPC roles (identity.kind) by slug equality,
+  // the same matching charter gate rules use — not a duplicated role enum.
+  const npcRoleSlugs = new Set(npcs.map((n) => slugify(n.npc.identity.kind)));
 
   // 2 — asset refs resolve.
   if (registry) {
@@ -187,6 +230,47 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
     }
   }
 
+  // 2b — construction sites: chunk, stage-mesh, completion-prop, and builder
+  // role refs resolve (issue #91).
+  for (const { file, site } of sites) {
+    if (!chunksById.has(site.chunk)) {
+      violations.push({
+        file,
+        rule: 'asset-refs-resolve',
+        message: `construction site "${site.id}" rises in unknown chunk "${site.chunk}" (no chunk with that id)`,
+      });
+    }
+    if (registry) {
+      site.stages.forEach((stage, i) => {
+        if (!assetsById.has(stage.asset)) {
+          violations.push({
+            file,
+            rule: 'asset-refs-resolve',
+            message: `stage[${i}] "${stage.name}" shows unknown asset "${stage.asset}" (not in the asset registry)`,
+          });
+        }
+      });
+      site.completion.props.forEach((prop, i) => {
+        if (!assetsById.has(prop.asset)) {
+          violations.push({
+            file,
+            rule: 'asset-refs-resolve',
+            message: `completion.props[${i}] places unknown asset "${prop.asset}" (not in the asset registry)`,
+          });
+        }
+      });
+    }
+    for (const role of site.builder_roles) {
+      if (!npcRoleSlugs.has(slugify(role))) {
+        violations.push({
+          file,
+          rule: 'asset-refs-resolve',
+          message: `builder role "${role}" matches no resident (no NPC whose identity.kind resolves to it)`,
+        });
+      }
+    }
+  }
+
   // 3 — navmesh-lite connectivity.
   for (const { file, chunk } of chunks) {
     const adjacency = new Map<string, string[]>(chunk.nav.nodes.map((n) => [n.id, []]));
@@ -259,6 +343,67 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
     }
   }
 
+  // 3b — a construction footprint must not sever the walk graph (issue #91):
+  // nav nodes buried under the site are removed, and the rest of the chunk's
+  // graph must stay connected — and no buried node may be a portal, or the
+  // chunk loses a border crossing.
+  for (const { file, site } of sites) {
+    const target = chunksById.get(site.chunk);
+    if (!target) continue; // unknown-chunk already reported in 2b.
+    const nav = target.chunk.nav;
+    const [cx, , cz] = site.position;
+    const buried = new Set(
+      nav.nodes
+        .filter((n) =>
+          pointInFootprint(n.position[0], n.position[2], cx, cz, site.footprint.width, site.footprint.depth, site.rotation_y),
+        )
+        .map((n) => n.id),
+    );
+    if (buried.size === 0) continue;
+    const buriedPortals = nav.portals.filter((p) => buried.has(p.node));
+    if (buriedPortals.length > 0) {
+      violations.push({
+        file,
+        rule: 'nav-connectivity',
+        message: `site "${site.id}" footprint buries portal node(s) ${buriedPortals.map((p) => `"${p.node}"→"${p.to_chunk}"`).join(', ')} in chunk "${site.chunk}" — a border crossing would be lost`,
+      });
+    }
+    const remaining = nav.nodes.filter((n) => !buried.has(n.id));
+    if (remaining.length === 0) {
+      violations.push({
+        file,
+        rule: 'nav-connectivity',
+        message: `site "${site.id}" footprint buries every nav node in chunk "${site.chunk}" — nothing left to walk`,
+      });
+      continue;
+    }
+    const adjacency = new Map<string, string[]>(remaining.map((n) => [n.id, []]));
+    for (const [a, b] of nav.edges) {
+      if (buried.has(a) || buried.has(b)) continue;
+      adjacency.get(a)?.push(b);
+      adjacency.get(b)?.push(a);
+    }
+    const first = remaining[0]!.id;
+    const seen = new Set([first]);
+    const queue = [first];
+    while (queue.length > 0) {
+      for (const next of adjacency.get(queue.shift()!) ?? []) {
+        if (!seen.has(next)) {
+          seen.add(next);
+          queue.push(next);
+        }
+      }
+    }
+    const cut = remaining.filter((n) => !seen.has(n.id));
+    if (cut.length > 0) {
+      violations.push({
+        file,
+        rule: 'nav-connectivity',
+        message: `site "${site.id}" footprint disconnects chunk "${site.chunk}": ${cut.map((n) => `"${n.id}"`).join(', ')} unreachable once the site's nav nodes are buried`,
+      });
+    }
+  }
+
   // 4 — perf budget (charter generation.caps).
   const caps = charter.generation.caps;
   if (manifest && manifest.chunks.length > caps.max_regions) {
@@ -279,20 +424,40 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
       0,
     );
     const buildingPolys = chunk.buildings.length * 200;
-    const polys = terrainPolys + propPolys + buildingPolys;
+    // Each construction site adds, at its most expensive moment, the heavier
+    // of (a) its single visible stage mesh mid-build or (b) the parametric
+    // building(s)/prop(s) it becomes when finished — never both at once, so
+    // we charge the max. Priced the same as anything else in the chunk:
+    // registry poly_count for meshes, 200 tris / 6 draw calls per building.
+    const chunkSites = sitesByChunk.get(chunk.id) ?? [];
+    let sitePolys = 0;
+    let siteDrawCalls = 0;
+    for (const { site } of chunkSites) {
+      const heaviestStagePolys = site.stages.reduce(
+        (max, s) => Math.max(max, assetsById.get(s.asset)?.poly_count ?? 0),
+        0,
+      );
+      const completionPolys =
+        site.completion.buildings.length * 200 +
+        site.completion.props.reduce((sum, p) => sum + (assetsById.get(p.asset)?.poly_count ?? 0), 0);
+      sitePolys += Math.max(heaviestStagePolys, completionPolys);
+      const completionDrawCalls = site.completion.buildings.length * 6 + site.completion.props.length;
+      siteDrawCalls += Math.max(1, completionDrawCalls);
+    }
+    const polys = terrainPolys + propPolys + buildingPolys + sitePolys;
     if (polys > caps.chunk_poly_budget) {
       violations.push({
         file,
         rule: 'perf-budget',
-        message: `chunk "${chunk.id}" has ${polys} triangles (terrain ${terrainPolys} + props ${propPolys} + buildings ${buildingPolys}), budget is ${caps.chunk_poly_budget}`,
+        message: `chunk "${chunk.id}" has ${polys} triangles (terrain ${terrainPolys} + props ${propPolys} + buildings ${buildingPolys} + construction ${sitePolys}), budget is ${caps.chunk_poly_budget}`,
       });
     }
-    const drawCalls = 1 + chunk.props.length + chunk.buildings.length * 6;
+    const drawCalls = 1 + chunk.props.length + chunk.buildings.length * 6 + siteDrawCalls;
     if (drawCalls > caps.chunk_drawcall_budget) {
       violations.push({
         file,
         rule: 'perf-budget',
-        message: `chunk "${chunk.id}" needs ${drawCalls} draw calls (terrain + ${chunk.props.length} props + ${chunk.buildings.length} buildings), budget is ${caps.chunk_drawcall_budget}`,
+        message: `chunk "${chunk.id}" needs ${drawCalls} draw calls (terrain + ${chunk.props.length} props + ${chunk.buildings.length} buildings + ${chunkSites.length} construction site(s)), budget is ${caps.chunk_drawcall_budget}`,
       });
     }
   }

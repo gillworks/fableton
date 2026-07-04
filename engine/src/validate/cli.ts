@@ -46,23 +46,28 @@ if (charter) {
     (manifest.doc as { chunks?: { path?: unknown }[] }).chunks
       ?.map((c) => c.path)
       .filter((p): p is string => typeof p === 'string') ?? [];
-  const npcsDir = join(worldDir, 'npcs');
+  const readDirJson = (dir: string): { file: string; doc: unknown }[] =>
+    existsSync(dir)
+      ? readdirSync(dir)
+          .filter((f) => f.endsWith('.json'))
+          .sort()
+          .map((f) => readJson(join(dir, f)))
+      : [];
   const world: WorldDocs = {
     manifest,
     registry: readJson(join(worldDir, 'assets.json')),
     chunks: chunkPaths.map((p) => readJson(join(worldDir, p))),
-    npcs: existsSync(npcsDir)
-      ? readdirSync(npcsDir)
-          .filter((f) => f.endsWith('.json'))
-          .sort()
-          .map((f) => readJson(join(npcsDir, f)))
-      : [],
+    npcs: readDirJson(join(worldDir, 'npcs')),
+    // Construction sites are optional world-data (issue #91); worlds without
+    // an `construction/` dir simply carry none.
+    constructionSites: readDirJson(join(worldDir, 'construction')),
   };
   violations.push(...validateWorld(charter, world));
 
   if (violations.length === 0) {
+    const sites = world.constructionSites?.length ?? 0;
     console.log(
-      `✓ world valid — ${world.chunks.length} chunks, ${world.npcs.length} NPCs, charter "${charter.identity.name}"`,
+      `✓ world valid — ${world.chunks.length} chunks, ${world.npcs.length} NPCs${sites > 0 ? `, ${sites} construction site(s)` : ''}, charter "${charter.identity.name}"`,
     );
   }
 }

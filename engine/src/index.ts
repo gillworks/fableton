@@ -59,6 +59,16 @@ export {
   type Npc,
   type NpcRelationship,
 } from './schemas/npc.js';
+export {
+  CompletionSchema,
+  ConstructionSiteSchema,
+  ConstructionStageSchema,
+  FootprintSchema,
+  type Completion,
+  type ConstructionSite,
+  type ConstructionStage,
+  type Footprint,
+} from './schemas/construction.js';
 export { validateWorld, type Violation, type WorldDocs } from './validate/validateWorld.js';
 export { deriveSeed, mulberry32, pick, randInt, type Rng } from './generate/rng.js';
 export { colorFor, hslToHex } from './color.js';

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "bakery-extension",
+  "chunk": "town-square",
+  "position": [11, 0, 11],
+  "rotation_y": 0,
+  "footprint": { "width": 3, "depth": 3 },
+  "builder_roles": ["master builder", "carpenter"],
+  "stages": [
+    { "name": "marked plot", "asset": "lantern", "work_units": 4 },
+    { "name": "foundation", "asset": "tree", "work_units": 20 },
+    { "name": "timber frame", "asset": "cart", "work_units": 40 },
+    { "name": "raising day", "asset": "cart", "work_units": 16 }
+  ],
+  "completion": {
+    "buildings": [
+      {
+        "position": [11, 0, 11],
+        "rotation_y": 0,
+        "width": 3,
+        "depth": 3,
+        "height": 4,
+        "wall_color": "#d9c7a3",
+        "roof_color": "#7a4a2b",
+        "windows": 2,
+        "chimney": true
+      }
+    ],
+    "props": []
+  }
+}
