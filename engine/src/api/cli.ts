@@ -11,6 +11,7 @@ import { parseCharter } from '../charter/parse.js';
 import { AssetRegistrySchema } from '../schemas/assets.js';
 import { ChunkSchema } from '../schemas/chunk.js';
 import { ConstructionSiteSchema } from '../schemas/construction.js';
+import { ExpansionPlanSchema } from '../schemas/expansion.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema } from '../schemas/npc.js';
 import { RumorsDocSchema } from '../schemas/rumors.js';
@@ -58,11 +59,28 @@ const sites = existsSync(constructionDir)
       .sort()
       .map((f) => ConstructionSiteSchema.parse(readJson(join('construction', f))))
   : [];
+// How the town grows over time (issue #95): the sim opens each queued site as
+// its prerequisites come true and spawns it into the construction runtime so
+// builders raise it (issue #107). The served world MUST load this — otherwise
+// the sim never sees the plan and the flagship loop stays dormant. Absent
+// means a town that grows no further than it was born.
+const expansionPlan = existsSync(join(worldDir, 'expansion-plan.json'))
+  ? ExpansionPlanSchema.parse(readJson('expansion-plan.json'))
+  : undefined;
 
 // Wall time lives here in the server layer: a founded world resumes the
 // day/phase it should be on, so deploys never reset the town to day 1.
 const startTick = manifest.founded_at ? startTickAt(Date.parse(manifest.founded_at), Date.now()) : 0;
-const sim = new WorldSim({ charter, manifest, chunks, npcs, ...(rumors && { rumors }), sites, startTick });
+const sim = new WorldSim({
+  charter,
+  manifest,
+  chunks,
+  npcs,
+  ...(rumors && { rumors }),
+  sites,
+  ...(expansionPlan && { expansionPlan }),
+  startTick,
+});
 const { day, phase } = sim.clock();
 console.log(
   manifest.founded_at
@@ -101,7 +119,7 @@ if (wishIntake) {
 
 const simServer = await startSimServer(sim, { port: Number(values['sim-port'] ?? 8090) });
 const api = await startWorldApi(
-  { sim, charter, manifest, chunks, npcs, registry, ...(rumors && { rumors }), sites },
+  { sim, charter, manifest, chunks, npcs, registry, ...(rumors && { rumors }), sites, ...(expansionPlan && { expansionPlan }) },
   { port: Number(values['api-port'] ?? 8091), wishIntake },
 );
 console.log(
