@@ -49,6 +49,12 @@ export interface WorldSceneProps {
 const damp = (from: number, to: number, dt: number): number =>
   from + (to - from) * Math.min(1, dt * 3);
 
+// Per-frame scratch: reused via .set() so the useFrame relight loop allocates
+// no Color/Vector3 each frame (this is a hot path — keep it GC-quiet).
+const _sunColor = new Color();
+const _sunPos = new Vector3();
+const _fogColor = new Color();
+
 export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction, follow, weather }: WorldSceneProps): ReactElement {
   const worldRef = useRef<Group>(new Group());
   const chunkGroups = useRef(new Map<string, Group>());
@@ -115,8 +121,8 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
     const sun = sunRef.current as { intensity: number; color: Color; position: Vector3 } | null;
     if (sun) {
       sun.intensity = damp(sun.intensity, lighting.sunIntensity * vfx.sunFactor, dt);
-      sun.color.lerp(new Color(lighting.sunColor), Math.min(1, dt * 3));
-      sun.position.lerp(new Vector3(...lighting.sunPosition), Math.min(1, dt * 3));
+      sun.color.lerp(_sunColor.set(lighting.sunColor), Math.min(1, dt * 3));
+      sun.position.lerp(_sunPos.set(...lighting.sunPosition), Math.min(1, dt * 3));
     }
     const ambient = ambientRef.current as { intensity: number } | null;
     if (ambient) {
@@ -124,7 +130,7 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
     }
     // Fog eases toward the phase's fog color at the weather's density, so
     // rolling fog thickens smoothly rather than snapping in.
-    fog.color.lerp(new Color(lighting.fogColor), Math.min(1, dt * 3));
+    fog.color.lerp(_fogColor.set(lighting.fogColor), Math.min(1, dt * 3));
     fog.density = damp(fog.density, vfx.fogDensity, dt);
     weatherField.update(dt, vfx, [camera.position.x, 0, camera.position.z]);
   });

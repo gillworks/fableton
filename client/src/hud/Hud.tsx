@@ -8,7 +8,7 @@ import { useEffect, useState, type CSSProperties, type ReactElement } from 'reac
 import { HUD_Z, HUD_ZOOM, dayOf, hudInk, paceLabel, pollChronicle, pollChronicleFile, type ChronicleEntry } from '../core/hud.js';
 import { TICKS_PER_DAY } from '../core/types.js';
 import type { WorldTheme } from '../core/theme.js';
-import type { WorldInfo } from '../core/types.js';
+import type { WeatherState, WorldInfo } from '../core/types.js';
 import { ChroniclePanel } from './ChroniclePanel.js';
 
 export interface HudProps {
@@ -21,13 +21,15 @@ export interface HudProps {
   /** Currently rendered phase (override or live). */
   shownPhase: number;
   tick: number;
+  /** Live weather from the sim; its diegetic label is shown by the clock. */
+  weather: WeatherState | null;
   onSelectPhase: (index: number | null) => void;
 }
 
 const INK = 'rgba(20, 17, 14, 0.82)';
 const PAPER = 'rgba(246, 239, 224, 0.92)';
 
-export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onSelectPhase }: HudProps): ReactElement {
+export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, weather, onSelectPhase }: HudProps): ReactElement {
   const [latest, setLatest] = useState<ChronicleEntry | null>(null);
   const [chronicle, setChronicle] = useState<string[] | null>(null);
   const [lineageOpen, setLineageOpen] = useState(false);
@@ -88,6 +90,25 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
           DAY {dayOf(tick, ticksPerDay)} · {info.phases[shownPhase] ?? '—'}
           {shownPhase !== livePhase ? ' · preview' : ''}
         </div>
+        {/* The weather's own diegetic line — the authored string the sim
+            derives per world day ("a steady grey rain"), surfaced so the
+            viewer reads what they're seeing, not just the VFX. */}
+        {weather && weather.kind !== 'clear' && (
+          <div
+            data-testid="weather-label"
+            style={{
+              fontFamily: display,
+              fontStyle: 'italic',
+              fontSize: 13,
+              color: fg,
+              textShadow: fgShadow,
+              opacity: 0.9,
+              marginTop: 6,
+            }}
+          >
+            {weather.label}
+          </div>
+        )}
         {/* The world clock: progress through today, and how fast a day passes */}
         <div
           title={`time of day: ${Math.round(((tick % ticksPerDay) / ticksPerDay) * 100)}%`}

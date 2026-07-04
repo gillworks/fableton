@@ -95,7 +95,7 @@ export type WeatherKind = 'clear' | 'rain' | 'fog' | 'snow';
 export interface WeatherState {
   season: string;
   kind: WeatherKind;
-  /** Diegetic — shown verbatim in the HUD/inspect chrome. */
+  /** Diegetic — shown verbatim by the HUD clock (see Hud.tsx). */
   label: string;
   /** VFX strength 0..1. */
   intensity: number;

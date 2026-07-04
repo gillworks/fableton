@@ -65,6 +65,8 @@ export function weatherVfx(weather: WeatherState | null): WeatherVfx {
       };
     case 'fog':
       return {
+        // Deliberate 0.02 floor: fog is never *nothing* — even the lightest
+        // fog weather keeps a faint haze so the label and the scene agree.
         fogDensity: 0.02 + 0.06 * i,
         particleKind: 'none',
         particleCount: 0,

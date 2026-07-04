@@ -137,6 +137,7 @@ export function App(): ReactElement {
         livePhase={phase}
         shownPhase={shownPhase}
         tick={tick}
+        weather={weather}
         onSelectPhase={setPhaseOverride}
       />
       {selected && (
