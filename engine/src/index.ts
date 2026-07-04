@@ -59,6 +59,12 @@ export {
   type Npc,
   type NpcRelationship,
 } from './schemas/npc.js';
+export {
+  RumorSchema,
+  RumorsDocSchema,
+  type Rumor,
+  type RumorsDoc,
+} from './schemas/rumors.js';
 export { validateWorld, type Violation, type WorldDocs } from './validate/validateWorld.js';
 export { deriveSeed, mulberry32, pick, randInt, type Rng } from './generate/rng.js';
 export { colorFor, hslToHex } from './color.js';
@@ -66,6 +72,7 @@ export { generateWorld, type GeneratedWorld } from './generate/generateWorld.js'
 export { TICK_HZ, clockAt, type ClockState } from './sim/clock.js';
 export { activeEvent, eventActiveAt, eventOccursOnDay } from './sim/calendar.js';
 export { NpcRuntime, type NpcState, type StepContext } from './sim/npcRuntime.js';
+export { GossipRuntime, type Heard, type Spread } from './sim/gossipRuntime.js';
 export {
   WorldSim,
   type Delta,

@@ -12,6 +12,7 @@ import { AssetRegistrySchema } from '../schemas/assets.js';
 import { ChunkSchema } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema } from '../schemas/npc.js';
+import { RumorsDocSchema } from '../schemas/rumors.js';
 import { startTickAt } from '../sim/clock.js';
 import { startSimServer } from '../sim/server.js';
 import { WorldSim } from '../sim/worldSim.js';
@@ -46,11 +47,14 @@ const npcs = existsSync(npcsDir)
 const registry = AssetRegistrySchema.parse(
   JSON.parse(readFileSync(new URL('../../../assets/registry.json', import.meta.url), 'utf8')),
 );
+const rumors = existsSync(join(worldDir, 'rumors.json'))
+  ? RumorsDocSchema.parse(readJson('rumors.json'))
+  : undefined;
 
 // Wall time lives here in the server layer: a founded world resumes the
 // day/phase it should be on, so deploys never reset the town to day 1.
 const startTick = manifest.founded_at ? startTickAt(Date.parse(manifest.founded_at), Date.now()) : 0;
-const sim = new WorldSim({ charter, manifest, chunks, npcs, startTick });
+const sim = new WorldSim({ charter, manifest, chunks, npcs, ...(rumors && { rumors }), startTick });
 const { day, phase } = sim.clock();
 console.log(
   manifest.founded_at
@@ -59,6 +63,8 @@ console.log(
 );
 sim.onEvent((event) => {
   if (event.type === 'phase') console.log(`[tick ${event.tick}] the world turns: ${event.phase}`);
+  else if (event.type === 'rumor')
+    console.log(`[tick ${event.tick}] rumor — ${event.from} → ${event.to}: ${event.text}`);
   else if (event.type === 'event') console.log(`[tick ${event.tick}] the ${event.event} begins`);
   else console.log(`[tick ${event.tick}] ${event.npc} — ${event.activity}`);
 });
@@ -81,7 +87,7 @@ if (wishIntake) {
 
 const simServer = await startSimServer(sim, { port: Number(values['sim-port'] ?? 8090) });
 const api = await startWorldApi(
-  { sim, charter, manifest, chunks, npcs, registry },
+  { sim, charter, manifest, chunks, npcs, registry, ...(rumors && { rumors }) },
   { port: Number(values['api-port'] ?? 8091), wishIntake },
 );
 console.log(

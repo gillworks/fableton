@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "spread_radius": 2.5,
+  "spread_chance": 0.35,
+  "rumors": [
+    {
+      "id": "the-cold-oven",
+      "text": "Greta's oven went cold at midnight — and something knocked from inside.",
+      "origin": "greta-the-baker",
+      "notable": true
+    },
+    {
+      "id": "reynards-apples",
+      "text": "Reynard swears the apples are honestly come by, which is how you know they aren't.",
+      "origin": "reynard-the-retired",
+      "notable": false
+    }
+  ]
+}

@@ -210,6 +210,30 @@ export function InspectPanel({
             </>
           )}
 
+          {panel.heard.length > 0 && (
+            <>
+              <div
+                data-testid="has-heard"
+                style={{
+                  fontFamily: mono,
+                  fontSize: 10,
+                  letterSpacing: 2,
+                  color: MUTED,
+                  margin: '12px 0 6px',
+                }}
+              >
+                HAS HEARD…
+              </div>
+              {panel.heard.map((h) => (
+                <div key={h.rumor} style={{ fontSize: 13.5, marginBottom: 4 }}>
+                  <em>“{h.text}”</em>
+                  {' — from '}
+                  <strong>{h.from}</strong>
+                </div>
+              ))}
+            </>
+          )}
+
           <div
             style={{
               fontFamily: mono,

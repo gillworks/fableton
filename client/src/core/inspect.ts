@@ -10,6 +10,9 @@ export interface NpcDetail {
   relationships: { to: string; kind: string }[];
   lore: string[];
   tree: string;
+  // What this resident has overheard, and from whom (issue #81). Optional so
+  // a world-api without gossip (or an older one) still renders.
+  heard?: { rumor: string; text: string; from: string; tick: number }[];
 }
 
 export interface PanelData {
@@ -19,6 +22,7 @@ export interface PanelData {
   role: string;
   bio: string;
   relationships: { name: string; clause: string }[];
+  heard: { rumor: string; text: string; from: string }[];
   footer: string;
 }
 
@@ -42,6 +46,11 @@ export function buildPanelData(
       name: nameById.get(rel.to) ?? rel.to,
       clause: rel.kind,
     })),
+    // Newest first: the freshest gossip reads at the top of the section.
+    heard: (detail.heard ?? [])
+      .slice()
+      .reverse()
+      .map((h) => ({ rumor: h.rumor, text: h.text, from: nameById.get(h.from) ?? h.from })),
     footer: `lore/${detail.id}.json · tree: ${slug(detail.tree)}`,
   };
 }
