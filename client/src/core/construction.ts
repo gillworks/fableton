@@ -89,6 +89,8 @@ export function buildSiteGroup(
 }
 
 export interface SiteWorker {
+  /** Resident id — stable across renders, safe as a list key. */
+  id: string;
   /** Resident's display name. */
   name: string;
   /** Their live behavior-tree label, verbatim ("raising the frame"). */
@@ -138,6 +140,7 @@ export function buildSitePanelData(
     fraction: site.complete ? 1 : site.required > 0 ? Math.min(1, site.progress / site.required) : 0,
     complete: site.complete,
     workers: site.workers.map((id) => ({
+      id,
       name: nameById.get(id) ?? id,
       activity: activityOf(id),
     })),

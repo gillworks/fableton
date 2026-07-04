@@ -144,7 +144,7 @@ export function ConstructionInspectPanel({
           </div>
           {panel.workers.length > 0 ? (
             panel.workers.map((w) => (
-              <div key={w.name} style={{ fontSize: 13.5, marginBottom: 4 }}>
+              <div key={w.id} style={{ fontSize: 13.5, marginBottom: 4 }}>
                 <strong>{w.name}</strong>
                 {w.activity ? (
                   <>

@@ -111,7 +111,7 @@ describe('buildSitePanelData', () => {
     expect(panel.stage).toBe('timber frame');
     expect(panel.progress).toBe('12 / 40');
     expect(panel.fraction).toBeCloseTo(0.3);
-    expect(panel.workers).toEqual([{ name: 'Aldous', activity: 'raising the frame' }]);
+    expect(panel.workers).toEqual([{ id: 'aldous', name: 'Aldous', activity: 'raising the frame' }]);
   });
 
   it('reads "done" with no workers once complete', () => {
@@ -125,6 +125,6 @@ describe('buildSitePanelData', () => {
 
   it('falls back to the id when a worker is not in the roster', () => {
     const panel = buildSitePanelData(state({ workers: ['unknown'] }), roster, () => 'hauling timber');
-    expect(panel.workers[0]).toEqual({ name: 'unknown', activity: 'hauling timber' });
+    expect(panel.workers[0]).toEqual({ id: 'unknown', name: 'unknown', activity: 'hauling timber' });
   });
 });

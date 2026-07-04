@@ -111,7 +111,12 @@ function SiteMesh({
         document.body.style.cursor = 'auto';
       }}
     >
-      <primitive object={group} />
+      {/* dispose={null}: the group's meshes reuse geometry/material from the
+          shared asset-piece pool (core/construction.placeAsset), the same
+          instances chunk props draw. A stage swap re-keys and unmounts this
+          primitive; without dispose={null} R3F would free those shared
+          resources and blank every other prop of the asset scene-wide. */}
+      <primitive object={group} dispose={null} />
       <Html
         center
         position={[view.position[0], view.position[1] + 3.2, view.position[2]]}
