@@ -101,7 +101,10 @@ export function createGithubWishIntake(config: GithubWishIntakeConfig): WishInta
 export function githubWishIntakeFromEnv(env: NodeJS.ProcessEnv = process.env): WishIntake | null {
   const token = env['FABLETON_WISH_TOKEN'];
   if (!token) return null;
-  const source = env['FABLETON_WISH_REPO'] ?? env['FABLETON_REPO_URL'];
+  // `||`, not `??`: compose's `${FABLETON_WISH_REPO:-}` delivers an EMPTY
+  // STRING when unset, which must fall through to FABLETON_REPO_URL —
+  // this bit the first production enablement (issue #110).
+  const source = env['FABLETON_WISH_REPO'] || env['FABLETON_REPO_URL'];
   const slug = source ? parseRepoSlug(source) : null;
   if (!slug) return null;
   return createGithubWishIntake({ token, owner: slug.owner, repo: slug.repo });
