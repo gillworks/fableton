@@ -69,6 +69,16 @@ export {
   type NpcRelationship,
 } from './schemas/npc.js';
 export {
+  CompletionSchema,
+  ConstructionSiteSchema,
+  ConstructionStageSchema,
+  FootprintSchema,
+  type Completion,
+  type ConstructionSite,
+  type ConstructionStage,
+  type Footprint,
+} from './schemas/construction.js';
+export {
   RumorSchema,
   RumorsDocSchema,
   type Rumor,
