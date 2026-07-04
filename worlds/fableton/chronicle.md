@@ -13,3 +13,4 @@ At lamplighting, Stilts plates and Salt seasons, table-side, and neither has sai
 Marigold brought her chair to the square at hush and simply stayed; now she and Greta deal cards where the ovens have gone quiet, and the oven, as ever, is not mentioned. (PR #115)
 COUNCIL — The god watched the square learn its four hours by heart, ruled that a rumor is a lamp, and told the town: you may dig.
 At first light Ferrous asks the empty road the same question he asks Mirabel every year; at high sun, chunks away, Widow Hood counts her wolves against Pip's without waiting for him to visit. (PR #122)
+The town dug, as it was told it could: Ferrous's question is three doors closer to Mirabel than his own voice ever got it, and half the lane can recite Widow Hood's wolf count better than Pip can dispute it. (PR #123)
