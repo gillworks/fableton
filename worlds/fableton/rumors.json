@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "spread_radius": 2.5,
+  "spread_chance": 0.35,
+  "rumors": [
+    {
+      "id": "the-question-ferrous-carries",
+      "text": "Ferrous asked the empty road again at first light, same question as always — and it's already three doors closer to Mirabel than his voice could ever carry on its own.",
+      "origin": "ferrous-the-constant",
+      "notable": true
+    },
+    {
+      "id": "widow-hoods-tally",
+      "text": "Widow Hood's wolf count came in again at high sun, unwitnessed as ever — by lamplighting half the lane could recite her number better than Pip could dispute it.",
+      "origin": "widow-hood",
+      "notable": false
+    }
+  ]
+}
