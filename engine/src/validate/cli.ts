@@ -72,8 +72,10 @@ if (charter) {
 
   if (violations.length === 0) {
     const sites = world.constructionSites?.length ?? 0;
+    // Reached only when the plan validated cleanly, so its queue is well-formed.
+    const planned = (world.expansionPlan?.doc as { queue?: unknown[] } | undefined)?.queue?.length ?? 0;
     console.log(
-      `✓ world valid — ${world.chunks.length} chunks, ${world.npcs.length} NPCs${sites > 0 ? `, ${sites} construction site(s)` : ''}, charter "${charter.identity.name}"`,
+      `✓ world valid — ${world.chunks.length} chunks, ${world.npcs.length} NPCs${sites > 0 ? `, ${sites} construction site(s)` : ''}${planned > 0 ? `, ${planned} planned site(s)` : ''}, charter "${charter.identity.name}"`,
     );
   }
 }
