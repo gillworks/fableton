@@ -74,6 +74,15 @@ describe('githubWishIntakeFromEnv', () => {
     expect(githubWishIntakeFromEnv({ FABLETON_WISH_TOKEN: 'tok' })).toBeNull();
     expect(githubWishIntakeFromEnv({ FABLETON_WISH_TOKEN: 'tok', FABLETON_WISH_REPO: 'not-a-slug' })).toBeNull();
   });
+  it('an empty FABLETON_WISH_REPO (compose default) still falls back to FABLETON_REPO_URL', () => {
+    expect(
+      githubWishIntakeFromEnv({
+        FABLETON_WISH_TOKEN: 'tok',
+        FABLETON_WISH_REPO: '',
+        FABLETON_REPO_URL: 'https://github.com/a/b',
+      }),
+    ).not.toBeNull();
+  });
   it('enables intake from a token plus repo, falling back to FABLETON_REPO_URL', () => {
     expect(githubWishIntakeFromEnv({ FABLETON_WISH_TOKEN: 'tok', FABLETON_WISH_REPO: 'a/b' })).not.toBeNull();
     expect(
