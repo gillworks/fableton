@@ -10,6 +10,7 @@ import type { BehaviorNode } from '../schemas/behavior.js';
 import type { Charter } from '../schemas/charter.js';
 import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
 import { ConstructionSiteSchema, type ConstructionSite } from '../schemas/construction.js';
+import { ExpansionPlanSchema } from '../schemas/expansion.js';
 import { WorldManifestSchema, type WorldManifest } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
 import { RumorsDocSchema } from '../schemas/rumors.js';
@@ -20,6 +21,7 @@ export interface Violation {
     | 'schema-valid'
     | 'asset-refs-resolve'
     | 'nav-connectivity'
+    | 'footprint-overlap'
     | 'perf-budget'
     | 'charter-gate-rule'
     | 'duplicate-id';
@@ -38,6 +40,11 @@ export interface WorldDocs {
   // Optional (issue #81): a world with no rumors.json is simply a quiet
   // town. Present ⇒ schema-valid and every origin resolves to a resident.
   rumors?: { file: string; doc: unknown };
+  // Optional (issue #95): the town's expansion plan. Its queued sites are
+  // pre-placed, so the gate validates them statically alongside any standing
+  // construction sites — same ref/footprint/perf checks, plus no two footprints
+  // (planned or standing) may overlap in a chunk.
+  expansionPlan?: { file: string; doc: unknown };
 }
 
 // Is chunk-local point (px, pz) inside a rectangular footprint centred at
@@ -112,6 +119,31 @@ function segmentCrossesFootprint(
   );
 }
 
+// Do two rectangular footprints overlap? Each is an oriented box (centre,
+// width along local x, depth along local z, rotation_y). Separating Axis
+// Theorem on the four face normals: if any axis separates the projected
+// extents, the boxes are disjoint. Shared edges (exact touch) do not count as
+// overlap — adjacent buildings are fine. Pure trig — deterministic.
+function footprintsOverlap(a: ConstructionSite, b: ConstructionSite): boolean {
+  const au = [Math.cos(a.rotation_y), Math.sin(a.rotation_y)] as const;
+  const av = [-Math.sin(a.rotation_y), Math.cos(a.rotation_y)] as const;
+  const bu = [Math.cos(b.rotation_y), Math.sin(b.rotation_y)] as const;
+  const bv = [-Math.sin(b.rotation_y), Math.cos(b.rotation_y)] as const;
+  const ahw = a.footprint.width / 2;
+  const ahd = a.footprint.depth / 2;
+  const bhw = b.footprint.width / 2;
+  const bhd = b.footprint.depth / 2;
+  const dx = b.position[0] - a.position[0];
+  const dz = b.position[2] - a.position[2];
+  const EPS = 1e-9;
+  for (const [ex, ez] of [au, av, bu, bv]) {
+    const projA = ahw * Math.abs(ex * au[0] + ez * au[1]) + ahd * Math.abs(ex * av[0] + ez * av[1]);
+    const projB = bhw * Math.abs(ex * bu[0] + ez * bu[1]) + bhd * Math.abs(ex * bv[0] + ez * bv[1]);
+    if (Math.abs(ex * dx + ez * dz) >= projA + projB - EPS) return false; // separated on this axis
+  }
+  return true;
+}
+
 // Gate-enforced charter rules match asset tags on slug equality (ADR-0001).
 const slugify = (s: string): string =>
   s
@@ -182,6 +214,18 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
     const result = ConstructionSiteSchema.safeParse(doc);
     if (result.success) sites.push({ file, site: result.data });
     else invalid(file, result.error);
+  }
+  // The expansion plan's queued sites are pre-placed world-data too, so they
+  // join the same site pool: every ref/footprint/perf check below runs over
+  // planned and standing sites alike, and the plan is validated statically as
+  // if the whole town were already built (issue #95).
+  if (world.expansionPlan) {
+    const result = ExpansionPlanSchema.safeParse(world.expansionPlan.doc);
+    if (result.success) {
+      for (const entry of result.data.queue) {
+        sites.push({ file: world.expansionPlan.file, site: entry.site });
+      }
+    } else invalid(world.expansionPlan.file, result.error);
   }
 
   const registry = registryResult.success ? registryResult.data : undefined;
@@ -438,11 +482,12 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
   // graph must stay connected — and no buried node may be a portal, or the
   // chunk loses a border crossing.
   //
-  // Known limitation: each site is validated against the chunk's original nav
-  // in isolation. Two sites that each individually preserve connectivity could
+  // Known limitation: connectivity is checked per-site against the chunk's
+  // original nav. Two sites that each individually preserve connectivity could
   // together bury complementary nodes (or cross complementary edges) and
-  // disconnect the chunk; site-vs-site interaction is deferred to the
-  // placement issue.
+  // disconnect the chunk. Direct footprint overlap between sites is caught in
+  // 3c below (issue #95); the subtler complementary-burial case remains a
+  // deferred enhancement.
   for (const { file, site } of sites) {
     const target = chunksById.get(site.chunk);
     if (!target) continue; // unknown-chunk already reported in 2b.
@@ -514,6 +559,25 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
         rule: 'nav-connectivity',
         message: `site "${site.id}" footprint disconnects chunk "${site.chunk}": ${cut.map((n) => `"${n.id}"`).join(', ')} unreachable once the site's footprint is placed`,
       });
+    }
+  }
+
+  // 3c — no two footprints (planned or standing) may overlap within a chunk
+  // (issue #95): buildings that share ground would fight for the same tiles.
+  // Deterministic pairwise sweep, stable order (sites keep their load order).
+  for (const [chunkId, chunkSites] of sitesByChunk) {
+    for (let i = 0; i < chunkSites.length; i++) {
+      for (let j = i + 1; j < chunkSites.length; j++) {
+        const a = chunkSites[i]!;
+        const b = chunkSites[j]!;
+        if (footprintsOverlap(a.site, b.site)) {
+          violations.push({
+            file: b.file,
+            rule: 'footprint-overlap',
+            message: `site "${b.site.id}" footprint overlaps site "${a.site.id}" in chunk "${chunkId}" — two buildings cannot share ground`,
+          });
+        }
+      }
     }
   }
 

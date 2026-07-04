@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "starter-plan",
+  "queue": [
+    {
+      "site": {
+        "schema_version": 1,
+        "id": "town-well",
+        "chunk": "town-square",
+        "position": [11, 0, 11],
+        "rotation_y": 0,
+        "footprint": { "width": 3, "depth": 3 },
+        "builder_roles": ["master builder"],
+        "stages": [
+          { "name": "marked plot", "asset": "lantern", "work_units": 4 },
+          { "name": "digging the shaft", "asset": "tree", "work_units": 16 },
+          { "name": "raising the wellhead", "asset": "cart", "work_units": 12 }
+        ],
+        "completion": {
+          "buildings": [
+            {
+              "position": [11, 0, 11],
+              "rotation_y": 0,
+              "width": 2,
+              "depth": 2,
+              "height": 3,
+              "wall_color": "#b9b0a0",
+              "roof_color": "#5c6670",
+              "windows": 0,
+              "chimney": false
+            }
+          ],
+          "props": []
+        }
+      },
+      "prerequisites": [{ "type": "day", "min_day": 1 }]
+    },
+    {
+      "site": {
+        "schema_version": 1,
+        "id": "market-hall",
+        "chunk": "town-square",
+        "position": [12, 0, 4],
+        "rotation_y": 0,
+        "footprint": { "width": 3, "depth": 3 },
+        "builder_roles": ["master builder"],
+        "stages": [
+          { "name": "marked plot", "asset": "lantern", "work_units": 4 },
+          { "name": "laying the floor", "asset": "tree", "work_units": 20 },
+          { "name": "timber frame", "asset": "cart", "work_units": 40 },
+          { "name": "raising day", "asset": "cart", "work_units": 16 }
+        ],
+        "completion": {
+          "buildings": [
+            {
+              "position": [12, 0, 4],
+              "rotation_y": 0,
+              "width": 3,
+              "depth": 3,
+              "height": 4,
+              "wall_color": "#d9c7a3",
+              "roof_color": "#7a4a2b",
+              "windows": 3,
+              "chimney": true
+            }
+          ],
+          "props": []
+        }
+      },
+      "prerequisites": [
+        { "type": "site_complete", "site": "town-well" },
+        { "type": "day", "min_day": 2 }
+      ]
+    }
+  ]
+}

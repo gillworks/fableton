@@ -7,6 +7,7 @@ import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
 import { RumorsDocSchema, type RumorsDoc } from '../schemas/rumors.js';
+import { ExpansionPlanSchema, type ExpansionPlan } from '../schemas/expansion.js';
 import { DELTA_ENVELOPE_BUDGET, DELTA_PER_NPC_BUDGET, WorldSim, type SimEvent } from './worldSim.js';
 
 const root = new URL('../../test/fixtures/sample-world/', import.meta.url);
@@ -376,6 +377,46 @@ describe('WorldSim', () => {
       sim.onEvent((e) => e.type === 'rumor' && rumors.push(e));
       for (let i = 0; i < 20; i++) sim.tick();
       return { heard: npcs.map((n) => sim.heard(n.id)), rumors };
+    };
+    expect(JSON.stringify(run())).toEqual(JSON.stringify(run()));
+  });
+
+  // A two-building starter plan: the town-well opens on day one (no unmet
+  // prerequisite), the market-hall waits on the well finishing — and the
+  // builder mechanic that completes it lands later, so it stays queued here.
+  const starterPlan: ExpansionPlan = ExpansionPlanSchema.parse(loadJson('../expansion/valid-starter-plan.json'));
+
+  it('opens a planned site on day one and announces the groundbreaking', () => {
+    const sim = new WorldSim({ charter, manifest, chunks, npcs, expansionPlan: starterPlan, ticksPerPhase: 600 });
+    expect(sim.openSites()).toEqual([]); // nothing broken before the first tick
+    const events: SimEvent[] = [];
+    sim.onEvent((e) => e.type === 'expansion' && events.push(e));
+    sim.tick();
+    expect(events).toEqual([{ type: 'expansion', tick: 1, site: 'town-well', stage: 'marked plot' }]);
+    expect(sim.openSites()).toEqual(['town-well']);
+    // The market-hall waits on the well completing, which no mechanic reports yet.
+    for (let i = 0; i < 100; i++) sim.tick();
+    expect(sim.openSites()).toEqual(['town-well']);
+  });
+
+  it('a resumed world does not re-break ground already opened', () => {
+    const resumed = new WorldSim({
+      charter, manifest, chunks, npcs, expansionPlan: starterPlan, ticksPerPhase: 10, startTick: 100,
+    });
+    expect(resumed.openSites()).toEqual(['town-well']); // seeded from the resume day
+    const events: SimEvent[] = [];
+    resumed.onEvent((e) => e.type === 'expansion' && events.push(e));
+    resumed.tick();
+    expect(events).toEqual([]); // nothing re-announced
+  });
+
+  it('expansion is deterministic: two sims open sites identically', () => {
+    const run = (): SimEvent[] => {
+      const sim = new WorldSim({ charter, manifest, chunks, npcs, expansionPlan: starterPlan, ticksPerPhase: 50 });
+      const events: SimEvent[] = [];
+      sim.onEvent((e) => e.type === 'expansion' && events.push(e));
+      for (let i = 0; i < 200; i++) sim.tick();
+      return events;
     };
     expect(JSON.stringify(run())).toEqual(JSON.stringify(run()));
   });

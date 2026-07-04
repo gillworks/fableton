@@ -68,6 +68,8 @@ sim.onEvent((event) => {
   else if (event.type === 'rumor')
     console.log(`[tick ${event.tick}] rumor — ${event.from} → ${event.to}: ${event.text}`);
   else if (event.type === 'event') console.log(`[tick ${event.tick}] the ${event.event} begins`);
+  else if (event.type === 'expansion')
+    console.log(`[tick ${event.tick}] ground breaks: ${event.site} — ${event.stage}`);
   else console.log(`[tick ${event.tick}] ${event.npc} — ${event.activity}`);
 });
 

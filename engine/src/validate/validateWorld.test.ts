@@ -377,3 +377,72 @@ describe('validateWorld — construction sites', () => {
     expect(violations.map((v) => v.message).join('\n')).toContain('construction 608');
   });
 });
+
+const loadPlan = (): AnyDoc =>
+  JSON.parse(
+    readFileSync(new URL('../../test/fixtures/expansion/valid-starter-plan.json', import.meta.url), 'utf8'),
+  );
+
+// sampleWorld() + a resident who can build + the starter plan whose two sites
+// are pre-placed in the town square. The fixture's builder_roles already read
+// "master builder", the role that resident fills, so refs resolve.
+const worldWithPlan = (): WorldDocs => {
+  const world = sampleWorld();
+  world.npcs.push(builderNpc());
+  (world.chunks[0]!.doc as AnyDoc).npcs.push('mabel-the-mason'); // town-square
+  world.expansionPlan = { file: 'expansion-plan.json', doc: loadPlan() };
+  return world;
+};
+
+describe('validateWorld — expansion plans', () => {
+  it('passes a plan whose pre-placed sites all hold statically', () => {
+    expect(validateWorld(charter, worldWithPlan())).toEqual([]);
+  });
+
+  it('validates a planned site like any other: an unknown chunk fails, naming the plan file', () => {
+    const world = worldWithPlan();
+    (world.expansionPlan!.doc as AnyDoc).queue[0].site.chunk = 'atlantis';
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'asset-refs-resolve');
+    expect(violations.map((v) => v.message).join('\n')).toContain('unknown chunk "atlantis"');
+    expect(violations.some((v) => v.file === 'expansion-plan.json')).toBe(true);
+  });
+
+  it('rejects a planned site whose footprint overlaps another building', () => {
+    const world = worldWithPlan();
+    const queue = (world.expansionPlan!.doc as AnyDoc).queue;
+    // Drop market-hall onto town-well's footprint — they would share ground.
+    queue[1].site.position = queue[0].site.position;
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'footprint-overlap');
+    expect(violations).toHaveLength(1);
+    expect(violations[0]!.message).toMatch(/overlaps site "town-well"/);
+    expect(violations[0]!.file).toBe('expansion-plan.json');
+  });
+
+  it('rejects a planned site whose footprint disconnects the walk graph', () => {
+    const world = worldWithPlan();
+    const site = (world.expansionPlan!.doc as AnyDoc).queue[0].site;
+    site.position = [8, 0, 8]; // square-center — every edge runs through the hub
+    site.footprint = { width: 2, depth: 2 };
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'nav-connectivity');
+    expect(violations.map((v) => v.message).join('\n')).toMatch(/unreachable once the site/);
+  });
+
+  it('adjacent (edge-touching) footprints do not count as overlap', () => {
+    const world = worldWithPlan();
+    const queue = (world.expansionPlan!.doc as AnyDoc).queue;
+    // town-well is 3×3 centred at (11,11) → east edge at x=12.5. Place market-hall
+    // 3×3 centred at (14,11) → west edge at x=12.5: they share an edge, no overlap.
+    queue[1].site.position = [14, 0, 11];
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'footprint-overlap');
+    expect(violations).toEqual([]);
+  });
+
+  it('a planned site clashing with a standing construction site is caught across both pools', () => {
+    const world = worldWithPlan();
+    const standing = loadSite(); // fixture bakery site at (11,0,11), same as town-well
+    standing['builder_roles'] = ['master builder'];
+    world.constructionSites = [{ file: 'construction/bakery-extension.json', doc: standing }];
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'footprint-overlap');
+    expect(violations.some((v) => v.message.includes('bakery-extension'))).toBe(true);
+  });
+});
