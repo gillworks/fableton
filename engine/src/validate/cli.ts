@@ -47,6 +47,7 @@ if (charter) {
       ?.map((c) => c.path)
       .filter((p): p is string => typeof p === 'string') ?? [];
   const npcsDir = join(worldDir, 'npcs');
+  const rumorsPath = join(worldDir, 'rumors.json');
   const world: WorldDocs = {
     manifest,
     registry: readJson(join(worldDir, 'assets.json')),
@@ -57,6 +58,8 @@ if (charter) {
           .sort()
           .map((f) => readJson(join(npcsDir, f)))
       : [],
+    // Optional (issue #81): validate rumors when the world seeds any.
+    ...(existsSync(rumorsPath) && { rumors: readJson(rumorsPath) }),
   };
   violations.push(...validateWorld(charter, world));
 

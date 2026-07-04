@@ -31,5 +31,28 @@ describe('buildPanelData', () => {
     // Unknown ids fall back to the id rather than dropping the entry.
     expect(panel.relationships[1]!.name).toBe('someone-unknown');
     expect(panel.footer).toBe('lore/greta-the-baker.json · tree: a-baker-s-day');
+    // No gossip in the fixture detail → an empty section, not undefined.
+    expect(panel.heard).toEqual([]);
+  });
+
+  it('maps HAS HEARD, newest first, resolving the teller id to a name', () => {
+    const panel = buildPanelData(
+      {
+        ...detail,
+        heard: [
+          { rumor: 'oven-knock', text: 'the oven knocked back', from: 'reynard-the-retired', tick: 3 },
+          { rumor: 'honest-apples', text: 'the apples are honest', from: 'tam-the-lamplighter', tick: 9 },
+        ],
+      },
+      new Map([
+        ['reynard-the-retired', 'Reynard'],
+        ['tam-the-lamplighter', 'Tam'],
+      ]),
+    );
+    // Reversed to newest-first, and ids resolved like relationships.
+    expect(panel.heard).toEqual([
+      { rumor: 'honest-apples', text: 'the apples are honest', from: 'Tam' },
+      { rumor: 'oven-knock', text: 'the oven knocked back', from: 'Reynard' },
+    ]);
   });
 });
