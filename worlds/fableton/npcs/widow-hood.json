@@ -30,11 +30,20 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "inspecting callers at the gate",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the annual tally, kept without him",
+          "children": [
+            {
+              "type": "move",
+              "label": "stepping out to the gate",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "counting this year's wolves against Pip's count",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {
