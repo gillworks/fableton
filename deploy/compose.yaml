@@ -55,13 +55,14 @@ services:
     ports:
       - '${FABLETON_PORT:-8080}:80'
     environment:
-      # Social-card text comes from the world's CHARTER (issue #55): the
-      # world container writes /world/og.env at boot and the caddy
-      # entrypoint sources it. Only the URL bits are instance config.
-      # Per-world og.png lives in the world dir (served at /world/og.png);
-      # /assets/og-default.png is the engine fallback for fresh charters.
+      # Social card comes from the world's CHARTER (issue #55): the world
+      # container writes /world/og.env at boot (title, description, and
+      # image path) and the caddy entrypoint sources it. Only the deploy
+      # URL is instance config. A world ships its own og.png (served at
+      # /world/og.png); write-og-env falls back to /assets/og-default.png
+      # for a fresh charter, and the entrypoint defaults it again if
+      # og.env never appears.
       PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
-      OG_IMAGE_PATH: ${OG_IMAGE_PATH:-/world/og.png}
     volumes:
       - world-data:/world:ro
     depends_on:

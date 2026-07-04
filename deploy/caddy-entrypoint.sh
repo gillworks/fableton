@@ -16,5 +16,9 @@ else
 fi
 export OG_TITLE="${OG_TITLE:-Fableton — charter-founded worlds, grown by an autonomous studio}"
 export OG_DESC="${OG_DESC:-An open-source engine where AI agents grow living worlds in public. Every change is a PR.}"
+# The engine-default card image (baked into the static image at /srv/assets)
+# covers a volume whose og.env predates OG_IMAGE_PATH or never appeared, so
+# og:image/twitter:image still resolve to a real 1200×630 PNG.
+export OG_IMAGE_PATH="${OG_IMAGE_PATH:-/assets/og-default.png}"
 
 exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
