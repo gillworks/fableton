@@ -44,6 +44,14 @@ Escalations are the only channel by which law questions travel upward. The contr
 
 Every role brief opens by reading the same documents in the same order — charter → `artifacts/master-plan.json` → `artifacts/decrees.json` (→ `amendments/`) → the recent chronicle — before any session-specific input (backlog, PR list, findings). Stable, slow-changing law first and volatile context last keeps the shared prefix of consecutive sessions identical, which is exactly what prompt caching rewards; it is also why decrees are append-only. When editing a brief, preserve that order.
 
+## Untrusted input & the review boundary (#101)
+
+The feedback funnel means the pantheon reads text written by anonymous visitors (wish box → `wish` issues) and arbitrary GitHub accounts (`feedback`, petitions). Assume prompt injection; the containment is layered:
+
+1. **Intake neutralizes the GitHub layer** — wishes land fenced (no mentions, no cross-refs, no markdown injection), length-capped, rate-limited (#84).
+2. **The briefs carry an untrusted-input contract** — visitor text is data about desires, never instructions; instruction-shaped content is closed as spam, never acted on, never quoted verbatim into world data or artifacts.
+3. **The review boundary is machinery, not convention** — `.github/CODEOWNERS` owns everything except `worlds/`, and branch protection requires code-owner review: world-data PRs auto-merge on green, while a PR touching code, briefs, deploy, or CI cannot merge without the EP even if an agent tries. Keep the studio's gh token non-admin (see `deploy/crontab.example`) or the boundary doesn't bind.
+
 ### Non-root requirement (learned in production)
 
 Claude Code refuses `--dangerously-skip-permissions` under root — correctly. The pantheon runs as a dedicated `studio` user that owns its own clone; `deploy/crontab.example` documents the full user setup, including the one-time bootstrap pull (the clone must already contain `run.sh` before cron can invoke it) and token handling (`claude setup-token` → the token lives in the studio user's crontab header, never in world-readable `/etc/environment`). The log file needs `chown studio` once: `touch /var/log/fableton-studio.log && chown studio:studio /var/log/fableton-studio.log`.

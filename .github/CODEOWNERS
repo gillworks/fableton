@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# The review boundary, as machinery (issue #101): everything is owned by
+# the executive producer EXCEPT worlds/ — so world-data PRs (the
+# pantheon's lane) auto-merge on green CI, while any PR touching code,
+# briefs, deploy, CI, charters, or root manifests requires EP review no
+# matter what an agent decides. Branch protection enforces this via
+# "require review from Code Owners".
+*         @gillworks
+
+# worlds/ is the steward's lane: chunks, residents, artifacts, chronicle,
+# expansion plans. An entry with no owner clears the requirement.
+/worlds/
