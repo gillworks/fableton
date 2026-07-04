@@ -310,3 +310,96 @@ export function generateWorld(
 
   return { manifest, chunks };
 }
+
+/**
+ * Grow the world by ONE region (issue #120): generate the chunk at `cell`
+ * exactly as the founding would have — same world-space noise (terrain
+ * seams match the neighbours automatically), same per-chunk derived seed —
+ * then wire it in: manifest entry, neighbours' adjacency, and each
+ * neighbour's reciprocal gate node + portal, star-wired to its heart, as
+ * if the chunk had always been there. Deterministic given (charter, world
+ * state, cell); throws rather than producing a detached, occupied, or
+ * over-cap world. Callers gate + write; this only computes.
+ */
+export interface GrownRegion {
+  manifest: WorldManifest;
+  /** The freshly generated chunk (residents come later — steward's lane). */
+  chunk: Chunk;
+  /** Neighbour chunks with the reciprocal gate/portal patched in. */
+  patchedNeighbours: Chunk[];
+}
+
+export function growRegion(
+  charter: Charter,
+  registry: AssetRegistry,
+  world: { manifest: WorldManifest; chunks: Chunk[] },
+  cell: { gx: number; gz: number },
+): GrownRegion {
+  const caps = charter.generation.caps;
+  if (world.manifest.chunks.length + 1 > caps.max_regions) {
+    throw new Error(
+      `the charter caps this world at ${caps.max_regions} regions (currently ${world.manifest.chunks.length})`,
+    );
+  }
+  const cellOf = (origin: [number, number]): Cell => ({
+    gx: origin[0] / CHUNK_SIZE,
+    gz: origin[1] / CHUNK_SIZE,
+  });
+  const occupied = new Map(world.manifest.chunks.map((c) => [cellKey(cellOf(c.origin)), c.id]));
+  const id = chunkId(cell);
+  if (occupied.has(cellKey(cell))) {
+    throw new Error(`cell (${cell.gx}, ${cell.gz}) is already ${occupied.get(cellKey(cell))}`);
+  }
+  const neighbours = DIRS.flatMap((dir) => {
+    const other = occupied.get(cellKey({ gx: cell.gx + dir.gx, gz: cell.gz + dir.gz }));
+    return other ? [{ id: other, dir }] : [];
+  });
+  if (neighbours.length === 0) {
+    throw new Error(`cell (${cell.gx}, ${cell.gz}) touches no existing chunk — the world stays connected`);
+  }
+
+  const heightField = makeHeightField(charter.identity.seed);
+  const chunk = generateChunk(cell, neighbours, charter, registry, heightField);
+
+  // Reciprocal side: each neighbour gains the gate + portal the founding
+  // would have given it. Pure geometry — no RNG is consumed, so the
+  // neighbour's existing generated content is untouched.
+  const mid = CHUNK_SIZE / 2;
+  const neighbourIds = new Set(neighbours.map((n) => n.id));
+  const patchedNeighbours = world.chunks
+    .filter((c) => neighbourIds.has(c.id))
+    .map((c) => {
+      const dir = neighbours.find((n) => n.id === c.id)!.dir; // new cell → neighbour
+      const gate = `gate-${id}`;
+      if (c.nav.nodes.some((n) => n.id === gate)) return c; // already wired (re-run)
+      const lx = mid + -dir.gx * (mid - 1);
+      const lz = mid + -dir.gz * (mid - 1);
+      return ChunkSchema.parse({
+        ...c,
+        nav: {
+          nodes: [...c.nav.nodes, { id: gate, position: [round3(lx), heightOnMesh(c.terrain.heights, lx, lz), round3(lz)] }],
+          edges: [...c.nav.edges, ['heart', gate]],
+          portals: [...c.nav.portals, { node: gate, to_chunk: id }],
+        },
+      });
+    });
+
+  const manifest = WorldManifestSchema.parse({
+    ...world.manifest,
+    chunks: [
+      ...world.manifest.chunks.map((entry) =>
+        neighbourIds.has(entry.id)
+          ? { ...entry, adjacent: [...entry.adjacent, id].sort() }
+          : entry,
+      ),
+      {
+        id,
+        path: `chunks/${id}.json`,
+        origin: [cell.gx * CHUNK_SIZE, cell.gz * CHUNK_SIZE],
+        adjacent: neighbours.map((n) => n.id).sort(),
+      },
+    ],
+  });
+
+  return { manifest, chunk, patchedNeighbours };
+}
