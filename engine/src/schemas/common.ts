@@ -4,8 +4,9 @@
 // stored as JSON (agents emit it; the charter alone is YAML-authored).
 import { z } from 'zod';
 
-// Chunk, manifest, asset-registry, and NPC documents version together for
-// now; split into per-schema versions if they ever migrate independently.
+// Chunk, manifest, asset-registry, NPC, and rumors documents version
+// together for now; split into per-schema versions if they ever migrate
+// independently.
 export const WORLD_DATA_SCHEMA_VERSION = 1;
 
 export const nonEmpty = z.string().min(1);
