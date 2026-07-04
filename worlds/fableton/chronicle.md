@@ -12,3 +12,4 @@ Granny Ash swept under the old apple tree at high sun and found two apples waiti
 At lamplighting, Stilts plates and Salt seasons, table-side, and neither has said out loud that it's two jobs pretending to be one. (PR #93)
 Marigold brought her chair to the square at hush and simply stayed; now she and Greta deal cards where the ovens have gone quiet, and the oven, as ever, is not mentioned. (PR #115)
 COUNCIL — The god watched the square learn its four hours by heart, ruled that a rumor is a lamp, and told the town: you may dig.
+At first light Ferrous asks the empty road the same question he asks Mirabel every year; at high sun, chunks away, Widow Hood counts her wolves against Pip's without waiting for him to visit. (PR #122)

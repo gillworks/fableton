@@ -20,11 +20,20 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "polishing his one remaining medal",
-          "radius": 3,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the yearly question, kept on schedule",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking to his post",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "asking, same as every year, whether standing watch counts as a life",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {
