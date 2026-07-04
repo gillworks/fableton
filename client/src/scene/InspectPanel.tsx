@@ -20,9 +20,21 @@ export interface InspectPanelProps {
   sim: SimState;
   theme: WorldTheme;
   onClose: () => void;
+  /** Whether the camera is currently following this resident. */
+  following: boolean;
+  onFollow: () => void;
+  onExitFollow: () => void;
 }
 
-export function InspectPanel({ npcId, sim, theme, onClose }: InspectPanelProps): ReactElement | null {
+export function InspectPanel({
+  npcId,
+  sim,
+  theme,
+  onClose,
+  following,
+  onFollow,
+  onExitFollow,
+}: InspectPanelProps): ReactElement | null {
   const [panel, setPanel] = useState<PanelData | null>(null);
   const [activity, setActivity] = useState(sim.activityOf(npcId));
   const [failure, setFailure] = useState<string | null>(null);
@@ -155,6 +167,25 @@ export function InspectPanel({ npcId, sim, theme, onClose }: InspectPanelProps):
             />
             {activity}
           </div>
+
+          <button
+            onClick={following ? onExitFollow : onFollow}
+            style={{
+              width: '100%',
+              border: following ? `1px solid ${MUTED}` : 'none',
+              background: following ? 'transparent' : INK,
+              color: following ? MUTED : PARCHMENT,
+              borderRadius: 999,
+              padding: '8px 12px',
+              marginBottom: 14,
+              fontFamily: mono,
+              fontSize: 12,
+              letterSpacing: 0.5,
+              cursor: 'pointer',
+            }}
+          >
+            {following ? 'Following — exit' : `Follow ${panel.name}`}
+          </button>
 
           {panel.relationships.length > 0 && (
             <>
