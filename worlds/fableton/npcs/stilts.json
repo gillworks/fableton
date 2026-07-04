@@ -44,11 +44,21 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "serving the evening crowd fairly",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "plating for the evening crowd",
+          "children": [
+            {
+              "type": "move",
+              "label": "wheeling the cart to the square",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "serving the evening crowd fairly",
+              "with": "stall",
+              "duration_s": 90
+            }
+          ]
         }
       },
       {
