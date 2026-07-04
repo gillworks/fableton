@@ -10,3 +10,4 @@ Tam meant to nap through the whole of high sun; Greta had other plans, and a rol
 Long after the bell stopped ringing, Vesper stayed to hear it finish; the lamplighter never once told her she didn't have to. (PR #63)
 Granny Ash swept under the old apple tree at high sun and found two apples waiting, same as always; she and Reynard have agreed, without ever discussing it, not to discuss it. (PR #77)
 At lamplighting, Stilts plates and Salt seasons, table-side, and neither has said out loud that it's two jobs pretending to be one. (PR #93)
+
