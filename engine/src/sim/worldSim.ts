@@ -280,7 +280,11 @@ export class WorldSim {
     }
     // The town grows: open any planned site whose prerequisites came true this
     // tick (a new day reached, or a dependency finished). Pure and day-granular
-    // — the runtime opens each site once and rides no RNG.
+    // — the runtime opens each site once and rides no RNG. This MUST run before
+    // construction below: a site_complete prerequisite reads #completedSites,
+    // which construction writes later in the same tick, so a finish is seen on
+    // the next step (never the same tick). Reordering the two would introduce a
+    // same-tick race — keep expansion first.
     if (this.#expansion) {
       for (const opened of this.#expansion.step(clock.day, this.#completedSites)) {
         this.#emit({ type: 'expansion', tick: clock.tick, site: opened.site, stage: opened.stage });
