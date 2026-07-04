@@ -2,14 +2,14 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 1,
-  "issued": "2026-07-03T05:56:36Z",
-  "horizon": "Season of Introductions — the town learns it is a town",
+  "revision": 2,
+  "issued": "2026-07-04T09:03:46Z",
+  "horizon": "Season of Groundbreaking — the town builds what it wished for",
   "goals": [
-    "Honor the Law of Ties: no new resident without at least one grounded tie to a living neighbor (Decree 1)",
-    "Give the square a heartbeat: one shared, visible ritual in each day phase",
-    "One discoverable arc per region — orchard, well, and square — legible from inspect panels alone",
-    "The Chronicle speaks daily, in the town's voice, never mechanically (Decree 2)",
-    "Only after the above feel true: grow by one small place that has a reason to exist"
+    "Raise the wishing well and the hedge arbor in public: named residents do the building, stages legible from the inspect panel, and the day each one finishes belongs to its builders",
+    "Repay the edges: the square won its heartbeat by borrowing Vesper and Marigold — now the chunks that lent them get rituals of their own, Ferrous and Widow Hood first, before anyone drifts toward woodcut-grey",
+    "New powers enter through the law: Fableton's first rumors are acts of retelling under Decree 3, its first weather is a moral lingering (charter law 4), its first festival earns a place on the calendar by what the town has actually done",
+    "Keep converting wander into purpose: every resident's day should answer, from the inspect panel alone, what they are doing and for whom",
+    "When the well opens, wishes are ledgered, not granted — debts made in a tale survive its ending, and the well keeps books"
   ]
 }
