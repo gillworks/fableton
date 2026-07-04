@@ -28,6 +28,7 @@ import { ChunkStreamer } from '../core/streamer.js';
 import { phaseLighting, type WorldTheme } from '../core/theme.js';
 import { fetchChunk, type WorldBundle } from '../core/loadWorld.js';
 import type { Chunk } from '../core/types.js';
+import { DEFAULT_FOLLOW, followStep, type FollowCam } from '../core/follow.js';
 
 export interface WorldSceneProps {
   bundle: WorldBundle;
@@ -37,12 +38,14 @@ export interface WorldSceneProps {
   phaseIndex: number;
   onSelect: (npcId: string) => void;
   construction: ConstructionSite[];
+  /** The resident the camera is following, or null for explore. */
+  follow: string | null;
 }
 
 const damp = (from: number, to: number, dt: number): number =>
   from + (to - from) * Math.min(1, dt * 3);
 
-export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction }: WorldSceneProps): ReactElement {
+export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction, follow }: WorldSceneProps): ReactElement {
   const worldRef = useRef<Group>(new Group());
   const chunkGroups = useRef(new Map<string, Group>());
   const windowMaterials = useRef<import('../core/buildings.js').BuiltBuilding['windowMaterials']>([]);
@@ -109,21 +112,59 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
         const entry = bundle.manifest.chunks.find((c) => c.id === site.chunk);
         return entry ? <ConstructionMarker key={site.chunk + site.pr} site={site} origin={entry.origin} /> : null;
       })}
-      <OrbitControls
-        target={[coin.center[0], 0.5, coin.center[1]]}
-        enableDamping
-        dampingFactor={0.08}
-        minDistance={2.5}
-        // Zoom out far enough to frame the whole diorama, however big
-        // the world grows.
-        maxDistance={Math.max(70, Math.max(coin.rx, coin.rz) * 2.6)}
-        // Street level: tilt to just above horizontal, so the viewer can
-        // stand among the houses (#73). The coin hides the void below.
-        maxPolarAngle={1.53}
-        makeDefault
-      />
+      {follow ? (
+        // Follow mode drives the camera itself; OrbitControls would fight
+        // it, so it steps aside until the viewer exits follow (#80).
+        <FollowCamera key={follow} sim={sim} follow={follow} />
+      ) : (
+        <OrbitControls
+          target={[coin.center[0], 0.5, coin.center[1]]}
+          enableDamping
+          dampingFactor={0.08}
+          minDistance={2.5}
+          // Zoom out far enough to frame the whole diorama, however big
+          // the world grows.
+          maxDistance={Math.max(70, Math.max(coin.rx, coin.rz) * 2.6)}
+          // Street level: tilt to just above horizontal, so the viewer can
+          // stand among the houses (#73). The coin hides the void below.
+          maxPolarAngle={1.53}
+          makeDefault
+        />
+      )}
     </>
   );
+}
+
+/**
+ * Drives the camera to trail the followed resident through their day. The
+ * pose math is pure (core/follow); this component only reads the live
+ * position each frame and writes it onto the camera. Does nothing until
+ * the resident has streamed in — so a deep link to someone not yet
+ * broadcast just holds the explore framing until they appear.
+ */
+function FollowCamera({ sim, follow }: { sim: SimState; follow: string }): null {
+  const { camera } = useThree();
+  const cam = useRef<FollowCam | null>(null);
+
+  useFrame((_, dt) => {
+    if (!sim.has(follow)) return;
+    const now = performance.now();
+    const pos = sim.positionOf(follow, now);
+    if (!cam.current) {
+      // Seed from wherever the explore camera left off, so the handoff
+      // eases in rather than snapping.
+      cam.current = {
+        position: [camera.position.x, camera.position.y, camera.position.z],
+        target: [pos[0], pos[1] + DEFAULT_FOLLOW.lookHeight, pos[2]],
+      };
+    }
+    cam.current = followStep(cam.current, pos, sim.headingOf(follow), dt);
+    const { position, target } = cam.current;
+    camera.position.set(position[0], position[1], position[2]);
+    camera.lookAt(target[0], target[1], target[2]);
+  });
+
+  return null;
 }
 
 function Npcs({ sim, theme, onSelect }: { sim: SimState; theme: WorldTheme; onSelect: (id: string) => void }): ReactElement {

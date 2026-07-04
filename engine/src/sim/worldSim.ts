@@ -14,6 +14,7 @@ import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import type { Npc } from '../schemas/npc.js';
 import { EMPTY_RUMORS, type RumorsDoc } from '../schemas/rumors.js';
+import { activeEvent } from './calendar.js';
 import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
 import { GossipRuntime, type Heard } from './gossipRuntime.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
@@ -45,6 +46,7 @@ export interface Delta {
 
 export type SimEvent =
   | { type: 'phase'; tick: number; phase: string }
+  | { type: 'event'; tick: number; event: string }
   | { type: 'activity'; tick: number; npc: string; activity: string }
   // A notable rumor jumped from one resident to another this tick — the
   // chronicle's "who told Greta?" line. Quiet rumors still spread (the
@@ -77,9 +79,12 @@ export class WorldSim {
   #listeners: ((event: SimEvent) => void)[] = [];
   #lastSent = new Map<string, { pos: string; ry: number; activity: string }>();
   #lastPhase: string;
+  #calendar: Charter['calendar'];
+  #lastEvent: string | null;
 
   constructor(options: WorldSimOptions) {
     this.#phases = options.charter.aesthetic.day_phases;
+    this.#calendar = options.charter.calendar;
     this.#ticksPerPhase =
       options.ticksPerPhase ??
       ticksPerPhaseFor(options.charter.generation.day_length_hours, this.#phases.length);
@@ -99,10 +104,19 @@ export class WorldSim {
       options.charter.identity.seed,
     );
     this.#lastPhase = this.clock().phase;
+    // Seed from the resume tick so a redeploy mid-festival doesn't re-announce
+    // an event already underway (issue #57).
+    this.#lastEvent = activeEvent(this.#calendar, this.clock())?.name ?? null;
   }
 
   clock(): ClockState {
     return clockAt(this.#tick, this.#phases, this.#ticksPerPhase);
+  }
+
+  /** The town event in effect right now, or null on an ordinary day. Drives
+   *  the HUD's "Today: <event>" line and behavior-tree event context. */
+  event(): string | null {
+    return activeEvent(this.#calendar, this.clock())?.name ?? null;
   }
 
   /** How fast world time moves: one full day in sim ticks and real seconds. */
@@ -151,8 +165,15 @@ export class WorldSim {
       delta.phase = clock.phase;
       this.#emit({ type: 'phase', tick: clock.tick, phase: clock.phase });
     }
+    // The town event in effect this tick: behavior context for the runtimes,
+    // and a chronicle occurrence when a new one comes into effect.
+    const eventName = activeEvent(this.#calendar, clock)?.name ?? null;
+    if (eventName !== this.#lastEvent) {
+      this.#lastEvent = eventName;
+      if (eventName !== null) this.#emit({ type: 'event', tick: clock.tick, event: eventName });
+    }
     for (const runtime of this.#runtimes) {
-      const state = runtime.step(clock.phase);
+      const state = runtime.step({ phase: clock.phase, event: eventName });
       const posKey = state.pos.join(',');
       const last = this.#lastSent.get(state.id);
       const entry: NpcDelta = { id: state.id };

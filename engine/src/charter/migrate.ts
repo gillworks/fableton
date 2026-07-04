@@ -24,8 +24,17 @@ const migrateV0toV1: Migration = (doc) => {
   };
 };
 
+// v2 adds the town-events calendar (issue #62). Pre-calendar charters simply
+// have no events; the flagship and every earlier charter migrate untouched.
+const migrateV1toV2: Migration = (doc) => ({
+  ...doc,
+  schema_version: 2,
+  calendar: isRecord(doc['calendar']) ? doc['calendar'] : { events: [] },
+});
+
 const MIGRATIONS: Record<number, Migration> = {
   0: migrateV0toV1,
+  1: migrateV1toV2,
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {

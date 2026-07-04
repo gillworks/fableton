@@ -16,6 +16,8 @@ import type { RumorsDoc } from '../schemas/rumors.js';
 import { validateWorld } from '../validate/validateWorld.js';
 import type { SimEvent } from '../sim/worldSim.js';
 import type { WorldSim } from '../sim/worldSim.js';
+import { WISH_MIN_LEN, WISH_MAX_LEN } from '../wish.js';
+import type { WishIntake } from './wishIntake.js';
 
 // Stored, not yet consumed (issue #9): the audit slider and escalation
 // cap the Phase B escalation contract reads (docs/architecture.md).
@@ -27,6 +29,19 @@ export type AdminConfig = z.infer<typeof AdminConfigSchema>;
 
 const DEFAULT_ADMIN_CONFIG: AdminConfig = { audit_sample_percent: 10, escalation_cap: 5 };
 const CHRONICLE_CAP = 100;
+
+// Wish intake (issue #79): capped short (bounds in ../wish.js, shared
+// with the client) and rate-limited at the API so a visitor's wish can't
+// spam the backlog. A wish is a sentence, not a doc.
+const WISH_RATE_MAX = 3;
+const WISH_RATE_WINDOW_MS = 10 * 60_000;
+// Once the per-IP window map grows past this many keys, sweep the buckets
+// that have fully expired so a public endpoint can't leak memory forever.
+const WISH_BUCKET_SWEEP_AT = 1024;
+
+export const WishRequestSchema = z.strictObject({
+  wish: z.string().trim().min(WISH_MIN_LEN, 'a wish needs a few more words').max(WISH_MAX_LEN, 'keep the wish short'),
+});
 
 export interface WorldApiDeps {
   sim: WorldSim;
@@ -44,27 +59,88 @@ export interface WorldApi {
   close: () => Promise<void>;
 }
 
-export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {}): Promise<WorldApi> {
+export interface WorldApiOptions {
+  port?: number;
+  /**
+   * The viewer wish source of the feedback funnel (issue #79). Absent/null
+   * means this instance has no wish token configured — the endpoint then
+   * reports that wishes are closed rather than erroring.
+   */
+  wishIntake?: WishIntake | null;
+  /** Injectable clock for the wish rate limiter; defaults to Date.now. */
+  now?: () => number;
+  /**
+   * How many proxy hops in front of world-api are trusted for reading the
+   * client IP from `X-Forwarded-For`. Behind the single caddy of the v1
+   * deploy (deploy/Caddyfile) this is 1: caddy *appends* the real peer, so
+   * the trusted client is the rightmost hop and everything to its left is
+   * client-supplied (spoofable). Raise it only if more trusted proxies sit
+   * in front. Defaults to 1.
+   */
+  trustedProxyHops?: number;
+}
+
+export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {}): Promise<WorldApi> {
   const npcs = new Map(deps.npcs.map((n) => [n.id, n]));
   const rumorText = new Map((deps.rumors?.rumors ?? []).map((r) => [r.id, r.text]));
   const nameOf = (id: string): string => npcs.get(id)?.identity.name ?? id;
   const adminConfig: AdminConfig = { ...DEFAULT_ADMIN_CONFIG };
   const chronicle: { tick: number; entry: string }[] = [];
+  const wishIntake = options.wishIntake ?? null;
+  const now = options.now ?? (() => Date.now());
+  const trustedProxyHops = Math.max(1, Math.trunc(options.trustedProxyHops ?? 1));
 
-  const entryFor = (event: SimEvent): string => {
+  // Per-IP sliding window: cheap in-memory rate limit for the wish box.
+  const wishHits = new Map<string, number[]>();
+  const clientIp = (req: IncomingMessage): string => {
+    const xff = req.headers['x-forwarded-for'];
+    const raw = Array.isArray(xff) ? xff.join(',') : xff;
+    if (raw) {
+      // Count from the RIGHT: the trusted proxy appends the real peer, so
+      // the rightmost hop is trustworthy and the leftmost is whatever the
+      // client sent. Reading the leftmost would let a visitor rotate the
+      // header to mint unlimited rate-limit buckets and defeat the cap.
+      const hops = raw.split(',').map((h) => h.trim()).filter(Boolean);
+      const trusted = hops[hops.length - trustedProxyHops];
+      if (trusted) return trusted;
+    }
+    return req.socket.remoteAddress ?? 'unknown';
+  };
+  const wishRateLimited = (ip: string): boolean => {
+    const cutoff = now() - WISH_RATE_WINDOW_MS;
+    // Keep the map bounded: once it grows large, drop every bucket whose
+    // timestamps have all aged out of the window. Buckets we keep always
+    // hold at least one live timestamp, so idle IPs don't accumulate.
+    if (wishHits.size > WISH_BUCKET_SWEEP_AT) {
+      for (const [key, hits] of wishHits) {
+        if (hits.every((t) => t <= cutoff)) wishHits.delete(key);
+      }
+    }
+    const recent = (wishHits.get(ip) ?? []).filter((t) => t > cutoff);
+    if (recent.length >= WISH_RATE_MAX) {
+      wishHits.set(ip, recent);
+      return true;
+    }
+    recent.push(now());
+    wishHits.set(ip, recent);
+    return false;
+  };
+
+  const narrate = (event: SimEvent): string => {
     switch (event.type) {
       case 'phase':
         return `the world turns: ${event.phase}`;
       case 'rumor':
         // The "who told Greta?" line, in plain sight.
         return `${nameOf(event.to)} heard from ${nameOf(event.from)}: “${event.text}”`;
-      default:
+      case 'event':
+        return `the ${event.event} begins`;
+      case 'activity':
         return `${event.npc} — ${event.activity}`;
     }
   };
-
   deps.sim.onEvent((event: SimEvent) => {
-    chronicle.push({ tick: event.tick, entry: entryFor(event) });
+    chronicle.push({ tick: event.tick, entry: narrate(event) });
     if (chronicle.length > CHRONICLE_CAP) chronicle.shift();
   });
 
@@ -152,6 +228,9 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
         npcs: npcs.size,
         clock,
         pace: deps.sim.pace(),
+        // The town event in effect right now (issue #62); null on an ordinary
+        // day. The HUD renders it as "Today: <event>".
+        event: deps.sim.event(),
       });
     }
     if (req.method === 'GET' && path === '/api/npcs') {
@@ -199,6 +278,37 @@ export function startWorldApi(deps: WorldApiDeps, options: { port?: number } = {
     }
     if (req.method === 'GET' && path === '/api/chronicle') {
       return json(res, 200, { entries: chronicle });
+    }
+    // The viewer source of the feedback funnel (issue #79): a wish lands
+    // in the world repo's backlog as a GH issue labeled `wish`. Disabled
+    // gracefully when the instance has no token; capped and rate-limited
+    // so it can't spam the backlog.
+    if (req.method === 'POST' && path === '/api/wishes') {
+      if (!wishIntake) return json(res, 503, { error: 'the wishing well is quiet in this world' });
+      let body: unknown;
+      try {
+        body = JSON.parse(await readBody(req));
+      } catch (e) {
+        return error(res, 400, `body is not JSON: ${e instanceof Error ? e.message : e}`);
+      }
+      const parsed = WishRequestSchema.safeParse(body);
+      if (!parsed.success) {
+        return json(res, 400, { error: 'that wish will not do', detail: z.prettifyError(parsed.error) });
+      }
+      if (wishRateLimited(clientIp(req))) {
+        return json(res, 429, { error: 'the well needs a moment — make another wish shortly' });
+      }
+      try {
+        const filed = await wishIntake.file(parsed.data.wish);
+        return json(res, 201, {
+          ok: true,
+          url: filed.url,
+          number: filed.number,
+          note: 'your wish drifts toward the stewards',
+        });
+      } catch {
+        return json(res, 502, { error: 'the wish could not be carried to the stewards — try again' });
+      }
     }
     if (path === '/api/admin/config') {
       if (req.method === 'GET') return json(res, 200, adminConfig);

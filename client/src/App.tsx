@@ -10,8 +10,10 @@ import { coinFor } from './core/chunkMeshes.js';
 import type { AssetPiece } from './core/chunkMeshes.js';
 import { SimState, connectSim } from './core/interpolator.js';
 import { constructionSites } from './core/hud.js';
+import { parseFollowParam, followSearch } from './core/follow.js';
 import { loadWorld, type WorldBundle } from './core/loadWorld.js';
 import { Hud } from './hud/Hud.js';
+import { FollowBanner } from './hud/FollowBanner.js';
 import { deriveTheme, phaseLighting } from './core/theme.js';
 import { InspectPanel } from './scene/InspectPanel.js';
 import { WorldScene } from './scene/WorldScene.js';
@@ -24,6 +26,9 @@ export function App(): ReactElement {
   const [tick, setTick] = useState(0);
   const [failure, setFailure] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  // Follow the resident named in the URL, if any — the shareable deep link.
+  const [follow, setFollow] = useState<string | null>(() => parseFollowParam(location.search));
+  const [roster, setRoster] = useState<Map<string, string>>(new Map());
   const sim = useMemo(() => new SimState(), []);
 
   useEffect(() => {
@@ -38,6 +43,14 @@ export function App(): ReactElement {
         sim.onPhase((name) => setPhase(Math.max(0, b.info.phases.indexOf(name))));
       })
       .catch((e) => setFailure(e instanceof Error ? e.message : String(e)));
+    // The resident roster: id→name for the follow banner, and the source
+    // of truth for validating a deep-linked ?follow= id.
+    fetch('/api/npcs')
+      .then((r) => (r.ok ? (r.json() as Promise<{ id: string; name: string }[]>) : []))
+      .then((all) => {
+        if (!disposed) setRoster(new Map(all.map((n) => [n.id, n.name])));
+      })
+      .catch(() => undefined);
     const disconnect = connectSim(
       sim,
       `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/sim`,
@@ -48,6 +61,24 @@ export function App(): ReactElement {
       disconnect();
     };
   }, [sim]);
+
+  // Keep the address bar in step with the follow state, so the URL you'd
+  // copy is the URL that reproduces what you're watching.
+  useEffect(() => {
+    const search = followSearch(location.search, follow);
+    history.replaceState(null, '', `${location.pathname}${search}${location.hash}`);
+  }, [follow]);
+
+  // A deep link to an id that isn't a real resident falls back to explore
+  // once the roster is known (empty roster = not loaded yet, so wait).
+  useEffect(() => {
+    if (follow && roster.size > 0 && !roster.has(follow)) setFollow(null);
+  }, [follow, roster]);
+
+  const startFollow = (id: string): void => {
+    setFollow(id);
+    setSelected(id); // open the panel too, so name + lore ride along
+  };
 
   if (failure) {
     return <div style={{ padding: 32, fontFamily: 'monospace' }}>world failed to load: {failure}</div>;
@@ -92,6 +123,7 @@ export function App(): ReactElement {
           phaseIndex={shownPhase}
           onSelect={setSelected}
           construction={sites}
+          follow={follow}
         />
       </Canvas>
       <Hud
@@ -104,7 +136,24 @@ export function App(): ReactElement {
         onSelectPhase={setPhaseOverride}
       />
       {selected && (
-        <InspectPanel npcId={selected} sim={sim} theme={theme} onClose={() => setSelected(null)} />
+        <InspectPanel
+          npcId={selected}
+          sim={sim}
+          theme={theme}
+          onClose={() => setSelected(null)}
+          following={follow === selected}
+          onFollow={() => startFollow(selected)}
+          onExitFollow={() => setFollow(null)}
+        />
+      )}
+      {follow && (
+        <FollowBanner
+          npcId={follow}
+          name={roster.get(follow) ?? follow}
+          sim={sim}
+          theme={theme}
+          onExit={() => setFollow(null)}
+        />
       )}
     </div>
   );

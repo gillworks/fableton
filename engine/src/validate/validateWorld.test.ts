@@ -159,6 +159,40 @@ describe('validateWorld', () => {
     expect(messages).toContain('the witching hour');
   });
 
+  it('accepts an on_event that names a declared calendar event', () => {
+    const festive: Charter = {
+      ...charter,
+      calendar: { events: [{ name: 'Lantern Festival', cadence: { every_days: 2, offset_days: 0 }, phases: [] }] },
+    };
+    const world = sampleWorld();
+    const greta = world.npcs.find((n) => n.file.includes('greta'))!.doc as AnyDoc;
+    greta.behavior = {
+      type: 'on_event',
+      label: "a baker's day, festival or not",
+      event: 'Lantern Festival',
+      child: { type: 'idle', label: 'feasting in the square', duration_s: 10 },
+      otherwise: { type: 'idle', label: 'minding the oven', duration_s: 10 },
+    };
+    expect(validateWorld(festive, world).filter((v) => v.file.includes('greta'))).toEqual([]);
+  });
+
+  it('flags an on_event that names an event the charter calendar does not declare', () => {
+    const world = sampleWorld();
+    const greta = world.npcs.find((n) => n.file.includes('greta'))!.doc as AnyDoc;
+    greta.behavior = {
+      type: 'on_event',
+      label: "a baker's day",
+      event: 'Ghost Festival',
+      child: { type: 'idle', label: 'haunting', duration_s: 10 },
+    };
+    // The template charter declares no events, so the reference cannot resolve.
+    const messages = validateWorld(charter, world)
+      .filter((v) => v.file.includes('greta'))
+      .map((v) => v.message)
+      .join('\n');
+    expect(messages).toContain('Ghost Festival');
+  });
+
   it('flags an NPC placed in no chunk', () => {
     const world = sampleWorld();
     (world.chunks[1]!.doc as AnyDoc).npcs = []; // orchard-row drops reynard

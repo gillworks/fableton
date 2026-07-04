@@ -40,6 +40,10 @@ export class SimState {
   npcIds(): string[] {
     return [...this.#tracks.keys()];
   }
+  /** Whether a resident is currently tracked (has streamed in yet). */
+  has(id: string): boolean {
+    return this.#tracks.has(id);
+  }
   activityOf(id: string): string {
     return this.#tracks.get(id)?.activity ?? '';
   }
