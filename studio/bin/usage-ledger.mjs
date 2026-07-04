@@ -14,6 +14,8 @@ export const CSV_HEADER =
 
 const TIER_ORDER = ['steward', 'qa', 'council'];
 
+const EXITS = ['ok', 'timeout', 'crash', 'error'];
+
 const num = (x) => {
   const n = Number(x);
   return Number.isFinite(n) ? n : 0;
@@ -98,7 +100,9 @@ export function summarize(csv) {
     const tier = byRole.get(role) ?? blankTier(role);
     tier.sessions += 1;
     const exit = c[10] || 'ok';
-    if (exit in tier && exit !== 'role') tier[exit] = (tier[exit] ?? 0) + 1;
+    // Explicit allowlist — a malformed exit column must not increment an
+    // unrelated tier key (e.g. via the prototype chain).
+    if (EXITS.includes(exit)) tier[exit] += 1;
     tier.input_tokens += num(c[3]);
     tier.cache_creation_tokens += num(c[4]);
     tier.cache_read_tokens += num(c[5]);

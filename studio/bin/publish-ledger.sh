@@ -21,6 +21,9 @@ git fetch -q origin main
 
 WORK=$(mktemp -d)
 trap 'git worktree remove -f "$WORK" 2>/dev/null || true; rm -rf "$WORK"' EXIT
+# Self-heal after a hard crash/reboot: a stale worktree still holding `ledger`
+# would make `worktree add -B` fail (branch checked out elsewhere).
+git worktree prune
 git worktree add -q -f -B "$BRANCH" "$WORK" origin/main
 
 # Read the box-local (gitignored) ledger; write the surface into the worktree.
