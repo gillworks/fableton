@@ -84,6 +84,18 @@ export {
   type Rumor,
   type RumorsDoc,
 } from './schemas/rumors.js';
+export {
+  DayPrerequisiteSchema,
+  ExpansionEntrySchema,
+  ExpansionPlanSchema,
+  PrerequisiteSchema,
+  SiteCompletePrerequisiteSchema,
+  type DayPrerequisite,
+  type ExpansionEntry,
+  type ExpansionPlan,
+  type Prerequisite,
+  type SiteCompletePrerequisite,
+} from './schemas/expansion.js';
 export { validateWorld, type Violation, type WorldDocs } from './validate/validateWorld.js';
 export { deriveSeed, mulberry32, pick, randInt, type Rng } from './generate/rng.js';
 export { colorFor, hslToHex } from './color.js';
@@ -92,6 +104,7 @@ export { TICK_HZ, clockAt, type ClockState } from './sim/clock.js';
 export { activeEvent, eventActiveAt, eventOccursOnDay } from './sim/calendar.js';
 export { NpcRuntime, type NpcState, type StepContext } from './sim/npcRuntime.js';
 export { GossipRuntime, type Heard, type Spread } from './sim/gossipRuntime.js';
+export { ExpansionRuntime, type SiteOpening } from './sim/expansionRuntime.js';
 export {
   ConstructionRuntime,
   type ConstructionSiteState,

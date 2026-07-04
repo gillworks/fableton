@@ -54,6 +54,7 @@ if (charter) {
           .map((f) => readJson(join(dir, f)))
       : [];
   const rumorsPath = join(worldDir, 'rumors.json');
+  const expansionPath = join(worldDir, 'expansion-plan.json');
   const world: WorldDocs = {
     manifest,
     registry: readJson(join(worldDir, 'assets.json')),
@@ -64,13 +65,17 @@ if (charter) {
     constructionSites: readDirJson(join(worldDir, 'construction')),
     // Optional (issue #81): validate rumors when the world seeds any.
     ...(existsSync(rumorsPath) && { rumors: readJson(rumorsPath) }),
+    // Optional (issue #95): validate the expansion plan's pre-placed sites.
+    ...(existsSync(expansionPath) && { expansionPlan: readJson(expansionPath) }),
   };
   violations.push(...validateWorld(charter, world));
 
   if (violations.length === 0) {
     const sites = world.constructionSites?.length ?? 0;
+    // Reached only when the plan validated cleanly, so its queue is well-formed.
+    const planned = (world.expansionPlan?.doc as { queue?: unknown[] } | undefined)?.queue?.length ?? 0;
     console.log(
-      `✓ world valid — ${world.chunks.length} chunks, ${world.npcs.length} NPCs${sites > 0 ? `, ${sites} construction site(s)` : ''}, charter "${charter.identity.name}"`,
+      `✓ world valid — ${world.chunks.length} chunks, ${world.npcs.length} NPCs${sites > 0 ? `, ${sites} construction site(s)` : ''}${planned > 0 ? `, ${planned} planned site(s)` : ''}, charter "${charter.identity.name}"`,
     );
   }
 }

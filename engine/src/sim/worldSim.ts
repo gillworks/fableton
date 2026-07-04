@@ -15,6 +15,7 @@ import type { WorldManifest } from '../schemas/manifest.js';
 import type { Npc } from '../schemas/npc.js';
 import { EMPTY_RUMORS, type RumorsDoc } from '../schemas/rumors.js';
 import type { ConstructionSite } from '../schemas/construction.js';
+import type { ExpansionPlan } from '../schemas/expansion.js';
 import { activeEvent } from './calendar.js';
 import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
 import {
@@ -22,6 +23,7 @@ import {
   type ConstructionSiteState,
   type ConstructionTransition,
 } from './constructionRuntime.js';
+import { ExpansionRuntime } from './expansionRuntime.js';
 import { GossipRuntime, type Heard } from './gossipRuntime.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
 import { weatherAt, type WeatherState } from './weather.js';
@@ -82,7 +84,11 @@ export type SimEvent =
   // A construction site climbed a stage (or finished) this tick — the
   // chronicle's "the bakery's frame went up" line. `text` is the diegetic
   // line; `done` marks the tick the building stands.
-  | { type: 'construction'; tick: number; site: string; stage: string; stageIndex: number; done: boolean; text: string };
+  | { type: 'construction'; tick: number; site: string; stage: string; stageIndex: number; done: boolean; text: string }
+  // Ground broke on a planned building: its prerequisites came true and the
+  // expansion runtime opened the site (issue #95). `stage` is the site's first
+  // stage name, read verbatim by the chronicle ("marked plot on the town-well").
+  | { type: 'expansion'; tick: number; site: string; stage: string };
 
 export interface WorldSimOptions {
   charter: Charter;
@@ -94,6 +100,12 @@ export interface WorldSimOptions {
   /** Construction sites this world seeds (world-DATA). Absent means nothing
    *  is being built. */
   sites?: ConstructionSite[];
+  /**
+   * The town's expansion plan (world-DATA, issue #95): an ordered queue of
+   * buildings the sim opens as prerequisites come true. Absent means a town
+   * that grows no further than it was born.
+   */
+  expansionPlan?: ExpansionPlan;
   /** Overrides the charter-derived pace (tests shrink it). */
   ticksPerPhase?: number;
   /**
@@ -118,6 +130,11 @@ export class WorldSim {
   #weather: WeatherState;
   #calendar: Charter['calendar'];
   #lastEvent: string | null;
+  #expansion: ExpansionRuntime | undefined;
+  // Sites the sim has seen finished. Empty until the builder mechanic that
+  // spends work_units lands (a later issue); expansion prerequisites of type
+  // site_complete read from here, so they simply wait until then.
+  #completedSites = new Set<string>();
 
   constructor(options: WorldSimOptions) {
     this.#charter = options.charter;
@@ -152,6 +169,14 @@ export class WorldSim {
     // Seed from the resume tick so a redeploy mid-festival doesn't re-announce
     // an event already underway (issue #57).
     this.#lastEvent = activeEvent(this.#calendar, this.clock())?.name ?? null;
+    // Same for the expansion plan. On a RESUME (startTick > 0) seed the sites
+    // whose prerequisites came true on an earlier run so a redeploy doesn't
+    // re-break ground; a freshly founded world (tick 0) leaves them to open on
+    // its own ticks, so the chronicle records the first day's groundbreaking.
+    if (options.expansionPlan) {
+      this.#expansion = new ExpansionRuntime(options.expansionPlan);
+      if (this.#tick > 0) this.#expansion.seed(this.clock().day, this.#completedSites);
+    }
   }
 
   clock(): ClockState {
@@ -167,6 +192,12 @@ export class WorldSim {
    *  the HUD's "Today: <event>" line and behavior-tree event context. */
   event(): string | null {
     return activeEvent(this.#calendar, this.clock())?.name ?? null;
+  }
+
+  /** Planned sites whose ground has broken (open for construction), in plan
+   *  order. Empty for a town with no expansion plan. */
+  openSites(): string[] {
+    return this.#expansion?.openSites() ?? [];
   }
 
   /** How fast world time moves: one full day in sim ticks and real seconds. */
@@ -244,6 +275,14 @@ export class WorldSim {
     if (eventName !== this.#lastEvent) {
       this.#lastEvent = eventName;
       if (eventName !== null) this.#emit({ type: 'event', tick: clock.tick, event: eventName });
+    }
+    // The town grows: open any planned site whose prerequisites came true this
+    // tick (a new day reached, or a dependency finished). Pure and day-granular
+    // — the runtime opens each site once and rides no RNG.
+    if (this.#expansion) {
+      for (const opened of this.#expansion.step(clock.day, this.#completedSites)) {
+        this.#emit({ type: 'expansion', tick: clock.tick, site: opened.site, stage: opened.stage });
+      }
     }
     for (const runtime of this.#runtimes) {
       const state = runtime.step({ phase: clock.phase, event: eventName, weather: this.#weather.kind });

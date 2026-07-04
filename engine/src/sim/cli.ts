@@ -9,6 +9,7 @@ import { parseCharter } from '../charter/parse.js';
 import { ChunkSchema } from '../schemas/chunk.js';
 import { ConstructionSiteSchema } from '../schemas/construction.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
+import { ExpansionPlanSchema } from '../schemas/expansion.js';
 import { NpcSchema } from '../schemas/npc.js';
 import { RumorsDocSchema } from '../schemas/rumors.js';
 import { TICK_HZ } from './clock.js';
@@ -49,8 +50,19 @@ const sites = existsSync(constructionDir)
       .sort()
       .map((f) => ConstructionSiteSchema.parse(readJson(join('construction', f))))
   : [];
+const expansionPlan = existsSync(join(worldDir, 'expansion-plan.json'))
+  ? ExpansionPlanSchema.parse(readJson('expansion-plan.json'))
+  : undefined;
 
-const sim = new WorldSim({ charter, manifest, chunks, npcs, ...(rumors && { rumors }), sites });
+const sim = new WorldSim({
+  charter,
+  manifest,
+  chunks,
+  npcs,
+  ...(rumors && { rumors }),
+  sites,
+  ...(expansionPlan && { expansionPlan }),
+});
 // The decision log's v1 surface: every notable sim event, legible.
 sim.onEvent((event) => {
   if (event.type === 'phase') console.log(`[tick ${event.tick}] the world turns: ${event.phase}`);
@@ -61,6 +73,8 @@ sim.onEvent((event) => {
   else if (event.type === 'event') console.log(`[tick ${event.tick}] the ${event.event} begins`);
   else if (event.type === 'construction')
     console.log(`[tick ${event.tick}] construction — ${event.text}`);
+  else if (event.type === 'expansion')
+    console.log(`[tick ${event.tick}] ground breaks: ${event.site} — ${event.stage}`);
   else console.log(`[tick ${event.tick}] ${event.npc} — ${event.activity}`);
 });
 

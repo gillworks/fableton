@@ -137,6 +137,9 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
         return `${nameOf(event.to)} heard from ${nameOf(event.from)}: “${event.text}”`;
       case 'event':
         return `the ${event.event} begins`;
+      case 'expansion':
+        // The town grows: ground breaks on a planned building.
+        return `ground breaks on ${event.site} — ${event.stage}`;
       case 'activity':
         return `${event.npc} — ${event.activity}`;
       case 'construction':
