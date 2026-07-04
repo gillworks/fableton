@@ -8,6 +8,7 @@ import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema } from '../schemas/npc.js';
 import { WorldSim } from '../sim/worldSim.js';
 import { startWorldApi, type WorldApi } from './worldApi.js';
+import type { WishIntake } from './wishIntake.js';
 
 const root = new URL('../../test/fixtures/sample-world/', import.meta.url);
 const loadJson = (rel: string): unknown => JSON.parse(readFileSync(new URL(rel, root), 'utf8'));
@@ -143,5 +144,102 @@ describe('world-api', () => {
       body: JSON.stringify({ audit_sample_percent: 250, escalation_cap: -1 }),
     });
     expect(bad.status).toBe(400);
+  });
+
+  it('POST /api/wishes is closed (503) when no intake is configured', async () => {
+    // The shared `api` above was started without a wishIntake.
+    const res = await fetch(`${base}/api/wishes`, {
+      method: 'POST',
+      body: JSON.stringify({ wish: 'build a lighthouse' }),
+    });
+    expect(res.status).toBe(503);
+    expect((await res.json()).error).toContain('wishing well');
+  });
+});
+
+describe('world-api wish intake (issue #79)', () => {
+  const filed: string[] = [];
+  let clock = 0;
+  const intake: WishIntake = {
+    file: async (wish) => {
+      filed.push(wish);
+      return { url: `https://github.com/gillworks/fableton/issues/${filed.length}`, number: filed.length };
+    },
+  };
+  let wishApi: WorldApi;
+  let wishBase: string;
+
+  beforeAll(async () => {
+    const wishSim = new WorldSim({ charter, manifest, chunks, npcs });
+    wishApi = await startWorldApi(
+      { sim: wishSim, charter, manifest, chunks, npcs, registry },
+      { port: 0, wishIntake: intake, now: () => clock },
+    );
+    wishBase = `http://localhost:${wishApi.port}`;
+  });
+  afterAll(async () => wishApi.close());
+
+  it('files a valid wish as a labeled issue and returns where it landed', async () => {
+    const res = await fetch(`${wishBase}/api/wishes`, {
+      method: 'POST',
+      body: JSON.stringify({ wish: 'build a lighthouse on the point' }),
+    });
+    expect(res.status).toBe(201);
+    const body = await res.json();
+    expect(body.ok).toBe(true);
+    expect(body.number).toBe(1);
+    expect(body.url).toContain('/issues/1');
+    expect(filed).toContain('build a lighthouse on the point');
+  });
+
+  it('rejects a too-short wish (400) without filing anything', async () => {
+    const before = filed.length;
+    const res = await fetch(`${wishBase}/api/wishes`, { method: 'POST', body: JSON.stringify({ wish: 'x' }) });
+    expect(res.status).toBe(400);
+    expect(filed.length).toBe(before);
+  });
+
+  it('rejects a too-long wish (400)', async () => {
+    const res = await fetch(`${wishBase}/api/wishes`, {
+      method: 'POST',
+      body: JSON.stringify({ wish: 'a'.repeat(281) }),
+    });
+    expect(res.status).toBe(400);
+  });
+
+  it('rate-limits repeated wishes from one client, then recovers after the window', async () => {
+    const post = (): Promise<Response> =>
+      fetch(`${wishBase}/api/wishes`, {
+        method: 'POST',
+        headers: { 'x-forwarded-for': '203.0.113.9' },
+        body: JSON.stringify({ wish: 'plant an orchard by the mill' }),
+      });
+    // The valid+rejected tests above used no XFF (a different bucket), so
+    // this client starts fresh: 3 land, the 4th is turned away.
+    expect((await post()).status).toBe(201);
+    expect((await post()).status).toBe(201);
+    expect((await post()).status).toBe(201);
+    expect((await post()).status).toBe(429);
+    // Advance past the 10-minute window — the well fills again.
+    clock += 11 * 60_000;
+    expect((await post()).status).toBe(201);
+  });
+
+  it('counts the trusted rightmost XFF hop, not the spoofable leftmost', async () => {
+    // Move well past any earlier window so this client starts fresh.
+    clock += 60 * 60_000;
+    // caddy appends the real peer (198.51.100.7) to whatever the client
+    // sent; rotating the leftmost value must NOT mint a fresh bucket, or the
+    // rate limit is trivially bypassed.
+    const post = (spoofed: string): Promise<Response> =>
+      fetch(`${wishBase}/api/wishes`, {
+        method: 'POST',
+        headers: { 'x-forwarded-for': `${spoofed}, 198.51.100.7` },
+        body: JSON.stringify({ wish: 'raise a festival in the square' }),
+      });
+    expect((await post('1.1.1.1')).status).toBe(201);
+    expect((await post('2.2.2.2')).status).toBe(201);
+    expect((await post('3.3.3.3')).status).toBe(201);
+    expect((await post('4.4.4.4')).status).toBe(429);
   });
 });

@@ -22,6 +22,11 @@ services:
       # Where this instance's studio works — chronicle PR references in
       # the client link here (issue #59). Unset it for plain text.
       FABLETON_REPO_URL: ${FABLETON_REPO_URL:-https://github.com/gillworks/fableton}
+      # Wish intake (issue #79): a token enables the in-client wish box —
+      # wishes file to FABLETON_WISH_REPO (or FABLETON_REPO_URL) as GH
+      # issues labeled `wish`. Unset → wishes closed. Bring-your-own-keys.
+      FABLETON_WISH_TOKEN: ${FABLETON_WISH_TOKEN:-}
+      FABLETON_WISH_REPO: ${FABLETON_WISH_REPO:-}
       DATABASE_URL: ${DATABASE_URL:-postgres://fableton:${POSTGRES_PASSWORD:-fableton}@postgres:5432/fableton}
     volumes:
       - world-data:/world

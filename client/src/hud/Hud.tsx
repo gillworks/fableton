@@ -10,6 +10,7 @@ import { TICKS_PER_DAY } from '../core/types.js';
 import type { WorldTheme } from '../core/theme.js';
 import type { WorldInfo } from '../core/types.js';
 import { ChroniclePanel } from './ChroniclePanel.js';
+import { WishBox } from './WishBox.js';
 
 export interface HudProps {
   info: WorldInfo;
@@ -31,6 +32,7 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
   const [latest, setLatest] = useState<ChronicleEntry | null>(null);
   const [chronicle, setChronicle] = useState<string[] | null>(null);
   const [lineageOpen, setLineageOpen] = useState(false);
+  const [wishOpen, setWishOpen] = useState(false);
   useEffect(() => pollChronicle(setLatest), []);
   useEffect(() => pollChronicleFile(setChronicle), []);
 
@@ -152,6 +154,37 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
         </div>
       </div>
 
+      {/* The wish affordance (issue #79): a diegetic chip above the
+          chronicle bar — the viewer end of the feedback funnel. Charter
+          accent, HUD-chrome type, foreground tuned to the sky like the
+          identity chips. */}
+      <button
+        onClick={() => setWishOpen(true)}
+        title="ask the town for something"
+        style={{
+          position: 'fixed',
+          left: 24,
+          bottom: 44,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 7,
+          fontFamily: mono,
+          fontSize: 10,
+          letterSpacing: 1.5,
+          padding: '5px 12px',
+          borderRadius: 999,
+          border: `1px solid ${fg}`,
+          background: onPale ? 'rgba(246,239,224,0.55)' : 'rgba(20,17,14,0.45)',
+          color: fg,
+          textShadow: fgShadow,
+          cursor: 'pointer',
+          zoom: HUD_ZOOM,
+          zIndex: HUD_Z,
+        }}
+      >
+        <span style={{ color: theme.accentHex, fontSize: 12 }}>✦</span> MAKE A WISH
+      </button>
+
       {/* Bottom: the chronicle bar — the newest line of the town's
           written history (issue #59); the live sim ticker stands in for
           worlds too young to have one. Click opens the lineage. */}
@@ -193,6 +226,7 @@ export function Hud({ info, theme, backdropHex, livePhase, shownPhase, tick, onS
           onClose={() => setLineageOpen(false)}
         />
       )}
+      {wishOpen && <WishBox theme={theme} onClose={() => setWishOpen(false)} />}
     </>
   );
 }
