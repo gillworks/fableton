@@ -22,7 +22,8 @@ import { OVERLAY_Z_RANGE } from '../core/hud.js';
 import { colorFor } from '@fableton/engine/color';
 import type { AssetPiece } from '../core/chunkMeshes.js';
 import { ConstructionMarker } from './ConstructionMarker.js';
-import type { ConstructionSite } from '../core/types.js';
+import { ConstructionSites } from './ConstructionSites.js';
+import type { ConstructionSite, ConstructionSiteView } from '../core/types.js';
 import { buildChunkGroup, coinFor } from '../core/chunkMeshes.js';
 import type { SimState } from '../core/interpolator.js';
 import { ChunkStreamer } from '../core/streamer.js';
@@ -39,7 +40,11 @@ export interface WorldSceneProps {
   theme: WorldTheme;
   phaseIndex: number;
   onSelect: (npcId: string) => void;
+  /** Studio PRs rendered in-world (docs/design.md). */
   construction: ConstructionSite[];
+  /** Citizen-construction sites the residents raise (issue #99). */
+  sites: ConstructionSiteView[];
+  onSelectSite: (siteId: string) => void;
   /** The resident the camera is following, or null for explore. */
   follow: string | null;
   /** The day's weather, or null before the first snapshot / on old worlds. */
@@ -55,7 +60,7 @@ const _sunColor = new Color();
 const _sunPos = new Vector3();
 const _fogColor = new Color();
 
-export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction, follow, weather }: WorldSceneProps): ReactElement {
+export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction, sites, onSelectSite, follow, weather }: WorldSceneProps): ReactElement {
   const worldRef = useRef<Group>(new Group());
   const chunkGroups = useRef(new Map<string, Group>());
   const windowMaterials = useRef<import('../core/buildings.js').BuiltBuilding['windowMaterials']>([]);
@@ -150,6 +155,14 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
         const entry = bundle.manifest.chunks.find((c) => c.id === site.chunk);
         return entry ? <ConstructionMarker key={site.chunk + site.pr} site={site} origin={entry.origin} /> : null;
       })}
+      <ConstructionSites
+        defs={sites}
+        manifest={bundle.manifest}
+        sim={sim}
+        pieces={pieces}
+        theme={theme}
+        onSelect={onSelectSite}
+      />
       {follow ? (
         // Follow mode drives the camera itself; OrbitControls would fight
         // it, so it steps aside until the viewer exits follow (#80).

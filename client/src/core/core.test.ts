@@ -182,6 +182,61 @@ describe('SimState interpolation', () => {
     sim.apply({ type: 'delta', tick: 2, phase: 'high sun', npcs: [{ id: 'greta', activity: 'selling' }] }, 1000);
     expect(events).toEqual(['greta:waking up', 'phase:first light', 'phase:high sun', 'greta:selling']);
   });
+
+  it('tracks construction sites from the snapshot and climbs stages on deltas', () => {
+    const sim = new SimState(500);
+    const snaps: number[][] = [];
+    sim.onSites((sites) => snaps.push(sites.map((s) => s.stageIndex)));
+    sim.apply(
+      {
+        ...snapshot,
+        construction: [
+          { id: 'bakery-extension', chunk: 'town-square', stage: 'marked plot', stageIndex: 0, stageCount: 3, progress: 1, required: 4, workers: ['greta'], complete: false },
+        ],
+      },
+      0,
+    );
+    expect(sim.siteOf('bakery-extension')?.stage).toBe('marked plot');
+
+    // A stage-change delta swaps the site's stage; progress restarts at 0 and
+    // the mesh-swap listener fires.
+    sim.apply(
+      { type: 'delta', tick: 1, npcs: [], construction: [{ id: 'bakery-extension', stage: 'foundation', stageIndex: 1 }] },
+      500,
+    );
+    const site = sim.siteOf('bakery-extension');
+    expect(site?.stage).toBe('foundation');
+    expect(site?.stageIndex).toBe(1);
+    expect(site?.progress).toBe(0);
+    expect(site?.complete).toBe(false);
+
+    // Completion: workers clear and progress is done.
+    sim.apply(
+      { type: 'delta', tick: 2, npcs: [], construction: [{ id: 'bakery-extension', stage: 'frame', stageIndex: 3, done: true }] },
+      1000,
+    );
+    const done = sim.siteOf('bakery-extension');
+    expect(done?.complete).toBe(true);
+    expect(done?.workers).toEqual([]);
+    // Snapshot replay on subscribe, then a fire per stage-carrying message.
+    expect(snaps).toEqual([[0], [1], [3]]);
+  });
+
+  it('replays current sites to a late subscriber', () => {
+    const sim = new SimState(500);
+    sim.apply(
+      {
+        ...snapshot,
+        construction: [
+          { id: 'town-well', chunk: 'town-square', stage: 'foundation', stageIndex: 1, stageCount: 3, progress: 2, required: 6, workers: [], complete: false },
+        ],
+      },
+      0,
+    );
+    let seen: string[] = [];
+    sim.onSites((sites) => (seen = sites.map((s) => s.id)));
+    expect(seen).toEqual(['town-well']);
+  });
 });
 
 describe('theme', () => {

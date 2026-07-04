@@ -12,11 +12,12 @@ import { SimState, connectSim } from './core/interpolator.js';
 import { constructionSites } from './core/hud.js';
 import { parseFollowParam, followSearch } from './core/follow.js';
 import { loadWorld, type WorldBundle } from './core/loadWorld.js';
-import type { WeatherState } from './core/types.js';
+import type { ConstructionSiteView, WeatherState } from './core/types.js';
 import { Hud } from './hud/Hud.js';
 import { FollowBanner } from './hud/FollowBanner.js';
 import { deriveTheme, phaseLighting } from './core/theme.js';
 import { InspectPanel } from './scene/InspectPanel.js';
+import { ConstructionInspectPanel } from './scene/ConstructionInspectPanel.js';
 import { WorldScene } from './scene/WorldScene.js';
 
 export function App(): ReactElement {
@@ -27,6 +28,8 @@ export function App(): ReactElement {
   const [tick, setTick] = useState(0);
   const [failure, setFailure] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const [selectedSite, setSelectedSite] = useState<string | null>(null);
+  const [siteDefs, setSiteDefs] = useState<ConstructionSiteView[]>([]);
   // Follow the resident named in the URL, if any — the shareable deep link.
   const [follow, setFollow] = useState<string | null>(() => parseFollowParam(location.search));
   const [roster, setRoster] = useState<Map<string, string>>(new Map());
@@ -54,6 +57,15 @@ export function App(): ReactElement {
         if (!disposed) setRoster(new Map(all.map((n) => [n.id, n.name])));
       })
       .catch(() => undefined);
+    // Citizen-construction site definitions (issue #99): static per world, so
+    // fetched once. The sim socket then drives each site's stage; the inspect
+    // panel polls this same endpoint for live progress and workers.
+    fetch('/api/construction')
+      .then((r) => (r.ok ? (r.json() as Promise<{ sites: ConstructionSiteView[] }>) : { sites: [] }))
+      .then((body) => {
+        if (!disposed) setSiteDefs(body.sites ?? []);
+      })
+      .catch(() => undefined);
     const disconnect = connectSim(
       sim,
       `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/sim`,
@@ -78,9 +90,20 @@ export function App(): ReactElement {
     if (follow && roster.size > 0 && !roster.has(follow)) setFollow(null);
   }, [follow, roster]);
 
+  // The resident panel and the construction panel are mutually exclusive —
+  // opening one closes the other so only one reading surface shows at a time.
+  const selectNpc = (id: string): void => {
+    setSelected(id);
+    setSelectedSite(null);
+  };
+  const selectSite = (id: string): void => {
+    setSelectedSite(id);
+    setSelected(null);
+  };
+
   const startFollow = (id: string): void => {
     setFollow(id);
-    setSelected(id); // open the panel too, so name + lore ride along
+    selectNpc(id); // open the panel too, so name + lore ride along
   };
 
   if (failure) {
@@ -94,7 +117,10 @@ export function App(): ReactElement {
   // The selector previews a relight; the sim clock stays authoritative.
   const shownPhase = phaseOverride ?? phase;
   const lighting = phaseLighting(shownPhase, theme);
-  const sites = constructionSites(bundle.info.construction, location.search);
+  // Studio PRs rendered in-world (docs/design.md); the ?construction= override
+  // demos them until the studio emits real refs. Distinct from the citizen
+  // construction sites, which come live from the sim via siteDefs.
+  const prMarkers = constructionSites(undefined, location.search);
   // Cozy default framing: storybook three-quarter view sized to the diorama.
   const coin = coinFor(bundle.manifest.chunks.map((c) => c.origin));
   const span = Math.max(coin.rx, coin.rz);
@@ -116,7 +142,10 @@ export function App(): ReactElement {
         shadows
         gl={{ alpha: true, antialias: true }}
         camera={{ position: eye, fov: 42 }}
-        onPointerMissed={() => setSelected(null)}
+        onPointerMissed={() => {
+          setSelected(null);
+          setSelectedSite(null);
+        }}
       >
         <WorldScene
           bundle={bundle}
@@ -124,8 +153,10 @@ export function App(): ReactElement {
           sim={sim}
           theme={theme}
           phaseIndex={shownPhase}
-          onSelect={setSelected}
-          construction={sites}
+          onSelect={selectNpc}
+          construction={prMarkers}
+          sites={siteDefs}
+          onSelectSite={selectSite}
           follow={follow}
           weather={weather}
         />
@@ -149,6 +180,15 @@ export function App(): ReactElement {
           following={follow === selected}
           onFollow={() => startFollow(selected)}
           onExitFollow={() => setFollow(null)}
+        />
+      )}
+      {selectedSite && (
+        <ConstructionInspectPanel
+          siteId={selectedSite}
+          sim={sim}
+          theme={theme}
+          roster={roster}
+          onClose={() => setSelectedSite(null)}
         />
       )}
       {follow && (

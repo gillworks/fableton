@@ -59,10 +59,73 @@ export interface ThemeTokens {
   typography: { display: string; mono: string };
 }
 
+/**
+ * A studio PR rendered in-world as a construction marker (docs/design.md,
+ * "the studio, visible in-world"): engine chrome, same in every world, links
+ * to the open PR. Distinct from the citizen-construction sites below — this is
+ * the world's makers made visible, not a building the residents raise.
+ */
 export interface ConstructionSite {
   chunk: string;
   pr: number;
   url?: string;
+}
+
+/** One rung of a construction site's stage ladder: its diegetic name and the
+ *  asset-registry mesh shown while the site sits at that stage (issue #99). */
+export interface ConstructionStageRef {
+  name: string;
+  asset: string;
+}
+
+/**
+ * A citizen-construction site's live state, as the sim broadcasts it (the
+ * snapshot on connect, stage-change deltas thereafter). Mirrors the engine's
+ * ConstructionSiteState. Progress and workers ride the snapshot but NOT the
+ * per-tick delta (compact by construction) — the inspect panel polls
+ * /api/construction for those.
+ */
+export interface ConstructionSiteState {
+  id: string;
+  chunk: string;
+  /** Diegetic name of the stage the site currently sits at. */
+  stage: string;
+  /** Stage the site has climbed to; equals stageCount once complete. */
+  stageIndex: number;
+  stageCount: number;
+  /** Work accrued toward advancing out of the current stage. */
+  progress: number;
+  /** Work needed to advance out of the current stage (0 once complete). */
+  required: number;
+  /** Resident ids working the site right now. */
+  workers: string[];
+  complete: boolean;
+}
+
+/**
+ * A site's live state paired with its static definition, as /api/construction
+ * serves it (issue #99): everything the client needs to place the site, swap
+ * in the mesh for the stage it has reached, and stand the finished building.
+ */
+export interface ConstructionSiteView extends ConstructionSiteState {
+  /** Footprint centre, chunk-local — add the chunk origin for world space. */
+  position: [number, number, number];
+  rotation_y: number;
+  /** The stage ladder, low → high — the client maps stageIndex to a mesh. */
+  stages: ConstructionStageRef[];
+  /** What the finished site becomes: ordinary chunk-data. */
+  completion: { buildings: Building[]; props: PropPlacement[] };
+}
+
+/**
+ * A citizen-construction site changed stage (or finished) this tick — the
+ * compact delta the sim socket carries. Last-writer-wins per id.
+ */
+export interface ConstructionDelta {
+  id: string;
+  stage: string;
+  stageIndex: number;
+  done?: boolean;
 }
 
 export interface WorldInfo {
@@ -72,7 +135,6 @@ export interface WorldInfo {
   charter_version?: number;
   /** Where the studio works — chronicle PR refs link here when set. */
   repo_url?: string;
-  construction?: ConstructionSite[];
   phases: string[];
   theme?: Partial<ThemeTokens>;
   chunks: number;
@@ -112,6 +174,9 @@ export interface SimSnapshot {
   /** Optional so pre-weather worlds still parse; the sim always sends it. */
   weather?: WeatherState;
   npcs: NpcSnapshot[];
+  /** Live construction sites: stage, progress, workers. Optional so
+   *  pre-construction worlds still parse. */
+  construction?: ConstructionSiteState[];
 }
 
 export interface SimDelta {
@@ -121,6 +186,8 @@ export interface SimDelta {
   /** Present only on the tick the weather turns. */
   weather?: WeatherState;
   npcs: { id: string; pos?: [number, number, number]; ry?: number; activity?: string }[];
+  /** Present only on ticks a site changes stage or completes. */
+  construction?: ConstructionDelta[];
 }
 
 export type SimMessage = SimSnapshot | SimDelta;
