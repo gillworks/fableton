@@ -4,7 +4,14 @@
 #
 # Prerequisites for the studio lines (studio/README.md § Runtime):
 #   - Claude Code on the host, authenticated: `claude setup-token`
-#   - gh authenticated with a repo-scoped token
+#   - gh authenticated with a repo-scoped token. Least privilege (issue
+#     #101): a FINE-GRAINED token with Contents, Pull requests, and Issues
+#     read/write on the world repo ONLY — no workflow permission, and
+#     ideally issued by a NON-ADMIN machine account with Write role, so
+#     branch protection binds the pantheon (an owner/admin token can pass
+#     `gh pr merge --admin` and step around the review boundary). The
+#     agents read text written by anonymous visitors; assume injection and
+#     contain, don't trust.
 #   - studio working clone at /opt/fableton-studio (never the deploy clone)
 
 # Engine auto-deploy: track origin/main, rebuild when it moves
