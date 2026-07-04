@@ -18,7 +18,10 @@ export const CalendarEventSchema = z.strictObject({
     offset_days: z.number().int().min(0).default(0),
   }),
   // Which day phases the event runs during — a subset of
-  // aesthetic.day_phases. Empty means all day (the gate checks membership).
+  // aesthetic.day_phases (membership enforced by CharterSchema.superRefine).
+  // Empty means all day. When events overlap on the same day the first
+  // declared wins (deterministic), so declare phase-scoped events before
+  // all-day ones or the all-day one hides them.
   phases: z.array(nonEmpty).default([]),
 });
 
@@ -95,6 +98,23 @@ export const CharterSchema = z.strictObject({
       events: z.array(CalendarEventSchema).default([]),
     })
     .default({ events: [] }),
+}).superRefine((charter, ctx) => {
+  // A calendar event's phases must name real day_phases — otherwise
+  // eventActiveAt() never matches clock.phase and the festival silently
+  // never fires (no HUD line, no chronicle entry). Enforced here rather
+  // than in the CI gate so it holds for every parse path.
+  const dayPhases = new Set(charter.aesthetic.day_phases);
+  charter.calendar.events.forEach((event, eventIndex) => {
+    event.phases.forEach((phase, phaseIndex) => {
+      if (!dayPhases.has(phase)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `calendar event "${event.name}" phase "${phase}" is not one of aesthetic.day_phases`,
+          path: ['calendar', 'events', eventIndex, 'phases', phaseIndex],
+        });
+      }
+    });
+  });
 });
 
 export type Charter = z.infer<typeof CharterSchema>;

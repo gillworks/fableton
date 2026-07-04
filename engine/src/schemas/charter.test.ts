@@ -54,6 +54,28 @@ describe('CharterSchema', () => {
     ).toThrow(/phase/);
   });
 
+  it('rejects a calendar event phase outside aesthetic.day_phases', () => {
+    const charter = validCharter();
+    expect(() =>
+      CharterSchema.parse({
+        ...charter,
+        calendar: {
+          events: [{ name: 'Ghost Fest', cadence: { every_days: 2 }, phases: ['dusk'] }],
+        },
+      }),
+    ).toThrow(/day_phases/);
+    // A trailing-space typo on an otherwise-real phase is caught too.
+    const realPhase = charter.aesthetic.day_phases[0]!;
+    expect(() =>
+      CharterSchema.parse({
+        ...charter,
+        calendar: {
+          events: [{ name: 'Typo Fest', cadence: { every_days: 2 }, phases: [`${realPhase} `] }],
+        },
+      }),
+    ).toThrow(/day_phases/);
+  });
+
   it('round-trips: parse → serialize → parse is identity', () => {
     const charter = validCharter();
     const reparsed = CharterSchema.parse(JSON.parse(JSON.stringify(charter)));
