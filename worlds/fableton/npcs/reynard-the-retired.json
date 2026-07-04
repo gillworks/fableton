@@ -8,7 +8,8 @@
   },
   "lore": ["the-last-clever-bargain"],
   "relationships": [
-    { "to": "greta-the-baker", "kind": "owes her a tab and a story" }
+    { "to": "greta-the-baker", "kind": "owes her a tab and a story" },
+    { "to": "granny-ash", "kind": "leaves two apples by the hedge some mornings, and denies it if asked twice" }
   ],
   "behavior": {
     "type": "schedule",
