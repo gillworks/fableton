@@ -17,6 +17,65 @@ describe('CharterSchema', () => {
     expect(charter.aesthetic.never).toContainEqual({ rule: 'modern technology', enforced: 'gate' });
   });
 
+  it('parses the town-events calendar, defaulting cadence offset and phases', () => {
+    const charter = validCharter();
+    expect(charter.calendar.events.map((e) => e.name)).toEqual(['Coal Market', 'Emberwake']);
+    const market = charter.calendar.events[0]!;
+    expect(market.cadence).toEqual({ every_days: 3, offset_days: 0 }); // offset defaults to 0
+    expect(market.phases).toEqual(['forge-day']);
+    const emberwake = charter.calendar.events[1]!;
+    expect(emberwake.cadence).toEqual({ every_days: 7, offset_days: 2 });
+    expect(emberwake.phases).toEqual([]); // omitted phases mean all day
+  });
+
+  it('defaults calendar to an empty event list when omitted', () => {
+    const doc = validCharter() as Record<string, unknown>;
+    delete doc['calendar'];
+    expect(CharterSchema.parse(doc).calendar).toEqual({ events: [] });
+  });
+
+  it('rejects a calendar cadence that never recurs', () => {
+    const charter = validCharter();
+    expect(() =>
+      CharterSchema.parse({
+        ...charter,
+        calendar: { events: [{ name: 'Never Day', cadence: { every_days: 0 } }] },
+      }),
+    ).toThrow(/every_days/);
+  });
+
+  it('rejects unknown keys on a calendar event (typo protection)', () => {
+    const charter = validCharter();
+    expect(() =>
+      CharterSchema.parse({
+        ...charter,
+        calendar: { events: [{ name: 'Typo Fest', cadence: { every_days: 2 }, phase: ['x'] }] },
+      }),
+    ).toThrow(/phase/);
+  });
+
+  it('rejects a calendar event phase outside aesthetic.day_phases', () => {
+    const charter = validCharter();
+    expect(() =>
+      CharterSchema.parse({
+        ...charter,
+        calendar: {
+          events: [{ name: 'Ghost Fest', cadence: { every_days: 2 }, phases: ['dusk'] }],
+        },
+      }),
+    ).toThrow(/day_phases/);
+    // A trailing-space typo on an otherwise-real phase is caught too.
+    const realPhase = charter.aesthetic.day_phases[0]!;
+    expect(() =>
+      CharterSchema.parse({
+        ...charter,
+        calendar: {
+          events: [{ name: 'Typo Fest', cadence: { every_days: 2 }, phases: [`${realPhase} `] }],
+        },
+      }),
+    ).toThrow(/day_phases/);
+  });
+
   it('round-trips: parse → serialize → parse is identity', () => {
     const charter = validCharter();
     const reparsed = CharterSchema.parse(JSON.parse(JSON.stringify(charter)));

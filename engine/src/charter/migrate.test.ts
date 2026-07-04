@@ -21,6 +21,23 @@ describe('migrateCharter', () => {
     expect(charter.taboos.every((t) => t.enforced === 'prompt')).toBe(true);
   });
 
+  it('gives a pre-calendar charter an empty town-events calendar (v1 → v2)', () => {
+    expect(migrateCharter(v0doc()).calendar).toEqual({ events: [] });
+  });
+
+  it('preserves a calendar already present when migrating from v1', () => {
+    const v1 = migrateCharter(v0doc());
+    const withCalendar = {
+      ...JSON.parse(JSON.stringify(v1)),
+      schema_version: 1,
+      calendar: { events: [{ name: 'Market Day', cadence: { every_days: 3 } }] },
+    };
+    const migrated = migrateCharter(withCalendar);
+    expect(migrated.schema_version).toBe(CHARTER_SCHEMA_VERSION);
+    expect(migrated.calendar.events[0]!.name).toBe('Market Day');
+    expect(migrated.calendar.events[0]!.cadence).toEqual({ every_days: 3, offset_days: 0 });
+  });
+
   it('passes a current-version charter through unchanged', () => {
     const migrated = migrateCharter(v0doc());
     expect(migrateCharter(JSON.parse(JSON.stringify(migrated)))).toEqual(migrated);

@@ -13,6 +13,7 @@ import type { Charter } from '../schemas/charter.js';
 import type { Chunk } from '../schemas/chunk.js';
 import type { WorldManifest } from '../schemas/manifest.js';
 import type { Npc } from '../schemas/npc.js';
+import { activeEvent } from './calendar.js';
 import { TICK_HZ, clockAt, ticksPerPhaseFor, type ClockState } from './clock.js';
 import { NpcRuntime, type NpcState } from './npcRuntime.js';
 import { weatherAt, type WeatherState } from './weather.js';
@@ -48,6 +49,7 @@ export interface Delta {
 export type SimEvent =
   | { type: 'phase'; tick: number; phase: string }
   | { type: 'weather'; tick: number; weather: WeatherState }
+  | { type: 'event'; tick: number; event: string }
   | { type: 'activity'; tick: number; npc: string; activity: string };
 
 export interface WorldSimOptions {
@@ -75,10 +77,13 @@ export class WorldSim {
   #lastSent = new Map<string, { pos: string; ry: number; activity: string }>();
   #lastPhase: string;
   #weather: WeatherState;
+  #calendar: Charter['calendar'];
+  #lastEvent: string | null;
 
   constructor(options: WorldSimOptions) {
     this.#charter = options.charter;
     this.#phases = options.charter.aesthetic.day_phases;
+    this.#calendar = options.charter.calendar;
     this.#ticksPerPhase =
       options.ticksPerPhase ??
       ticksPerPhaseFor(options.charter.generation.day_length_hours, this.#phases.length);
@@ -94,6 +99,9 @@ export class WorldSim {
       });
     this.#lastPhase = this.clock().phase;
     this.#weather = weatherAt(this.#charter, this.clock().day);
+    // Seed from the resume tick so a redeploy mid-festival doesn't re-announce
+    // an event already underway (issue #57).
+    this.#lastEvent = activeEvent(this.#calendar, this.clock())?.name ?? null;
   }
 
   clock(): ClockState {
@@ -103,6 +111,12 @@ export class WorldSim {
   /** The current weather — a pure function of the charter and world day. */
   weather(): WeatherState {
     return this.#weather;
+  }
+
+  /** The town event in effect right now, or null on an ordinary day. Drives
+   *  the HUD's "Today: <event>" line and behavior-tree event context. */
+  event(): string | null {
+    return activeEvent(this.#calendar, this.clock())?.name ?? null;
   }
 
   /** How fast world time moves: one full day in sim ticks and real seconds. */
@@ -167,8 +181,15 @@ export class WorldSim {
       delta.weather = weather;
       this.#emit({ type: 'weather', tick: clock.tick, weather });
     }
+    // The town event in effect this tick: behavior context for the runtimes,
+    // and a chronicle occurrence when a new one comes into effect.
+    const eventName = activeEvent(this.#calendar, clock)?.name ?? null;
+    if (eventName !== this.#lastEvent) {
+      this.#lastEvent = eventName;
+      if (eventName !== null) this.#emit({ type: 'event', tick: clock.tick, event: eventName });
+    }
     for (const runtime of this.#runtimes) {
-      const state = runtime.step(clock.phase, this.#weather.kind);
+      const state = runtime.step({ phase: clock.phase, event: eventName, weather: this.#weather.kind });
       const posKey = state.pos.join(',');
       const last = this.#lastSent.get(state.id);
       const entry: NpcDelta = { id: state.id };

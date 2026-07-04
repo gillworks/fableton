@@ -15,6 +15,7 @@ import { NpcSchema } from '../schemas/npc.js';
 import { startTickAt } from '../sim/clock.js';
 import { startSimServer } from '../sim/server.js';
 import { WorldSim } from '../sim/worldSim.js';
+import { githubWishIntakeFromEnv } from './wishIntake.js';
 import { startWorldApi } from './worldApi.js';
 
 const { values } = parseArgs({
@@ -60,13 +61,30 @@ sim.onEvent((event) => {
   if (event.type === 'phase') console.log(`[tick ${event.tick}] the world turns: ${event.phase}`);
   else if (event.type === 'weather')
     console.log(`[tick ${event.tick}] the weather turns: ${event.weather.label}`);
+  else if (event.type === 'event') console.log(`[tick ${event.tick}] the ${event.event} begins`);
   else console.log(`[tick ${event.tick}] ${event.npc} — ${event.activity}`);
 });
+
+// The viewer wish source of the feedback funnel (issue #79). Bring-your-
+// own-keys: with no FABLETON_WISH_TOKEN the intake is null and the wish
+// endpoint reports that wishes are closed — the v1 stack needs no keys.
+const wishIntake = githubWishIntakeFromEnv();
+if (wishIntake) {
+  console.log(`wish intake enabled → issues in ${process.env['FABLETON_WISH_REPO'] ?? process.env['FABLETON_REPO_URL']}`);
+} else if (process.env['FABLETON_WISH_TOKEN']) {
+  // Token is present but no usable repo parsed — don't blame the token.
+  console.log(
+    'wish intake disabled — FABLETON_WISH_TOKEN is set but no usable repo; ' +
+      'set FABLETON_WISH_REPO (or FABLETON_REPO_URL) to an owner/repo slug',
+  );
+} else {
+  console.log('wish intake disabled (no FABLETON_WISH_TOKEN)');
+}
 
 const simServer = await startSimServer(sim, { port: Number(values['sim-port'] ?? 8090) });
 const api = await startWorldApi(
   { sim, charter, manifest, chunks, npcs, registry },
-  { port: Number(values['api-port'] ?? 8091) },
+  { port: Number(values['api-port'] ?? 8091), wishIntake },
 );
 console.log(
   `"${charter.identity.name}" live — sim ws://localhost:${simServer.port} · api http://localhost:${api.port}/api/world`,

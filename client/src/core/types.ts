@@ -79,6 +79,9 @@ export interface WorldInfo {
   npcs: number;
   clock: { tick: number; phase: string; timeOfDay: number; day?: number };
   pace?: { ticks_per_day: number; seconds_per_day: number };
+  /** The charter-defined town event in effect now (issue #62); null/absent
+   *  on an ordinary day. Rendered as "Today: <event>". */
+  event?: string | null;
 }
 
 export interface NpcSnapshot {
