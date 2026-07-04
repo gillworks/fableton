@@ -6,6 +6,7 @@ import type { Charter } from '../schemas/charter.js';
 import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
+import { ConstructionSiteSchema, type ConstructionSite } from '../schemas/construction.js';
 import { RumorsDocSchema, type RumorsDoc } from '../schemas/rumors.js';
 import { ExpansionPlanSchema, type ExpansionPlan } from '../schemas/expansion.js';
 import { DELTA_ENVELOPE_BUDGET, DELTA_PER_NPC_BUDGET, WorldSim, type SimEvent } from './worldSim.js';
@@ -219,6 +220,12 @@ describe('WorldSim', () => {
   });
 
   it('holds the documented per-tick byte budget', () => {
+    // NOTE: the sample world authors no construction sites, so this asserts the
+    // NPC/activity/weather wire only. A stage transition rides an extra
+    // `construction: [{id,stage,stageIndex}]` (~50-90 B) *outside* the per-NPC
+    // budget — transitions are rare and the envelope has slack, but that path
+    // is intentionally not measured here. If a construction-bearing world is
+    // ever added to this suite, fold that allowance into the budget.
     const sim = makeSim(50);
     for (let i = 0; i < 300; i++) {
       const delta = sim.tick();
@@ -379,6 +386,129 @@ describe('WorldSim', () => {
       return { heard: npcs.map((n) => sim.heard(n.id)), rumors };
     };
     expect(JSON.stringify(run())).toEqual(JSON.stringify(run()));
+  });
+
+  // Greta's tree walks her to the oven at (4,0,4); a site placed there with
+  // her role as its builder means her authored schedule brings her onto the
+  // job — the interpreter spends the work units while she stands on it. The
+  // unit tests in constructionRuntime.test.ts cover presence, role matching,
+  // and the seeded effort directly.
+  const bakerySite: ConstructionSite = ConstructionSiteSchema.parse({
+    schema_version: 1,
+    id: 'bakery-extension',
+    chunk: 'town-square',
+    position: [4, 0, 4],
+    footprint: { width: 4, depth: 4 },
+    builder_roles: ['witch-gone-respectable'], // Greta's identity.kind
+    stages: [
+      { name: 'marked plot', asset: 'stakes', work_units: 2 },
+      { name: 'foundation', asset: 'foundation-mesh', work_units: 3 },
+      { name: 'frame', asset: 'frame-mesh', work_units: 5 },
+    ],
+    completion: { props: [{ asset: 'bakery', position: [4, 0, 4] }] },
+  });
+
+  it('builders raise a site through its stages: chronicle events + compact deltas', () => {
+    const sim = new WorldSim({ charter, manifest, chunks, npcs, sites: [bakerySite], ticksPerPhase: 600 });
+    const events: SimEvent[] = [];
+    sim.onEvent((e) => e.type === 'construction' && events.push(e));
+    // Snapshot before any tick: the site sits at its first authored stage.
+    expect(sim.snapshot().construction).toEqual([
+      { id: 'bakery-extension', chunk: 'town-square', stage: 'marked plot', stageIndex: 0, stageCount: 3, progress: 0, required: 2, workers: [], complete: false },
+    ]);
+
+    const constructionDeltas: number[] = [];
+    for (let i = 0; i < 40; i++) {
+      const delta = sim.tick();
+      if (delta.construction) {
+        constructionDeltas.push(delta.tick);
+        // Budget coverage for the construction wire path (the standalone
+        // budget test runs a site-less world, so it never sees this). A
+        // transition entry rides *outside* the per-active-NPC budget — a lone
+        // builder holding on the site contributes nothing to delta.npcs, yet
+        // the ~55B entry still ships — so it is bounded by the whole-town
+        // budget, which is what actually caps worst-case wire size.
+        const bytes = Buffer.byteLength(JSON.stringify(delta), 'utf8');
+        expect(bytes, `construction tick ${delta.tick}: ${bytes}B`).toBeLessThanOrEqual(
+          DELTA_ENVELOPE_BUDGET + DELTA_PER_NPC_BUDGET * npcs.length,
+        );
+      }
+    }
+
+    // She climbs the ladder in order and finishes; the chronicle sees each
+    // rung as a diegetic line, ending on completion.
+    expect(events.map((e) => e.type === 'construction' && e.stage)).toEqual(['foundation', 'frame', 'frame']);
+    expect(events.map((e) => e.type === 'construction' && e.text)).toEqual([
+      'the bakery extension — foundation',
+      'the bakery extension — frame',
+      'the bakery extension is complete',
+    ]);
+    expect(events.at(-1)).toMatchObject({ type: 'construction', done: true, stageIndex: 3 });
+    // Deltas carry construction only on the ticks a stage actually turns —
+    // one entry per transition, not every accruing tick.
+    expect(constructionDeltas.length).toBe(events.length);
+    expect(sim.construction()[0]).toMatchObject({ complete: true, stageIndex: 3, workers: [] });
+  });
+
+  it('collapses multiple stage crossings in one tick to a single delta entry per site', () => {
+    // Three one-unit stages: a builder rolling 2 effort in a tick clears two
+    // rungs at once. The chronicle must still narrate every crossing, but the
+    // wire carries one last-writer entry per site (the client is last-writer-
+    // wins, so intermediate same-id entries would be pure redundancy).
+    const fastSite = ConstructionSiteSchema.parse({
+      ...bakerySite,
+      id: 'quick-shed',
+      stages: [
+        { name: 'a', asset: 'stakes', work_units: 1 },
+        { name: 'b', asset: 'foundation-mesh', work_units: 1 },
+        { name: 'c', asset: 'frame-mesh', work_units: 1 },
+      ],
+    });
+    const sim = new WorldSim({ charter, manifest, chunks, npcs, sites: [fastSite], ticksPerPhase: 600 });
+    const eventsByTick = new Map<number, string[]>();
+    sim.onEvent((e) => {
+      if (e.type === 'construction') eventsByTick.set(e.tick, [...(eventsByTick.get(e.tick) ?? []), e.stage]);
+    });
+    for (let i = 0; i < 60; i++) {
+      const delta = sim.tick();
+      if (!delta.construction) continue;
+      // Invariant: at most one entry per site id on any tick, no matter how
+      // many stages turned — the collapse guard.
+      const ids = delta.construction.map((c) => c.id);
+      expect(new Set(ids).size).toBe(ids.length);
+      // On a tick where >1 stage crossed, the lone entry is the *final* stage.
+      const crossings = eventsByTick.get(delta.tick) ?? [];
+      if (crossings.length > 1) {
+        const entry = delta.construction.find((c) => c.id === 'quick-shed')!;
+        expect(entry.stage).toBe(crossings[crossings.length - 1]);
+      }
+    }
+    // The double-crossing tick actually happened (else this test proves nothing).
+    expect([...eventsByTick.values()].some((s) => s.length > 1)).toBe(true);
+    expect(sim.construction()[0]).toMatchObject({ complete: true, stageIndex: 3 });
+  });
+
+  it('construction is deterministic: two sims produce identical site state and deltas', () => {
+    const run = (): { deltas: string; state: unknown } => {
+      const sim = new WorldSim({ charter, manifest, chunks, npcs, sites: [bakerySite], ticksPerPhase: 50 });
+      const deltas = [];
+      for (let i = 0; i < 60; i++) deltas.push(sim.tick());
+      return { deltas: JSON.stringify(deltas.map((d) => d.construction ?? null)), state: sim.construction() };
+    };
+    const a = run();
+    const b = run();
+    expect(a.deltas).toEqual(b.deltas);
+    expect(JSON.stringify(a.state)).toEqual(JSON.stringify(b.state));
+  });
+
+  it('a site whose builder role matches no resident never progresses', () => {
+    const orphan = ConstructionSiteSchema.parse({ ...bakerySite, id: 'ghost-hall', builder_roles: ['stonemason'] });
+    const sim = new WorldSim({ charter, manifest, chunks, npcs, sites: [orphan], ticksPerPhase: 600 });
+    const events: SimEvent[] = [];
+    sim.onEvent((e) => e.type === 'construction' && events.push(e));
+    for (let i = 0; i < 100; i++) sim.tick();
+    expect(events).toEqual([]);
+    expect(sim.construction()[0]).toMatchObject({ stageIndex: 0, progress: 0, complete: false, workers: [] });
   });
 
   // A two-building starter plan: the town-well opens on day one (no unmet

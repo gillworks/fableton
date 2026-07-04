@@ -9,6 +9,7 @@ import { AssetRegistrySchema } from '../schemas/assets.js';
 import type { BehaviorNode } from '../schemas/behavior.js';
 import type { Charter } from '../schemas/charter.js';
 import { ChunkSchema, type Chunk } from '../schemas/chunk.js';
+import { slugify } from '../schemas/common.js';
 import { ConstructionSiteSchema, type ConstructionSite } from '../schemas/construction.js';
 import { ExpansionPlanSchema } from '../schemas/expansion.js';
 import { WorldManifestSchema, type WorldManifest } from '../schemas/manifest.js';
@@ -143,13 +144,6 @@ function footprintsOverlap(a: ConstructionSite, b: ConstructionSite): boolean {
   }
   return true;
 }
-
-// Gate-enforced charter rules match asset tags on slug equality (ADR-0001).
-const slugify = (s: string): string =>
-  s
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
 
 interface BehaviorRefs {
   phases: Set<string>;

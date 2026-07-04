@@ -6,6 +6,7 @@ import { AssetRegistrySchema } from '../schemas/assets.js';
 import { ChunkSchema } from '../schemas/chunk.js';
 import { WorldManifestSchema } from '../schemas/manifest.js';
 import { NpcSchema } from '../schemas/npc.js';
+import { ConstructionSiteSchema } from '../schemas/construction.js';
 import { RumorsDocSchema } from '../schemas/rumors.js';
 import { WorldSim } from '../sim/worldSim.js';
 import { startWorldApi, type WorldApi } from './worldApi.js';
@@ -282,5 +283,66 @@ describe('world-api gossip (issue #81)', () => {
     expect(
       entries.some((e: { entry: string }) => e.entry === 'Tam heard from Greta: “the oven knocked back”'),
     ).toBe(true);
+  });
+});
+
+describe('world-api construction (issue #94)', () => {
+  let siteApi: WorldApi;
+  let siteBase: string;
+
+  // A site on Greta's oven with her role as the builder — her authored tree
+  // walks her onto it, so the sim raises it over the first several ticks.
+  const site = ConstructionSiteSchema.parse({
+    schema_version: 1,
+    id: 'bakery-extension',
+    chunk: 'town-square',
+    position: [4, 0, 4],
+    footprint: { width: 4, depth: 4 },
+    builder_roles: ['witch-gone-respectable'],
+    stages: [
+      { name: 'marked plot', asset: 'stakes', work_units: 2 },
+      { name: 'foundation', asset: 'foundation-mesh', work_units: 3 },
+      { name: 'frame', asset: 'frame-mesh', work_units: 5 },
+    ],
+    completion: { props: [{ asset: 'bakery', position: [4, 0, 4] }] },
+  });
+
+  beforeAll(async () => {
+    const siteSim = new WorldSim({ charter, manifest, chunks, npcs, sites: [site], ticksPerPhase: 600 });
+    siteApi = await startWorldApi(
+      { sim: siteSim, charter, manifest, chunks, npcs, registry },
+      { port: 0 },
+    );
+    siteBase = `http://localhost:${siteApi.port}`;
+    for (let i = 0; i < 40; i++) siteSim.tick(); // long enough to top out the site
+  });
+  afterAll(async () => siteApi.close());
+
+  it('GET /api/construction exposes each site stage, progress, and workers', async () => {
+    const res = await fetch(`${siteBase}/api/construction`);
+    expect(res.status).toBe(200);
+    const { sites } = await res.json();
+    expect(sites).toHaveLength(1);
+    expect(sites[0]).toMatchObject({
+      id: 'bakery-extension',
+      chunk: 'town-square',
+      stage: 'frame',
+      stageIndex: 3,
+      stageCount: 3,
+      complete: true,
+    });
+  });
+
+  it('GET /api/world carries the live construction state', async () => {
+    const body = await (await fetch(`${siteBase}/api/world`)).json();
+    expect(body.construction).toHaveLength(1);
+    expect(body.construction[0].id).toBe('bakery-extension');
+  });
+
+  it('records stage transitions in the chronicle diegetically', async () => {
+    const { entries } = await (await fetch(`${siteBase}/api/chronicle`)).json();
+    const lines = entries.map((e: { entry: string }) => e.entry);
+    expect(lines).toContain('the bakery extension — foundation');
+    expect(lines).toContain('the bakery extension is complete');
   });
 });

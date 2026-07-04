@@ -1,4 +1,6 @@
-node_modules/
+# No trailing slash: also ignores per-package `node_modules` *symlinks* (as
+# pnpm worktrees create), which a dir-only `node_modules/` pattern misses.
+node_modules
 dist/
 build/
 coverage/

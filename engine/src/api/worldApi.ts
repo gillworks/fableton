@@ -142,6 +142,9 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
         return `ground breaks on ${event.site} — ${event.stage}`;
       case 'activity':
         return `${event.npc} — ${event.activity}`;
+      case 'construction':
+        // The "the bakery's frame went up" line, in plain sight.
+        return event.text;
     }
   };
   deps.sim.onEvent((event: SimEvent) => {
@@ -217,9 +220,11 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
         // PR references as links to it (issue #59). Instance config, not
         // charter data; absent means plain text.
         ...(process.env['FABLETON_REPO_URL'] && { repo_url: process.env['FABLETON_REPO_URL'] }),
-        // Studio construction sites (Phase B populates this; the client
-        // renders markers for whatever appears here).
-        construction: [],
+        // Studio construction sites: live stage, progress, and current
+        // workers (issue #94). The client renders markers for whatever
+        // appears here; the dedicated /api/construction route serves the
+        // inspect panel the same payload.
+        construction: deps.sim.construction(),
         phases: deps.charter.aesthetic.day_phases,
         // Charter theme tokens (docs/design.md): the client derives its
         // atmosphere, accent, and type from these — never from constants.
@@ -283,6 +288,11 @@ export function startWorldApi(deps: WorldApiDeps, options: WorldApiOptions = {})
     }
     if (req.method === 'GET' && path === '/api/chronicle') {
       return json(res, 200, { entries: chronicle });
+    }
+    // Live construction state for the inspect panel (issue #94): each site's
+    // current stage, work accrued toward the next, and who is working it now.
+    if (req.method === 'GET' && path === '/api/construction') {
+      return json(res, 200, { sites: deps.sim.construction() });
     }
     // The viewer source of the feedback funnel (issue #79): a wish lands
     // in the world repo's backlog as a GH issue labeled `wish`. Disabled
