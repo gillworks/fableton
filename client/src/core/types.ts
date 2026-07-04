@@ -71,11 +71,13 @@ export interface ConstructionSite {
   url?: string;
 }
 
-/** One rung of a construction site's stage ladder: its diegetic name and the
- *  asset-registry mesh shown while the site sits at that stage (issue #99). */
+/** One rung of a construction site's stage ladder: its diegetic name and
+ *  what it shows — a kit mesh (`asset`) or the completion buildings at a
+ *  fraction of their height (`rise`, issue #117). Exactly one is set. */
 export interface ConstructionStageRef {
   name: string;
-  asset: string;
+  asset?: string;
+  rise?: number;
 }
 
 /**

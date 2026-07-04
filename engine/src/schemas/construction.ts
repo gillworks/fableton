@@ -25,16 +25,33 @@ export const FootprintSchema = z.strictObject({
 });
 
 // One rung of the ladder a site climbs. `name` is diegetic and viewer-facing
-// (the client narrates it verbatim, invariant 4). `asset` is the mesh shown
-// while the site sits at this stage. `work_units` is the effort required to
-// advance OUT of this stage into the next — a positive integer the sim
-// decrements against; the last stage's work_units is what it costs to finish
-// the build and swap in the completion payload.
-export const ConstructionStageSchema = z.strictObject({
-  name: nonEmpty,
-  asset: idSlug,
-  work_units: z.number().int().positive(),
-});
+// (the client narrates it verbatim, invariant 4). What the stage LOOKS like
+// is exactly one of:
+//   - `asset`: a kit mesh shown while the site sits at this stage, or
+//   - `rise` (issue #117): the site's completion buildings rendered rising —
+//     bare walls at this fraction of their final height, so a house under
+//     construction looks like a house going up, not a prop.
+// `work_units` is the effort required to advance OUT of this stage into the
+// next — a positive integer the sim decrements against; the last stage's
+// work_units is what it costs to finish the build and swap in the
+// completion payload.
+export const ConstructionStageSchema = z
+  .strictObject({
+    name: nonEmpty,
+    asset: idSlug.optional(),
+    rise: z.number().gt(0).lte(1).optional(),
+    work_units: z.number().int().positive(),
+  })
+  .check((ctx) => {
+    if ((ctx.value.asset === undefined) === (ctx.value.rise === undefined)) {
+      ctx.issues.push({
+        code: 'custom',
+        message: 'a stage shows exactly one of `asset` (kit mesh) or `rise` (completion buildings at partial height)',
+        path: ['asset'],
+        input: ctx.value,
+      });
+    }
+  });
 
 // What the finished site becomes: ordinary chunk-data (parametric buildings
 // and/or placed props, reusing the chunk schema's own types — no new render
@@ -85,6 +102,15 @@ export const ConstructionSiteSchema = z
   .check((ctx) => {
     const seen = new Set<string>();
     ctx.value.stages.forEach((stage, i) => {
+      // A rising stage renders the completion buildings — there must be some.
+      if (stage.rise !== undefined && ctx.value.completion.buildings.length === 0) {
+        ctx.issues.push({
+          code: 'custom',
+          message: `stage "${stage.name}" uses \`rise\` but the completion has no buildings to raise`,
+          path: ['stages', i, 'rise'],
+          input: stage.rise,
+        });
+      }
       const slug = stage.name.toLowerCase().trim();
       if (seen.has(slug)) {
         ctx.issues.push({

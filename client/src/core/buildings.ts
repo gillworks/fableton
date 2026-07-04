@@ -23,6 +23,35 @@ export interface BuiltBuilding {
   windowMaterials: MeshLambertMaterial[];
 }
 
+/**
+ * A building mid-rise (issue #117): bare walls at `fraction` of their final
+ * height on the authored footprint, the door arriving once the walls can
+ * hold one. Roof, windows, and chimney wait for completion — a site swaps
+ * to the real buildBuilding when it finishes.
+ */
+export function buildRisingBuilding(b: Building, fraction: number): Group {
+  const group = new Group();
+  group.position.set(b.position[0], b.position[1], b.position[2]);
+  group.rotation.y = b.rotation_y ?? 0;
+  const height = Math.max(0.05, b.height * Math.min(1, fraction));
+  const walls = new Mesh(
+    new BoxGeometry(b.width, height, b.depth),
+    new MeshLambertMaterial({ color: b.wall_color }),
+  );
+  walls.position.y = height / 2;
+  walls.castShadow = true;
+  group.add(walls);
+  if (fraction >= 0.5) {
+    const door = new Mesh(
+      new BoxGeometry(Math.min(0.62, b.width * 0.22), Math.min(1.0, height * 0.55), 0.08),
+      new MeshLambertMaterial({ color: DOOR_INK }),
+    );
+    door.position.set(0, Math.min(0.5, height * 0.275), b.depth / 2 + 0.02);
+    group.add(door);
+  }
+  return group;
+}
+
 export function buildBuilding(b: Building): BuiltBuilding {
   const group = new Group();
   group.position.set(b.position[0], b.position[1], b.position[2]);

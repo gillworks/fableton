@@ -368,7 +368,7 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
     }
     if (registry) {
       site.stages.forEach((stage, i) => {
-        if (!assetsById.has(stage.asset)) {
+        if (stage.asset !== undefined && !assetsById.has(stage.asset)) {
           violations.push({
             file,
             rule: 'asset-refs-resolve',
@@ -604,8 +604,16 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
     let sitePolys = 0;
     let siteDrawCalls = 0;
     for (const { site } of chunkSites) {
+      // A rise stage shows the completion buildings at partial height —
+      // price it like the completion's buildings (200 tris each).
       const heaviestStagePolys = site.stages.reduce(
-        (max, s) => Math.max(max, assetsById.get(s.asset)?.poly_count ?? 0),
+        (max, s) =>
+          Math.max(
+            max,
+            s.rise !== undefined
+              ? site.completion.buildings.length * 200
+              : (assetsById.get(s.asset ?? '')?.poly_count ?? 0),
+          ),
         0,
       );
       const completionPolys =

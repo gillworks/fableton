@@ -90,6 +90,53 @@ describe('ConstructionSiteSchema', () => {
     expect(() => ConstructionSiteSchema.parse({ ...validSite(), height_m: 12 })).toThrow();
   });
 
+  it('rising stages (issue #117): rise renders the completion buildings mid-build', () => {
+    const doc = validSite() as unknown as Record<string, unknown>;
+    const stages = [
+      { name: 'marked plot', asset: 'lantern', work_units: 4 },
+      { name: 'walls waist-high', rise: 0.4, work_units: 20 },
+      { name: 'walls to the eaves', rise: 0.95, work_units: 20 },
+    ];
+    const site = ConstructionSiteSchema.parse({ ...doc, stages });
+    expect(site.stages[1]).toMatchObject({ rise: 0.4 });
+    expect(site.stages[1]!.asset).toBeUndefined();
+    // round-trips
+    expect(ConstructionSiteSchema.parse(JSON.parse(JSON.stringify(site)))).toEqual(site);
+  });
+
+  it('rejects a stage with both asset and rise, or neither', () => {
+    const doc = validSite() as unknown as Record<string, unknown>;
+    for (const stage of [
+      { name: 'confused', asset: 'lantern', rise: 0.5, work_units: 4 },
+      { name: 'invisible', work_units: 4 },
+    ]) {
+      expect(() => ConstructionSiteSchema.parse({ ...doc, stages: [stage] })).toThrow(
+        /exactly one of/,
+      );
+    }
+  });
+
+  it('rejects rise outside (0, 1] ', () => {
+    const doc = validSite() as unknown as Record<string, unknown>;
+    for (const rise of [0, -0.2, 1.4]) {
+      expect(() =>
+        ConstructionSiteSchema.parse({ ...doc, stages: [{ name: 'x', rise, work_units: 1 }] }),
+      ).toThrow();
+    }
+  });
+
+  it('rejects a rise stage when the completion has no buildings to raise', () => {
+    const doc = validSite() as unknown as Record<string, unknown>;
+    const completion = { buildings: [], props: (doc['completion'] as { props: unknown[] }).props ?? [] };
+    expect(() =>
+      ConstructionSiteSchema.parse({
+        ...doc,
+        completion: { ...completion, props: [{ asset: 'tree', position: [1, 0, 1], rotation_y: 0, scale: 1 }] },
+        stages: [{ name: 'rising from nothing', rise: 0.5, work_units: 2 }],
+      }),
+    ).toThrow(/no buildings to raise/);
+  });
+
   it('rejects a non-slug id', () => {
     expect(() => ConstructionSiteSchema.parse({ ...validSite(), id: 'Bakery Extension' })).toThrow();
   });
