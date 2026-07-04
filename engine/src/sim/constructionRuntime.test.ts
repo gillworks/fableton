@@ -111,4 +111,45 @@ describe('ConstructionRuntime', () => {
     expect(more).toEqual([]);
     expect(rt.state()[0]!.workers).toEqual([]);
   });
+
+  it('spawnSite opens a workable site mid-run that then climbs its stages', () => {
+    // Boot with nothing under construction (the expansion-driven world).
+    const rt = new ConstructionRuntime([], origins, roles, 7);
+    expect(rt.state()).toEqual([]);
+    expect(rt.step(1, onSite)).toEqual([]); // nothing to work yet
+
+    // Ground breaks: the site enters at its first stage and is now visible.
+    expect(rt.spawnSite(site())).toBe(true);
+    expect(rt.state()[0]).toMatchObject({ id: 'bakery-extension', stageIndex: 0, progress: 0, complete: false });
+
+    // From here the builder standing on it raises it exactly as a founding site.
+    const transitions = [];
+    for (let t = 2; t <= 200; t++) transitions.push(...rt.step(t, onSite));
+    expect(transitions.map((tr) => tr.stage)).toEqual(['foundation', 'frame', 'frame']);
+    expect(rt.state()[0]).toMatchObject({ stageIndex: 3, complete: true });
+  });
+
+  it('spawnSite is idempotent by id and keeps sites in sorted order', () => {
+    const rt = new ConstructionRuntime([site({ id: 'mill' })], origins, roles, 1);
+    // A brand-new id is added and the set re-sorts by id.
+    expect(rt.spawnSite(site({ id: 'aqueduct' }))).toBe(true);
+    expect(rt.state().map((s) => s.id)).toEqual(['aqueduct', 'mill']);
+    // A duplicate id is a no-op — the existing runtime is untouched.
+    rt.step(1, new Map([['mabel', [4, 0, 4]]])); // give 'mill' some progress
+    const before = JSON.stringify(rt.state());
+    expect(rt.spawnSite(site({ id: 'mill' }))).toBe(false);
+    expect(JSON.stringify(rt.state())).toBe(before);
+  });
+
+  it('is deterministic whether a site is founding or spawned mid-run', () => {
+    // Founding: the site is present from tick 1.
+    const founding = run(onSite, 40, 9).rt;
+    // Spawned: the same site opens on tick 1 before that tick is worked.
+    const spawned = new ConstructionRuntime([], origins, roles, 9);
+    for (let t = 1; t <= 40; t++) {
+      if (t === 1) spawned.spawnSite(site());
+      spawned.step(t, onSite);
+    }
+    expect(JSON.stringify(spawned.state())).toBe(JSON.stringify(founding.state()));
+  });
 });

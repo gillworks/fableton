@@ -91,6 +91,9 @@ export class ConstructionRuntime {
   #seed: number;
   // Resident id → role slug (identity.kind, slugified). Built once.
   #roleOf: Map<string, string>;
+  // Chunk id → world origin, kept so sites opened mid-run (issue #107) resolve
+  // their world-space centre exactly as the founding sites did.
+  #originOf: ReadonlyMap<string, readonly [number, number]>;
   // Sites keyed by id, walked in sorted order for stable output.
   #sites: SiteRuntime[];
 
@@ -102,32 +105,56 @@ export class ConstructionRuntime {
   ) {
     this.#seed = worldSeed;
     this.#roleOf = new Map([...roleOf].map(([id, kind]) => [id, slugify(kind)]));
+    this.#originOf = originOf;
     this.#sites = [...sites]
       .sort((a, b) => a.id.localeCompare(b.id))
-      .map((site) => {
-        const origin = originOf.get(site.chunk) ?? ([0, 0] as const);
-        // Bounding-circle approximation of the work zone: half the larger
-        // footprint dimension plus the margin. Rotation-invariant (so
-        // `rotation_y` needs no handling here) and deliberately fuzzy —
-        // presence, not exact rectangle containment. For a long, thin plot it
-        // over-admits along the short axis, which only ever lets a builder who
-        // is standing slightly off the footprint pitch in; harmless.
-        const reach = Math.max(site.footprint.width, site.footprint.depth) / 2 + WORK_MARGIN;
-        return {
-          site,
-          centre: [origin[0] + site.position[0], site.position[1], origin[1] + site.position[2]] as [
-            number,
-            number,
-            number,
-          ],
-          radius2: reach * reach,
-          roles: new Set(site.builder_roles.map(slugify)),
-          stageIndex: 0,
-          progress: 0,
-          complete: false,
-          workers: [],
-        };
-      });
+      .map((site) => this.#makeSiteRuntime(site));
+  }
+
+  // Build the live runtime state for one site at its first stage. Shared by the
+  // founding set (constructor) and sites the expansion plan opens later
+  // (spawnSite) so both resolve the work zone and roles identically.
+  #makeSiteRuntime(site: ConstructionSite): SiteRuntime {
+    const origin = this.#originOf.get(site.chunk) ?? ([0, 0] as const);
+    // Bounding-circle approximation of the work zone: half the larger
+    // footprint dimension plus the margin. Rotation-invariant (so
+    // `rotation_y` needs no handling here) and deliberately fuzzy —
+    // presence, not exact rectangle containment. For a long, thin plot it
+    // over-admits along the short axis, which only ever lets a builder who
+    // is standing slightly off the footprint pitch in; harmless.
+    const reach = Math.max(site.footprint.width, site.footprint.depth) / 2 + WORK_MARGIN;
+    return {
+      site,
+      centre: [origin[0] + site.position[0], site.position[1], origin[1] + site.position[2]] as [
+        number,
+        number,
+        number,
+      ],
+      radius2: reach * reach,
+      roles: new Set(site.builder_roles.map(slugify)),
+      stageIndex: 0,
+      progress: 0,
+      complete: false,
+      workers: [],
+    };
+  }
+
+  /**
+   * Open a construction site mid-run — the reverse of the completion→prereq
+   * wire (issue #107): when the expansion plan's prerequisites come true, the
+   * WorldSim hands the opened site here so builders can raise it. The site
+   * enters at its first stage and is walked from the next `step` on.
+   *
+   * Idempotent by id: a site already present (a founding site the plan also
+   * names, or a re-emitted opening) is left untouched and `false` is returned.
+   * Determinism holds — effort rolls are keyed by (site, npc, tick) and sites
+   * are re-sorted by id, so spawning one never shifts another's progress.
+   */
+  spawnSite(site: ConstructionSite): boolean {
+    if (this.#sites.some((rt) => rt.site.id === site.id)) return false;
+    this.#sites.push(this.#makeSiteRuntime(site));
+    this.#sites.sort((a, b) => a.site.id.localeCompare(b.site.id));
+    return true;
   }
 
   // One worker's effort this tick: 1 or 2 units, an independent seeded roll

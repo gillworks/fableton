@@ -131,6 +131,12 @@ export class WorldSim {
   #calendar: Charter['calendar'];
   #lastEvent: string | null;
   #expansion: ExpansionRuntime | undefined;
+  // Payload for every site the expansion plan can open, keyed by id. When a
+  // site's ground breaks (issue #107) the WorldSim looks its full
+  // construction_site payload up here and hands it to the construction runtime,
+  // so a plan-opened site becomes one the builders actually raise — the reverse
+  // of the completion→prerequisite wire below. Empty for a town with no plan.
+  #plannedSites = new Map<string, ConstructionSite>();
   // Sites the sim has seen finished. Populated by the construction runtime as
   // sites complete (issue #96); expansion prerequisites of type site_complete
   // read from here. Construction runs AFTER expansion in a tick, so a site that
@@ -177,7 +183,15 @@ export class WorldSim {
     // its own ticks, so the chronicle records the first day's groundbreaking.
     if (options.expansionPlan) {
       this.#expansion = new ExpansionRuntime(options.expansionPlan);
-      if (this.#tick > 0) this.#expansion.seed(this.clock().day, this.#completedSites);
+      for (const entry of options.expansionPlan.queue) this.#plannedSites.set(entry.site.id, entry.site);
+      if (this.#tick > 0) {
+        this.#expansion.seed(this.clock().day, this.#completedSites);
+        // A resumed world skips the ticks that broke this ground, so re-open the
+        // sites the seed marked as already up: spawn each into construction so a
+        // redeploy resumes with its opened sites workable (construction state
+        // itself is re-derived from tick 0, matching the founding sites).
+        for (const id of this.#expansion.openSites()) this.#construction.spawnSite(this.#plannedSites.get(id)!);
+      }
     }
   }
 
@@ -287,6 +301,12 @@ export class WorldSim {
     // same-tick race — keep expansion first.
     if (this.#expansion) {
       for (const opened of this.#expansion.step(clock.day, this.#completedSites)) {
+        // Close the loop: a plan-opened site becomes a real construction site
+        // (issue #107). spawnSite runs before construction steps below, so a
+        // site whose ground breaks this tick can already take work this tick if
+        // an eligible builder is standing on it. Idempotent by id — a founding
+        // site the plan also names is left as-is.
+        this.#construction.spawnSite(this.#plannedSites.get(opened.site)!);
         this.#emit({ type: 'expansion', tick: clock.tick, site: opened.site, stage: opened.stage });
       }
     }
