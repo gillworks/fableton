@@ -4,6 +4,14 @@
 // registry parses, every asset path resolves to a real file, and the
 // generator's output built from this registry passes the world gate —
 // so every prop id the generator can emit resolves in the registry.
+//
+// Fonts are the other client-referenced asset set (issue #131): the
+// client links assets/fonts/fonts.css and the browser fetches the
+// woff2 faces it declares. Those paths live outside registry.json, so
+// this also checks fonts.css exists and every url(/assets/…) in it
+// resolves to a real vendored file — the deploy contract the client
+// depends on. Both halves are network-free (they check the built asset
+// tree on disk); deploy/verify-assets.mjs is the live-URL counterpart.
 // Usage: tsx src/validate/checkRegistry.ts --charter <charter.yaml> --registry <registry.json>
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -28,6 +36,7 @@ const registryPath = values.registry;
 const repoRoot = join(dirname(registryPath), '..');
 
 const violations: Violation[] = [];
+let registrySummary = '';
 const registryResult = AssetRegistrySchema.safeParse(
   JSON.parse(readFileSync(registryPath, 'utf8')),
 );
@@ -62,11 +71,42 @@ if (!registryResult.success) {
     }),
   );
 
-  if (violations.length === 0) {
-    console.log(
-      `✓ registry valid — ${registryResult.data.assets.length} assets resolve; generated world (${chunks.length} chunks) passes the gate`,
-    );
+  registrySummary = `registry valid — ${registryResult.data.assets.length} assets resolve; generated world (${chunks.length} chunks) passes the gate`;
+}
+
+// Fonts: the client links assets/fonts/fonts.css and the browser fetches
+// the faces it declares. Those paths are not in the registry, so check
+// the stylesheet exists and every url(/assets/…) it declares resolves.
+const fontsCssRel = 'assets/fonts/fonts.css';
+const fontsCssPath = join(repoRoot, fontsCssRel);
+let fontFacesChecked = 0;
+if (!existsSync(fontsCssPath)) {
+  violations.push({
+    file: fontsCssRel,
+    rule: 'asset-refs-resolve',
+    message: `the client links "/${fontsCssRel}" but it does not exist`,
+  });
+} else {
+  const css = readFileSync(fontsCssPath, 'utf8');
+  for (const match of css.matchAll(/url\(\s*['"]?([^'")]+?)['"]?\s*\)/g)) {
+    const ref = match[1]!;
+    // Only local /assets/* refs are the deploy contract; skip remote urls.
+    if (!ref.startsWith('/assets/')) continue;
+    fontFacesChecked++;
+    const rel = ref.replace(/^\//, '');
+    if (!existsSync(join(repoRoot, rel))) {
+      violations.push({
+        file: fontsCssRel,
+        rule: 'asset-refs-resolve',
+        message: `fonts.css declares "${ref}", which does not exist`,
+      });
+    }
   }
+}
+
+if (violations.length === 0) {
+  const fontsSummary = `fonts.css valid — ${fontFacesChecked} face(s) resolve`;
+  console.log(`✓ ${registrySummary}\n✓ ${fontsSummary}`);
 }
 
 for (const v of violations) {
