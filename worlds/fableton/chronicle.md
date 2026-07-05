@@ -18,3 +18,4 @@ Winsome left her wandering and finally found the shaft she'd been tending in spi
 A sister who once spoke diamonds broke ground downwind of Reynard's orchard, betting the whole town's turnips on a fox's word; nobody has checked yet whether either of them is telling the truth. (PR #127)
 At high sun, Needle holds the hem up and Mirabel Glass tells her the truth about it, the way they've always told each other everything; the compliment gets fact-checked in the same breath. (PR #128)
 The common garden's first turnips came up honest, same as Reynard's word; asked to take the credit, he found somewhere else to look. (PR #130)
+COUNCIL — The god counted six days of doing against two days of telling, ruled that a town which does more than it tells is halfway to the grey, and noticed three residents standing suddenly alone; the lane has been told to talk.
