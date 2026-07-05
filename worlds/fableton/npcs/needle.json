@@ -34,11 +34,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "fitting the town, honestly",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "holding the day's work up to an honest light",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to where Mirabel catches the best light",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "asking Mirabel, out loud, whether the hem lies",
+              "with": "mirabel-glass",
+              "duration_s": 90
+            }
+          ]
         }
       },
       {

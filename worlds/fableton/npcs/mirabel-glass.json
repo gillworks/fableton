@@ -34,11 +34,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "offering unsolicited reflections",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "giving the day's most requested honest opinion",
+          "children": [
+            {
+              "type": "move",
+              "label": "drifting over to where Needle's holding up the cloth",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "confirming the hem is honest, and the compliment too",
+              "with": "needle",
+              "duration_s": 90
+            }
+          ]
         }
       },
       {
