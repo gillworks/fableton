@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "the-kinder-sister",
+  "identity": {
+    "name": "the Kinder Sister",
+    "kind": "gardener, retired from speaking jewels",
+    "story": "Every kind word once bought her a diamond, and her sister's every unkind word bought a toad. She's kept the manners and let the jewels go. Now she keeps the town's common garden downwind of Reynard's orchard, on ground a fox's overdue honesty already softened, and swears the turnips come up truer for it."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "reynard-the-retired",
+      "kind": "plants downwind of his orchard on purpose — the ground already knows how to behave"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Kinder Sister's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "sequence",
+          "label": "opening the common garden",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking down to the borrowed ground",
+              "to": "the-common-garden"
+            },
+            {
+              "type": "idle",
+              "label": "coaxing the turnips to come up honest",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "the honest tending",
+          "children": [
+            {
+              "type": "move",
+              "label": "back to the garden row",
+              "to": "the-common-garden"
+            },
+            {
+              "type": "interact",
+              "label": "training the border hedge to hold its line, the way a kind word should",
+              "with": "hedge",
+              "duration_s": 90
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "latching the garden gate for the night",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "leaving a kind word for the frost, just in case",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}
