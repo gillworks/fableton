@@ -184,6 +184,26 @@
       ],
       "rotation_y": 0,
       "scale": 1
+    },
+    {
+      "asset": "hedge",
+      "position": [
+        2.5,
+        0.72,
+        8.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "hedge",
+      "position": [
+        4.5,
+        0.72,
+        10.5
+      ],
+      "rotation_y": 0,
+      "scale": 1
     }
   ],
   "buildings": [
@@ -236,6 +256,14 @@
           0.683,
           1
         ]
+      },
+      {
+        "id": "the-common-garden",
+        "position": [
+          3.5,
+          0.72,
+          9.5
+        ]
       }
     ],
     "edges": [
@@ -250,6 +278,10 @@
       [
         "heart",
         "gate-chunk-3-3"
+      ],
+      [
+        "wander",
+        "the-common-garden"
       ]
     ],
     "portals": [
@@ -266,7 +298,8 @@
   "npcs": [
     "cobble",
     "granny-ash",
-    "reynard-the-retired"
+    "reynard-the-retired",
+    "the-kinder-sister"
   ],
   "lore": []
 }
