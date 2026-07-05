@@ -20,11 +20,26 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "finishing the dawn cobbling",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the cheap end of the batch",
+          "children": [
+            {
+              "type": "idle",
+              "label": "finishing the dawn cobbling, right on the union bell",
+              "duration_s": 30
+            },
+            {
+              "type": "move",
+              "label": "crossing to meet the bread cart, off the clock now",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "buying the first burnt loaf, cheap, before her oven's rightly hot",
+              "with": "cart-high",
+              "duration_s": 20
+            }
+          ]
         }
       },
       {
