@@ -30,11 +30,20 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "sunning on the fountain rim",
-          "radius": 3,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "proof, sunning in plain view",
+          "children": [
+            {
+              "type": "move",
+              "label": "climbing onto the fountain rim",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "sunning where everyone can see, proof a kiss was never required",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {

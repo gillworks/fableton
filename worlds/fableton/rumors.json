@@ -38,6 +38,24 @@
       "text": "Winsome sank the well's first foot of shaft at first light, one careful foot at a time — she's been tending it in spirit for years, and the ground finally noticed.",
       "origin": "winsome",
       "notable": true
+    },
+    {
+      "id": "brindles-wordless-wage",
+      "text": "Bo Brindleson folded the flock in at lamplighting again and paid Brindle the same way he always does — not a word between them, and somehow the whole lane's heard about it anyway.",
+      "origin": "bo-brindleson",
+      "notable": false
+    },
+    {
+      "id": "old-thorns-annual-inspection",
+      "text": "Fable Jack walked the line at first light and inspected Old Thorn first, same as every year; neither one will call it personal, and neither one has missed a year.",
+      "origin": "fable-jack",
+      "notable": false
+    },
+    {
+      "id": "puddles-standing-proof",
+      "text": "Puddle sunned himself on the fountain rim again at high sun, right where everyone could see — proof, same as always, that a kiss was never required.",
+      "origin": "puddle",
+      "notable": true
     }
   ]
 }
