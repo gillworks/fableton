@@ -40,11 +40,20 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "folding the flock for the night",
-          "radius": 7,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the wordless wage, paid on time",
+          "children": [
+            {
+              "type": "move",
+              "label": "folding the flock in toward the gate",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "paying Brindle in silence, the only wage that's ever suited either of them",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {

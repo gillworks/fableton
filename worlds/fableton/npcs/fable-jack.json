@@ -24,11 +24,20 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "measuring the morning growth",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the annual inspection, kept on schedule",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking the property line",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "inspecting Old Thorn first, the one appointment neither of them will call personal",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {
