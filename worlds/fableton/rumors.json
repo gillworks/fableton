@@ -14,6 +14,30 @@
       "text": "Widow Hood's wolf count came in again at high sun, unwitnessed as ever — by lamplighting half the lane could recite her number better than Pip could dispute it.",
       "origin": "widow-hood",
       "notable": false
+    },
+    {
+      "id": "the-common-gardens-honest-turnips",
+      "text": "The common garden's first turnips came up honest as Reynard's word, and the Kinder Sister's told the row so twice — once for the turnips, once to watch him look away.",
+      "origin": "the-kinder-sister",
+      "notable": true
+    },
+    {
+      "id": "the-fact-checked-compliment",
+      "text": "Needle held the hem up at high sun and Mirabel Glass told her the truth of it, compliment and all; half the lane's taken to fact-checking its own compliments now, just to see if the habit sticks.",
+      "origin": "mirabel-glass",
+      "notable": false
+    },
+    {
+      "id": "the-hedge-that-hasnt-grown",
+      "text": "Old Thorn and Bramble Rose staked a plot for a hedge that hasn't grown a single leaf yet, and neither one will admit which of them is waiting on the other.",
+      "origin": "bramble-rose",
+      "notable": false
+    },
+    {
+      "id": "the-wells-first-foot-of-shaft",
+      "text": "Winsome sank the well's first foot of shaft at first light, one careful foot at a time — she's been tending it in spirit for years, and the ground finally noticed.",
+      "origin": "winsome",
+      "notable": true
     }
   ]
 }

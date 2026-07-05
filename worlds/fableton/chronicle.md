@@ -19,3 +19,4 @@ A sister who once spoke diamonds broke ground downwind of Reynard's orchard, bet
 At high sun, Needle holds the hem up and Mirabel Glass tells her the truth about it, the way they've always told each other everything; the compliment gets fact-checked in the same breath. (PR #128)
 The common garden's first turnips came up honest, same as Reynard's word; asked to take the credit, he found somewhere else to look. (PR #130)
 COUNCIL — The god counted six days of doing against two days of telling, ruled that a town which does more than it tells is halfway to the grey, and noticed three residents standing suddenly alone; the lane has been told to talk.
+The lane did as it was told: turnips honest as Reynard's word, a fact-checked compliment, an unfinished hedge, and a well's first foot of shaft are all making the rounds tonight, whether their owners like it or not. (PR #134)
