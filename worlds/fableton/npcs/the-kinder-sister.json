@@ -4,13 +4,13 @@
   "identity": {
     "name": "the Kinder Sister",
     "kind": "gardener, retired from speaking jewels",
-    "story": "Every kind word once bought her a diamond, and her sister's every unkind word bought a toad. She's kept the manners and let the jewels go. Now she keeps the town's common garden downwind of Reynard's orchard, on ground a fox's overdue honesty already softened, and swears the turnips come up truer for it."
+    "story": "Every kind word once bought her a diamond, and her sister's every unkind word bought a toad. She's kept the manners and let the jewels go. Now she keeps the town's common garden downwind of Reynard's orchard, on ground a fox's overdue honesty already softened — and the first harvest came up exactly as honest as she'd bet it would."
   },
   "lore": [],
   "relationships": [
     {
       "to": "reynard-the-retired",
-      "kind": "plants downwind of his orchard on purpose — the ground already knows how to behave"
+      "kind": "plants downwind of his orchard on purpose — the harvest came up honest, same as his word, and she's told him so more than once"
     }
   ],
   "behavior": {
@@ -52,6 +52,11 @@
               "label": "training the border hedge to hold its line, the way a kind word should",
               "with": "hedge",
               "duration_s": 90
+            },
+            {
+              "type": "idle",
+              "label": "counting the turnips against Reynard's word, and finding both true",
+              "duration_s": 45
             }
           ]
         }

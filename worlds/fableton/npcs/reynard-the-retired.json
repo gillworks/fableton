@@ -10,7 +10,7 @@
   "relationships": [
     { "to": "greta-the-baker", "kind": "owes her a tab and a story" },
     { "to": "granny-ash", "kind": "leaves two apples by the hedge some mornings, and denies it if asked twice" },
-    { "to": "the-kinder-sister", "kind": "lets her borrow the honest ground and has never once mentioned rent (that he'll admit to)" }
+    { "to": "the-kinder-sister", "kind": "lets her borrow the honest ground, and denies with a straight face that the honest part had anything to do with him" }
   ],
   "behavior": {
     "type": "schedule",
@@ -38,7 +38,8 @@
           "label": "the evening visit",
           "children": [
             { "type": "move", "label": "slipping toward the square", "to": "wander" },
-            { "type": "idle", "label": "composing an excuse for Greta", "duration_s": 45 }
+            { "type": "idle", "label": "composing an excuse for Greta", "duration_s": 45 },
+            { "type": "idle", "label": "changing the subject about the honest turnips, again", "duration_s": 30 }
           ]
         }
       },
