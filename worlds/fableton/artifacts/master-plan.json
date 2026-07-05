@@ -2,13 +2,13 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 2,
-  "issued": "2026-07-04T09:03:46Z",
+  "revision": 3,
+  "issued": "2026-07-05T09:03:37Z",
   "horizon": "Season of Groundbreaking — the town builds what it wished for",
   "goals": [
-    "Raise the wishing well and the hedge arbor in public: named residents do the building, stages legible from the inspect panel, and the day each one finishes belongs to its builders",
-    "Repay the edges: the square won its heartbeat by borrowing Vesper and Marigold — now the chunks that lent them get rituals of their own, Ferrous and Widow Hood first, before anyone drifts toward woodcut-grey",
-    "New powers enter through the law: Fableton's first rumors are acts of retelling under Decree 3, its first weather is a moral lingering (charter law 4), its first festival earns a place on the calendar by what the town has actually done",
+    "Finish what was started: the well and the arbor rise stage by stage in public, and the day each one completes belongs to its builders by name — if the town ever wants a first festival, a finished well is the kind of thing festivals are for",
+    "The lane keeps pace with the Chronicle (Decree 4): every chronicle-worthy day since groundbreaking gets its retelling — the garden's honest harvest, the hem fact-checked at high sun, three builders at their plots — before new days pile on top of untold ones",
+    "The builders' leaving had a cost: Bo Brindleson, Fable Jack, and Puddle each stand alone in their chunk now, nearest of anyone to the woodcut-grey. Repay them the way Ferrous and Widow Hood were repaid — a ritual of their own, and a rumor to carry it home",
     "Keep converting wander into purpose: every resident's day should answer, from the inspect panel alone, what they are doing and for whom",
     "When the well opens, wishes are ledgered, not granted — debts made in a tale survive its ending, and the well keeps books"
   ]
