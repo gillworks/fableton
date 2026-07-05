@@ -16,3 +16,4 @@ At first light Ferrous asks the empty road the same question he asks Mirabel eve
 The town dug, as it was told it could: Ferrous's question is three doors closer to Mirabel than his own voice ever got it, and half the lane can recite Widow Hood's wolf count better than Pip can dispute it. (PR #123)
 Winsome left her wandering and finally found the shaft she'd been tending in spirit for years; behind her, at a respectful distance, Old Thorn and Bramble Rose staked out ground for a hedge that hasn't grown yet, and waited, the way a hedge waits for anything. (PR #124)
 A sister who once spoke diamonds broke ground downwind of Reynard's orchard, betting the whole town's turnips on a fox's word; nobody has checked yet whether either of them is telling the truth. (PR #127)
+At high sun, Needle holds the hem up and Mirabel Glass tells her the truth about it, the way they've always told each other everything; the compliment gets fact-checked in the same breath. (PR #128)
