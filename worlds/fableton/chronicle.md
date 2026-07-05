@@ -21,3 +21,4 @@ The common garden's first turnips came up honest, same as Reynard's word; asked 
 COUNCIL — The god counted six days of doing against two days of telling, ruled that a town which does more than it tells is halfway to the grey, and noticed three residents standing suddenly alone; the lane has been told to talk.
 The lane did as it was told: turnips honest as Reynard's word, a fact-checked compliment, an unfinished hedge, and a well's first foot of shaft are all making the rounds tonight, whether their owners like it or not. (PR #134)
 Three who'd gone quiet were found doing what they'd always done, just louder now: Bo Brindleson paid Brindle his wordless wage, Fable Jack inspected Old Thorn first as ever, and Puddle sat where the whole square could see him, proof as always. (PR #136)
+Cobble clocked out the moment the union bell rang and met the bread cart before Greta's oven was rightly hot, same loaf, same price, same as every dawn. (PR #137)

@@ -56,6 +56,12 @@
       "text": "Puddle sunned himself on the fountain rim again at high sun, right where everyone could see — proof, same as always, that a kiss was never required.",
       "origin": "puddle",
       "notable": true
+    },
+    {
+      "id": "cobbles-cheap-loaf",
+      "text": "Cobble clocked out the second the union bell rang and met the bread cart at first light, same as every dawn — the loaf was burnt, cheap, and his, same as always.",
+      "origin": "cobble",
+      "notable": false
     }
   ]
 }
