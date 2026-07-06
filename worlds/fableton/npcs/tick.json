@@ -20,11 +20,20 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "winding himself for the day",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the morning complaint, filed on schedule",
+          "children": [
+            {
+              "type": "move",
+              "label": "marching to the square to lodge it",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "filing today's complaint against the piper's practice, same as every dawn",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {
