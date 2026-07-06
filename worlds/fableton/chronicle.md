@@ -22,3 +22,4 @@ COUNCIL — The god counted six days of doing against two days of telling, ruled
 The lane did as it was told: turnips honest as Reynard's word, a fact-checked compliment, an unfinished hedge, and a well's first foot of shaft are all making the rounds tonight, whether their owners like it or not. (PR #134)
 Three who'd gone quiet were found doing what they'd always done, just louder now: Bo Brindleson paid Brindle his wordless wage, Fable Jack inspected Old Thorn first as ever, and Puddle sat where the whole square could see him, proof as always. (PR #136)
 Cobble clocked out the moment the union bell rang and met the bread cart before Greta's oven was rightly hot, same loaf, same price, same as every dawn. (PR #137)
+The oldest debts came due tonight: Vesper's patient bell, Granny Ash's two apples, Stilts and Salt's one job wearing two names, and Marigold's quiet cards all finally reached the lane — the Chronicle has nothing left it hasn't been repeated. (PR #138)
