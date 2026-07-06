@@ -11,6 +11,10 @@
     {
       "to": "marigold-crumb",
       "kind": "one of the two she led home; still leaves her a trail out of habit"
+    },
+    {
+      "to": "pip-halfpenny",
+      "kind": "the only neighbor who has ever actually counted the crumbs"
     }
   ],
   "behavior": {
@@ -30,11 +34,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "being followed by optimistic pigeons",
-          "radius": 7,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the morning trail, freshly laid",
+          "children": [
+            {
+              "type": "move",
+              "label": "leading a new trail toward the heart",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "watching Pip Halfpenny count them anyway",
+              "with": "pip-halfpenny",
+              "duration_s": 90
+            }
+          ]
         }
       },
       {
