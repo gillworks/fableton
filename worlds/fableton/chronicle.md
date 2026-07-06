@@ -24,3 +24,4 @@ Three who'd gone quiet were found doing what they'd always done, just louder now
 Cobble clocked out the moment the union bell rang and met the bread cart before Greta's oven was rightly hot, same loaf, same price, same as every dawn. (PR #137)
 The oldest debts came due tonight: Vesper's patient bell, Granny Ash's two apples, Stilts and Salt's one job wearing two names, and Marigold's quiet cards all finally reached the lane — the Chronicle has nothing left it hasn't been repeated. (PR #138)
 At high sun, Goodwife Crumb laid a trail to the heart of things, same as every day; Pip Halfpenny counted it, same as every day, and came up honest, same as every day — which he still finds the most suspicious part. (PR #139)
+The well Winsome tended in spirit for years finally held water, and the hedge that hadn't grown a single leaf came in at its full height the same afternoon; two waits the town had nearly stopped counting, both over before lamplighting. (PR #140)
