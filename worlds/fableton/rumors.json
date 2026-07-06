@@ -62,6 +62,30 @@
       "text": "Cobble clocked out the second the union bell rang and met the bread cart at first light, same as every dawn — the loaf was burnt, cheap, and his, same as always.",
       "origin": "cobble",
       "notable": false
+    },
+    {
+      "id": "vespers-patient-bell",
+      "text": "Vesper stayed long after the bell had finished ringing, just to hear it all the way out — Tam never once told her she didn't have to, and she never once needed him to.",
+      "origin": "vesper",
+      "notable": true
+    },
+    {
+      "id": "granny-ashs-two-apples",
+      "text": "Granny Ash swept under the old apple tree at high sun and found two apples waiting, same as always; she and Reynard have agreed, without ever discussing it, not to discuss it.",
+      "origin": "granny-ash",
+      "notable": false
+    },
+    {
+      "id": "stilts-and-salts-one-job",
+      "text": "At lamplighting, Stilts plates and Salt seasons, table-side, and neither one has said out loud that it's two jobs pretending to be one — the lane's noticed anyway.",
+      "origin": "stilts",
+      "notable": false
+    },
+    {
+      "id": "marigolds-quiet-cards",
+      "text": "Marigold brought her chair to the square at hush and simply stayed; now she and Greta deal cards where the ovens have gone quiet, and the oven, as ever, is not mentioned.",
+      "origin": "marigold-crumb",
+      "notable": true
     }
   ]
 }
