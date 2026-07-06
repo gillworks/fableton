@@ -27,3 +27,4 @@ At high sun, Goodwife Crumb laid a trail to the heart of things, same as every d
 The well Winsome tended in spirit for years finally held water, and the hedge that hadn't grown a single leaf came in at its full height the same afternoon; two waits the town had nearly stopped counting, both over before lamplighting. (PR #140)
 COUNCIL — The god found every debt of telling paid for the first time and a finished well already taking new ones on deposit; he ruled that the well grants nothing and keeps everything, and named the season for the first wish.
 Tick marched to the square at first light and filed the complaint he always files; the piper set up not ten minutes later, directly under his window, tuning up as if the thought had only just occurred to him. (PR #143)
+Winsome fished a wish for a bridge over the mill stream out at lamplighting and filed it under owed, not granted — the well's first debt, and already she's counting stone for it in her head. (PR #144)
