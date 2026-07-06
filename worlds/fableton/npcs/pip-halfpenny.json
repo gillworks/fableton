@@ -19,6 +19,10 @@
     {
       "to": "morrow",
       "kind": "remembers it exactly as he checked it"
+    },
+    {
+      "to": "goodwife-crumb",
+      "kind": "the one trail he's confirmed correct, every single day"
     }
   ],
   "behavior": {
@@ -38,11 +42,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "cross-checking the morning gossip",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the daily recount",
+          "children": [
+            {
+              "type": "move",
+              "label": "following this morning's trail to the heart",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "recounting Goodwife Crumb's crumbs, out loud",
+              "with": "goodwife-crumb",
+              "duration_s": 90
+            }
+          ]
         }
       },
       {

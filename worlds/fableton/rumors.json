@@ -86,6 +86,12 @@
       "text": "Marigold brought her chair to the square at hush and simply stayed; now she and Greta deal cards where the ovens have gone quiet, and the oven, as ever, is not mentioned.",
       "origin": "marigold-crumb",
       "notable": true
+    },
+    {
+      "id": "pips-daily-recount",
+      "text": "Goodwife Crumb laid a fresh trail to the heart at high sun, same as every day, and Pip Halfpenny counted every crumb of it out loud; it has come out right every single time, which he finds more suspicious, not less.",
+      "origin": "pip-halfpenny",
+      "notable": false
     }
   ]
 }
