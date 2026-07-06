@@ -92,6 +92,18 @@
       "text": "Goodwife Crumb laid a fresh trail to the heart at high sun, same as every day, and Pip Halfpenny counted every crumb of it out loud; it has come out right every single time, which he finds more suspicious, not less.",
       "origin": "pip-halfpenny",
       "notable": false
+    },
+    {
+      "id": "the-wellhead-holds",
+      "text": "Winsome set the wellhead's last stone at high sun and it held; she filed the day's first true wish under sincere before the mortar had properly cooled.",
+      "origin": "winsome",
+      "notable": true
+    },
+    {
+      "id": "the-arch-that-finally-stands",
+      "text": "The hedge arch came in at its full height today, roses and all, and Old Thorn walked under it like a doorway that had been waiting on him the whole time.",
+      "origin": "old-thorn",
+      "notable": true
     }
   ]
 }

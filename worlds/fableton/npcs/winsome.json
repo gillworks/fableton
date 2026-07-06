@@ -21,16 +21,16 @@
         "phase": "first light",
         "child": {
           "type": "sequence",
-          "label": "answering the shaft before the wishes do",
+          "label": "opening a well that's finally hers to open",
           "children": [
             {
               "type": "move",
-              "label": "walking down to the plot everyone's been stepping around",
+              "label": "walking down to the wellhead she raised herself",
               "to": "wishing-well-plot"
             },
             {
               "type": "idle",
-              "label": "sinking the well's shaft, one careful foot at a time",
+              "label": "drawing up the day's first wish, sincere or not",
               "duration_s": 45
             }
           ]
@@ -40,16 +40,16 @@
         "phase": "high sun",
         "child": {
           "type": "sequence",
-          "label": "raising what she's tended in spirit for years",
+          "label": "filing wishes the way she always meant to",
           "children": [
             {
               "type": "move",
-              "label": "crossing back to the marked plot",
+              "label": "crossing back to the finished stone",
               "to": "wishing-well-plot"
             },
             {
               "type": "idle",
-              "label": "setting stone for a wellhead she's been imagining since before it existed",
+              "label": "filing sincere wishes on the left, insincere on the right",
               "duration_s": 45
             }
           ]
@@ -69,7 +69,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "wishing, once, on her own coin",
+          "label": "wishing on her own coin, at last",
           "radius": 4,
           "min_pause_s": 2,
           "max_pause_s": 12

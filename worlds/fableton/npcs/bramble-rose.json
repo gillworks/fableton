@@ -21,16 +21,16 @@
         "phase": "first light",
         "child": {
           "type": "sequence",
-          "label": "training thorns that don't exist yet",
+          "label": "crossing to an arch that doesn't need training anymore",
           "children": [
             {
               "type": "move",
-              "label": "crossing to the marked plot",
+              "label": "crossing to the finished plot",
               "to": "hedge-arbor-plot"
             },
             {
               "type": "idle",
-              "label": "practicing the arch's shape on air, for when the quickthorn's ready",
+              "label": "checking the arch's grip, out of old habit",
               "duration_s": 45
             }
           ]
@@ -40,16 +40,16 @@
         "phase": "high sun",
         "child": {
           "type": "sequence",
-          "label": "keeping the future hedge in line",
+          "label": "keeping the finished hedge in line",
           "children": [
             {
               "type": "move",
-              "label": "back to the plot, same as this morning",
+              "label": "back to the arch, same as this morning",
               "to": "hedge-arbor-plot"
             },
             {
               "type": "idle",
-              "label": "training roses along a fence line that hasn't been planted",
+              "label": "training roses along a fence line that's finally there to train",
               "duration_s": 45
             }
           ]
@@ -69,7 +69,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "dreaming in green",
+          "label": "dreaming in green, under a roof that's hers too now",
           "radius": 6,
           "min_pause_s": 2,
           "max_pause_s": 12

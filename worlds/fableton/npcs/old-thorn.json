@@ -21,16 +21,16 @@
         "phase": "first light",
         "child": {
           "type": "sequence",
-          "label": "lending his roots to someone else's hedge",
+          "label": "lending his roots to a hedge that's finally his height",
           "children": [
             {
               "type": "move",
-              "label": "walking the long way round to the marked plot",
+              "label": "walking the last time to a plot that isn't marked anymore",
               "to": "hedge-arbor-plot"
             },
             {
               "type": "idle",
-              "label": "loosening the ground for quickthorn he'll never personally wear",
+              "label": "standing in the archway, finished, the way a hedge stands anywhere",
               "duration_s": 45
             }
           ]
@@ -40,16 +40,16 @@
         "phase": "high sun",
         "child": {
           "type": "sequence",
-          "label": "standing where the arch will stand",
+          "label": "keeping the arch honest now that it stands",
           "children": [
             {
               "type": "move",
-              "label": "returning to the plot",
+              "label": "returning to the arch, same as ever, only shorter walk now",
               "to": "hedge-arbor-plot"
             },
             {
               "type": "idle",
-              "label": "waiting his turn behind the well, the way a hedge waits for anything",
+              "label": "holding the arch's shape, since somebody should",
               "duration_s": 45
             }
           ]
@@ -59,7 +59,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "wander",
-          "label": "redirecting lost travelers around himself",
+          "label": "redirecting lost travelers under the arch instead of around it",
           "radius": 3,
           "min_pause_s": 2,
           "max_pause_s": 12
@@ -69,7 +69,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "standing very still, but meaningfully",
+          "label": "standing very still, but meaningfully, under something that finally stands with him",
           "radius": 3,
           "min_pause_s": 2,
           "max_pause_s": 12
