@@ -110,6 +110,12 @@
       "text": "Tick filed his complaint against the piper's practice at first light, same square, same wording as always — and the piper tuned up directly under his window not ten minutes later, allegedly by coincidence.",
       "origin": "tick",
       "notable": false
+    },
+    {
+      "id": "the-first-debt-in-the-book",
+      "text": "Winsome fished up a wish for a bridge over the mill stream at lamplighting and filed it under owed, not granted — the well's first entry, and she's already started saving up the stone for it in her head.",
+      "origin": "winsome",
+      "notable": true
     }
   ]
 }
