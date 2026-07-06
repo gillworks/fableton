@@ -20,11 +20,20 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "tuning the work pipe",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "tuning directly under the complaint",
+          "children": [
+            {
+              "type": "move",
+              "label": "setting up beneath Tick's favorite window",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "tuning the work pipe, allegedly by coincidence, exactly where Tick can hear it",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {

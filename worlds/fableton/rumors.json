@@ -104,6 +104,12 @@
       "text": "The hedge arch came in at its full height today, roses and all, and Old Thorn walked under it like a doorway that had been waiting on him the whole time.",
       "origin": "old-thorn",
       "notable": true
+    },
+    {
+      "id": "ticks-morning-complaint",
+      "text": "Tick filed his complaint against the piper's practice at first light, same square, same wording as always — and the piper tuned up directly under his window not ten minutes later, allegedly by coincidence.",
+      "origin": "tick",
+      "notable": false
     }
   ]
 }
