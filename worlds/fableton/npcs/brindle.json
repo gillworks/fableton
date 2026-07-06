@@ -44,11 +44,20 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "escorting the lamplighter",
-          "radius": 7,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the wordless wage, taken on time",
+          "children": [
+            {
+              "type": "move",
+              "label": "coming in off the herding, no charge as ever",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "taking Bo Brindleson's silence, the only wage that's ever suited either of them",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {

@@ -40,11 +40,20 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "following the lamplighter at a respectful distance",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the respectful distance, closed at last",
+          "children": [
+            {
+              "type": "move",
+              "label": "catching up to the lamp route, same distance as ever",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "collecting the stubs Tam saved him, sworn truest before he's even tasted the wax",
+              "duration_s": 30
+            }
+          ]
         }
       },
       {
