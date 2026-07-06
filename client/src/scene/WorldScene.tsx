@@ -19,6 +19,7 @@ import {
   Vector3,
 } from 'three';
 import { OVERLAY_Z_RANGE } from '../core/hud.js';
+import { ambientLabel } from '../core/ambient.js';
 import { colorFor } from '@fableton/engine/color';
 import type { AssetPiece } from '../core/chunkMeshes.js';
 import { ConstructionMarker } from './ConstructionMarker.js';
@@ -39,6 +40,8 @@ export interface WorldSceneProps {
   sim: SimState;
   theme: WorldTheme;
   phaseIndex: number;
+  /** id→role (identity.kind) for the ambient over-head label (issue #62). */
+  roles: Map<string, string>;
   onSelect: (npcId: string) => void;
   /** Studio PRs rendered in-world (docs/design.md). */
   construction: ConstructionSite[];
@@ -60,7 +63,7 @@ const _sunColor = new Color();
 const _sunPos = new Vector3();
 const _fogColor = new Color();
 
-export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, construction, sites, onSelectSite, follow, weather }: WorldSceneProps): ReactElement {
+export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, roles, onSelect, construction, sites, onSelectSite, follow, weather }: WorldSceneProps): ReactElement {
   const worldRef = useRef<Group>(new Group());
   const chunkGroups = useRef(new Map<string, Group>());
   const windowMaterials = useRef<import('../core/buildings.js').BuiltBuilding['windowMaterials']>([]);
@@ -150,7 +153,7 @@ export function WorldScene({ bundle, pieces, sim, theme, phaseIndex, onSelect, c
         <meshLambertMaterial color={new Color(theme.paletteHex[1] ?? theme.paletteHex[0]).multiplyScalar(0.55)} />
       </mesh>
       <primitive object={worldRef.current} />
-      <Npcs sim={sim} theme={theme} onSelect={onSelect} />
+      <Npcs sim={sim} theme={theme} roles={roles} onSelect={onSelect} />
       {construction.map((site) => {
         const entry = bundle.manifest.chunks.find((c) => c.id === site.chunk);
         return entry ? <ConstructionMarker key={site.chunk + site.pr} site={site} origin={entry.origin} /> : null;
@@ -218,7 +221,7 @@ function FollowCamera({ sim, follow }: { sim: SimState; follow: string }): null 
   return null;
 }
 
-function Npcs({ sim, theme, onSelect }: { sim: SimState; theme: WorldTheme; onSelect: (id: string) => void }): ReactElement {
+function Npcs({ sim, theme, roles, onSelect }: { sim: SimState; theme: WorldTheme; roles: Map<string, string>; onSelect: (id: string) => void }): ReactElement {
   const [ids, setIds] = useState<string[]>([]);
   const [activities, setActivities] = useState<Record<string, string>>({});
   const [hovered, setHovered] = useState<string | null>(null);
@@ -254,7 +257,9 @@ function Npcs({ sim, theme, onSelect }: { sim: SimState; theme: WorldTheme; onSe
 
   return (
     <>
-      {ids.map((id) => (
+      {ids.map((id) => {
+        const label = ambientLabel(roles.get(id), activities[id]);
+        return (
         <group key={id}>
           <mesh
             ref={(m) => {
@@ -276,25 +281,49 @@ function Npcs({ sim, theme, onSelect }: { sim: SimState; theme: WorldTheme; onSe
             <mesh geometry={hatGeometry} position={[0, 0.62, 0]}>
               <meshLambertMaterial color={theme.accentHex} />
             </mesh>
-            {/* The ambient activity tooltip: the live tree label, verbatim */}
-            <Html center distanceFactor={26} position={[0, 1.25, 0]} zIndexRange={OVERLAY_Z_RANGE} style={{ pointerEvents: 'none' }}>
-              <div
-                style={{
-                  background: 'rgba(24, 22, 20, 0.88)',
-                  color: '#f3ede2',
-                  fontFamily: `"${theme.mono}", ui-monospace, monospace`,
-                  fontSize: 16,
-                  padding: '4px 11px',
-                  borderRadius: 10,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {activities[id] ?? ''}
-              </div>
-            </Html>
+            {/* The ambient tag: who they ARE (role) over what they're DOING
+                (live tree label), so a resident's purpose reads without a
+                click (issue #62). Composition is pure — see core/ambient. */}
+            {label.show && (
+              <Html center distanceFactor={26} position={[0, 1.25, 0]} zIndexRange={OVERLAY_Z_RANGE} style={{ pointerEvents: 'none' }}>
+                <div
+                  style={{
+                    background: 'rgba(24, 22, 20, 0.88)',
+                    color: '#f3ede2',
+                    fontFamily: `"${theme.mono}", ui-monospace, monospace`,
+                    fontSize: 16,
+                    padding: '4px 11px',
+                    borderRadius: 10,
+                    whiteSpace: 'nowrap',
+                    textAlign: 'center',
+                    lineHeight: 1.25,
+                  }}
+                >
+                  {label.role && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                        fontSize: 12,
+                        letterSpacing: 1,
+                        textTransform: 'uppercase',
+                        color: theme.accentHex,
+                      }}
+                    >
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: theme.accentHex, flexShrink: 0 }} />
+                      {label.role}
+                    </div>
+                  )}
+                  {label.activity && <div>{label.activity}</div>}
+                </div>
+              </Html>
+            )}
           </mesh>
         </group>
-      ))}
+        );
+      })}
     </>
   );
 }
