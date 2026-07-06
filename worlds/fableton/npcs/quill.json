@@ -40,11 +40,20 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "honking the dusk announcements",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the coin, made change of and returned",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to where Winsome makes her evening change",
+              "to": "heart"
+            },
+            {
+              "type": "idle",
+              "label": "collecting the coin someone threw at her, insulted it was ever thrown at all",
+              "duration_s": 20
+            }
+          ]
         }
       },
       {
