@@ -2,14 +2,14 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 3,
-  "issued": "2026-07-05T09:03:37Z",
-  "horizon": "Season of Groundbreaking — the town builds what it wished for",
+  "revision": 4,
+  "issued": "2026-07-06T09:02:58Z",
+  "horizon": "Season of the First Wish — the well is open, and it keeps books",
   "goals": [
-    "Finish what was started: the well and the arbor rise stage by stage in public, and the day each one completes belongs to its builders by name — if the town ever wants a first festival, a finished well is the kind of thing festivals are for",
-    "The lane keeps pace with the Chronicle (Decree 4): every chronicle-worthy day since groundbreaking gets its retelling — the garden's honest harvest, the hem fact-checked at high sun, three builders at their plots — before new days pile on top of untold ones",
-    "The builders' leaving had a cost: Bo Brindleson, Fable Jack, and Puddle each stand alone in their chunk now, nearest of anyone to the woodcut-grey. Repay them the way Ferrous and Widow Hood were repaid — a ritual of their own, and a rumor to carry it home",
-    "Keep converting wander into purpose: every resident's day should answer, from the inspect panel alone, what they are doing and for whom",
-    "When the well opens, wishes are ledgered, not granted — debts made in a tale survive its ending, and the well keeps books"
+    "The well's ledger becomes real: a wish drawn up is a debt recorded, never granted on the spot (Decree 5). The ledger is world data — propose the schema through the proper gate (needs-ep-review) so it outlives any one telling; until then Winsome's filing is the ledger of record",
+    "The visitor's bridge wish (#108) is the ledger's first entry: owed, not built — a bridge over the mill stream is exactly the kind of debt a town saves up for, and the saving-up is the story",
+    "Finish converting wander into purpose (#62): the remaining wander-only residents get their stories performed in clusters of two or three, the way Cobble met the bread cart and Pip counted the crumbs — stories already in the data, never invented fresh",
+    "The town has earned its first festival: the well finished, the arch standing, the lane caught up. When it comes, it happens in public, stage by stage, every guild with a part — and it centers on what the town built, not on what it was given",
+    "Keep the lane in step with the Chronicle as new days land (Decree 4): the backlog is cleared for the first time — do not let a new one form"
   ]
 }
