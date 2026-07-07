@@ -33,6 +33,10 @@ export function App(): ReactElement {
   // Follow the resident named in the URL, if any — the shareable deep link.
   const [follow, setFollow] = useState<string | null>(() => parseFollowParam(location.search));
   const [roster, setRoster] = useState<Map<string, string>>(new Map());
+  // id→role (identity.kind), for the ambient over-head label (issue #62). The
+  // roster endpoint already carries it, so no extra fetch and no per-resident
+  // detail call is needed to read a resident's vocation at a glance.
+  const [roles, setRoles] = useState<Map<string, string>>(new Map());
   const [weather, setWeather] = useState<WeatherState | null>(null);
   const sim = useMemo(() => new SimState(), []);
 
@@ -52,9 +56,11 @@ export function App(): ReactElement {
     // The resident roster: id→name for the follow banner, and the source
     // of truth for validating a deep-linked ?follow= id.
     fetch('/api/npcs')
-      .then((r) => (r.ok ? (r.json() as Promise<{ id: string; name: string }[]>) : []))
+      .then((r) => (r.ok ? (r.json() as Promise<{ id: string; name: string; kind?: string }[]>) : []))
       .then((all) => {
-        if (!disposed) setRoster(new Map(all.map((n) => [n.id, n.name])));
+        if (disposed) return;
+        setRoster(new Map(all.map((n) => [n.id, n.name])));
+        setRoles(new Map(all.map((n) => [n.id, n.kind ?? ''])));
       })
       .catch(() => undefined);
     // Citizen-construction site definitions (issue #99): static per world, so
@@ -153,6 +159,7 @@ export function App(): ReactElement {
           sim={sim}
           theme={theme}
           phaseIndex={shownPhase}
+          roles={roles}
           onSelect={selectNpc}
           construction={prMarkers}
           sites={siteDefs}
