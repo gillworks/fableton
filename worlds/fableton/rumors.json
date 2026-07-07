@@ -122,6 +122,18 @@
       "text": "Winsome looked at the bridge debt again tonight and decided counting stone in her head wasn't the same as raising it — she's asking around the square whether a fair could earn it faster than a season of waiting, and whether every guild has got something worth putting on a table.",
       "origin": "winsome",
       "notable": true
+    },
+    {
+      "id": "quills-basket-for-the-bridge",
+      "text": "Quill answered Winsome before the question had properly finished — a full basket for the fair table, she said, and ordinary eggs every one, so nobody mistakes her generosity for the old habit.",
+      "origin": "quill",
+      "notable": true
+    },
+    {
+      "id": "humble-pots-reasonable-portion",
+      "text": "Humble Pot volunteered for the fair table the way he volunteers for everything now — porridge, he said, one reasonable bowl at a time, and he'll be the one doing the measuring, thank you.",
+      "origin": "humble-pot",
+      "notable": false
     }
   ]
 }
