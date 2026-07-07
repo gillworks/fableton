@@ -40,6 +40,21 @@ describe('canonical asset registry', () => {
     }
   });
 
+  it('every font face the client links in fonts.css resolves to a vendored file', () => {
+    // The client links assets/fonts/fonts.css (client/index.html) and the
+    // browser fetches the woff2 faces it declares. Those paths aren't in
+    // the registry, so guard them here too (issue #131).
+    const css = read('assets/fonts/fonts.css');
+    const refs = [...css.matchAll(/url\(\s*['"]?([^'")]+?)['"]?\s*\)/g)]
+      .map((m) => m[1]!)
+      .filter((ref) => ref.startsWith('/assets/'));
+    expect(refs.length).toBeGreaterThan(0);
+    for (const ref of refs) {
+      const rel = ref.replace(/^\//, '');
+      expect(existsSync(new URL(rel, repoRoot)), `fonts.css → ${ref}`).toBe(true);
+    }
+  });
+
   it('every prop id the generator emits resolves in the registry (both charters)', () => {
     const ids = new Set(registry.assets.map((a) => a.id));
     for (const charter of [fableton, cindervault]) {
