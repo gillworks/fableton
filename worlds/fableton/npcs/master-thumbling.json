@@ -30,11 +30,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "surveying the square from a fence post",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the survey from higher up",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the hedge, announcing each corner",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "climbing the hedge to survey the square, so the town can find him for once",
+              "with": "hedge",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {

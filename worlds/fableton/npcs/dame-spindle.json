@@ -40,11 +40,21 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "counting the locks again",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the evening count, done aloud",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to check the cart that holds it",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "walking all three locks on the cart, out loud, so the town hears the clicks",
+              "with": "cart",
+              "duration_s": 40
+            }
+          ]
         }
       },
       {

@@ -30,11 +30,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "ladling out cautionary tales",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the demonstration portion",
+          "children": [
+            {
+              "type": "move",
+              "label": "wheeling himself to the stall, carefully",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "ladling one reasonable portion at the stall, and checking it twice",
+              "with": "stall",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {

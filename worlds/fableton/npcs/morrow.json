@@ -30,11 +30,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "telling fortunes that already happened",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the day's reading, already over",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the stool where she reads",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "telling yesterday's fortune to whoever sits down, already certain how it goes",
+              "with": "stall-stool",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {
