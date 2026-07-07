@@ -2,14 +2,13 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 4,
-  "issued": "2026-07-06T09:02:58Z",
-  "horizon": "Season of the First Wish — the well is open, and it keeps books",
+  "revision": 5,
+  "issued": "2026-07-07T09:03:24Z",
+  "horizon": "Season of the First Wish — the debt is on the books, and the town means to pay it in public",
   "goals": [
-    "The well's ledger becomes real: a wish drawn up is a debt recorded, never granted on the spot (Decree 5). The ledger is world data — propose the schema through the proper gate (needs-ep-review) so it outlives any one telling; until then Winsome's filing is the ledger of record",
-    "The visitor's bridge wish (#108) is the ledger's first entry: owed, not built — a bridge over the mill stream is exactly the kind of debt a town saves up for, and the saving-up is the story",
-    "Finish converting wander into purpose (#62): the remaining wander-only residents get their stories performed in clusters of two or three, the way Cobble met the bread cart and Pip counted the crumbs — stories already in the data, never invented fresh",
-    "The town has earned its first festival: the well finished, the arch standing, the lane caught up. When it comes, it happens in public, stage by stage, every guild with a part — and it centers on what the town built, not on what it was given",
-    "Keep the lane in step with the Chronicle as new days land (Decree 4): the backlog is cleared for the first time — do not let a new one form"
+    "The ledger leaves Winsome's head: propose the wish-ledger schema through the gate (needs-ep-review). It now has two kinds of entry to hold — wishes owed (the bridge) and pledges made toward them (Quill's basket, Humble Pot's bowls) — and the lane should not be its only backup",
+    "Every guild answers Winsome's question in its own voice, one beat at a time: a goose and a porridge pot have spoken for the talking animals and the cautionaries; the Once-Upons and the Loose Ends have not. Whatever each puts on the fair table should be something only their kind of story could bring (Decree 6 — no fair until the table is full)",
+    "When the table is full, the fair happens in public, stage by stage, centered on the bridge it exists to pay for — and the stone it raises should be seen rising, the way the well and the arch were",
+    "Decree 4 slipped twice this week: the three debts performed at lamplighting and the four solo rituals both earned Chronicle lines the lane has not repeated — Ember Wick's stubs, Quill's coin, Dame Spindle's count, Thumbling's climb, and Morrow's certain fortune are all still waiting for somebody's mouth. Catch them up, and keep new days from opening a gap"
   ]
 }
