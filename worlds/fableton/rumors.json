@@ -134,6 +134,36 @@
       "text": "Humble Pot volunteered for the fair table the way he volunteers for everything now — porridge, he said, one reasonable bowl at a time, and he'll be the one doing the measuring, thank you.",
       "origin": "humble-pot",
       "notable": false
+    },
+    {
+      "id": "ember-wicks-collected-stubs",
+      "text": "Ember Wick finally closed the distance he'd been keeping and collected the stubs Tam saves him — swore, before he'd so much as struck a match, that the last inch would burn truest, same as it always has.",
+      "origin": "ember-wick",
+      "notable": false
+    },
+    {
+      "id": "quills-returned-coin",
+      "text": "Quill got her coin back at lamplighting, insulted it was ever thrown at all — Winsome made the change without a word, the way she does for a debt that isn't news to either of them.",
+      "origin": "quill",
+      "notable": false
+    },
+    {
+      "id": "dame-spindles-three-locks",
+      "text": "Dame Spindle walked all three locks on the cart out loud at lamplighting, same count as ever, loud enough the lane could hear the clicks — nobody's asked her to stop, and nobody's asked her which foot, either.",
+      "origin": "dame-spindle",
+      "notable": true
+    },
+    {
+      "id": "thumblings-hedge-survey",
+      "text": "Master Thumbling climbed the hedge at high sun to survey the square from up where the town could finally find him — Needle's bright flag caught the light before he did, same as it's meant to.",
+      "origin": "master-thumbling",
+      "notable": false
+    },
+    {
+      "id": "morrows-stranger-fortune",
+      "text": "Morrow told a stranger's fortune at high sun, same stool as ever, already certain how it goes — she read him a yesterday he swore he hadn't lived yet, and by hush he wasn't so sure.",
+      "origin": "morrow",
+      "notable": true
     }
   ]
 }
