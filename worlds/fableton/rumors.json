@@ -176,6 +176,48 @@
       "text": "Granny Ash answered Winsome last of all, and didn't stop sweeping to do it — an Once-Upon doesn't keep a basket or a bowl, she said, she keeps the story before the story, and for one afternoon at the fair she'll set the other slipper on the table and let the whole town guess the foot; the table's full now, she added, so somebody had better start laying stone.",
       "origin": "granny-ash",
       "notable": true
+    },
+    {
+      "id": "gretas-purposeful-loss",
+      "text": "Greta let Marigold take the pot again at hush, same as every hush — she's been losing on purpose so long now even she might not remember starting, and neither of them has ever once called it anything but cards.",
+      "origin": "greta-the-baker",
+      "notable": false
+    },
+    {
+      "id": "reynards-latest-excuse",
+      "text": "Reynard tried a fresh excuse on Greta at lamplighting, same tab as ever — she let him finish the whole thing before reminding him the turnips are honest enough for both of them, and he changed the subject anyway.",
+      "origin": "reynard-the-retired",
+      "notable": false
+    },
+    {
+      "id": "needles-verified-blanket",
+      "text": "Needle checked her own blanket for holes before hush, same as she checks every hem that crosses her table — found none, same as always, and still isn't sure that's a thing worth trusting.",
+      "origin": "needle",
+      "notable": false
+    },
+    {
+      "id": "brindles-declined-confirmation",
+      "text": "Pip Halfpenny asked Brindle straight out at high sun whether the count was right, same as he always eventually does — Brindle looked at him, said nothing, same as always, and the lane's decided that's an answer too.",
+      "origin": "brindle",
+      "notable": false
+    },
+    {
+      "id": "goodwife-crumbs-old-habit",
+      "text": "Goodwife Crumb still leaves Marigold a trail some mornings, same as the one that led her home the first time — Marigold's been found for years now, and neither of them has ever once mentioned that either.",
+      "origin": "goodwife-crumb",
+      "notable": false
+    },
+    {
+      "id": "salts-daily-argument",
+      "text": "Salt argued flavor with Greta again at high sun, same argument as every high sun — loses every time on the bread, wins every time on everything else, and both of them show up tomorrow to have it again.",
+      "origin": "salt",
+      "notable": false
+    },
+    {
+      "id": "the-lesser-pipers-honest-contract",
+      "text": "The Lesser Piper swore again that the timing under Tick's window is coincidence, same as every first light — he's still counting rats he's owed for from two seasons back, and insists, contract in hand, that clockwork was never part of the deal.",
+      "origin": "the-lesser-piper",
+      "notable": false
     }
   ]
 }
