@@ -59,7 +59,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "counting stone in the open, for once",
+          "label": "hauling stone up from the millrace",
           "children": [
             {
               "type": "move",
@@ -68,7 +68,7 @@
             },
             {
               "type": "idle",
-              "label": "counting the stone as it's laid, out loud this time",
+              "label": "hauling stone up from the water, one load at a time",
               "duration_s": 45
             }
           ]
