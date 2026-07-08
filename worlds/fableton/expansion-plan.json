@@ -50,6 +50,31 @@
         { "type": "site_complete", "site": "the-wishing-well" },
         { "type": "day", "min_day": 2 }
       ]
+    },
+    {
+      "site": {
+        "schema_version": 1,
+        "id": "the-millstream-bridge",
+        "chunk": "chunk-3-3",
+        "position": [11.5, 0.804, 2.2],
+        "rotation_y": 0,
+        "footprint": { "width": 2, "depth": 4 },
+        "builder_roles": ["wishing-well attendant", "woodcutter's-son-turned-lamplighter"],
+        "stages": [
+          { "name": "marked plot", "asset": "lantern", "work_units": 4 },
+          { "name": "hauling stone from the millrace", "asset": "rock-large", "work_units": 14 },
+          { "name": "laying the span", "asset": "rock-wide", "work_units": 16 }
+        ],
+        "completion": {
+          "buildings": [],
+          "props": [
+            { "asset": "rock-wide", "position": [11.5, 0.769, 0.8], "rotation_y": 0, "scale": 1 },
+            { "asset": "rock-large", "position": [11.5, 0.804, 2.2], "rotation_y": 0, "scale": 1.1 },
+            { "asset": "rock-wide", "position": [11.5, 0.835, 3.6], "rotation_y": 0, "scale": 1 }
+          ]
+        }
+      },
+      "prerequisites": [{ "type": "site_complete", "site": "the-hedge-arbor" }]
     }
   ]
 }
