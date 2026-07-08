@@ -58,11 +58,20 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "making evening change for dreamers",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "counting stone in the open, for once",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking down to the bridge that's finally more than a wish",
+              "to": "bridge-plot"
+            },
+            {
+              "type": "idle",
+              "label": "counting the stone as it's laid, out loud this time",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {

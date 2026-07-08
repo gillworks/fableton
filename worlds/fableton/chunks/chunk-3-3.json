@@ -290,6 +290,14 @@
           0.762,
           9.9
         ]
+      },
+      {
+        "id": "bridge-plot",
+        "position": [
+          11.5,
+          0.851,
+          4.8
+        ]
       }
     ],
     "edges": [
@@ -316,6 +324,10 @@
       [
         "wander",
         "hedge-arbor-plot"
+      ],
+      [
+        "heart",
+        "bridge-plot"
       ]
     ],
     "portals": [

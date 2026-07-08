@@ -90,9 +90,20 @@
       {
         "phase": "hush",
         "child": {
-          "type": "idle",
-          "label": "watching over the lit square",
-          "duration_s": 240
+          "type": "sequence",
+          "label": "a lamplighter's vigil over half a bridge",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking past the lit square to the unfinished stone",
+              "to": "bridge-plot"
+            },
+            {
+              "type": "idle",
+              "label": "keeping the match dry for the day it's needed",
+              "duration_s": 220
+            }
+          ]
         }
       }
     ]
