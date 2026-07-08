@@ -218,6 +218,12 @@
       "text": "The Lesser Piper swore again that the timing under Tick's window is coincidence, same as every first light — he's still counting rats he's owed for from two seasons back, and insists, contract in hand, that clockwork was never part of the deal.",
       "origin": "the-lesser-piper",
       "notable": false
+    },
+    {
+      "id": "the-first-stone-of-the-bridge",
+      "text": "Winsome came down off the well at lamplighting to count the bridge's first stone out loud instead of in her head, and Tam crossed over after his rounds to keep his match dry right beside her — the fair filled a table weeks ago; it's these two hands laying the actual stone.",
+      "origin": "winsome",
+      "notable": true
     }
   ]
 }
