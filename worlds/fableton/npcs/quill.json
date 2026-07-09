@@ -30,11 +30,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "preening by the fountain",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the basket, delivered",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the fair table, eggs already counted",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "setting the full basket down, no mistaking her for the old habit",
+              "with": "stall-red",
+              "duration_s": 30
+            }
+          ]
         }
       },
       {
