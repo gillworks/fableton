@@ -59,16 +59,16 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "laying the span's first course",
+          "label": "closing the millstream bridge's last course",
           "children": [
             {
               "type": "move",
-              "label": "walking down to the stone she already hauled",
+              "label": "walking down to the span that only needs one more course",
               "to": "bridge-plot"
             },
             {
               "type": "interact",
-              "label": "setting stones from the cart into the first course",
+              "label": "setting the last stones and stepping back to look at a bridge, not a plan",
               "with": "cart",
               "duration_s": 45
             }
@@ -78,11 +78,20 @@
       {
         "phase": "hush",
         "child": {
-          "type": "wander",
-          "label": "wishing on her own coin, at last",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "standing on the far bank for the first time",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking all the way across her own bridge",
+              "to": "bridge-plot"
+            },
+            {
+              "type": "idle",
+              "label": "wishing on her own coin, at last, from the other side",
+              "duration_s": 90
+            }
+          ]
         }
       }
     ]

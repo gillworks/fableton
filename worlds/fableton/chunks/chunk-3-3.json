@@ -214,6 +214,36 @@
       ],
       "rotation_y": 0,
       "scale": 1
+    },
+    {
+      "asset": "rock-wide",
+      "position": [
+        11.5,
+        0.769,
+        0.8
+      ],
+      "rotation_y": 0,
+      "scale": 1
+    },
+    {
+      "asset": "rock-large",
+      "position": [
+        11.5,
+        0.804,
+        2.2
+      ],
+      "rotation_y": 0,
+      "scale": 1.1
+    },
+    {
+      "asset": "rock-wide",
+      "position": [
+        11.5,
+        0.835,
+        3.6
+      ],
+      "rotation_y": 0,
+      "scale": 1
     }
   ],
   "buildings": [
