@@ -134,6 +134,16 @@
       ],
       "rotation_y": 2.722,
       "scale": 0.991
+    },
+    {
+      "asset": "fountain-square",
+      "position": [
+        8,
+        0.845,
+        8
+      ],
+      "rotation_y": 0,
+      "scale": 1
     }
   ],
   "buildings": [

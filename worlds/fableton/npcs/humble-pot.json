@@ -50,11 +50,21 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "cooling his handles",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "cooling his handles, under supervision",
+          "children": [
+            {
+              "type": "move",
+              "label": "wheeling over to the flat rock",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "checking the level line Stilts chalked on the rock, the one he's never once come close to boiling over",
+              "with": "rock-wide",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {

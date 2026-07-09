@@ -39,8 +39,9 @@
               "to": "heart"
             },
             {
-              "type": "idle",
-              "label": "sunning where everyone can see, proof a kiss was never required",
+              "type": "interact",
+              "label": "sunning on the fountain rim, proof a kiss was never required, same as he tells Salt every time she stops by to check",
+              "with": "fountain-round",
               "duration_s": 60
             }
           ]

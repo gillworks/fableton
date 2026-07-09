@@ -43,6 +43,11 @@
               "label": "climbing the hedge to survey the square, so the town can find him for once",
               "with": "hedge",
               "duration_s": 45
+            },
+            {
+              "type": "idle",
+              "label": "checking Needle's bright flag, still snapping from the hedge-top, the one thing that finds him first",
+              "duration_s": 30
             }
           ]
         }

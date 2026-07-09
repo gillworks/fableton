@@ -39,8 +39,9 @@
               "to": "heart"
             },
             {
-              "type": "idle",
-              "label": "counting this year's wolves against Pip's count",
+              "type": "interact",
+              "label": "chalking this year's tally onto the boundary stone, right below the mark Pip already left",
+              "with": "rock-large",
               "duration_s": 60
             }
           ]
