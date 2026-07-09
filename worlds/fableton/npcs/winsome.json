@@ -59,16 +59,17 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "hauling stone up from the millrace",
+          "label": "laying the span's first course",
           "children": [
             {
               "type": "move",
-              "label": "walking down to the bridge that's finally more than a wish",
+              "label": "walking down to the stone she already hauled",
               "to": "bridge-plot"
             },
             {
-              "type": "idle",
-              "label": "hauling stone up from the water, one load at a time",
+              "type": "interact",
+              "label": "setting stones from the cart into the first course",
+              "with": "cart",
               "duration_s": 45
             }
           ]

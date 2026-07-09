@@ -91,17 +91,23 @@
         "phase": "hush",
         "child": {
           "type": "sequence",
-          "label": "a lamplighter's vigil over half a bridge",
+          "label": "holding the lamp over the first course",
           "children": [
             {
               "type": "move",
-              "label": "walking past the lit square to the unfinished stone",
+              "label": "walking past the lit square to the stone going in",
               "to": "bridge-plot"
             },
             {
+              "type": "interact",
+              "label": "steadying the cart so she doesn't have to",
+              "with": "cart",
+              "duration_s": 60
+            },
+            {
               "type": "idle",
-              "label": "keeping the match dry for the day it's needed",
-              "duration_s": 220
+              "label": "keeping the match dry for the stone that isn't laid yet",
+              "duration_s": 160
             }
           ]
         }
