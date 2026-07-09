@@ -14,10 +14,12 @@ const { values } = parseArgs({
   options: {
     charter: { type: 'string' },
     world: { type: 'string' },
+    // Promote advisory warnings (e.g. region-tethering) to hard failures.
+    strict: { type: 'boolean', default: false },
   },
 });
 if (!values.charter || !values.world) {
-  console.error('usage: cli.ts --charter <charter.yaml> --world <world-dir>');
+  console.error('usage: cli.ts --charter <charter.yaml> --world <world-dir> [--strict]');
   process.exit(2);
 }
 const charterPath = values.charter;
@@ -80,10 +82,21 @@ if (charter) {
   }
 }
 
-for (const v of violations) {
+// Warnings are advisory unless --strict promotes them; errors always fail.
+const isError = (v: Violation): boolean => (v.severity ?? 'error') === 'error';
+const fatal = violations.filter((v) => isError(v) || values.strict);
+const advisory = violations.filter((v) => !isError(v) && !values.strict);
+
+for (const v of fatal) {
   console.error(`✗ [${v.rule}] ${v.file}\n  ${v.message.split('\n').join('\n  ')}`);
 }
-if (violations.length > 0) {
-  console.error(`\n${violations.length} violation(s) — the gate holds.`);
+for (const v of advisory) {
+  console.error(`⚠ [${v.rule}] ${v.file}\n  ${v.message.split('\n').join('\n  ')}`);
+}
+if (advisory.length > 0) {
+  console.error(`\n${advisory.length} warning(s) — advisory; re-run with --strict to enforce.`);
+}
+if (fatal.length > 0) {
+  console.error(`\n${fatal.length} violation(s) — the gate holds.`);
   process.exit(1);
 }

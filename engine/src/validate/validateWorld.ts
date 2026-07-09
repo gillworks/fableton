@@ -25,8 +25,19 @@ export interface Violation {
     | 'footprint-overlap'
     | 'perf-budget'
     | 'charter-gate-rule'
-    | 'duplicate-id';
+    | 'duplicate-id'
+    | 'region-tethering';
+  // Errors fail the gate; warnings are advisory — the CLI prints them but
+  // only fails on --strict. Omitted means 'error', so every gate rule that
+  // predates the severity field keeps hard-failing exactly as before.
+  severity?: 'error' | 'warning';
   message: string;
+}
+
+export interface OrphanedRegion {
+  chunkId: string;
+  file: string;
+  residents: string[];
 }
 
 export interface WorldDocs {
@@ -177,6 +188,59 @@ function collectBehaviorRefs(node: BehaviorNode, refs: BehaviorRefs): void {
     case 'idle':
       break;
   }
+}
+
+// Decree 1, the Law of Ties: "No resident enters Fableton alone." A
+// populated region earns its place when a relationship edge connects one of
+// its residents to a living neighbour — another resident of the same chunk
+// (a local micro-story) or a resident of a different chunk (a hook out to
+// the town: a pledge, a rumour, a debt). A region whose residents share no
+// such tie in either direction is orphaned — locally coherent, regionally
+// adrift. We only judge regions where at least one resident has an NPC
+// document to read, so the npc-less world the registry check generates is
+// never flagged. Pure: findings map to advisory `region-tethering`
+// warnings; the acceptance harness promotes them to a hard bar.
+export function findOrphanedRegions(world: WorldDocs): OrphanedRegion[] {
+  const chunks = world.chunks
+    .map(({ file, doc }) => {
+      const parsed = ChunkSchema.safeParse(doc);
+      return parsed.success ? { file, chunk: parsed.data } : null;
+    })
+    .filter((c): c is { file: string; chunk: Chunk } => c !== null);
+  const npcsById = new Map<string, Npc>();
+  for (const { doc } of world.npcs) {
+    const parsed = NpcSchema.safeParse(doc);
+    if (parsed.success) npcsById.set(parsed.data.id, parsed.data);
+  }
+  // Which chunk each placed resident lives in.
+  const residentChunk = new Map<string, string>();
+  for (const { chunk } of chunks) {
+    for (const id of chunk.npcs) residentChunk.set(id, chunk.id);
+  }
+  // A tie only counts when it names a living neighbour — a resident placed
+  // somewhere in the world. Both endpoints' regions become tethered, so an
+  // inbound tie ("X owes the lamplighter a story") rescues a lone resident
+  // just as an outbound one does.
+  const tethered = new Set<string>();
+  for (const [id, home] of residentChunk) {
+    const npc = npcsById.get(id);
+    if (!npc) continue;
+    for (const rel of npc.relationships) {
+      const otherHome = residentChunk.get(rel.to);
+      if (otherHome === undefined) continue; // tie is not to a living neighbour
+      tethered.add(home);
+      tethered.add(otherHome);
+    }
+  }
+  const orphaned: OrphanedRegion[] = [];
+  for (const { file, chunk } of chunks) {
+    if (chunk.npcs.length === 0) continue; // unpopulated regions are exempt
+    if (!chunk.npcs.some((id) => npcsById.has(id))) continue; // no doc to judge
+    if (!tethered.has(chunk.id)) {
+      orphaned.push({ chunkId: chunk.id, file, residents: chunk.npcs });
+    }
+  }
+  return orphaned;
 }
 
 export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
@@ -672,6 +736,23 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
         }
       }
     }
+  }
+
+  // Region tethering (Decree 1, the Law of Ties). Advisory: a taste
+  // heuristic on a prime directive, so it warns rather than hard-fails the
+  // per-world gate; the acceptance harness (`pnpm accept`) is the hard bar.
+  for (const region of findOrphanedRegions(world)) {
+    violations.push({
+      file: region.file,
+      rule: 'region-tethering',
+      severity: 'warning',
+      message:
+        `region "${region.chunkId}" is orphaned: its resident(s) ` +
+        `${region.residents.map((r) => `"${r}"`).join(', ')} share no tie with a ` +
+        `living neighbour — here or in any other region (Decree 1, the Law of Ties). ` +
+        `Give it a local tie (a second resident with a shared beat) or a hook to the ` +
+        `town arc (a pledge, a rumour, a debt).`,
+    });
   }
 
   return violations;

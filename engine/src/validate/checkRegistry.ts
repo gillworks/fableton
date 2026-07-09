@@ -109,10 +109,13 @@ if (violations.length === 0) {
   console.log(`✓ ${registrySummary}\n✓ ${fontsSummary}`);
 }
 
-for (const v of violations) {
+// The generated world carries no NPC docs, so region-tethering never fires
+// here; still, keep advisory warnings out of the registry check's exit code.
+const errors = violations.filter((v) => (v.severity ?? 'error') === 'error');
+for (const v of errors) {
   console.error(`✗ [${v.rule}] ${v.file}\n  ${v.message.split('\n').join('\n  ')}`);
 }
-if (violations.length > 0) {
-  console.error(`\n${violations.length} violation(s) — the gate holds.`);
+if (errors.length > 0) {
+  console.error(`\n${errors.length} violation(s) — the gate holds.`);
   process.exit(1);
 }

@@ -6,6 +6,10 @@
 // when the piece it exercises hasn't landed yet; it FAILs when the piece
 // exists but misses the bar. `--no-skip` turns skips into failures — that
 // is the mode the v1 tag must pass.
+//
+// Test 4 (FABA-69) extends the harness past the v1 DoD with a live-world
+// coherence guardrail: every committed world must satisfy Decree 1, the
+// Law of Ties — no orphaned single-resident region.
 import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -166,11 +170,50 @@ function testGate() {
   }
 }
 
+// ---------------------------------------------------------------- test 4
+// Coherence (FABA-69): every populated region in a committed world is
+// tethered — Decree 1, the Law of Ties. A committed world is a directory
+// under worlds/ with a manifest and a matching charter under charters/.
+// The check reads NPC relationships, so it skips until real worlds land.
+function testCoherence() {
+  const name = 'coherence: no orphaned regions in committed worlds (Law of Ties)';
+  const worldsDir = join(root, 'worlds');
+  if (!existsSync(worldsDir)) {
+    return record(name, 'SKIP', 'no worlds/ directory yet — nothing to tether');
+  }
+  const worlds = readdirSync(worldsDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name)
+    .filter(
+      (w) =>
+        existsSync(join(worldsDir, w, 'manifest.json')) &&
+        existsSync(join(root, 'charters', w, 'charter.yaml')),
+    );
+  if (worlds.length === 0) {
+    return record(name, 'SKIP', 'no committed world has both a manifest and a charter yet');
+  }
+  const failures = [];
+  for (const w of worlds) {
+    const run = engineExec([
+      'src/acceptance/coherence.ts',
+      join(root, 'charters', w, 'charter.yaml'),
+      join(worldsDir, w),
+    ]);
+    if (run.status !== 0) failures.push((run.stderr || run.stdout).trim());
+  }
+  if (failures.length > 0) {
+    record(name, 'FAIL', failures.join('\n'));
+  } else {
+    record(name, 'PASS', `${worlds.length} world(s) — every populated region tethered: ${worlds.join(', ')}`);
+  }
+}
+
 // ---------------------------------------------------------------- run
 console.log('v1 acceptance harness — docs/v1.md definition of done\n');
 await testInstall();
 testDivergence();
 testGate();
+testCoherence();
 
 const failed = results.filter((r) => r.status === 'FAIL');
 const skipped = results.filter((r) => r.status === 'SKIP');
