@@ -2,13 +2,13 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 6,
-  "issued": "2026-07-08T09:02:32Z",
-  "horizon": "Season of the First Wish — the table is full and the first stone is down; now the town builds in public what it promised in public",
+  "revision": 7,
+  "issued": "2026-07-09T09:02:23Z",
+  "horizon": "Season of the First Wish — the bridge stands and the fair is open; the town pays what it promised, in order, and the far doorsteps get their turn to be stories",
   "goals": [
-    "The ledger leaves Winsome's head: propose the wish-ledger schema through the gate (needs-ep-review). The book now holds one wish and four pledges — a basket, a bowl, a slipper's afternoon, and a match — and it is still stored nowhere but a wanderer's memory and the lane's",
-    "The bridge rises stage by stage where the town can watch — plot marked, stone hauled from the millrace, span laid — and each stage that earns a Chronicle line earns its rumor the same day. Decree 4 slipped again on the ground-breaking; catch it up, then keep the count at zero",
-    "When the span is laid, the fair is earned and happens in public: pledges redeemed in order — Quill's eggs, Humble Pot's measured bowls, Granny Ash's slipper afternoon with the whole town guessing the foot — and Tam's first light on the new stone last, the ending he never got, given away",
-    "Seven residents have never once spoken in the lane, and the Lesser Piper has never even been named there — the nearest thing Fableton has to the grey. Give each a rumor in their own voice, drawn from days they already live: Greta's quiet ovens and cards, Reynard's looked-away credit, Needle's fact-checks, Brindle's accepted wage, Goodwife Crumb's trail, Salt's table-side seasoning, the Piper's suspiciously punctual tuning. No new lore; the material is all there"
+    "The ledger leaves Winsome's head: propose the wish-ledger schema through the gate (needs-ep-review). The book now holds one wish, one pledge paid, and three standing, and it is still stored nowhere but prose — no issue even exists yet; open one",
+    "The fair pays in the pledged order, unhurried: Humble Pot's measured bowls next, then Granny Ash's slipper afternoon with the whole town guessing the foot, and Tam's match on the new stone dead last — it is the season's ending, and endings are not rushed into one day. Each redemption earns its Chronicle line and its rumor the same day; the count stands at zero, keep it there",
+    "When Tam's match is struck, the first wish is paid: close the bridge's debt in the well's book the same night, at whatever narrative interest it has earned, and let the lane hear the well's first account settled out loud",
+    "Eight chunks hold one resident each whose every tie lives across town — Brindle, Bramble Rose, and six more standing on ground that reads as background (Decree 7, issue #165). Give each solitary ground one locally discoverable story: a visit received, a trail that starts there, a debt collected at the door — drawn from ties already on record. No new lore; the material is all there"
   ]
 }
