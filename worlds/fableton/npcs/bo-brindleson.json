@@ -49,8 +49,9 @@
               "to": "heart"
             },
             {
-              "type": "idle",
-              "label": "paying Brindle in silence, the only wage that's ever suited either of them",
+              "type": "interact",
+              "label": "latching the fold gate Brindle already swung shut behind her, paid in silence, same as ever",
+              "with": "hedge",
               "duration_s": 60
             }
           ]

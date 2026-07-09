@@ -124,6 +124,16 @@
       ],
       "rotation_y": 1.082,
       "scale": 1.055
+    },
+    {
+      "asset": "fountain-round",
+      "position": [
+        8,
+        0.66,
+        8
+      ],
+      "rotation_y": 0,
+      "scale": 0.95
     }
   ],
   "buildings": [

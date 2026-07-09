@@ -59,11 +59,21 @@
       {
         "phase": "hush",
         "child": {
-          "type": "wander",
-          "label": "counting rats he is owed for",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "totting up the debt before he sleeps",
+          "children": [
+            {
+              "type": "move",
+              "label": "circling back past the stall",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "chalking this month's rat count on the stall board, complaint from Tick or no complaint from Tick",
+              "with": "stall",
+              "duration_s": 45
+            }
+          ]
         }
       }
     ]

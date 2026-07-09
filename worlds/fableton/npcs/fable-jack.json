@@ -36,6 +36,12 @@
               "type": "idle",
               "label": "inspecting Old Thorn first, the one appointment neither of them will call personal",
               "duration_s": 60
+            },
+            {
+              "type": "interact",
+              "label": "measuring the morning's growth against the notch he and Bramble Rose have argued over for three seasons, still the same stubborn half-inch",
+              "with": "hedge",
+              "duration_s": 30
             }
           ]
         }

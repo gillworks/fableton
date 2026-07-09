@@ -29,8 +29,9 @@
               "to": "heart"
             },
             {
-              "type": "idle",
-              "label": "asking, same as every year, whether standing watch counts as a life",
+              "type": "interact",
+              "label": "asking his own reflection in the fountain the same question he'll ask Mirabel come evening, whether standing watch counts as a life",
+              "with": "fountain-square",
               "duration_s": 60
             }
           ]
