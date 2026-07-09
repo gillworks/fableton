@@ -35,18 +35,18 @@
         "phase": "high sun",
         "child": {
           "type": "sequence",
-          "label": "an honest morning's sweep, or so she claims",
+          "label": "the other slipper, set out",
           "children": [
             {
               "type": "move",
-              "label": "crossing to the old apple tree",
+              "label": "crossing to the fair table, slipper wrapped in cloth",
               "to": "heart"
             },
             {
               "type": "interact",
-              "label": "sweeping where the extra apples always land",
-              "with": "tree",
-              "duration_s": 90
+              "label": "setting the other slipper on the table for the whole town to guess the foot, telling nobody",
+              "with": "stall-red",
+              "duration_s": 45
             }
           ]
         }
