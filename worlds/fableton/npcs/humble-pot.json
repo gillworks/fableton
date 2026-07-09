@@ -31,16 +31,16 @@
         "phase": "high sun",
         "child": {
           "type": "sequence",
-          "label": "the demonstration portion",
+          "label": "the bowls, delivered",
           "children": [
             {
               "type": "move",
-              "label": "wheeling himself to the stall, carefully",
+              "label": "wheeling himself to the fair table, carefully",
               "to": "heart"
             },
             {
               "type": "interact",
-              "label": "ladling one reasonable portion at the stall, and checking it twice",
+              "label": "setting down one reasonable bowl at a time, measured and counted twice, paying off what he pledged",
               "with": "stall",
               "duration_s": 60
             }

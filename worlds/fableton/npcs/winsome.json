@@ -79,7 +79,7 @@
         "phase": "hush",
         "child": {
           "type": "sequence",
-          "label": "marking the first pledge paid",
+          "label": "marking the second pledge paid",
           "children": [
             {
               "type": "move",
@@ -88,7 +88,7 @@
             },
             {
               "type": "idle",
-              "label": "crossing Quill's basket off the ledger, first debt of the fair repaid",
+              "label": "crossing Humble Pot's bowls off the ledger, second debt of the fair repaid",
               "duration_s": 60
             }
           ]
