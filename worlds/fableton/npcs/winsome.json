@@ -79,7 +79,7 @@
         "phase": "hush",
         "child": {
           "type": "sequence",
-          "label": "marking the third pledge paid",
+          "label": "closing the well's first account",
           "children": [
             {
               "type": "move",
@@ -88,7 +88,7 @@
             },
             {
               "type": "idle",
-              "label": "crossing Granny Ash's slipper off the ledger, third debt of the fair repaid, Tam's match all that's left",
+              "label": "crossing Tam's match off the ledger, fourth and final pledge repaid, then closing the well's very first debt — the bridge wish — paid in full at compound interest",
               "duration_s": 60
             }
           ]

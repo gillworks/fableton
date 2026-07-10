@@ -91,16 +91,16 @@
         "phase": "hush",
         "child": {
           "type": "sequence",
-          "label": "a lamplighter's vigil over a finished bridge",
+          "label": "the match Tam finally gets to strike",
           "children": [
             {
               "type": "move",
-              "label": "walking past the lit square to the span that's whole now",
+              "label": "walking past the lit square to the span that's finally his to light",
               "to": "bridge-plot"
             },
             {
               "type": "idle",
-              "label": "keeping the match dry — the stone is his to light, but the fair gets there first",
+              "label": "striking his match on the new stone, the line his own tale never finished",
               "duration_s": 220
             }
           ]
