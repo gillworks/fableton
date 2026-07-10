@@ -2,13 +2,13 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 7,
-  "issued": "2026-07-09T09:02:23Z",
-  "horizon": "Season of the First Wish — the bridge stands and the fair is open; the town pays what it promised, in order, and the far doorsteps get their turn to be stories",
+  "revision": 8,
+  "issued": "2026-07-10T09:02:31Z",
+  "horizon": "Season of the Open Book — the first wish is paid and the well's ledger must now outlive its keeper's head: the book becomes data, the fair folds its table, and the second wish finds the town ready",
   "goals": [
-    "The ledger leaves Winsome's head: propose the wish-ledger schema through the gate (needs-ep-review). The book now holds one wish, one pledge paid, and three standing, and it is still stored nowhere but prose — no issue even exists yet; open one",
-    "The fair pays in the pledged order, unhurried: Humble Pot's measured bowls next, then Granny Ash's slipper afternoon with the whole town guessing the foot, and Tam's match on the new stone dead last — it is the season's ending, and endings are not rushed into one day. Each redemption earns its Chronicle line and its rumor the same day; the count stands at zero, keep it there",
-    "When Tam's match is struck, the first wish is paid: close the bridge's debt in the well's book the same night, at whatever narrative interest it has earned, and let the lane hear the well's first account settled out loud",
-    "Eight chunks hold one resident each whose every tie lives across town — Brindle, Bramble Rose, and six more standing on ground that reads as background (Decree 7, issue #165). Give each solitary ground one locally discoverable story: a visit received, a trail that starts there, a debt collected at the door — drawn from ties already on record. No new lore; the material is all there"
+    "The well's book gets a spine: #172 is ruled buildable (wish, needs-ep-review) — land the wish-ledger schema through the founder's gate, fixtures and all, then backfill the bridge wish as the book's first page: one wish, four pledges, paid in full at compound interest, matching the Chronicle word for word. Every field legible as Winsome's own hand",
+    "The fair folds its table: it was earned, it paid all four pledges, and a fair left standing becomes scenery — the town keeps none (Decree 7). Clear the square with the same care the table was set, and let the lane mark the ending the way it marked the opening",
+    "The well takes its second wish, unhurried: not from Winsome this time, and not for infrastructure — let it come out of somebody's gap, the part their teller left blank, because hooks are never wasted on trivia. Recorded as owed, per Decree 5; no fair is called for it until a table earns one (Decree 6)",
+    "The Other Sister earns her second tie in the open: her undercharging already touches neighbors on record — let one of them catch her at it and let the rumor carry it (Decree 3). No new lore; her story implies everything needed"
   ]
 }
