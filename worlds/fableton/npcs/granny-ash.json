@@ -34,21 +34,11 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "sequence",
-          "label": "the other slipper, set out",
-          "children": [
-            {
-              "type": "move",
-              "label": "crossing to the fair table, slipper wrapped in cloth",
-              "to": "heart"
-            },
-            {
-              "type": "interact",
-              "label": "setting the other slipper on the table for the whole town to guess the foot, telling nobody",
-              "with": "stall-red",
-              "duration_s": 45
-            }
-          ]
+          "type": "wander",
+          "label": "sweeping the square clean of fair-dust, slipper back where it belongs",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
         }
       },
       {

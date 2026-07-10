@@ -31,16 +31,16 @@
         "phase": "high sun",
         "child": {
           "type": "sequence",
-          "label": "the bowls, delivered",
+          "label": "an ordinary bowl, measured out",
           "children": [
             {
               "type": "move",
-              "label": "wheeling himself to the fair table, carefully",
+              "label": "wheeling himself to the stall, carefully, same as any day",
               "to": "heart"
             },
             {
               "type": "interact",
-              "label": "setting down one reasonable bowl at a time, measured and counted twice, paying off what he pledged",
+              "label": "measuring out one reasonable bowl, counted twice out of habit, the fair pledge long since crossed off",
               "with": "stall",
               "duration_s": 60
             }
