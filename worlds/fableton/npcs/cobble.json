@@ -11,6 +11,10 @@
     {
       "to": "greta-the-baker",
       "kind": "buys the first burnt loaf, cheap, every dawn"
+    },
+    {
+      "to": "the-other-sister",
+      "kind": "caught her charging him under the union rate and has been filing the grievance she won't let him win"
     }
   ],
   "behavior": {
@@ -56,7 +60,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "wander",
-          "label": "filing grievances, cheerfully",
+          "label": "filing the same grievance against the Other Sister's fair prices, cheerfully, again",
           "radius": 4,
           "min_pause_s": 2,
           "max_pause_s": 12

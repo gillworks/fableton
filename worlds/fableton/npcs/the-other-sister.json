@@ -11,6 +11,10 @@
     {
       "to": "the-kinder-sister",
       "kind": "leaves a toad at the garden gate some nights, gone before the frost can even complain, and calls it pest control if anyone asks — the nearest thing to sorry she's got"
+    },
+    {
+      "to": "cobble",
+      "kind": "shaved his pest-control bill below the union rate without asking, and got caught at it by the one neighbor who checks every price twice"
     }
   ],
   "behavior": {
@@ -36,7 +40,7 @@
             { "type": "move", "label": "carrying the week's catch to the stall", "to": "heart" },
             {
               "type": "interact",
-              "label": "collecting the pest-control fee, undercharging on purpose and daring anyone to call it kindness",
+              "label": "collecting the pest-control fee, undercharging Cobble on purpose and daring him to call it kindness",
               "with": "stall-red",
               "duration_s": 60
             }
