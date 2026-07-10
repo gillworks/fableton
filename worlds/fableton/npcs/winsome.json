@@ -59,16 +59,16 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "calling the fair she said would wait for the stone",
+          "label": "folding the table now that the ledger's clear",
           "children": [
             {
               "type": "move",
-              "label": "crossing to the square with the ledger under her arm",
+              "label": "crossing to the square with the ledger closed under her arm",
               "to": "heart"
             },
             {
               "type": "interact",
-              "label": "calling the fair to order over a table that's finally got something on it",
+              "label": "folding the fair table back down to an ordinary stall, four pledges paid and nothing left to call to order",
               "with": "stall-red",
               "duration_s": 45
             }
