@@ -15,6 +15,7 @@ import { ExpansionPlanSchema } from '../schemas/expansion.js';
 import { WorldManifestSchema, type WorldManifest } from '../schemas/manifest.js';
 import { NpcSchema, type Npc } from '../schemas/npc.js';
 import { RumorsDocSchema } from '../schemas/rumors.js';
+import { WishLedgerDocSchema } from '../schemas/wishLedger.js';
 
 export interface Violation {
   file: string;
@@ -41,6 +42,11 @@ export interface WorldDocs {
   // Optional (issue #81): a world with no rumors.json is simply a quiet
   // town. Present ⇒ schema-valid and every origin resolves to a resident.
   rumors?: { file: string; doc: unknown };
+  // Optional (issue #172): the wish-ledger — the well's book of wishes,
+  // pledges, and closed debts. A world with no well simply omits it. Present
+  // ⇒ schema-valid, the keeper resolves to a resident, and every pledge is
+  // made by a resident (a promise from no one is no promise).
+  wishLedger?: { file: string; doc: unknown };
   // Optional (issue #95): the town's expansion plan. Its queued sites are
   // pre-placed, so the gate validates them statically alongside any standing
   // construction sites — same ref/footprint/perf checks, plus no two footprints
@@ -294,6 +300,37 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
             rule: 'asset-refs-resolve',
             message: `rumor "${rumor.id}" originates with unknown NPC "${rumor.origin}" (no NPC file with that id)`,
           });
+        }
+      }
+    }
+  }
+
+  // Wish-ledger (issue #172): schema-valid, and its book is kept by a real
+  // resident with every pledge made by one. Optional file — a world with no
+  // well carries no ledger. Mirrors the rumors block: parse against the doc's
+  // file, then resolve the diegetic refs (keeper, pledge.by) to placed NPCs,
+  // exactly as a rumor's origin is resolved above.
+  if (world.wishLedger) {
+    const result = WishLedgerDocSchema.safeParse(world.wishLedger.doc);
+    if (!result.success) invalid(world.wishLedger.file, result.error);
+    else {
+      const ledger = result.data;
+      if (!npcIds.has(ledger.keeper)) {
+        violations.push({
+          file: world.wishLedger.file,
+          rule: 'asset-refs-resolve',
+          message: `wish-ledger keeper "${ledger.keeper}" is not a resident (no NPC file with that id)`,
+        });
+      }
+      for (const wish of ledger.wishes) {
+        for (const pledge of wish.pledges) {
+          if (!npcIds.has(pledge.by)) {
+            violations.push({
+              file: world.wishLedger.file,
+              rule: 'asset-refs-resolve',
+              message: `pledge "${pledge.id}" against wish "${wish.id}" is made by unknown resident "${pledge.by}" (no NPC file with that id)`,
+            });
+          }
         }
       }
     }

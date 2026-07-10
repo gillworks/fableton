@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "keeper": "greta-the-baker",
+  "wishes": [
+    {
+      "id": "the-mended-lane",
+      "text": "a bridge over the mill stream, so the far side stops being far",
+      "sincerity": "sincere",
+      "status": "paid",
+      "recorded_on": "the first cold lamplighting",
+      "closed_on": "the night the stone was laid",
+      "notable": true,
+      "pledges": [
+        {
+          "id": "tams-match",
+          "by": "tam-the-lamplighter",
+          "what": "a match struck on the new stone the day it is laid",
+          "redeemed": true,
+          "redeemed_on": "the night the stone was laid"
+        }
+      ],
+      "accounting": [
+        { "on": "the first cold lamplighting", "note": "filed under owed, not granted — the book's first debt", "chronicle_ref": "PR #144" },
+        { "on": "the season of counting", "note": "the stone counted out loud instead of in her head, and the debt closed at compound interest", "chronicle_ref": "PR #171" }
+      ]
+    },
+    {
+      "id": "the-long-winter-loaf",
+      "text": "warm bread on every doorstep through the cold months",
+      "sincerity": "sincere",
+      "status": "standing",
+      "recorded_on": "the eve of the first frost",
+      "notable": true,
+      "pledges": [
+        {
+          "id": "reynards-share",
+          "by": "reynard-the-retired",
+          "what": "a share of the orchard's last apples for the ovens",
+          "redeemed": false
+        }
+      ],
+      "accounting": [
+        { "on": "the eve of the first frost", "note": "filed under owed; the town has not yet answered" }
+      ]
+    },
+    {
+      "id": "the-gold-egg-goose",
+      "text": "a goose that lays a gold egg each morning",
+      "sincerity": "insincere",
+      "status": "returned",
+      "recorded_on": "a bright greedy noon",
+      "closed_on": "the same afternoon",
+      "notable": false,
+      "accounting": [
+        { "on": "the same afternoon", "note": "filed under insincere; the coin returned to the sill it came from" }
+      ]
+    }
+  ]
+}

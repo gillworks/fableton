@@ -54,6 +54,7 @@ if (charter) {
           .map((f) => readJson(join(dir, f)))
       : [];
   const rumorsPath = join(worldDir, 'rumors.json');
+  const wishLedgerPath = join(worldDir, 'wish-ledger.json');
   const expansionPath = join(worldDir, 'expansion-plan.json');
   const world: WorldDocs = {
     manifest,
@@ -65,6 +66,8 @@ if (charter) {
     constructionSites: readDirJson(join(worldDir, 'construction')),
     // Optional (issue #81): validate rumors when the world seeds any.
     ...(existsSync(rumorsPath) && { rumors: readJson(rumorsPath) }),
+    // Optional (issue #172): validate the wish-ledger when the world keeps one.
+    ...(existsSync(wishLedgerPath) && { wishLedger: readJson(wishLedgerPath) }),
     // Optional (issue #95): validate the expansion plan's pre-placed sites.
     ...(existsSync(expansionPath) && { expansionPlan: readJson(expansionPath) }),
   };
