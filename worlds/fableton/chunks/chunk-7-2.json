@@ -225,5 +225,7 @@
   "npcs": [
     "ferrous-the-constant"
   ],
-  "lore": []
+  "lore": [
+    "the-recast-heart"
+  ]
 }

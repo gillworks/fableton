@@ -206,5 +206,7 @@
   "npcs": [
     "fable-jack"
   ],
-  "lore": []
+  "lore": [
+    "the-knee-height-inspection"
+  ]
 }
