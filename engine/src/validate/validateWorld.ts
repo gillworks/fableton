@@ -25,7 +25,8 @@ export interface Violation {
     | 'footprint-overlap'
     | 'perf-budget'
     | 'charter-gate-rule'
-    | 'duplicate-id';
+    | 'duplicate-id'
+    | 'region-lore';
   message: string;
 }
 
@@ -671,6 +672,30 @@ export function validateWorld(charter: Charter, world: WorldDocs): Violation[] {
           }
         }
       }
+    }
+  }
+
+  // Prime directive (charter): "every region contains at least one
+  // discoverable story." A region earns its residents only if it also
+  // carries lore — a chunk's `lore` array holds the story ids a visitor can
+  // uncover there. A populated region (≥1 placed NPC) that ships with an
+  // empty `lore` array is the founder-reported violation (GH #183): people
+  // live there, but there is nothing to discover. We judge populated
+  // regions only, so a freshly generated npc-less skeleton — which the
+  // generator emits with `lore: []` before any authoring — is never flagged;
+  // the seam holds (enforcement is ours, the lore prose is world-data's).
+  for (const { file, chunk } of chunks) {
+    if (chunk.npcs.length > 0 && chunk.lore.length === 0) {
+      violations.push({
+        file,
+        rule: 'region-lore',
+        message:
+          `region "${chunk.id}" is populated (${chunk.npcs.length} resident(s): ` +
+          `${chunk.npcs.map((n) => `"${n}"`).join(', ')}) but its lore array is empty — ` +
+          `there is no discoverable story here (charter prime directive). Author at ` +
+          `least one lore entry for this region and reference its id in the chunk's ` +
+          `"lore" array.`,
+      });
     }
   }
 

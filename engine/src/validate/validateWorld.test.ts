@@ -225,6 +225,32 @@ describe('validateWorld', () => {
     expect(schema).toHaveLength(1);
     expect(schema[0]).toMatchObject({ file: 'rumors.json' });
   });
+
+  // Prime directive: every region has at least one discoverable story
+  // (GH #183 — the founder found 16 populated chunks shipping empty lore).
+  it('flags a populated region whose lore array is empty, naming the region', () => {
+    const world = sampleWorld();
+    (world.chunks[1]!.doc as AnyDoc).lore = []; // orchard-row: reynard lives here, no story
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'region-lore');
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toMatchObject({ rule: 'region-lore', file: 'chunks/orchard-row.json' });
+    expect(violations[0]!.message).toContain('orchard-row');
+    expect(violations[0]!.message).toContain('reynard-the-retired');
+  });
+
+  it('exempts an unpopulated region — a bare skeleton chunk needs no lore yet', () => {
+    const world = sampleWorld();
+    (world.chunks[1]!.doc as AnyDoc).npcs = []; // orchard-row emptied of residents
+    (world.chunks[1]!.doc as AnyDoc).lore = [];
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'region-lore');
+    expect(violations).toHaveLength(0);
+  });
+
+  it('passes a populated region that carries at least one lore entry', () => {
+    const world = sampleWorld(); // town-square + orchard-row are both populated and loreful
+    const violations = validateWorld(charter, world).filter((v) => v.rule === 'region-lore');
+    expect(violations).toHaveLength(0);
+  });
 });
 
 // A resident who can work a site, placed in the square (idle behaviour: no
