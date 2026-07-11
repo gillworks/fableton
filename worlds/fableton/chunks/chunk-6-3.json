@@ -230,5 +230,7 @@
   "npcs": [
     "puddle"
   ],
-  "lore": []
+  "lore": [
+    "the-crown-declined"
+  ]
 }
