@@ -61,11 +61,14 @@ for (const [name, config] of Object.entries(WORLDS)) {
   const worldDir = join(root, 'worlds', name);
 
   // 1. Read the steward's current truth before touching anything.
-  const current = new Map(); // chunk id → { npcs, props, origin }
+  const current = new Map(); // chunk id → { npcs, props, lore, origin }
   if (existsSync(join(worldDir, 'chunks'))) {
     for (const file of readdirSync(join(worldDir, 'chunks')).filter((f) => f.endsWith('.json'))) {
       const chunk = readJson(join(worldDir, 'chunks', file));
-      current.set(chunk.id, { npcs: chunk.npcs, props: chunk.props, origin: null });
+      // `lore` is authored world-data (the region's discoverable stories); the
+      // generator emits it empty, so — like npcs and props — it must be carried
+      // over by reading it here, or a rebuild would silently wipe it (GH #183).
+      current.set(chunk.id, { npcs: chunk.npcs, props: chunk.props, lore: chunk.lore ?? [], origin: null });
     }
   }
   const oldManifest = existsSync(join(worldDir, 'manifest.json'))
@@ -125,8 +128,14 @@ for (const [name, config] of Object.entries(WORLDS)) {
       return chunk.props.every((p) => Math.hypot(b.position[0] - p.position[0], b.position[2] - p.position[2]) > r + 0.8);
     });
     chunk.npcs = [...new Set(npcsFor.get(entry.id))].sort();
+    // Carry the region's authored lore. It is place-scoped, so a chunk that
+    // still exists by id keeps its stories; the generator's empty `lore: []`
+    // would otherwise overwrite them (GH #183).
+    const carriedLore = current.get(entry.id)?.lore ?? [];
+    if (carriedLore.length > 0) chunk.lore = carriedLore;
     writeJson(join(tmp, 'chunks', `${entry.id}.json`), chunk);
     if (carried.length > 0) console.log(`  carried ${carried.length} authored prop(s) into ${name}/${entry.id}`);
+    if (carriedLore.length > 0) console.log(`  carried ${carriedLore.length} lore entr(y/ies) into ${name}/${entry.id}`);
   }
 
   // 5. Replace ONLY the generated outputs; authored files stay untouched.
