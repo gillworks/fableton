@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "the-reformed-wolf",
+  "identity": {
+    "name": "the Reformed Wolf",
+    "kind": "wolf, appetite retired",
+    "story": "Talked his way through the wrong door once, and the story's ending is one the lane doesn't retell to his face. He came out the other side of it anyway — nobody dies of an ending here — and gave up meat that same season, sincerely and for good. Ten years reformed and still, honestly, hungry."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "widow-hood",
+      "kind": "shows up for her yearly tooth-count without being asked twice, the one visit between them that used to run the other direction entirely"
+    },
+    {
+      "to": "bo-brindleson",
+      "kind": "counts his three sheep through the fence some mornings, out of old habit, and has never once acted on the count"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Reformed Wolf's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "sequence",
+          "label": "standing first watch at the fence line, out of habit",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking to the fence he can see Bo's flock from",
+              "to": "gate-chunk-1-4"
+            },
+            {
+              "type": "idle",
+              "label": "counting three sheep through the gate, same as every morning, and letting them alone",
+              "duration_s": 45
+            }
+          ]
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "the annual tooth-count, kept honest",
+          "children": [
+            {
+              "type": "move",
+              "label": "presenting himself at Widow Hood's door, same as every high sun",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "baring his teeth for her yearly count, the one visit between them that used to run the other direction entirely",
+              "with": "widow-hood",
+              "duration_s": 45
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "keeping to the wander paths, hungry and matter-of-fact about it",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "resisting the smell of Widow Hood's cooling loaves, same as every night, and winning",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}
