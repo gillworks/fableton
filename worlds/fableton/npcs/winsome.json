@@ -79,7 +79,7 @@
         "phase": "hush",
         "child": {
           "type": "sequence",
-          "label": "closing the well's first account",
+          "label": "opening the ledger's second page",
           "children": [
             {
               "type": "move",
@@ -88,7 +88,7 @@
             },
             {
               "type": "idle",
-              "label": "crossing Tam's match off the ledger, fourth and final pledge repaid, then closing the well's very first debt — the bridge wish — paid in full at compound interest",
+              "label": "entering a new debt in her own hand — no name given, no stone or bread behind it, just somebody's want left in fountain-water and carried to her by the telling — owed same as the first, and no table's been set for it yet",
               "duration_s": 60
             }
           ]
