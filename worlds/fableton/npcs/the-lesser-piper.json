@@ -11,6 +11,10 @@
     {
       "to": "tick",
       "kind": "insists clockwork is outside his contract"
+    },
+    {
+      "to": "the-miller-who-never-paid",
+      "kind": "collects on a debt he didn't earn, at his own rate, and has never once said it isn't his to collect"
     }
   ],
   "behavior": {

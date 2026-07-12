@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "the-miller-who-never-paid",
+  "identity": {
+    "name": "The Miller Who Never Paid",
+    "kind": "miller, retired (the debt outlived the mill)",
+    "story": "Shorted a piper's fee once, in a town two tales over — these things get paid for eventually, whether or not you're the one who owes them. Settled in Fableton and found only one piper left to pay: a cousin of that one, working strictly rats, strictly contracted. Neither has ever agreed whose debt it actually is, and neither has ever let that stop the payments."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "the-lesser-piper",
+      "kind": "pays down a fee that was never his cousin's to begin with, one short coin at a time"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Miller's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "grinding a morning's flour, short the same coin as always",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "paying down what was never quite his to owe",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to where the lesser piper keeps his rounds",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "handing over a coin the piper cousin didn't ask for and won't refuse",
+              "with": "the-lesser-piper",
+              "duration_s": 45
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "sweeping the mill floor, keeping better count than he ever did the first time",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "idle",
+          "label": "sleeping easy, one coin lighter than a debt that isn't his",
+          "duration_s": 60
+        }
+      }
+    ]
+  }
+}
