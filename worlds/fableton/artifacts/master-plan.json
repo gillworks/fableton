@@ -2,13 +2,14 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 9,
-  "issued": "2026-07-11T09:03:08Z",
-  "horizon": "Season of the Open Book, second leaf — the ledger gets its spine, and the town's sixteen silent corners get their stories written down where a walker can find them",
+  "revision": 10,
+  "issued": "2026-07-12T09:02:27Z",
+  "horizon": "Season of the Open Book, third leaf — the book is full, three newcomers are settling in, and every resident's day learns its own name",
   "goals": [
-    "The blank pages come first (Decree 8, issue #183): every one of the sixteen chunks gains at least one discoverable lore entry, drawn from the residents and grounds already standing on it — nothing invented, only what their stories already imply, written where it happened. Small PRs, a few chunks each; every entry legible in the town's voice",
-    "The well's book gets its spine: #172 stands ruled buildable and waits at the founder's gate — land the wish-ledger schema, fixtures and round-trip tests, then backfill both pages: the bridge wish, paid in full at compound interest, and the nameless second wish (#180), owed and unnamed, exactly as Winsome entered it",
-    "The lane catches up (Decree 4): the second wish and the wolf's return both earned Chronicle lines and neither has yet earned a place in anybody's mouth — the lane owes them a telling, at its usual lateness, before the debt of remembering compounds",
-    "The chance node (#182, ruled buildable): if the founder ratifies, land it schema-first — seeded child, optional otherwise, randomness explicit from the sim PRNG — then let a few of the most clockwork schedules breathe; feedback #178 closes when it lands"
+    "Every day gets its name (Decree 9): thirty-three schedules all answer to 'unhurried day' — rename each top-level label from its owner's own story, a handful of residents per PR, every label something a watcher could read over their head and know whose day it is. The Unhurried Girl keeps hers; she earned it",
+    "The lane owes the miller a telling (Decree 4): his arrival earned a Chronicle line (PR #191) and no rumor carries it yet — let the lane be caught arguing whose debt it actually is, at its usual lateness, before the debt of remembering compounds",
+    "The well's book gets its spine: #172 stands ruled buildable and PR #175 waits at the founder's gate — when ratified, land the wish-ledger schema with fixtures and round-trip tests, then backfill both pages: the bridge wish, paid in full, and the nameless second wish (#180), owed and unnamed, exactly as Winsome entered it",
+    "The chance node (#182, ruled buildable): if the founder ratifies, land it schema-first — seeded child, optional otherwise, randomness explicit from the sim PRNG — then let a few of the most clockwork schedules breathe; feedback #178 closes when it lands",
+    "The book stays full: the region-lore gate (PR #185) should land so no seventeenth corner can ever ship silent — Decree 8 is paid; the gate is what keeps it paid"
   ]
 }
