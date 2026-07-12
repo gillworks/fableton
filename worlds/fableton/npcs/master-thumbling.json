@@ -19,7 +19,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "Master Thumbling's unhurried day",
+    "label": "Master Thumbling announces the corners",
     "entries": [
       {
         "phase": "first light",

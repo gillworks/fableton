@@ -15,7 +15,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "Winsome's unhurried day",
+    "label": "Winsome's book, opened and closed",
     "entries": [
       {
         "phase": "first light",
