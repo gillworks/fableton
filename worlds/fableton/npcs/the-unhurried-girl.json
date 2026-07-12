@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "the-unhurried-girl",
+  "identity": {
+    "name": "the Unhurried Girl",
+    "kind": "grandmother's regular visitor, warning retired",
+    "story": "Wore the color to be seen before she ever needed saving twice, and kept wearing it after the wolf earned his pardon — a habit outlives its reason faster than a dye holds its color. Still walks the same path to her grandmother's door every first light, basket full, no woodcutter on standby. Some lamplightings she takes the long way home past his old watch on purpose, just to prove to herself she doesn't have to hurry."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "widow-hood",
+      "kind": "the expected company she bakes for every first light, basket delivered, no reason left to hurry"
+    },
+    {
+      "to": "the-reformed-wolf",
+      "kind": "walks his old stretch of the path some lamplightings, on purpose, just to prove she doesn't have to"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Unhurried Girl's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "sequence",
+          "label": "the expected delivery",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking the same path to her grandmother's door, same as always",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "handing over a full basket, no woodcutter on standby, none required",
+              "with": "widow-hood",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "tending her own patch, out of the habit of watching over her shoulder",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "sequence",
+          "label": "taking the long way home, on purpose",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking his old stretch of the path, same as some lamplightings",
+              "to": "wander"
+            },
+            {
+              "type": "interact",
+              "label": "not hurrying past him, same as she's proven before and means to prove again",
+              "with": "the-reformed-wolf",
+              "duration_s": 45
+            }
+          ]
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "idle",
+          "label": "hanging the empty basket by the door, hood down",
+          "duration_s": 60
+        }
+      }
+    ]
+  }
+}
