@@ -15,7 +15,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "Dame Spindle's unhurried day",
+    "label": "Dame Spindle's three locks, counted aloud",
     "entries": [
       {
         "phase": "first light",
