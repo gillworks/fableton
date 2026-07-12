@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "the-prince-who-gave-it-back",
+  "identity": {
+    "name": "the Prince Who Gave It Back",
+    "kind": "frog-prince, retired, un-crowned by choice",
+    "story": "Said yes, a tale over, to a kiss much like the one Puddle turned down. Wore the crown for one whole season and found the castle colder than any pond. Handed the kingdom back to whoever was standing closest, apologized for the inconvenience, and hopped the whole way to Fableton to find the one frog who'd seen this coming."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "puddle",
+      "kind": "the one who said yes, moved in once he understood exactly why Puddle didn't"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Prince's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "idle",
+          "label": "waking up unroyal, gratefully",
+          "duration_s": 90
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "comparing notes with the frog who got it right the first time",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the fountain rim, no crown to carry there anymore",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "conceding, again, that Puddle had the better answer all along",
+              "with": "puddle",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "practicing being unimpressive, on purpose",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "idle",
+          "label": "sleeping half a foot underwater, out of an old and unhelpful reflex",
+          "duration_s": 200
+        }
+      }
+    ]
+  }
+}
