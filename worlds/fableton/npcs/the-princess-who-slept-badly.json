@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "the-princess-who-slept-badly",
+  "identity": {
+    "name": "The Princess Who Slept Badly",
+    "kind": "a professional light sleeper, retired",
+    "story": "Proved her blood by feeling a pea through twenty mattresses. Never slept easy again and never once asked for the trade back — the smallest wrongness in a room still wakes her before anyone else has noticed it's there."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "master-thumbling",
+      "kind": "the first neighbor who feels him crossing a room and says so before he has to announce the corner"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Princess's unhurried day",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "resettling a pillow that was never actually wrong",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "hearing him before he says a word",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the hedge where he does his surveying",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "naming the corner he's about to announce, half a breath early",
+              "with": "master-thumbling",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "counting mattresses that aren't there anymore",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "idle",
+          "label": "awake under nine blankets, guessing at a tenth",
+          "duration_s": 60
+        }
+      }
+    ]
+  }
+}

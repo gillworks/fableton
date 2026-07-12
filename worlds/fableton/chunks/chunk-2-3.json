@@ -275,7 +275,10 @@
     ]
   },
   "npcs": [
-    "master-thumbling"
+    "master-thumbling",
+    "the-princess-who-slept-badly"
   ],
-  "lore": []
+  "lore": [
+    "the-giant-felled-by-paperwork"
+  ]
 }

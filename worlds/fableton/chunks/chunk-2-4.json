@@ -245,7 +245,11 @@
     ]
   },
   "npcs": [
-    "widow-hood"
+    "widow-hood",
+    "the-reformed-wolf",
+    "the-unhurried-girl"
   ],
-  "lore": []
+  "lore": [
+    "the-count-at-her-door"
+  ]
 }

@@ -31,16 +31,16 @@
         "phase": "high sun",
         "child": {
           "type": "sequence",
-          "label": "the basket, delivered",
+          "label": "an ordinary morning's eggs",
           "children": [
             {
               "type": "move",
-              "label": "crossing to the fair table, eggs already counted",
+              "label": "crossing to the stall, same as any market day now",
               "to": "heart"
             },
             {
               "type": "interact",
-              "label": "setting the full basket down, no mistaking her for the old habit",
+              "label": "setting down this morning's eggs, ordinary as ever, the pledge long since paid",
               "with": "stall-red",
               "duration_s": 30
             }

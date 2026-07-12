@@ -250,7 +250,11 @@
     ]
   },
   "npcs": [
-    "the-lesser-piper"
+    "the-lesser-piper",
+    "the-miller-who-never-paid"
   ],
-  "lore": []
+  "lore": [
+    "the-rats-only-contract",
+    "a-debt-two-tales-over"
+  ]
 }

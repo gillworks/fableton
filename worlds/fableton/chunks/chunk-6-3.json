@@ -228,7 +228,11 @@
     ]
   },
   "npcs": [
-    "puddle"
+    "puddle",
+    "the-prince-who-gave-it-back"
   ],
-  "lore": []
+  "lore": [
+    "the-crown-declined",
+    "the-crown-given-back"
+  ]
 }

@@ -237,5 +237,7 @@
   "npcs": [
     "humble-pot"
   ],
-  "lore": []
+  "lore": [
+    "the-great-porridge-flood"
+  ]
 }

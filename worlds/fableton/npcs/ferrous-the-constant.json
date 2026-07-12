@@ -11,6 +11,10 @@
     {
       "to": "mirabel-glass",
       "kind": "asks her yearly whether standing watch counts as a life"
+    },
+    {
+      "to": "winsome",
+      "kind": "let a second question follow the first into the fountain, and let the telling carry it to her ledger without ever giving his name"
     }
   ],
   "behavior": {
@@ -21,7 +25,7 @@
         "phase": "first light",
         "child": {
           "type": "sequence",
-          "label": "the yearly question, kept on schedule",
+          "label": "the yearly question, kept on schedule, plus one that wasn't",
           "children": [
             {
               "type": "move",
@@ -33,6 +37,12 @@
               "label": "asking his own reflection in the fountain the same question he'll ask Mirabel come evening, whether standing watch counts as a life",
               "with": "fountain-square",
               "duration_s": 60
+            },
+            {
+              "type": "interact",
+              "label": "letting a second, quieter question follow the first into the water before he could stop it — not whether standing watch counts as a life, but whether the one he melted for ever heard he came back at all, recast but constant",
+              "with": "fountain-square",
+              "duration_s": 20
             }
           ]
         }

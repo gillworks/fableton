@@ -91,16 +91,16 @@
         "phase": "hush",
         "child": {
           "type": "sequence",
-          "label": "the match Tam finally gets to strike",
+          "label": "the flame Tam only had to light once",
           "children": [
             {
               "type": "move",
-              "label": "walking past the lit square to the span that's finally his to light",
+              "label": "walking past the lit square to the span that's finally his to tend",
               "to": "bridge-plot"
             },
             {
               "type": "idle",
-              "label": "striking his match on the new stone, the line his own tale never finished",
+              "label": "checking that the fire he struck on the new stone still holds, nothing left to strike a second time",
               "duration_s": 220
             }
           ]
