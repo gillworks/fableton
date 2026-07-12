@@ -19,7 +19,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "Ferrous the Constant's unhurried day",
+    "label": "Ferrous the Constant's standing watch",
     "entries": [
       {
         "phase": "first light",
