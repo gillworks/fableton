@@ -15,7 +15,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "Morrow's unhurried day",
+    "label": "Morrow's fortune, already told",
     "entries": [
       {
         "phase": "first light",
