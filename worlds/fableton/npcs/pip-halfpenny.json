@@ -31,7 +31,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "Pip Halfpenny's unhurried day",
+    "label": "Pip Halfpenny's daily recount",
     "entries": [
       {
         "phase": "first light",

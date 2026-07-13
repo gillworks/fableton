@@ -19,7 +19,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "The Lesser Piper's unhurried day",
+    "label": "The Lesser Piper's rounds, rats only, strictly",
     "entries": [
       {
         "phase": "first light",
