@@ -15,6 +15,10 @@
     {
       "to": "the-other-sister",
       "kind": "caught her charging him under the union rate and has been filing the grievance she won't let him win"
+    },
+    {
+      "to": "granny-ash",
+      "kind": "measures her doorstep dust for a shoe size she has never once confirmed"
     }
   ],
   "behavior": {
@@ -49,11 +53,28 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "inspecting the town's heels",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "inspecting the town's heels, one doorstep closer than he'll admit",
+          "children": [
+            {
+              "type": "wander",
+              "label": "inspecting the town's heels",
+              "radius": 4,
+              "min_pause_s": 2,
+              "max_pause_s": 12
+            },
+            {
+              "type": "move",
+              "label": "finishing his rounds at Granny Ash's step, same as every high sun",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "measuring her doorstep dust for a shoe size she has never once confirmed",
+              "with": "granny-ash",
+              "duration_s": 30
+            }
+          ]
         }
       },
       {
