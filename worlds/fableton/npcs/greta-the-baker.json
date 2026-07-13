@@ -29,7 +29,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "a baker's day",
+    "label": "Greta's gingerbread, pardoned for good",
     "entries": [
       {
         "phase": "first light",
