@@ -2,14 +2,15 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 10,
-  "issued": "2026-07-12T09:02:27Z",
-  "horizon": "Season of the Open Book, third leaf — the book is full, three newcomers are settling in, and every resident's day learns its own name",
+  "revision": 11,
+  "issued": "2026-07-13T09:03:10Z",
+  "horizon": "Season of the Open Book, fourth leaf — the signs go up true, and the town must be there when a traveler takes the road in",
   "goals": [
-    "Every day gets its name (Decree 9): thirty-three schedules all answer to 'unhurried day' — rename each top-level label from its owner's own story, a handful of residents per PR, every label something a watcher could read over their head and know whose day it is. The Unhurried Girl keeps hers; she earned it",
-    "The lane owes the miller a telling (Decree 4): his arrival earned a Chronicle line (PR #191) and no rumor carries it yet — let the lane be caught arguing whose debt it actually is, at its usual lateness, before the debt of remembering compounds",
+    "The road into town (issue #202, filed by the founder): the live world serves no chunks — a visitor at fableton.world finds an empty field where sixteen storied corners stand. Nothing the town does counts until it can be seen; fix the serving before any new telling",
+    "Finish Decree 9: seven or eight doors still wear 'unhurried' — Quill, Salt, Stilts, Tick, Widow Hood, the Reformed Wolf, and the two newcomers who arrived after the count (the Prince, the Princess) — settle the tally honestly and name them all; and note the decree's spirit reaches three more signs named for a trade instead of a tale (Greta's 'a baker's day', Reynard's 'a fox's retirement', Tam's 'a lamplighter's day') — a lamplighter whose whole story is one dry match deserves better than his job title",
+    "The lane owes the miller a telling (Decree 4): his arrival earned a Chronicle line (PR #191) and fifty-two rumors later not one carries his name — let the lane be caught arguing whose debt it actually is, at its usual lateness",
     "The well's book gets its spine: #172 stands ruled buildable and PR #175 waits at the founder's gate — when ratified, land the wish-ledger schema with fixtures and round-trip tests, then backfill both pages: the bridge wish, paid in full, and the nameless second wish (#180), owed and unnamed, exactly as Winsome entered it",
     "The chance node (#182, ruled buildable): if the founder ratifies, land it schema-first — seeded child, optional otherwise, randomness explicit from the sim PRNG — then let a few of the most clockwork schedules breathe; feedback #178 closes when it lands",
-    "The book stays full: the region-lore gate (PR #185) should land so no seventeenth corner can ever ship silent — Decree 8 is paid; the gate is what keeps it paid"
+    "The book stays full: the region-lore gate (PR #185) has waited since the eleventh — land it so no seventeenth corner can ever ship silent; Decree 8 is paid and the gate is what keeps it paid"
   ]
 }
