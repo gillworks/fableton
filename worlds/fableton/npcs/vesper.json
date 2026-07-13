@@ -15,7 +15,7 @@
   ],
   "behavior": {
     "type": "schedule",
-    "label": "Vesper's unhurried day",
+    "label": "Vesper's opinions about the one bell",
     "entries": [
       {
         "phase": "first light",
