@@ -27,6 +27,10 @@
     {
       "to": "the-other-sister",
       "kind": "recounted her pest-control fee three times running, same wrong number every time, and keeps trying to make her take the copper she's owed"
+    },
+    {
+      "to": "second-crumb",
+      "kind": "counts stones the same way he counts everything else — twice, out loud, no explanation needed between them"
     }
   ],
   "behavior": {

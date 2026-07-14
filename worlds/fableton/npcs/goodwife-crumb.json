@@ -15,6 +15,10 @@
     {
       "to": "pip-halfpenny",
       "kind": "the only neighbor who has ever actually counted the crumbs"
+    },
+    {
+      "to": "second-crumb",
+      "kind": "the other one she led home; he trusts her trail least of anyone, and she's stopped taking it personally"
     }
   ],
   "behavior": {
