@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "cygnet",
+  "identity": {
+    "name": "Cygnet",
+    "kind": "swan (was the ugly duckling)",
+    "story": "Hatched grey and got mocked the length of a whole spring for it, same as the story says; what the story leaves out is that he liked the mud fine and only left the farm because the whole yard had already decided he wanted to. Grew into exactly what everybody always swore he would, and found the compliments stung nearly as much as the insult had. Kept the old name anyway — shares the fountain rim with Puddle most high suns now, on the grounds that a body's opinion of its own reflection is nobody else's business, least of all the pond's."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "puddle",
+      "kind": "shares the fountain rim most high suns — two retirees from two different kinds of story about being looked at"
+    },
+    {
+      "to": "quill",
+      "kind": "the only other retired waterfowl in the square; she's never asked why he still answers to a duckling's name, and he's never asked about the eggs"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "Cygnet's grey days, molted years since",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "paddling the morning round of the fountain",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "sharing the rim",
+          "children": [
+            {
+              "type": "move",
+              "label": "climbing onto the fountain rim",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "trading the sunniest spot on the rim with Puddle, half a turn each, same as every high sun",
+              "with": "puddle",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "preening feathers that were never actually the problem",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "floating wherever the water's stillest",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}
