@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "the-princess-who-slept-long",
+  "identity": {
+    "name": "The Princess Who Slept Long",
+    "kind": "a professional deep sleeper, retired",
+    "story": "Pricked a finger on Dame Spindle's wheel back when it still spun, and slept the full hundred years the story promised while Old Thorn grew a wall nobody could cross. The arch finally came in at its full height, roses and all, and she walked out through it same as it had been waiting on her the whole time. Sets an alarm now. Has not once used the snooze."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "old-thorn",
+      "kind": "the hedge that walled her in for a hundred years and finally let her out; she's decided to forgive it, mostly for the roses"
+    },
+    {
+      "to": "dame-spindle",
+      "kind": "kept the wheel that started it, three locks deep now — the two of them still haven't managed to be in the same room"
+    },
+    {
+      "to": "the-princess-who-slept-badly",
+      "kind": "swapped notes once: one of them never slept soundly again, the other's still deciding if she's proud she can"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Princess's hundred years, all slept at once",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "idle",
+          "label": "waking on the first try, still faintly surprised the ceiling isn't stone",
+          "duration_s": 30
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "thanking the hedge, out loud, same as every high sun",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking to the arch that finally let her through",
+              "to": "hedge-arbor-plot"
+            },
+            {
+              "type": "interact",
+              "label": "telling Old Thorn the roses were worth the wait, growls and all",
+              "with": "old-thorn",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "walking the lane wide of anything that spins",
+          "radius": 5,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "idle",
+          "label": "sleeping one ordinary night's worth, alarm set, snooze untouched",
+          "duration_s": 60
+        }
+      }
+    ]
+  }
+}
