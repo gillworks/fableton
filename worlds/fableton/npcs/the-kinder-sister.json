@@ -15,6 +15,10 @@
     {
       "to": "the-other-sister",
       "kind": "finds a toad at the garden gate some mornings and has stopped pretending she doesn't know who left it"
+    },
+    {
+      "to": "the-princess-who-kept-the-tower",
+      "kind": "gets a windowbox of tower greens every market day and has never once asked how tall a windowbox has to be to count"
     }
   ],
   "behavior": {
