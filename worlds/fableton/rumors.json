@@ -326,6 +326,12 @@
       "text": "Cobble finished his rounds at Granny Ash's step again at high sun, same as every high sun, and measured the doorstep dust for a shoe size she has never once confirmed — she let him, said nothing, and the lane still doesn't know which foot.",
       "origin": "cobble",
       "notable": true
+    },
+    {
+      "id": "the-second-crumbs-stone-count",
+      "text": "The Second Crumb laid his stones down the lane again at first light, quiet as ever, and Pip Halfpenny counted them twice without being asked — the two of them matched, same as every morning, and neither one has ever said why it matters.",
+      "origin": "second-crumb",
+      "notable": true
     }
   ]
 }

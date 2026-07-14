@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "second-crumb",
+  "identity": {
+    "name": "the Second Crumb",
+    "kind": "the brother the tale never named",
+    "story": "Walked out of the same oven as his sister, same morning, same fire — the story only followed her after. He answers to 'the Second Crumb' because nobody ever gave him a better one. He lays a line of stones behind him wherever he goes; stones don't tempt birds, and he isn't taking chances twice."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "goodwife-crumb",
+      "kind": "her trail he still won't follow — stones, always, since the birds got there first"
+    },
+    {
+      "to": "marigold-crumb",
+      "kind": "the sister who made peace with the oven; he hasn't, and doesn't begrudge her for it"
+    },
+    {
+      "to": "pip-halfpenny",
+      "kind": "counts stones the same way Pip counts everything else — twice, no explanation needed between them"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Second Crumb's stone-count",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "checking last night's stones are still where he left them",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "the morning count",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking his own line to the heart",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "matching his stone-count to Pip's crumb-count, out loud for once",
+              "with": "pip-halfpenny",
+              "duration_s": 90
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "keeping his distance from the bakery, same as every lamplighting",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "sequence",
+          "label": "the last stone of the day",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking his line back to the heart",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "leaving one stone on her sill before he goes",
+              "with": "goodwife-crumb",
+              "duration_s": 60
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

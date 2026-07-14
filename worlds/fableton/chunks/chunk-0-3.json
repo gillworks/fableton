@@ -234,7 +234,8 @@
   },
   "npcs": [
     "goodwife-crumb",
-    "pip-halfpenny"
+    "pip-halfpenny",
+    "second-crumb"
   ],
   "lore": [
     "the-trail-pip-checks-twice"
