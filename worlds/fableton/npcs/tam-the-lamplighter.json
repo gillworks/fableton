@@ -83,6 +83,12 @@
               "label": "lighting the square lamp",
               "with": "lantern",
               "duration_s": 15
+            },
+            {
+              "type": "interact",
+              "label": "hearing Vesper's bell answer before he's finished turning, proof enough he's on time",
+              "with": "vesper",
+              "duration_s": 10
             }
           ]
         }

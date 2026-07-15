@@ -50,8 +50,8 @@
             },
             {
               "type": "interact",
-              "label": "ringing the bell the moment his lamp catches",
-              "with": "lantern",
+              "label": "ringing the bell the moment his lamp catches, right at him, not the lantern",
+              "with": "tam-the-lamplighter",
               "duration_s": 15
             }
           ]
