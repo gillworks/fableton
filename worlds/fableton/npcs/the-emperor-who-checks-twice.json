@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "the-emperor-who-checks-twice",
+  "identity": {
+    "name": "The Emperor Who Checks Twice",
+    "kind": "emperor, retired — dressed now, thoroughly",
+    "story": "Wore nothing and believed every tailor who swore otherwise, until one apprentice said different in front of the whole road. Retired the throne, kept the shame, and dresses now like a man repaying a debt — buttoned to the throat, in triplicate. Has never once asked Needle or Mirabel whether the checking's become a costume of its own."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "needle",
+      "kind": "commissions three fittings where one would do, and asks the same question every time: is the cloth really there?"
+    },
+    {
+      "to": "mirabel-glass",
+      "kind": "checks with her, separately, what Needle already confirmed, and calls it prudence"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Emperor's morning proof",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "sequence",
+          "label": "the first of three fittings",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to Needle's step before the shop's even open",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "asking Needle to confirm, again, that last night's cloth held through till morning",
+              "with": "needle",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "the second opinion",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking over to where Mirabel's caught the best light",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "asking Mirabel to confirm, separately, what Needle already swore was true",
+              "with": "mirabel-glass",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "counting buttons by lamplight, out loud, so the count is witnessed",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "sleeping fully dressed, pressed for the morning's proof",
+          "radius": 4,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}
