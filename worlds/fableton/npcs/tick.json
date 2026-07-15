@@ -29,8 +29,9 @@
               "to": "heart"
             },
             {
-              "type": "idle",
-              "label": "filing today's complaint against the piper's practice, same as every dawn",
+              "type": "interact",
+              "label": "filing today's complaint straight at the piper, same as every dawn, in person this time",
+              "with": "the-lesser-piper",
               "duration_s": 45
             }
           ]
