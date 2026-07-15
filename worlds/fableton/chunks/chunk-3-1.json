@@ -251,7 +251,8 @@
   },
   "npcs": [
     "the-lesser-piper",
-    "the-miller-who-never-paid"
+    "the-miller-who-never-paid",
+    "tick"
   ],
   "lore": [
     "the-rats-only-contract",

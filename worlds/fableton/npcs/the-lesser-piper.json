@@ -33,8 +33,9 @@
               "to": "heart"
             },
             {
-              "type": "idle",
-              "label": "tuning the work pipe, allegedly by coincidence, exactly where Tick can hear it",
+              "type": "interact",
+              "label": "insisting, right back at Tick, that clockwork was never in his contract",
+              "with": "tick",
               "duration_s": 45
             }
           ]

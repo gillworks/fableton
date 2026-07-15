@@ -255,8 +255,7 @@
     ]
   },
   "npcs": [
-    "morrow",
-    "tick"
+    "morrow"
   ],
   "lore": [
     "yesterdays-wound-by-hand"
