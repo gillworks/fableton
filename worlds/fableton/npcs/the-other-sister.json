@@ -47,6 +47,12 @@
               "label": "collecting the pest-control fee, undercharging Cobble on purpose and daring him to call it kindness",
               "with": "stall-red",
               "duration_s": 60
+            },
+            {
+              "type": "interact",
+              "label": "daring him, face to face this time, to call the shortchange kindness",
+              "with": "cobble",
+              "duration_s": 60
             }
           ]
         }
