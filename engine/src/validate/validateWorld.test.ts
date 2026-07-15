@@ -7,7 +7,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { parseCharter } from '../charter/parse.js';
 import type { Charter } from '../schemas/charter.js';
-import { validateWorld, type WorldDocs } from './validateWorld.js';
+import { findOrphanedRegions, validateWorld, type WorldDocs } from './validateWorld.js';
 
 const root = new URL('../../test/fixtures/sample-world/', import.meta.url);
 const loadJson = (rel: string): unknown =>
@@ -444,5 +444,55 @@ describe('validateWorld — expansion plans', () => {
     world.constructionSites = [{ file: 'construction/bakery-extension.json', doc: standing }];
     const violations = validateWorld(charter, world).filter((v) => v.rule === 'footprint-overlap');
     expect(violations.some((v) => v.message.includes('bakery-extension'))).toBe(true);
+  });
+});
+
+// Region tethering — Decree 1, the Law of Ties (FABA-69).
+describe('validateWorld — region tethering', () => {
+  const npc = (world: WorldDocs, needle: string): AnyDoc =>
+    world.npcs.find((n) => n.file.includes(needle))!.doc as AnyDoc;
+  const orphan = (world: WorldDocs): void => {
+    // Cut every tie in and out of orchard-row's lone resident (reynard):
+    // drop his relationships and greta's relationship back to him. Greta and
+    // Tam still tie each other, so town-square stays tethered.
+    npc(world, 'reynard').relationships = [];
+    npc(world, 'greta').relationships = npc(world, 'greta').relationships.filter(
+      (r: AnyDoc) => r.to !== 'reynard-the-retired',
+    );
+  };
+
+  it('leaves a tethered world clean of region-tethering warnings', () => {
+    const violations = validateWorld(charter, sampleWorld());
+    expect(violations.filter((v) => v.rule === 'region-tethering')).toEqual([]);
+  });
+
+  it('warns on an orphaned region, naming the chunk and its lone resident', () => {
+    const world = sampleWorld();
+    orphan(world);
+    const tethering = validateWorld(charter, world).filter((v) => v.rule === 'region-tethering');
+    expect(tethering).toHaveLength(1);
+    expect(tethering[0]).toMatchObject({ file: 'chunks/orchard-row.json', severity: 'warning' });
+    expect(tethering[0]!.message).toContain('orphaned');
+    expect(tethering[0]!.message).toContain('reynard-the-retired');
+  });
+
+  it('findOrphanedRegions is pure and returns the orphaned chunk id', () => {
+    const world = sampleWorld();
+    orphan(world);
+    expect(findOrphanedRegions(world).map((r) => r.chunkId)).toEqual(['orchard-row']);
+  });
+
+  it('does not flag an unpopulated region (mill-lane has no residents)', () => {
+    expect(findOrphanedRegions(sampleWorld()).map((r) => r.chunkId)).not.toContain('mill-lane');
+  });
+
+  it('counts a cross-region hook (not just a local pair) as tethered', () => {
+    const world = sampleWorld();
+    // Make orchard-row's reynard the only tie-holder: his relationship reaches
+    // into town-square. A lone resident with a hook out is still tethered.
+    npc(world, 'greta').relationships = npc(world, 'greta').relationships.filter(
+      (r: AnyDoc) => r.to !== 'reynard-the-retired',
+    );
+    expect(findOrphanedRegions(world).map((r) => r.chunkId)).not.toContain('orchard-row');
   });
 });
