@@ -73,6 +73,12 @@
               "label": "measuring her doorstep dust for a shoe size she has never once confirmed",
               "with": "granny-ash",
               "duration_s": 30
+            },
+            {
+              "type": "interact",
+              "label": "catching the Other Sister at the stall mid-shortchange, and filing the same grievance to her face this time",
+              "with": "the-other-sister",
+              "duration_s": 60
             }
           ]
         }
@@ -81,7 +87,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "wander",
-          "label": "filing the same grievance against the Other Sister's fair prices, cheerfully, again",
+          "label": "turning over how little that grievance changed, and how much better it felt filed to her face",
           "radius": 4,
           "min_pause_s": 2,
           "max_pause_s": 12
