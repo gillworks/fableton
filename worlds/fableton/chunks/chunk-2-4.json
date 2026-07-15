@@ -134,6 +134,36 @@
       ],
       "rotation_y": 1.312,
       "scale": 0.996
+    },
+    {
+      "asset": "hedge",
+      "position": [
+        7.5,
+        0.652,
+        13.5
+      ],
+      "rotation_y": 0.3,
+      "scale": 1
+    },
+    {
+      "asset": "hedge",
+      "position": [
+        10.5,
+        0.748,
+        13.5
+      ],
+      "rotation_y": -0.3,
+      "scale": 1
+    },
+    {
+      "asset": "rock-small",
+      "position": [
+        9,
+        0.657,
+        15.5
+      ],
+      "rotation_y": 0.9,
+      "scale": 1
     }
   ],
   "buildings": [
@@ -165,6 +195,21 @@
       "wall_color": "#f6f2e9",
       "roof_color": "#e9b34e",
       "windows": 2,
+      "chimney": true
+    },
+    {
+      "position": [
+        9,
+        0.685,
+        14
+      ],
+      "rotation_y": 0.15,
+      "width": 2.2,
+      "depth": 2.4,
+      "height": 2.05,
+      "wall_color": "#f6f2e9",
+      "roof_color": "#4c6f39",
+      "windows": 1,
       "chimney": true
     }
   ],
@@ -209,6 +254,14 @@
           1.05,
           1
         ]
+      },
+      {
+        "id": "rampions-plot",
+        "position": [
+          9,
+          0.695,
+          13.7
+        ]
       }
     ],
     "edges": [
@@ -227,6 +280,10 @@
       [
         "heart",
         "gate-chunk-2-3"
+      ],
+      [
+        "heart",
+        "rampions-plot"
       ]
     ],
     "portals": [
@@ -248,9 +305,11 @@
     "widow-hood",
     "the-reformed-wolf",
     "the-unhurried-girl",
-    "the-princess-who-kept-the-tower"
+    "the-princess-who-kept-the-tower",
+    "mother-rampion"
   ],
   "lore": [
-    "the-count-at-her-door"
+    "the-count-at-her-door",
+    "the-row-she-lets-go-to-seed"
   ]
 }

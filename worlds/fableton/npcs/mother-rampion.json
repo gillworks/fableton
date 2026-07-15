@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "mother-rampion",
+  "identity": {
+    "name": "Mother Rampion",
+    "kind": "witch, retired — keeps the walled garden now",
+    "story": "Grew the finest rampion in three tales and priced it harder than any greens are worth — the bargain that put a girl up a tower for want of a salad. Keeps a walled plot behind the cottage now, gate left open for anyone who only wants to ask this time. Never harvests the one row nearest the wall; lets it go to seed every year and has never said why, though the whole lane has a guess."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "the-princess-who-kept-the-tower",
+      "kind": "grew the rampion that started the whole bargain, and leaves the tower windowbox be every high sun without a word — the one thing between them neither has finished saying"
+    },
+    {
+      "to": "the-kinder-sister",
+      "kind": "matches her turnip count row for row at the garden fence, and privately thinks her own rampion's better, which she'll never say"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "Mother Rampion's plot, kept open at the gate",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "walking the wall's edge before the dew's off it",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "tending what she won't harvest",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to the walled plot",
+              "to": "rampions-plot"
+            },
+            {
+              "type": "interact",
+              "label": "training the one row of rampion she still lets go to seed",
+              "with": "hedge",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "sequence",
+          "label": "the standing gesture",
+          "children": [
+            {
+              "type": "move",
+              "label": "carrying a fresh cutting up to the lane",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "leaving the cutting on the tower princess's step, same as every lamplighting, still no word for what it's meant to say",
+              "with": "the-princess-who-kept-the-tower",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "wander",
+          "label": "banking the coals under a plot that keeps no secrets anymore",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      }
+    ]
+  }
+}
