@@ -15,6 +15,9 @@ import { fileURLToPath } from 'node:url';
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const noSkip = process.argv.includes('--no-skip');
 const templateCharter = join(root, 'charters', '_template', 'charter.yaml');
+// Shared so testInstall and its settleWithin guard can never name different
+// tests if one string is edited.
+const INSTALL_TEST_NAME = 'install: compose up → explorable world ≤ 15 min';
 
 const results = [];
 const record = (name, status, detail) => {
@@ -22,6 +25,38 @@ const record = (name, status, detail) => {
   const mark = { PASS: '✓', FAIL: '✗', SKIP: '○' }[status];
   console.log(`${mark} ${status}  ${name}\n         ${detail}\n`);
 };
+
+// Every probe gets a hard timeout so a slow/half-open socket can never wedge
+// the poll (an un-timed fetch can leave the event loop in a state that aborts
+// Node with exit 13 — "unsettled top-level await" — mid-run, issue #63).
+const PROBE_TIMEOUT_MS = 10_000;
+const probe = (url) => fetch(url, { signal: AbortSignal.timeout(PROBE_TIMEOUT_MS) });
+
+// Race an awaited test against a ref'd deadline. The timer keeps the event
+// loop alive (so it can never drain out from under a pending await) and
+// guarantees the returned promise settles — turning a hang into a named FAIL
+// instead of a bare exit 13. Note: on a guard timeout the raced test is
+// abandoned mid-flight, so testInstall's `finally` compose-down is skipped —
+// harmless in CI (the runner is torn down), but a local dev run could leave
+// the compose stack up.
+const settleWithin = (promise, ms, name) =>
+  new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      record(name, 'FAIL', `did not settle within ${(ms / 1000).toFixed(0)}s — treated as a harness/infra hang`);
+      resolve();
+    }, ms);
+    promise.then(
+      () => {
+        clearTimeout(timer);
+        resolve();
+      },
+      (err) => {
+        clearTimeout(timer);
+        record(name, 'FAIL', `threw: ${err?.stack ?? err?.message ?? err}`);
+        resolve();
+      },
+    );
+  });
 
 const engineExec = (args, opts = {}) =>
   spawnSync('pnpm', ['--dir', join(root, 'engine'), 'exec', 'tsx', ...args], {
@@ -36,7 +71,7 @@ const engineExec = (args, opts = {}) =>
 // explorable when GET :8080/ returns 200 and :8080/world/manifest.json
 // returns the world manifest.
 async function testInstall() {
-  const name = 'install: compose up → explorable world ≤ 15 min';
+  const name = INSTALL_TEST_NAME;
   const composeFile = join(root, 'deploy', 'compose.yaml');
   if (!existsSync(composeFile)) {
     return record(name, 'SKIP', 'deploy/compose.yaml not in the repo yet (issue #12); contract in docs/v1.md');
@@ -56,13 +91,13 @@ async function testInstall() {
     }
     while (Date.now() - started < budgetMs) {
       try {
-        const [page, manifest] = await Promise.all([fetch(base), fetch(`${base}/world/manifest.json`)]);
+        const [page, manifest] = await Promise.all([probe(base), probe(`${base}/world/manifest.json`)]);
         if (page.ok && manifest.ok) {
           // "Explorable" means the client actually boots: its bundle must
           // resolve too (a route collision once served 200 HTML + 404 JS).
           const html = await page.text();
           const src = /src="([^"]+\.js)"/.exec(html)?.[1];
-          const bundle = src ? await fetch(`${base}${src}`) : { ok: false };
+          const bundle = src ? await probe(`${base}${src}`) : { ok: false };
           if (!bundle.ok) throw new Error(`client bundle ${src ?? '(none)'} unreachable`);
           const doc = await manifest.json();
           const elapsed = ((Date.now() - started) / 1000).toFixed(0);
@@ -168,7 +203,12 @@ function testGate() {
 
 // ---------------------------------------------------------------- run
 console.log('v1 acceptance harness — docs/v1.md definition of done\n');
-await testInstall();
+// testInstall is the only async test (it stands up docker + polls over HTTP).
+// Guard it so a wedged probe/build settles as a named FAIL within a hard
+// deadline rather than aborting Node with exit 13 (issue #63). The budget is
+// 15 min; give the guard a minute of slack so testInstall's own timeout wins
+// on the normal path.
+await settleWithin(testInstall(), 16 * 60 * 1000, INSTALL_TEST_NAME);
 testDivergence();
 testGate();
 
