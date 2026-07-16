@@ -2,15 +2,15 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 13,
-  "issued": "2026-07-15T09:02:40Z",
-  "horizon": "Season of the Open Book, sixth leaf — the road is open at last: a traveler can see the town, so the town had better be worth watching, not just worth reading",
+  "revision": 14,
+  "issued": "2026-07-16T09:04:53Z",
+  "horizon": "Season of the Open Book, seventh leaf — the quarrels have come out of the schedules and onto the lane; now the rest of the ties owe the same, and the road still waits for its first honest walker",
   "goals": [
-    "The road is open (bug #202, closed this council): the manifest and every chunk now serve from fableton.world/world/, verified by the god's own hand. Now walk it like a stranger — load the client against the live host, watch a full day pass, and file what a traveler actually sees. The town has been told true for weeks and never once looked at",
-    "Decree 10's debt: per feedback #216, nineteen residents keep their ties off-stage — schedules choreographed around each other, never a scene a walker can witness. Pick the pairs that owe the lane an argument most (Tick and the Lesser Piper first; Vesper and Tam close behind) and give each a shared scene on their common ground; close #216 when the first lands",
-    "The region-lore gate (PR #185) is still red and still owed: rebase it against a main that has since paid Decree 8 in full, get it green, and land it — the book stays full only while a gate exists to keep it full",
+    "The road is open and still unwalked: load the client against fableton.world, watch a full day pass from first light to hush, and file what a traveler actually sees. The town has been told true for weeks and never once looked at — this is the season's oldest debt and it ages worse than the others",
+    "Decree 10's first six scenes landed lawful — Tick and the Piper, Vesper and Tam, Cobble and the Other Sister, Widow Hood and the wolf, Tam and Greta, the sisters at the garden gate. Feedback #224 names the eighteen residents still keeping their ties off-stage: continue at the same cadence, pair by pair, preferring pairs that already share ground — Reynard owes Greta the excuse he keeps composing, and the Kinder Sister has three ties beyond her sister. Close #224 when the list runs dry",
+    "The region-lore gate (PR #185) is red twice over now — boundary and checks both fail against a main that moved on without it. Rebase it, get it green, land it: the book stays full only while a gate exists to keep it full",
     "The well's book gets its spine: #172 stands ruled buildable and PR #175 waits at the founder's gate — when ratified, land the wish-ledger schema with fixtures and round-trip tests, then backfill both pages: the bridge wish, paid in full, and the nameless second wish (#180), owed and unnamed, exactly as Winsome entered it",
     "The chance node (#182, ruled buildable): if the founder ratifies, land it schema-first — seeded child, optional otherwise, randomness explicit from the sim PRNG — then let a few of the most clockwork schedules breathe; feedback #178 closes when it lands",
-    "The town stands at forty-three souls and is full enough for the season: four fine doors opened in a single day, and every one of them lawful — but the fallback that opens them is becoming a habit. Enrichment sessions now deepen who's here (Decree 10 scenes, the ripening hooks) rather than adding neighbors. The three hooks keep ripening at rumor pace — the crown already moved on its own when the Prince said aloud he never looked back, which is exactly the pace to keep"
+    "The acceptance gate failed the sisters' scene (#222) with exit code 13 and not one line of output, and a bare rerun cured it — a gate that dies silently teaches nothing. If it flakes again, file the gate issue and make the harness name its failures; if it stays quiet, let it be"
   ]
 }
