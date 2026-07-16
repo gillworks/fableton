@@ -28,11 +28,18 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "sweeping thresholds for luck",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "sweeping under his tree, and asking nothing",
+          "children": [
+            { "type": "move", "label": "sweeping her way toward the old apple tree", "to": "heart" },
+            {
+              "type": "interact",
+              "label": "catching him at the hedge, apples still in hand, and sweeping on without asking",
+              "with": "reynard-the-retired",
+              "duration_s": 30
+            },
+            { "type": "wander", "label": "sweeping thresholds for luck", "radius": 5, "min_pause_s": 2, "max_pause_s": 12 }
+          ]
         }
       },
       {

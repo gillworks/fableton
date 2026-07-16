@@ -18,7 +18,16 @@
     "entries": [
       {
         "phase": "first light",
-        "child": { "type": "idle", "label": "napping under the old apple", "duration_s": 200 }
+        "child": {
+          "type": "sequence",
+          "label": "leaving two apples by the hedge, same as some mornings",
+          "children": [
+            { "type": "move", "label": "padding down to the hedge before the town's properly awake", "to": "heart" },
+            { "type": "interact", "label": "leaving two apples by the hedge, same as some mornings", "with": "hedge", "duration_s": 20 },
+            { "type": "interact", "label": "denying it, out loud, before she can even ask twice", "with": "granny-ash", "duration_s": 30 },
+            { "type": "idle", "label": "napping under the old apple", "duration_s": 150 }
+          ]
+        }
       },
       {
         "phase": "high sun",
