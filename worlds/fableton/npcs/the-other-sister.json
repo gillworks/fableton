@@ -71,12 +71,13 @@
         "phase": "hush",
         "child": {
           "type": "sequence",
-          "label": "the apology she won't call one",
+          "label": "the apology she still won't call one",
           "children": [
             { "type": "move", "label": "slipping down to the common garden", "to": "the-common-garden" },
             {
-              "type": "idle",
-              "label": "leaving a toad at the garden gate, gone before the frost can even complain",
+              "type": "interact",
+              "label": "handing the toad straight over this time, caught at the gate before the frost got a chance to complain",
+              "with": "the-kinder-sister",
               "duration_s": 30
             }
           ]

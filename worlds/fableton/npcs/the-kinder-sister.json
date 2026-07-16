@@ -86,11 +86,17 @@
       {
         "phase": "hush",
         "child": {
-          "type": "wander",
-          "label": "leaving a kind word for the frost, just in case",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "waiting at the gate instead of finding the toad after",
+          "children": [
+            { "type": "move", "label": "walking down to the garden gate ahead of her sister", "to": "the-common-garden" },
+            {
+              "type": "interact",
+              "label": "taking the toad straight from her sister's hand, and thanking her for it, out loud, for the first time",
+              "with": "the-other-sister",
+              "duration_s": 30
+            }
+          ]
         }
       }
     ]
