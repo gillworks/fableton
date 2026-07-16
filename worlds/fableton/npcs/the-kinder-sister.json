@@ -66,9 +66,10 @@
               "duration_s": 90
             },
             {
-              "type": "idle",
-              "label": "counting the turnips against Reynard's word, and finding both true",
-              "duration_s": 45
+              "type": "interact",
+              "label": "telling Reynard, to his face this time, that the harvest came up honest — same as his word — and watching him deny it anyway",
+              "with": "reynard-the-retired",
+              "duration_s": 40
             }
           ]
         }

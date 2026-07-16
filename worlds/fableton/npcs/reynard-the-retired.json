@@ -27,7 +27,14 @@
           "label": "tending the orchard, allegedly",
           "children": [
             { "type": "move", "label": "sauntering down the rows", "to": "heart" },
-            { "type": "interact", "label": "counting apples he did not steal", "with": "tree", "duration_s": 90 }
+            { "type": "interact", "label": "counting apples he did not steal", "with": "tree", "duration_s": 90 },
+            { "type": "move", "label": "wandering as far as the common garden fence, to see the honest harvest for himself", "to": "the-common-garden" },
+            {
+              "type": "interact",
+              "label": "hearing her say, to his face this time, that the harvest came up honest as his word — and denying it anyway, straight-faced as ever",
+              "with": "the-kinder-sister",
+              "duration_s": 40
+            }
           ]
         }
       },
