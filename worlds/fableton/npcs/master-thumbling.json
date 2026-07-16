@@ -44,6 +44,12 @@
             },
             {
               "type": "interact",
+              "label": "hearing the Princess name the corner before he can, and skipping the announcement for once",
+              "with": "the-princess-who-slept-badly",
+              "duration_s": 40
+            },
+            {
+              "type": "interact",
               "label": "climbing the hedge to survey the square, so the town can find him for once",
               "with": "hedge",
               "duration_s": 45
