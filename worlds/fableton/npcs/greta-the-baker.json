@@ -51,6 +51,12 @@
               "label": "kneading dough",
               "with": "stall-red",
               "duration_s": 90
+            },
+            {
+              "type": "interact",
+              "label": "setting aside the last morning loaf for Tam before he even has to ask",
+              "with": "tam-the-lamplighter",
+              "duration_s": 20
             }
           ]
         }

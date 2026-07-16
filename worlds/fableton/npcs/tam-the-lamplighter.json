@@ -40,8 +40,8 @@
             },
             {
               "type": "interact",
-              "label": "buying the first loaf",
-              "with": "stall-red",
+              "label": "taking the first loaf straight from Greta's hand, same as every morning",
+              "with": "greta-the-baker",
               "duration_s": 20
             }
           ]
