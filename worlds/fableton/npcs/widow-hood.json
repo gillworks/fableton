@@ -43,16 +43,22 @@
         "phase": "high sun",
         "child": {
           "type": "sequence",
-          "label": "the annual tally, kept without him",
+          "label": "the annual tally, kept face to face this year",
           "children": [
             {
               "type": "move",
-              "label": "stepping out to the gate",
+              "label": "stepping out to the gate, same as every high sun",
               "to": "heart"
             },
             {
               "type": "interact",
-              "label": "chalking this year's tally onto the boundary stone, right below the mark Pip already left",
+              "label": "checking his teeth herself, up close, the one visitor she's never had to ask twice",
+              "with": "the-reformed-wolf",
+              "duration_s": 45
+            },
+            {
+              "type": "interact",
+              "label": "chalking this year's tally onto the boundary stone, his count entered in person, right below the mark Pip already left",
               "with": "rock-large",
               "duration_s": 60
             }
