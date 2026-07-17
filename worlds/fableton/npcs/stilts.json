@@ -54,8 +54,8 @@
             },
             {
               "type": "interact",
-              "label": "serving the evening crowd fairly",
-              "with": "stall",
+              "label": "plating for the evening crowd, and refusing to send a dish out before Salt's had her say over it",
+              "with": "salt",
               "duration_s": 90
             }
           ]
