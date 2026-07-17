@@ -50,11 +50,27 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "standing the noon watch",
-          "radius": 3,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the noon watch, now with something new to watch for",
+          "children": [
+            {
+              "type": "move",
+              "label": "marching to the far verge of his post, where the fountain's ground gives out and the road starts",
+              "to": "wander"
+            },
+            {
+              "type": "idle",
+              "label": "watching the road the town finally left unlocked, waiting on the first stranger his watch has ever had real cause to expect",
+              "duration_s": 90
+            },
+            {
+              "type": "wander",
+              "label": "standing the noon watch, same as always, only listening harder now",
+              "radius": 3,
+              "min_pause_s": 2,
+              "max_pause_s": 12
+            }
+          ]
         }
       },
       {
