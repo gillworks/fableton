@@ -45,11 +45,28 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "sweeping the square clean of fair-dust, slipper back where it belongs",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "sweeping past his tape measure, slipper back where it belongs",
+          "children": [
+            {
+              "type": "move",
+              "label": "sweeping the last of the fair-dust toward the spot he's already measuring",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "holding still long enough for his tape, and giving away nothing new",
+              "with": "cobble",
+              "duration_s": 30
+            },
+            {
+              "type": "wander",
+              "label": "finishing the sweep with the guess still hers to keep",
+              "radius": 5,
+              "min_pause_s": 2,
+              "max_pause_s": 12
+            }
+          ]
         }
       },
       {
