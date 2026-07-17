@@ -40,7 +40,7 @@
             },
             {
               "type": "interact",
-              "label": "taking the first loaf straight from Greta's hand, same as every morning",
+              "label": "taking the first loaf straight from Greta's hand, the one she'd already set aside before he could ask",
               "with": "greta-the-baker",
               "duration_s": 20
             }

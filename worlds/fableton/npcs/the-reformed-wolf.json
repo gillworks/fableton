@@ -38,7 +38,7 @@
             },
             {
               "type": "idle",
-              "label": "counting three sheep through the gate, same as every morning, and letting them alone",
+              "label": "counting three sheep through the gate, appetite retired but not gone, and letting them alone anyway",
               "duration_s": 45
             }
           ]
@@ -52,7 +52,7 @@
           "children": [
             {
               "type": "move",
-              "label": "presenting himself at Widow Hood's door, same as every high sun",
+              "label": "presenting himself at Widow Hood's door, teeth bared first so she never has to ask twice",
               "to": "heart"
             },
             {
@@ -78,7 +78,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "resisting the smell of Widow Hood's cooling loaves, same as every night, and winning",
+          "label": "resisting the smell of Widow Hood's cooling loaves, hunger honest and outvoted, and winning",
           "radius": 4,
           "min_pause_s": 2,
           "max_pause_s": 12
