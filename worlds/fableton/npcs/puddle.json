@@ -48,8 +48,8 @@
             },
             {
               "type": "interact",
-              "label": "sunning on the fountain rim, proof a kiss was never required, same as he tells Salt every time she stops by to check",
-              "with": "fountain-round",
+              "label": "trading the sunniest inch of rim with Cygnet, half a turn each, proof neither of them needed a kiss to end up somewhere worth sitting",
+              "with": "cygnet",
               "duration_s": 60
             }
           ]
