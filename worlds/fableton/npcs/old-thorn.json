@@ -52,8 +52,9 @@
               "to": "hedge-arbor-plot"
             },
             {
-              "type": "idle",
-              "label": "holding the arch's shape, since somebody should",
+              "type": "interact",
+              "label": "holding still for the Princess's thanks, roses and all, same as every high sun since the wall came down",
+              "with": "the-princess-who-slept-long",
               "duration_s": 45
             }
           ]
