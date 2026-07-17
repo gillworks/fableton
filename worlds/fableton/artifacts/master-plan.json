@@ -2,15 +2,14 @@
   "schema_version": 1,
   "kind": "master-plan",
   "world": "Fableton",
-  "revision": 14,
-  "issued": "2026-07-16T09:04:53Z",
-  "horizon": "Season of the Open Book, seventh leaf — the quarrels have come out of the schedules and onto the lane; now the rest of the ties owe the same, and the road still waits for its first honest walker",
+  "revision": 15,
+  "issued": "2026-07-17T09:04:06Z",
+  "horizon": "Season of the Open Book, eighth leaf — the ties are coming face to face and the easy pairs are running thin; the town must stop captioning itself 'same as always,' and the road still waits for its first honest walker",
   "goals": [
-    "The road is open and still unwalked: load the client against fableton.world, watch a full day pass from first light to hush, and file what a traveler actually sees. The town has been told true for weeks and never once looked at — this is the season's oldest debt and it ages worse than the others",
-    "Decree 10's first six scenes landed lawful — Tick and the Piper, Vesper and Tam, Cobble and the Other Sister, Widow Hood and the wolf, Tam and Greta, the sisters at the garden gate. Feedback #224 names the eighteen residents still keeping their ties off-stage: continue at the same cadence, pair by pair, preferring pairs that already share ground — Reynard owes Greta the excuse he keeps composing, and the Kinder Sister has three ties beyond her sister. Close #224 when the list runs dry",
-    "The region-lore gate (PR #185) is red twice over now — boundary and checks both fail against a main that moved on without it. Rebase it, get it green, land it: the book stays full only while a gate exists to keep it full",
-    "The well's book gets its spine: #172 stands ruled buildable and PR #175 waits at the founder's gate — when ratified, land the wish-ledger schema with fixtures and round-trip tests, then backfill both pages: the bridge wish, paid in full, and the nameless second wish (#180), owed and unnamed, exactly as Winsome entered it",
-    "The chance node (#182, ruled buildable): if the founder ratifies, land it schema-first — seeded child, optional otherwise, randomness explicit from the sim PRNG — then let a few of the most clockwork schedules breathe; feedback #178 closes when it lands",
-    "The acceptance gate failed the sisters' scene (#222) with exit code 13 and not one line of output, and a bare rerun cured it — a gate that dies silently teaches nothing. If it flakes again, file the gate issue and make the harness name its failures; if it stays quiet, let it be"
+    "The road is open, Ferrous now stands watch on it, and still no one has walked it: load the client against fableton.world, watch a full day pass from first light to hush, and file what a traveler actually sees. This is the season's oldest debt and every session it goes unpaid it ages worse",
+    "Decree 11 landed because two watchers independently said the town feels frozen (#229, #230): sweep the standing behavior labels and the worst 'same as every X' offenders — labels name the doing and its cost, not the repetition. The Chronicle may keep the rhythm-then-rupture line; the doors may not",
+    "Decree 10's cadence holds — twelve ties staged, eleven souls still owing (#234 names them). The co-located pairs are nearly spent: prefer next the ties whose shared ground is already public — the square, the well, the fountain — which pays #230's complaint in the same coin; relocate a resident only when the move itself is a story, as Tick's was; and the truly far-flung ties stay half-ties, lawfully told by rumor, until the ground itself changes. Close #229 and #230 when the sweep and the public-ground scenes have answered them",
+    "The region-lore gate (PR #185) is still red against a main that moved on without it — rebase it, get it green, land it: the book stays full only while a gate exists to keep it full",
+    "Two ratifications wait on the founder and the queue behind them grows: the wish-ledger (#172, PR #175) with both well-pages ready to backfill, and the chance node (#182), behind which #178 and now #229 both stand. Nothing in town can lawfully vary its step until that second key turns — surface both to the founder plainly this week"
   ]
 }
