@@ -65,7 +65,7 @@
             },
             {
               "type": "wander",
-              "label": "standing the noon watch, same as always, only listening harder now",
+              "label": "standing the noon watch on feet that have stood every watch before this one, listening harder than any of them",
               "radius": 3,
               "min_pause_s": 2,
               "max_pause_s": 12

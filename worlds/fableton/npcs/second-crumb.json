@@ -59,7 +59,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "wander",
-          "label": "keeping his distance from the bakery, same as every lamplighting",
+          "label": "keeping his distance from the bakery, stones laid the long way round rather than risk the birds again",
           "radius": 6,
           "min_pause_s": 2,
           "max_pause_s": 12
