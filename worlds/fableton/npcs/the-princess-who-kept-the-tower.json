@@ -59,12 +59,18 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "comparing notes on visitors",
+          "label": "the lamplighting rounds, one stop earlier now",
           "children": [
             {
               "type": "move",
-              "label": "walking over to Widow Hood's step",
+              "label": "walking down to the heart of things before the light's quite gone",
               "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "taking the cutting straight from Mother Rampion's hand this year, instead of finding it already left on the step — neither says what it's for, same as ever, but no one has to guess who left it anymore",
+              "with": "mother-rampion",
+              "duration_s": 45
             },
             {
               "type": "interact",
