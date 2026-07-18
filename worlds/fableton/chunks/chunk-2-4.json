@@ -262,6 +262,14 @@
           0.695,
           13.7
         ]
+      },
+      {
+        "id": "fence-line-plot",
+        "position": [
+          3,
+          0.78,
+          9
+        ]
       }
     ],
     "edges": [
@@ -284,6 +292,10 @@
       [
         "heart",
         "rampions-plot"
+      ],
+      [
+        "heart",
+        "fence-line-plot"
       ]
     ],
     "portals": [
