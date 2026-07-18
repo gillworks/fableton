@@ -255,7 +255,8 @@
     ]
   },
   "npcs": [
-    "morrow"
+    "morrow",
+    "the-third-son-overdue"
   ],
   "lore": [
     "yesterdays-wound-by-hand"

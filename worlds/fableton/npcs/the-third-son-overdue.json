@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "the-third-son-overdue",
+  "identity": {
+    "name": "The Third Son, Overdue",
+    "kind": "third son, sent to seek his fortune (running late)",
+    "story": "Youngest of three brothers, sent off with the family's whole store of luck since a story's third son always finds his fortune and the first two never do. His brothers came home inside a season, fortunes in hand. He found this town instead, years back now, and still hasn't decided whether stopping here counts as arriving or only as resting very thoroughly along the way."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "morrow",
+      "kind": "sits for her reading every high sun and hears the same honest 'not yet' — closer, he's decided, to 'not never' each time he asks"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the third son's very long errand",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "checking the gate road for news that didn't come overnight",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "sequence",
+          "label": "the day's fortune, asked again",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing to Morrow's stool",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "sitting for Morrow's reading, asking if yesterday finally held it",
+              "with": "morrow",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "sequence",
+          "label": "earning it in the meantime",
+          "children": [
+            {
+              "type": "move",
+              "label": "walking back down to the carts",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "hauling the carts in before anyone has to ask, same as any third son worth his ending",
+              "with": "cart-high",
+              "duration_s": 90
+            }
+          ]
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "idle",
+          "label": "keeping the crust of blessed bread that hasn't gone stale a day since he left home",
+          "duration_s": 240
+        }
+      }
+    ]
+  }
+}
