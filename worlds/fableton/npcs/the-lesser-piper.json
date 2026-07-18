@@ -44,11 +44,21 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "wander",
-          "label": "making his rounds, pied slightly",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "standing still long enough to be paid",
+          "children": [
+            {
+              "type": "move",
+              "label": "circling back to the heart instead of past it",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "taking the coin the Miller keeps insisting on, still not saying whose debt it is",
+              "with": "the-miller-who-never-paid",
+              "duration_s": 45
+            }
+          ]
         }
       },
       {
