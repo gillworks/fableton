@@ -34,7 +34,7 @@
             {
               "type": "move",
               "label": "walking to the fence he can see Bo's flock from",
-              "to": "gate-chunk-1-4"
+              "to": "fence-line-plot"
             },
             {
               "type": "idle",
