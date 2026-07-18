@@ -28,11 +28,21 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "confirming the cloth exists",
-          "radius": 4,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the first of three fittings, taken from her side of the pins",
+          "children": [
+            {
+              "type": "move",
+              "label": "opening the shop before he's even knocked",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "confirming, to his face, that last night's cloth held through till morning — same answer as every morning, finally given where he can hear it",
+              "with": "the-emperor-who-checks-twice",
+              "duration_s": 60
+            }
+          ]
         }
       },
       {
