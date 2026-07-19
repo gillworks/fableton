@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "the-paper-dancer-singed",
+  "identity": {
+    "name": "The Paper Dancer, Singed",
+    "kind": "paper dancer, cut for a nursery shelf",
+    "story": "Scissored once into a pose on one leg because that was the shape left over, and she has stood that way ever since — paper doesn't get to change its mind about its own balance. A gust took her out an open window before this town had a name; a stove very nearly finished what the wind started, and only the hem of her paper skirt believes it happened at all, singed brown and never trimmed since, kept as a warning she doesn't need twice. She has walked every road there was to walk, the long way round each one, and stopped just outside this last one on hearing a soldier lived past his own fire recast, not gone — and has not yet decided whether that's a reason to knock or a reason to keep her distance a while longer."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "ferrous-the-constant",
+      "kind": "heard where he ended up before she saw him; still deciding whether the rest of the road counts as an answer or just another door left ajar"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the Paper Dancer's last bend in the road",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "measuring the road's last stretch in doorway-lengths, one leg down at a time",
+          "radius": 3,
+          "min_pause_s": 3,
+          "max_pause_s": 14
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "idle",
+          "label": "holding her pose at the road's last bend, in plain sight of a watch that finally has something to watch",
+          "duration_s": 90
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "wander",
+          "label": "keeping to the unlit side of the verge while the town's lamps come up, paper-careful even at a safe distance",
+          "radius": 3,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "idle",
+          "label": "holding the one-leg pose in the dark, three doorway-lengths closer to the fountain than she was this morning",
+          "duration_s": 240
+        }
+      }
+    ]
+  }
+}

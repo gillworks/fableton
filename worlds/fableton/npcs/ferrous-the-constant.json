@@ -15,6 +15,10 @@
     {
       "to": "winsome",
       "kind": "let a second question follow the first into the fountain, and let the telling carry it to her ledger without ever giving his name"
+    },
+    {
+      "to": "the-paper-dancer-singed",
+      "kind": "watched her take the road's last bend at high sun and hasn't worked out yet whether standing still is how a soldier says hello"
     }
   ],
   "behavior": {
@@ -65,7 +69,7 @@
             },
             {
               "type": "wander",
-              "label": "standing the noon watch on feet that have stood every watch before this one, listening harder than any of them",
+              "label": "standing the noon watch on the same feet, new reason — a stranger's taken the road's last bend and hasn't come the rest of the way yet, and neither has he",
               "radius": 3,
               "min_pause_s": 2,
               "max_pause_s": 12
