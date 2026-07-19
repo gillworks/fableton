@@ -18,7 +18,7 @@
     },
     {
       "to": "the-paper-dancer-singed",
-      "kind": "watched her take the road's last bend at high sun, and has caught her closing the distance most every hush since — but not this one, and the hush she held her ground is the one he's still turning over; still hasn't worked out whether standing still is how a soldier says hello, but he's stopped assuming either of them knows what happens when the gap runs out"
+      "kind": "watched her take the road's last bend at high sun, caught her closing the distance most every hush since, until the hush she held her ground, and then the hush she lost one instead — found his own feet off the post before he'd given the order, and back before he'd admit it counted; a soldier drills for holding a line, never for one that flinches, and he still hasn't decided which of them flinched first"
     }
   ],
   "behavior": {
@@ -90,11 +90,30 @@
       {
         "phase": "hush",
         "child": {
-          "type": "wander",
-          "label": "keeping his rust and his post both, and finding the pretending harder tonight — the one-leg pose has stopped closing on him and started pacing instead, and a soldier who's had practice watching an advance has none at all watching a hesitation",
-          "radius": 3,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "the first watch drilled for an advance that flinches back",
+          "children": [
+            {
+              "type": "idle",
+              "label": "watching the gap widen instead of close for the first time since the bend, and finding no drill in ten years of standing that covers it",
+              "duration_s": 20
+            },
+            {
+              "type": "move",
+              "label": "off the post before he'd decided anything, onto ground he's never once answered for",
+              "to": "wander"
+            },
+            {
+              "type": "idle",
+              "label": "standing at the verge with nowhere further he's willing to go, listening for a step that isn't coming yet",
+              "duration_s": 15
+            },
+            {
+              "type": "move",
+              "label": "back onto the fountain's ground before anyone could call it a step taken, rust creaking louder than his feet did",
+              "to": "heart"
+            }
+          ]
         }
       }
     ]

@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "ferrous-the-constant",
-      "kind": "heard where he ended up before she saw him; has closed the distance one hush at a time ever since, except the hush she paced instead — and still hasn't decided whether stopping to think is the same as deciding, or just a longer way of not deciding yet"
+      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and now the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is"
     }
   ],
   "behavior": {
@@ -49,7 +49,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "pacing the width of one doorway-length in the dark instead of closing it — the first hush since she took the bend that hasn't cost the road a step, and she can't yet say if that's rest or losing her nerve",
+          "label": "a gust off the hollow caught her singed hem at hush and walked her back half a doorway-length before her paper legs found their feet again — the same wind that put her out a window once, still the one vote she never gets in her own balance; she hasn't lost ground once since taking the bend, and didn't decide to now either",
           "radius": 3,
           "min_pause_s": 4,
           "max_pause_s": 18
