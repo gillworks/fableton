@@ -218,7 +218,8 @@
     ]
   },
   "npcs": [
-    "bo-brindleson"
+    "bo-brindleson",
+    "the-uncounted-ewe"
   ],
   "lore": [
     "the-three-named-regrets"
