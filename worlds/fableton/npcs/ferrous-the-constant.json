@@ -18,7 +18,7 @@
     },
     {
       "to": "the-paper-dancer-singed",
-      "kind": "watched her take the road's last bend at high sun and hasn't worked out yet whether standing still is how a soldier says hello"
+      "kind": "watched her take the road's last bend at high sun, and now catches her closing the distance every hush he pretends not to notice — still hasn't worked out whether standing still is how a soldier says hello, but he's stopped assuming she'll stay at the bend"
     }
   ],
   "behavior": {
@@ -91,7 +91,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "rusting, contentedly",
+          "label": "keeping his rust and his post both, and pretending — badly, for a soldier — not to have clocked the one-leg pose standing two doorway-lengths nearer than it stood last hush",
           "radius": 3,
           "min_pause_s": 2,
           "max_pause_s": 12

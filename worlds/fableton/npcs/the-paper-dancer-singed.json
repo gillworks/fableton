@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "ferrous-the-constant",
-      "kind": "heard where he ended up before she saw him; still deciding whether the rest of the road counts as an answer or just another door left ajar"
+      "kind": "heard where he ended up before she saw him; closes the distance one hush at a time now, and still hasn't decided whether the rest of the road counts as an answer or just another door left ajar"
     }
   ],
   "behavior": {
@@ -49,7 +49,7 @@
         "phase": "hush",
         "child": {
           "type": "idle",
-          "label": "holding the one-leg pose in the dark, three doorway-lengths closer to the fountain than she was this morning",
+          "label": "holding the one-leg pose in the dark, two doorway-lengths closer to the fountain than she stood last hush — close enough, this time, that a soldier's stillness looked like it was watching her back",
           "duration_s": 240
         }
       }
