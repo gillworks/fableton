@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "ferrous-the-constant",
-      "kind": "heard where he ended up before she saw him; closes the distance one hush at a time now, and still hasn't decided whether the rest of the road counts as an answer or just another door left ajar"
+      "kind": "heard where he ended up before she saw him; has closed the distance one hush at a time ever since, except the hush she paced instead — and still hasn't decided whether stopping to think is the same as deciding, or just a longer way of not deciding yet"
     }
   ],
   "behavior": {
@@ -48,9 +48,11 @@
       {
         "phase": "hush",
         "child": {
-          "type": "idle",
-          "label": "holding the one-leg pose in the dark, two doorway-lengths closer to the fountain than she stood last hush — close enough, this time, that a soldier's stillness looked like it was watching her back",
-          "duration_s": 240
+          "type": "wander",
+          "label": "pacing the width of one doorway-length in the dark instead of closing it — the first hush since she took the bend that hasn't cost the road a step, and she can't yet say if that's rest or losing her nerve",
+          "radius": 3,
+          "min_pause_s": 4,
+          "max_pause_s": 18
         }
       }
     ]
