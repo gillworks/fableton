@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "the-uncounted-ewe",
+  "identity": {
+    "name": "The Uncounted Ewe",
+    "kind": "ewe, arrived unannounced",
+    "story": "Came over the far hedge one hush and simply stayed, grazing at the loose edge of Regret, Remorse and Kevin's circle as if she'd always belonged to the count. Bo Brindleson has not named her. Naming her means finding a fourth regret worth the honor, or admitting the first three were never really regrets at all — and a shepherd who has spent years perfecting a headcount of three is in no hurry to find out which. She answers to nothing and comes when called anyway."
+  },
+  "lore": [],
+  "relationships": [
+    {
+      "to": "bo-brindleson",
+      "kind": "grazes in his circle uninvited and waits, patient as weather, on a name he can't quite commit to"
+    }
+  ],
+  "behavior": {
+    "type": "schedule",
+    "label": "the fourth who isn't counted",
+    "entries": [
+      {
+        "phase": "first light",
+        "child": {
+          "type": "wander",
+          "label": "grazing at the loose edge of the flock, close enough to pass for counted",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "high sun",
+        "child": {
+          "type": "wander",
+          "label": "trailing the flock's wander a half-length behind, uninvited and never turned away",
+          "radius": 6,
+          "min_pause_s": 2,
+          "max_pause_s": 12
+        }
+      },
+      {
+        "phase": "lamplighting",
+        "child": {
+          "type": "sequence",
+          "label": "queuing at the fold with no number to answer to",
+          "children": [
+            {
+              "type": "move",
+              "label": "drifting in with the flock at gate-time",
+              "to": "heart"
+            },
+            {
+              "type": "interact",
+              "label": "standing at the latch Bo hasn't decided is hers to be shut behind",
+              "with": "hedge",
+              "duration_s": 60
+            }
+          ]
+        }
+      },
+      {
+        "phase": "hush",
+        "child": {
+          "type": "idle",
+          "label": "sleeping just inside the gate, on a count that still stops at three",
+          "duration_s": 240
+        }
+      }
+    ]
+  }
+}
