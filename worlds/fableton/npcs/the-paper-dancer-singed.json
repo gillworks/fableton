@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "ferrous-the-constant",
-      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and then the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is; last night the watch didn't go back to its post at all, and she was the only one on the road who saw it stay; the night after that he said something out loud for the first time, and whatever it was, it wasn't the wind, and it wasn't a step — she's had years of practice not answering the road, and none at all for not answering a voice; last hush she gave her own stance an answer instead of the road one, turning to face the fountain for the first time since the day she was cut — a choice about her bearing, not a step toward him, and he'd already left the verge before he could have caught her making it"
+      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and then the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is; last night the watch didn't go back to its post at all, and she was the only one on the road who saw it stay; the night after that he said something out loud for the first time, and whatever it was, it wasn't the wind, and it wasn't a step — she's had years of practice not answering the road, and none at all for not answering a voice; last hush she gave her own stance an answer instead of the road one, turning to face the fountain for the first time since the day she was cut — a choice about her bearing, not a step toward him, and he'd already left the verge before he could have caught her making it; he found it anyway, come noon, and held there a beat too long for a man just checking the road — she didn't turn back to see it happen, she'd already done the only turning she meant to do"
     }
   ],
   "behavior": {
@@ -31,7 +31,7 @@
         "phase": "high sun",
         "child": {
           "type": "idle",
-          "label": "holding her pose at the road's last bend, in plain sight of a watch that finally has something to watch",
+          "label": "holding her pose at the road's last bend, facing the fountain instead of the road same as she has every hush since — and for the first time letting the noon watch find her already turned, rather than turning for him to catch",
           "duration_s": 90
         }
       },

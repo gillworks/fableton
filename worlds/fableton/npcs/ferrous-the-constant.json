@@ -18,7 +18,7 @@
     },
     {
       "to": "the-paper-dancer-singed",
-      "kind": "watched her take the road's last bend at high sun, caught her closing the distance most every hush since, until the hush she held her ground, and then the hush she lost one instead — found his own feet off the post before he'd given the order, and for the first time in ten years of standing it, didn't march them back; a soldier drills for holding a line, never for one that flinches, and now he's held the wrong one on purpose, at least once — and last night let the yearly question out past the fountain for the first time, not asked at his own reflection this time, said out toward the bend instead, where he already knows it carries; left the verge before he could hear anything come back, same as always, and so missed her turning to face the fountain instead of the road for the first time in her life — a soldier drills for standing his ground, never for staying long enough to see what a question moves"
+      "kind": "watched her take the road's last bend at high sun, caught her closing the distance most every hush since, until the hush she held her ground, and then the hush she lost one instead — found his own feet off the post before he'd given the order, and for the first time in ten years of standing it, didn't march them back; a soldier drills for holding a line, never for one that flinches, and now he's held the wrong one on purpose, at least once — and last night let the yearly question out past the fountain for the first time, not asked at his own reflection this time, said out toward the bend instead, where he already knows it carries; left the verge before he could hear anything come back, same as always, and so missed her turning to face the fountain instead of the road for the first time in her life; came back at noon the next day the way he's come back every noon for ten years and found the turn still held — she was facing him, not the road, and had been long enough that it wasn't news to anyone but him; a soldier drills for standing his ground, never for finding out he'd already been found"
     }
   ],
   "behavior": {
@@ -64,12 +64,12 @@
             },
             {
               "type": "idle",
-              "label": "watching the road the town finally left unlocked, waiting on the first stranger his watch has ever had real cause to expect",
+              "label": "arriving for the noon watch expecting the road, same as ten years of noons before it, and finding for the first time that the road isn't what's waiting — she's turned to meet him, not it, and he has no drill at all for being the thing a watch finds",
               "duration_s": 90
             },
             {
               "type": "wander",
-              "label": "standing the noon watch on the same feet, new reason — a stranger's taken the road's last bend and hasn't come the rest of the way yet, and neither has he",
+              "label": "standing the noon watch on the same feet, and no order left to give them — the road he's held for ten years isn't the one holding his attention now",
               "radius": 3,
               "min_pause_s": 2,
               "max_pause_s": 12
