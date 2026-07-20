@@ -17,6 +17,10 @@
       "kind": "counts his three sheep through the fence some mornings, out of old habit, and has never once acted on the count"
     },
     {
+      "to": "the-uncounted-ewe",
+      "kind": "started counting her through the fence too, same as the other three, before her own shepherd worked up the nerve to — nobody asked him to, and she isn't even his to count"
+    },
+    {
       "to": "the-unhurried-girl",
       "kind": "lets her walk his stretch of the path some lamplightings without ever once making her hurry"
     }
@@ -29,7 +33,7 @@
         "phase": "first light",
         "child": {
           "type": "sequence",
-          "label": "standing first watch at the fence line, out of habit",
+          "label": "standing first watch at the fence line, out of habit — a longer count than it used to be",
           "children": [
             {
               "type": "move",
@@ -40,6 +44,11 @@
               "type": "idle",
               "label": "counting three sheep through the gate, appetite retired but not gone, and letting them alone anyway",
               "duration_s": 45
+            },
+            {
+              "type": "idle",
+              "label": "counting a fourth grazing outside the gate that nobody's claimed yet, and letting her alone same as the other three — an old habit stretched to cover ground nobody asked him to watch",
+              "duration_s": 20
             }
           ]
         }
