@@ -18,7 +18,7 @@
     },
     {
       "to": "the-paper-dancer-singed",
-      "kind": "watched her take the road's last bend at high sun, caught her closing the distance most every hush since, until the hush she held her ground, and then the hush she lost one instead — found his own feet off the post before he'd given the order, and for the first time in ten years of standing it, didn't march them back; a soldier drills for holding a line, never for one that flinches, and now he's held the wrong one on purpose, at least once — and last night let the yearly question out past the fountain for the first time, not asked at his own reflection this time, said out toward the bend instead, where he already knows it carries; left the verge before he could hear anything come back, same as always, and so missed her turning to face the fountain instead of the road for the first time in her life; came back at noon the next day the way he's come back every noon for ten years and found the turn still held — she was facing him, not the road, and had been long enough that it wasn't news to anyone but him; a soldier drills for standing his ground, never for finding out he'd already been found"
+      "kind": "watched her take the road's last bend at high sun, caught her closing the distance most every hush since, until the hush she held her ground, and then the hush she lost one instead — found his own feet off the post before he'd given the order, and for the first time in ten years of standing it, didn't march them back; a soldier drills for holding a line, never for one that flinches, and now he's held the wrong one on purpose, at least once — and last night let the yearly question out past the fountain for the first time, not asked at his own reflection this time, said out toward the bend instead, where he already knows it carries; left the verge before he could hear anything come back, same as always, and so missed her turning to face the fountain instead of the road for the first time in her life; came back at noon the next day the way he's come back every noon for ten years and found the turn still held — she was facing him, not the road, and had been long enough that it wasn't news to anyone but him; a soldier drills for standing his ground, never for finding out he'd already been found — and now that he knows a question of his has once already found an answer he never waited for, he's stopped leaving before one might; a soldier drills to deliver a report and march off, never to stand there afterward on the chance of a reply"
     }
   ],
   "behavior": {
@@ -110,8 +110,13 @@
             },
             {
               "type": "idle",
-              "label": "letting the yearly question out past the fountain for the first time — not asked at his own reflection, not saved for Mirabel come evening, just said out toward the bend where he already knows it carries, and not staying still enough afterward to find out if anyone answers",
+              "label": "letting the yearly question out past the fountain again, same as last hush — except this time he already knows a question of his has found an answer once before, and doesn't leave the way he did then",
               "duration_s": 30
+            },
+            {
+              "type": "idle",
+              "label": "staying at the verge long after the question's gone quiet, waiting on an answer for the first time in ten years of only ever delivering one and marching off",
+              "duration_s": 60
             }
           ]
         }
