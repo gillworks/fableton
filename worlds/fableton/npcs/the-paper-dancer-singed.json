@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "ferrous-the-constant",
-      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and then the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is; last night the watch didn't go back to its post at all, and she was the only one on the road who saw it stay"
+      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and then the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is; last night the watch didn't go back to its post at all, and she was the only one on the road who saw it stay; the night after that he said something out loud for the first time, and whatever it was, it wasn't the wind, and it wasn't a step — she's had years of practice not answering the road, and none at all for not answering a voice"
     }
   ],
   "behavior": {
@@ -49,7 +49,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "a gust off the hollow caught her singed hem at hush and walked her back half a doorway-length before her paper legs found their feet again — the same wind that put her out a window once, still the one vote she never gets in her own balance; she hasn't lost ground once since taking the bend, and didn't decide to now either",
+          "label": "a voice came down the road at hush last night that wasn't the wind and wasn't a footstep — Ferrous the Constant, ten years disciplined in silence, said something out past the fountain for the first time — and she held her one-legged pose straight through it instead of pacing the gap the way she's paced every hush since the bend, which is its own way of not going anywhere",
           "radius": 3,
           "min_pause_s": 4,
           "max_pause_s": 18
