@@ -10,6 +10,7 @@
 //   node scripts/x-post.mjs --text "text-only is fine too"
 //   node scripts/x-post.mjs --selftest        # offline OAuth signature check
 //   node scripts/x-post.mjs --dry-run --text "..." --image /tmp/shot.png
+//   node scripts/x-post.mjs --verify          # live read-only creds pre-flight
 //
 // Flow (X API v2, OAuth 1.0a user context — required for media upload):
 //   1. POST <media upload>  (multipart) -> media id
@@ -18,14 +19,20 @@
 // Zero runtime dependencies: Node >= 20 built-ins only (global fetch,
 // FormData, Blob, node:crypto, node:fs). No `twitter-api-v2`, no `oauth`.
 //
-// Credentials (X developer app, OAuth 1.0a — bring-your-own-keys via env):
-//   X_API_KEY               consumer/API key
-//   X_API_SECRET            consumer/API secret
-//   X_ACCESS_TOKEN          user access token   (must have write scope)
-//   X_ACCESS_TOKEN_SECRET   user access token secret
+// Credentials (X developer app, bring-your-own-keys via env):
+//   X_API_KEY               consumer/API key           } OAuth 1.0a user
+//   X_API_SECRET            consumer/API secret         } context — REQUIRED
+//   X_ACCESS_TOKEN          user access token (write)   } for media upload
+//   X_ACCESS_TOKEN_SECRET   user access token secret    } and posting.
+//   X_BEARER_TOKEN          OAuth 2.0 app-only token — OPTIONAL. App-only auth
+//                           cannot upload media or post to a user timeline, so
+//                           it is NOT used for the write path; it is accepted,
+//                           reported by --dry-run, and reserved for read-only
+//                           app calls. Posting always uses the OAuth 1.0a set.
 // Optional endpoint overrides (if X moves the routes):
 //   X_MEDIA_UPLOAD_URL      default https://api.x.com/2/media/upload
 //   X_TWEETS_URL            default https://api.x.com/2/tweets
+//   X_USERS_ME_URL          default https://api.x.com/2/users/me
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -33,6 +40,7 @@ import path from 'node:path';
 
 const MEDIA_UPLOAD_URL = process.env.X_MEDIA_UPLOAD_URL || 'https://api.x.com/2/media/upload';
 const TWEETS_URL = process.env.X_TWEETS_URL || 'https://api.x.com/2/tweets';
+const USERS_ME_URL = process.env.X_USERS_ME_URL || 'https://api.x.com/2/users/me';
 
 // RFC 3986 percent-encoding. encodeURIComponent leaves !*'() alone but they
 // must be encoded; it leaves ~ alone, which is correct (unreserved).
@@ -92,6 +100,9 @@ function readCreds() {
     token: process.env.X_ACCESS_TOKEN,
     tokenSecret: process.env.X_ACCESS_TOKEN_SECRET,
   };
+  // OAuth 2.0 app-only token. Read for completeness / reporting; it cannot post
+  // media as the user, so it is never part of the required set (see header).
+  const bearerToken = process.env.X_BEARER_TOKEN;
   const missing = Object.entries({
     X_API_KEY: c.consumerKey,
     X_API_SECRET: c.consumerSecret,
@@ -100,7 +111,7 @@ function readCreds() {
   })
     .filter(([, v]) => !v)
     .map(([k]) => k);
-  return { creds: c, missing };
+  return { creds: c, bearerToken, missing };
 }
 
 const MIME = {
@@ -165,6 +176,20 @@ export async function createTweet({ text, mediaIds = [], creds, fetchImpl = fetc
   const id = json?.data?.id;
   if (!id) throw new Error(`/2/tweets: no tweet id in response: ${body}`);
   return id;
+}
+
+// Read-only credential pre-flight: confirm the OAuth 1.0a posting creds are
+// valid and carry user context, WITHOUT publishing anything. GET /2/users/me
+// is exactly the identity the write path posts as, so a 200 here means the
+// live post will authenticate. Returns { id, username }.
+export async function verifyCreds({ creds, fetchImpl = fetch }) {
+  const { header } = oauthHeader({ method: 'GET', url: USERS_ME_URL, ...creds });
+  const res = await fetchImpl(USERS_ME_URL, { headers: { Authorization: header } });
+  const body = await res.text();
+  if (!res.ok) throw new Error(`/2/users/me ${res.status}: ${body}`);
+  const data = JSON.parse(body)?.data;
+  if (!data?.id) throw new Error(`/2/users/me: no user in response: ${body}`);
+  return { id: String(data.id), username: data.username };
 }
 
 // take image path (optional) + text -> post. Returns { tweetId, mediaId }.
@@ -284,6 +309,29 @@ async function selftest() {
   ok = ok && okFlow;
   console.log('[3] mocked upload->tweet flow:', okFlow ? 'OK' : 'MISMATCH');
 
+  // (4) verifyCreds parses /2/users/me and signs the GET with OAuth 1.0a.
+  let okVerify = false;
+  const verifyCalls = [];
+  const verifyFetch = async (url, opts) => {
+    verifyCalls.push({ url, opts });
+    return {
+      ok: true,
+      status: 200,
+      text: async () => JSON.stringify({ data: { id: '42', username: 'fabletonworld' } }),
+    };
+  };
+  const who = await verifyCreds({
+    creds: { consumerKey: 'k', consumerSecret: 's', token: 't', tokenSecret: 'ts' },
+    fetchImpl: verifyFetch,
+  });
+  okVerify =
+    who.id === '42' &&
+    who.username === 'fabletonworld' &&
+    verifyCalls[0]?.url === USERS_ME_URL &&
+    String(verifyCalls[0]?.opts.headers.Authorization).startsWith('OAuth ');
+  ok = ok && okVerify;
+  console.log('[4] mocked verifyCreds (/2/users/me):', okVerify ? 'OK' : 'MISMATCH');
+
   console.log('    (X example signature computed as:', signature + ')');
   console.log('    (auth header:', header.slice(0, 48) + '...)');
   if (ok) {
@@ -299,6 +347,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i++) {
     const t = argv[i];
     if (t === '--selftest') a.selftest = true;
+    else if (t === '--verify') a.verify = true;
     else if (t === '--dry-run') a.dryRun = true;
     else if (t === '--text') a.text = argv[++i];
     else if (t === '--image') a.image = argv[++i];
@@ -311,6 +360,24 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.selftest) process.exit(await selftest());
 
+  // Live read-only pre-flight — no text/image required. Confirms the posting
+  // creds authenticate before anything is published.
+  if (args.verify) {
+    const { creds, missing } = readCreds();
+    if (missing.length) {
+      console.error(`error: missing X API credentials: ${missing.join(', ')}.`);
+      process.exit(3);
+    }
+    try {
+      const who = await verifyCreds({ creds });
+      console.log(JSON.stringify({ ok: true, verifiedAs: who.username, userId: who.id }));
+      process.exit(0);
+    } catch (err) {
+      console.error('verify failed:', err.message);
+      process.exit(1);
+    }
+  }
+
   if (!args.text) {
     console.error('error: --text is required (use --selftest for the offline check)');
     process.exit(2);
@@ -320,7 +387,7 @@ async function main() {
     process.exit(2);
   }
 
-  const { creds, missing } = readCreds();
+  const { creds, bearerToken, missing } = readCreds();
 
   if (args.dryRun) {
     console.log('DRY RUN — no network calls will be made.');
@@ -329,6 +396,7 @@ async function main() {
     console.log('  media upload url:', MEDIA_UPLOAD_URL);
     console.log('  tweets url      :', TWEETS_URL);
     console.log('  credentials     :', missing.length ? `MISSING (${missing.join(', ')})` : 'present');
+    console.log('  bearer token    :', bearerToken ? 'present (optional; not used for posting)' : 'absent (optional)');
     if (!missing.length) {
       const { header } = oauthHeader({ method: 'POST', url: TWEETS_URL, ...creds });
       console.log('  sample /2/tweets auth header builds OK:', header.slice(0, 24) + '...');
