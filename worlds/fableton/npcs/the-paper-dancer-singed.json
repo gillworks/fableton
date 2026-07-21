@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "ferrous-the-constant",
-      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and then the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is; last night the watch didn't go back to its post at all, and she was the only one on the road who saw it stay; the night after that he said something out loud for the first time, and whatever it was, it wasn't the wind, and it wasn't a step — she's had years of practice not answering the road, and none at all for not answering a voice; last hush she gave her own stance an answer instead of the road one, turning to face the fountain for the first time since the day she was cut — a choice about her bearing, not a step toward him, and he'd already left the verge before he could have caught her making it; he found it anyway, come noon, and held there a beat too long for a man just checking the road — she didn't turn back to see it happen, she'd already done the only turning she meant to do — and the next hush the quiet after his question didn't empty out the way it always had, the verge holding a beat longer than his voice ever lingers; she has years of practice being walked past and none at all for being waited on; this first light, alone, before his watch even started, she put one foot flat on the road she'd only ever measured from its edge before — the one road out of every road she's walked that she never let herself finish — and stopped there, deciding nothing, telling no one; he doesn't know it happened, same as she didn't know he'd stayed until the noon after; she held the second foot down anyway, past what a one-legged cut was ever scissored to carry, until the ankle-fold went paper-thin from the argument and she let it go before the strain could finish deciding for her — back on her one leg before any watch began, the doing of it hers alone same as always, only the dust kept what she didn't"
+      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and then the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is; last night the watch didn't go back to its post at all, and she was the only one on the road who saw it stay; the night after that he said something out loud for the first time, and whatever it was, it wasn't the wind, and it wasn't a step — she's had years of practice not answering the road, and none at all for not answering a voice; last hush she gave her own stance an answer instead of the road one, turning to face the fountain for the first time since the day she was cut — a choice about her bearing, not a step toward him, and he'd already left the verge before he could have caught her making it; he found it anyway, come noon, and held there a beat too long for a man just checking the road — she didn't turn back to see it happen, she'd already done the only turning she meant to do — and the next hush the quiet after his question didn't empty out the way it always had, the verge holding a beat longer than his voice ever lingers; she has years of practice being walked past and none at all for being waited on; this first light, alone, before his watch even started, she put one foot flat on the road she'd only ever measured from its edge before — the one road out of every road she's walked that she never let herself finish — and stopped there, deciding nothing, telling no one; he doesn't know it happened, same as she didn't know he'd stayed until the noon after; she held the second foot down anyway, past what a one-legged cut was ever scissored to carry, until the ankle-fold went paper-thin from the argument and she let it go before the strain could finish deciding for her — back on her one leg before any watch began, the doing of it hers alone same as always, only the dust kept what she didn't; today she watched him keep it too — a whole noon spent standing between her print and the sun, unasked — and felt something move at the ankle-fold that wasn't the wind and wasn't a step either, stilled before it could decide what it was; this time the not-knowing runs the other way, and she's the only one of the two of them who knows it happened at all"
     }
   ],
   "behavior": {
@@ -53,9 +53,25 @@
       {
         "phase": "high sun",
         "child": {
-          "type": "idle",
-          "label": "holding her pose at the road's last bend, facing the fountain instead of the road same as she has every hush since — and for the first time letting the noon watch find her already turned, rather than turning for him to catch",
-          "duration_s": 90
+          "type": "sequence",
+          "label": "holding her turn, and losing it for exactly one heartbeat",
+          "children": [
+            {
+              "type": "idle",
+              "label": "holding her pose at the road's last bend, facing the fountain instead of the road same as she has every hush since — and for the first time letting the noon watch find her already turned, rather than turning for him to catch",
+              "duration_s": 60
+            },
+            {
+              "type": "idle",
+              "label": "noticing, from a stance that was never built to look sideways, that his noon patrol has stopped moving too — planted instead over the one stretch of ground her own second foot marked, guarding it the way she's never once seen him guard the fountain",
+              "duration_s": 20
+            },
+            {
+              "type": "idle",
+              "label": "a tremor at the ankle-fold, gone before it can be called anything — the first involuntary flex her stance has made since the day she was cut, caught and stilled by no one but herself",
+              "duration_s": 10
+            }
+          ]
         }
       },
       {
