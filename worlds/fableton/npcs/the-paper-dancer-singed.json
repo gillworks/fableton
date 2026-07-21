@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "ferrous-the-constant",
-      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and then the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is; last night the watch didn't go back to its post at all, and she was the only one on the road who saw it stay; the night after that he said something out loud for the first time, and whatever it was, it wasn't the wind, and it wasn't a step — she's had years of practice not answering the road, and none at all for not answering a voice; last hush she gave her own stance an answer instead of the road one, turning to face the fountain for the first time since the day she was cut — a choice about her bearing, not a step toward him, and he'd already left the verge before he could have caught her making it; he found it anyway, come noon, and held there a beat too long for a man just checking the road — she didn't turn back to see it happen, she'd already done the only turning she meant to do — and the next hush the quiet after his question didn't empty out the way it always had, the verge holding a beat longer than his voice ever lingers; she has years of practice being walked past and none at all for being waited on"
+      "kind": "heard where he ended up before she saw him; closed the distance one hush at a time until the hush she paced instead, and then the hush the wind took a step back for her — she still hasn't decided whether either one was her choosing, only that the road keeps coming up shorter and longer by turns, same as she is; last night the watch didn't go back to its post at all, and she was the only one on the road who saw it stay; the night after that he said something out loud for the first time, and whatever it was, it wasn't the wind, and it wasn't a step — she's had years of practice not answering the road, and none at all for not answering a voice; last hush she gave her own stance an answer instead of the road one, turning to face the fountain for the first time since the day she was cut — a choice about her bearing, not a step toward him, and he'd already left the verge before he could have caught her making it; he found it anyway, come noon, and held there a beat too long for a man just checking the road — she didn't turn back to see it happen, she'd already done the only turning she meant to do — and the next hush the quiet after his question didn't empty out the way it always had, the verge holding a beat longer than his voice ever lingers; she has years of practice being walked past and none at all for being waited on; this first light, alone, before his watch even started, she put one foot flat on the road she'd only ever measured from its edge before — the one road out of every road she's walked that she never let herself finish — and stopped there, deciding nothing, telling no one; he doesn't know it happened, same as she didn't know he'd stayed until the noon after"
     }
   ],
   "behavior": {
@@ -20,11 +20,29 @@
       {
         "phase": "first light",
         "child": {
-          "type": "wander",
-          "label": "measuring the road's last stretch in doorway-lengths, one leg down at a time",
-          "radius": 3,
-          "min_pause_s": 3,
-          "max_pause_s": 14
+          "type": "sequence",
+          "label": "a private first light, one bend of road, nobody watching",
+          "children": [
+            {
+              "type": "wander",
+              "label": "measuring the road's last stretch in doorway-lengths, one leg down at a time",
+              "radius": 3,
+              "min_pause_s": 3,
+              "max_pause_s": 14
+            },
+            {
+              "type": "wander",
+              "label": "setting one paper foot flat on the road itself, the one stretch of the one road she never let herself finish walking — no gust to blame this time, no watch up yet to see it, and going no further",
+              "radius": 1,
+              "min_pause_s": 2,
+              "max_pause_s": 6
+            },
+            {
+              "type": "idle",
+              "label": "holding still on ground she's never once stood on, working out whether to call it a step or an accident before anyone can ask her",
+              "duration_s": 40
+            }
+          ]
         }
       },
       {
