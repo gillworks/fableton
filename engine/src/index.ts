@@ -85,6 +85,18 @@ export {
   type RumorsDoc,
 } from './schemas/rumors.js';
 export {
+  LedgerLineSchema,
+  PledgeSchema,
+  WishLedgerDocSchema,
+  WishSchema,
+  WishSincerity,
+  WishStatus,
+  type LedgerLine,
+  type Pledge,
+  type Wish,
+  type WishLedgerDoc,
+} from './schemas/wishLedger.js';
+export {
   DayPrerequisiteSchema,
   ExpansionEntrySchema,
   ExpansionPlanSchema,

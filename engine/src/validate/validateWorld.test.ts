@@ -225,6 +225,42 @@ describe('validateWorld', () => {
     expect(schema).toHaveLength(1);
     expect(schema[0]).toMatchObject({ file: 'rumors.json' });
   });
+
+  it('passes a valid wish-ledger whose keeper and pledgers are residents (issue #172)', () => {
+    const world = sampleWorld();
+    world.wishLedger = { file: 'wish-ledger.json', doc: loadJson('wish-ledger.json') };
+    expect(validateWorld(charter, world)).toEqual([]);
+  });
+
+  it('flags a wish-ledger keeper who is not a resident, naming keeper', () => {
+    const world = sampleWorld();
+    world.wishLedger = { file: 'wish-ledger.json', doc: loadJson('wish-ledger.json') };
+    (world.wishLedger.doc as AnyDoc).keeper = 'a-stranger';
+    const violations = validateWorld(charter, world);
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toMatchObject({ rule: 'asset-refs-resolve', file: 'wish-ledger.json' });
+    expect(violations[0]!.message).toContain('a-stranger');
+  });
+
+  it('flags a pledge made by a non-resident, naming pledge and NPC', () => {
+    const world = sampleWorld();
+    world.wishLedger = { file: 'wish-ledger.json', doc: loadJson('wish-ledger.json') };
+    (world.wishLedger.doc as AnyDoc).wishes[0].pledges[0].by = 'a-stranger';
+    const violations = validateWorld(charter, world);
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toMatchObject({ rule: 'asset-refs-resolve', file: 'wish-ledger.json' });
+    expect(violations[0]!.message).toContain('a-stranger');
+    expect(violations[0]!.message).toContain('tams-match');
+  });
+
+  it('flags a schema-invalid wish-ledger against its file', () => {
+    const world = sampleWorld();
+    world.wishLedger = { file: 'wish-ledger.json', doc: loadJson('wish-ledger.json') };
+    (world.wishLedger.doc as AnyDoc).wishes[2].status = 'standing'; // insincere ⇒ must be returned
+    const schema = validateWorld(charter, world).filter((v) => v.rule === 'schema-valid');
+    expect(schema).toHaveLength(1);
+    expect(schema[0]).toMatchObject({ file: 'wish-ledger.json' });
+  });
 });
 
 // A resident who can work a site, placed in the square (idle behaviour: no
