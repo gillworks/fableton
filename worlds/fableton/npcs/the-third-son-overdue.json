@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "morrow",
-      "kind": "sits for her reading every high sun and hears the same honest 'not yet' — closer, he's decided, to 'not never' each time he asks"
+      "kind": "sits for her reading every high sun and hears the same honest 'not yet' — closer, he's decided, to 'not never' each time he asks — until the high sun she went quiet over the leaves before the words came instead of after them, the first pause he's ever gotten in place of an answer"
     }
   ],
   "behavior": {
@@ -43,6 +43,11 @@
               "label": "sitting for Morrow's reading, asking if yesterday finally held it",
               "with": "morrow",
               "duration_s": 60
+            },
+            {
+              "type": "idle",
+              "label": "staying seated a beat longer than the answer needed — Morrow went quiet over the leaves before she spoke today, the first pause he's drawn instead of a 'not yet', and he hasn't worked out yet what a pause is owed in reply",
+              "duration_s": 20
             }
           ]
         }
