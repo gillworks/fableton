@@ -14,7 +14,7 @@
     },
     {
       "to": "the-third-son-overdue",
-      "kind": "reads him the same honest 'not yet' every high sun and has stopped charging him for it, since a fortune this overdue is nobody's living — except the high sun the leaves gave her a beat of silence to spend before the words came, the first hesitation she's owed him in all these readings, and she handed it over plain instead of dressing it up as more than it was; that same sitting he paid for the pause anyway, breaking a crumb off luck he's kept whole for years and setting it on her stool before she could tell him not to — she has given away plenty of fortunes for free and never once been handed someone else's luck to keep, and hasn't worked out yet what that makes them"
+      "kind": "reads him the same honest 'not yet' every high sun and has stopped charging him for it, since a fortune this overdue is nobody's living — except the high sun the leaves gave her a beat of silence to spend before the words came, the first hesitation she's owed him in all these readings, and she handed it over plain instead of dressing it up as more than it was; that same sitting he paid for the pause anyway, breaking a crumb off luck he's kept whole for years and setting it on her stool before she could tell him not to — she has given away plenty of fortunes for free and never once been handed someone else's luck to keep, and hasn't worked out yet what that makes them; she has kept the crumb since, out of the same habit that turns a leaf before a telling, and found nothing behind it worth telling — no yesterday sits behind a thing that hasn't been spent yet, and a sight built whole on certainty about what's already happened has never once come back empty before this"
     }
   ],
   "behavior": {
@@ -52,6 +52,16 @@
               "type": "idle",
               "label": "finding a crumb of someone else's luck left on her stool after he'd gone — the first payment she's ever been handed in fortune instead of coin, and no yesterday on record for what to do with it",
               "duration_s": 15
+            },
+            {
+              "type": "idle",
+              "label": "turning the crumb over in her hands the way she turns a leaf before a telling, the same habit reaching for the same certainty",
+              "duration_s": 15
+            },
+            {
+              "type": "idle",
+              "label": "finding nothing behind it to tell — no yesterday sits behind a thing that hasn't been spent yet, and a sight built whole on certainty about what's already happened has never once come back empty before this",
+              "duration_s": 20
             }
           ]
         }
