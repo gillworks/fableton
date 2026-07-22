@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "morrow",
-      "kind": "sits for her reading every high sun and hears the same honest 'not yet' — closer, he's decided, to 'not never' each time he asks — until the high sun she went quiet over the leaves before the words came instead of after them, the first pause he's ever gotten in place of an answer"
+      "kind": "sits for her reading every high sun and hears the same honest 'not yet' — closer, he's decided, to 'not never' each time he asks — until the high sun she went quiet over the leaves before the words came instead of after them, the first pause he's ever gotten in place of an answer; that same sitting he answered it the only way he had one to give, breaking the first corner off the one thing he's carried whole since he left home and leaving it on her stool without a word — either paying a debt or starting one, and he hasn't worked out which"
     }
   ],
   "behavior": {
@@ -48,6 +48,12 @@
               "type": "idle",
               "label": "staying seated a beat longer than the answer needed — Morrow went quiet over the leaves before she spoke today, the first pause he's drawn instead of a 'not yet', and he hasn't worked out yet what a pause is owed in reply",
               "duration_s": 20
+            },
+            {
+              "type": "interact",
+              "label": "breaking the first corner off the crust he's carried unspent since he left home and setting it on her stool before he can talk himself out of it — a family's whole store of luck, paid out one crumb at a time now, same as any other debt owed for a pause",
+              "with": "morrow",
+              "duration_s": 15
             }
           ]
         }
@@ -76,7 +82,7 @@
         "phase": "hush",
         "child": {
           "type": "idle",
-          "label": "keeping the crust of blessed bread that hasn't gone stale a day since he left home",
+          "label": "keeping what's left of the crust of blessed bread that hasn't gone stale a day since he left home, one corner lighter now than it's ever been",
           "duration_s": 240
         }
       }

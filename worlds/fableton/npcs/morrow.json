@@ -14,7 +14,7 @@
     },
     {
       "to": "the-third-son-overdue",
-      "kind": "reads him the same honest 'not yet' every high sun and has stopped charging him for it, since a fortune this overdue is nobody's living — except the high sun the leaves gave her a beat of silence to spend before the words came, the first hesitation she's owed him in all these readings, and she handed it over plain instead of dressing it up as more than it was"
+      "kind": "reads him the same honest 'not yet' every high sun and has stopped charging him for it, since a fortune this overdue is nobody's living — except the high sun the leaves gave her a beat of silence to spend before the words came, the first hesitation she's owed him in all these readings, and she handed it over plain instead of dressing it up as more than it was; that same sitting he paid for the pause anyway, breaking a crumb off luck he's kept whole for years and setting it on her stool before she could tell him not to — she has given away plenty of fortunes for free and never once been handed someone else's luck to keep, and hasn't worked out yet what that makes them"
     }
   ],
   "behavior": {
@@ -47,6 +47,11 @@
               "label": "telling yesterday's fortune to whoever sits down, already certain how it goes",
               "with": "stall-stool",
               "duration_s": 60
+            },
+            {
+              "type": "idle",
+              "label": "finding a crumb of someone else's luck left on her stool after he'd gone — the first payment she's ever been handed in fortune instead of coin, and no yesterday on record for what to do with it",
+              "duration_s": 15
             }
           ]
         }
