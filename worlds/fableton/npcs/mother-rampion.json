@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "the-princess-who-kept-the-tower",
-      "kind": "grew the rampion that started the whole bargain, and leaves the tower windowbox be every high sun without a word — the one thing between them neither has finished saying"
+      "kind": "grew the rampion that started the whole bargain, and leaves the tower windowbox be every high sun without a word — the one thing between them neither has finished saying; this lamplighting the cutting sat in her hand a beat too long, the Princess reaching past it instead, straight for the one row that's never once been harvested — and what she took never made it home, only got set down on the wall between them, in the open, the first thing off that row anyone's touched on purpose since it was let go to seed. Mother Rampion didn't reach to stop it landing there, and hasn't moved it since"
     },
     {
       "to": "the-kinder-sister",
@@ -64,9 +64,14 @@
             },
             {
               "type": "interact",
-              "label": "handing the cutting to the tower princess herself this year, since she's finally there to take it — still no word for what it's meant to say",
+              "label": "holding the fresh cutting out a beat too long, watching the Princess's hand go past it for the seeded row instead — still no word for what any of it's meant to say",
               "with": "the-princess-who-kept-the-tower",
               "duration_s": 60
+            },
+            {
+              "type": "idle",
+              "label": "finding a single seed-head set on the garden wall afterward, off the one row she's never let a basket near — not reaching to move it, not reaching to keep it either",
+              "duration_s": 25
             }
           ]
         }

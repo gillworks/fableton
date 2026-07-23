@@ -18,7 +18,7 @@
     },
     {
       "to": "mother-rampion",
-      "kind": "grew the greens that put her up the tower in the first place, and has never once turned the windowbox trade into the apology neither of them's ready to hear"
+      "kind": "grew the greens that put her up the tower in the first place, and has never once turned the windowbox trade into the apology neither of them's ready to hear; this lamplighting she let the offered cutting wait and reached past it instead, for the one row by the wall that's never once come up in anyone's basket — and didn't carry home what she took, only set it on the wall itself, in the open, the first thing off that row anyone's touched since Mother Rampion let it go to seed on purpose. She still hasn't worked out whether leaving it there was the apology, or just the first honest thing she's done at that gate"
     }
   ],
   "behavior": {
@@ -68,9 +68,14 @@
             },
             {
               "type": "interact",
-              "label": "taking the cutting straight from Mother Rampion's hand this year, instead of finding it already left on the step — neither says what it's for, same as ever, but no one has to guess who left it anymore",
+              "label": "letting the offered cutting wait in Mother Rampion's hand and reaching past it instead, for the one row by the wall that's never once come up in anyone's basket",
               "with": "mother-rampion",
               "duration_s": 45
+            },
+            {
+              "type": "idle",
+              "label": "setting what she took on the wall itself rather than carrying it home — the first thing off that row anyone's touched on purpose since it was let go to seed",
+              "duration_s": 20
             },
             {
               "type": "interact",
