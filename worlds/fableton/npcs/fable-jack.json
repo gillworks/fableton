@@ -14,7 +14,7 @@
     },
     {
       "to": "bramble-rose",
-      "kind": "they disagree about what counts as knee height"
+      "kind": "they disagree about what counts as knee height, three seasons running over the same stubborn half-inch — until this morning's notch came back flush with the law for the first time either of them can remember, and three seasons of arguing never once told him what an inspection is for once it stops coming back wrong"
     }
   ],
   "behavior": {
@@ -39,9 +39,14 @@
             },
             {
               "type": "interact",
-              "label": "measuring the morning's growth against the notch he and Bramble Rose have argued over for three seasons, still the same stubborn half-inch",
+              "label": "measuring the morning's growth against the notch he and Bramble Rose have argued over for three seasons — and finding it flush with his own knee-height law for the first time either of them can remember, no half-inch left to dispute",
               "with": "hedge",
               "duration_s": 30
+            },
+            {
+              "type": "idle",
+              "label": "chalking today's true reading into the ledger same as any other, and finding the chalk doesn't want to move — three seasons of arguing the half-inch were never really about the half-inch, and he's got nothing left to measure against her with",
+              "duration_s": 20
             }
           ]
         }
