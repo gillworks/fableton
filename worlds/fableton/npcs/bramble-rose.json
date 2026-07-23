@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "fable-jack",
-      "kind": "keeps his license number written on a thorn"
+      "kind": "keeps his license number written on a thorn, one thorn over from the notch the two of them have argued three seasons running — and felt the argument go quiet under her own hands this morning, the hedge grown true to his law without her once meaning it to, no notion yet what the two of them measure against each other once the half-inch stops giving them a reason to"
     }
   ],
   "behavior": {
@@ -51,6 +51,11 @@
               "type": "idle",
               "label": "training roses along a fence line that's finally there to train",
               "duration_s": 45
+            },
+            {
+              "type": "idle",
+              "label": "noticing, for the first time in three seasons, that the hedge isn't giving Fable Jack anything to measure against her — trained it true herself, and hasn't worked out yet whether that counts as losing the argument or ending it",
+              "duration_s": 20
             }
           ]
         }
