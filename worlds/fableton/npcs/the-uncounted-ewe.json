@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "bo-brindleson",
-      "kind": "grazes in his circle uninvited and waits, patient as weather, on a name he can't quite commit to"
+      "kind": "grazes in his circle uninvited and waits, patient as weather, on a name he got halfway to giving her at the latch last hush before he swallowed the rest of it — waiting the same as ever, only closer now"
     },
     {
       "to": "the-reformed-wolf",
@@ -45,7 +45,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "queuing at the fold with no number to answer to",
+          "label": "queuing at the fold with no number to answer to — nearly one, tonight",
           "children": [
             {
               "type": "move",
@@ -57,6 +57,17 @@
               "label": "standing at the latch Bo hasn't decided is hers to be shut behind",
               "with": "hedge",
               "duration_s": 60
+            },
+            {
+              "type": "interact",
+              "label": "catching the front half of a name meant for her, pitched low at the latch, and holding still so the rest of it has room to come",
+              "with": "bo-brindleson",
+              "duration_s": 30
+            },
+            {
+              "type": "idle",
+              "label": "hearing the name get swallowed before the latch clicks shut, and settling for closer instead of caught",
+              "duration_s": 20
             }
           ]
         }
@@ -65,7 +76,7 @@
         "phase": "hush",
         "child": {
           "type": "idle",
-          "label": "sleeping just inside the gate, on a count that still stops at three",
+          "label": "sleeping just inside the gate, on a count that still stops at three — one half-name closer than it did last hush",
           "duration_s": 240
         }
       }
