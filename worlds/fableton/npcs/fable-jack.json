@@ -14,7 +14,7 @@
     },
     {
       "to": "bramble-rose",
-      "kind": "they disagree about what counts as knee height, three seasons running over the same stubborn half-inch — until this morning's notch came back flush with the law for the first time either of them can remember, and three seasons of arguing never once told him what an inspection is for once it stops coming back wrong"
+      "kind": "they disagree about what counts as knee height, three seasons running over the same stubborn half-inch — until this morning's notch came back flush with the law for the first time either of them can remember, and three seasons of arguing never once told him what an inspection is for once it stops coming back wrong; the next morning it came back a hair over his law again, in a cut too deliberate for drift, and he chalked it down as 'within margin' instead of what a trained hand plainly meant — the first reading he's ever fudged on purpose, and the only one he intends to keep fudging"
     }
   ],
   "behavior": {
@@ -39,13 +39,13 @@
             },
             {
               "type": "interact",
-              "label": "measuring the morning's growth against the notch he and Bramble Rose have argued over for three seasons — and finding it flush with his own knee-height law for the first time either of them can remember, no half-inch left to dispute",
+              "label": "measuring the morning's growth against the notch he and Bramble Rose argued over for three seasons, and finding it a hair over his own law again — not the old half-inch drifting back on its own, but one cane trained long in a hand he'd know blind, left exactly where an argument used to live",
               "with": "hedge",
               "duration_s": 30
             },
             {
               "type": "idle",
-              "label": "chalking today's true reading into the ledger same as any other, and finding the chalk doesn't want to move — three seasons of arguing the half-inch were never really about the half-inch, and he's got nothing left to measure against her with",
+              "label": "chalking it down as 'within margin' instead of what a trained hand plainly meant — the first reading he's ever fudged on purpose, and the only one he means to keep fudging",
               "duration_s": 20
             }
           ]
