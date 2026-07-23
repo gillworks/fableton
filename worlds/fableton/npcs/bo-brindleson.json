@@ -18,7 +18,7 @@
     },
     {
       "to": "the-uncounted-ewe",
-      "kind": "won't count her yet — a fourth regret is a debt he's not ready to name, so for now she's just weather that follows the flock"
+      "kind": "tried a name on her for the first time last hush, right at the latch, one of the three regrets' rougher cousins — and swallowed the back half of it before the gate finished clicking, so for now she's still just weather that follows the flock, only closer"
     }
   ],
   "behavior": {
@@ -49,7 +49,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "the wordless wage, paid on time",
+          "label": "the wordless wage, and one word that almost wasn't",
           "children": [
             {
               "type": "move",
@@ -61,6 +61,17 @@
               "label": "latching the fold gate Brindle already swung shut behind her, paid in silence, same as ever",
               "with": "hedge",
               "duration_s": 60
+            },
+            {
+              "type": "interact",
+              "label": "trying a name on her at the latch, for the first time out loud — one of the three regrets' rougher cousins, pitched too low for Brindle to have to pretend she didn't hear it",
+              "with": "the-uncounted-ewe",
+              "duration_s": 30
+            },
+            {
+              "type": "idle",
+              "label": "swallowing the back half of the name before the latch finishes its click, and calling the count three again, same as he can still just about manage",
+              "duration_s": 20
             }
           ]
         }
@@ -69,7 +80,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "wondering what regret would fit a fourth, now that one's already grazing in the circle",
+          "label": "replaying the half-name he gave her at the latch, and still not finding a regret it fits",
           "radius": 7,
           "min_pause_s": 2,
           "max_pause_s": 12
