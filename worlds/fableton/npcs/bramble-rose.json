@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "fable-jack",
-      "kind": "keeps his license number written on a thorn, one thorn over from the notch the two of them have argued three seasons running — and felt the argument go quiet under her own hands this morning, the hedge grown true to his law without her once meaning it to, no notion yet what the two of them measure against each other once the half-inch stops giving them a reason to"
+      "kind": "keeps his license number written on a thorn, one thorn over from the notch the two of them have argued three seasons running — and felt the argument go quiet under her own hands this morning, the hedge grown true to his law without her once meaning it to, no notion yet what the two of them measure against each other once the half-inch stops giving them a reason to; so last hush, disarming the brambles same as any other, she left one cane a hand's width past her own law before she could talk herself out of it — the first thorn she's ever grown wrong on purpose, and the only one she's never once written up"
     }
   ],
   "behavior": {
@@ -63,11 +63,26 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "disarming the evening brambles",
-          "radius": 6,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "disarming the evening brambles, all but one",
+          "children": [
+            {
+              "type": "move",
+              "label": "crossing back to the arch at lamplighting, same as any other trim",
+              "to": "hedge-arbor-plot"
+            },
+            {
+              "type": "interact",
+              "label": "disarming the evening brambles, cane by cane, same as any other hush",
+              "with": "hedge",
+              "duration_s": 45
+            },
+            {
+              "type": "idle",
+              "label": "leaving the last cane a hand's width past her own law before she can talk herself out of it — the first thorn she's ever grown wrong on purpose, and the only one she's never once written up",
+              "duration_s": 20
+            }
+          ]
         }
       },
       {
