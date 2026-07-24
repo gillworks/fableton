@@ -10,11 +10,11 @@
   "relationships": [
     {
       "to": "ferrous-the-constant",
-      "kind": "tells him yes, phrased gently, and means it"
+      "kind": "told him yes every year, phrased gently, and meant it — until the year he stopped asking, which she noticed the way a mirror notices anything: at once, and without being consulted about it"
     },
     {
       "to": "needle",
-      "kind": "they fact-check each other's compliments"
+      "kind": "they fact-check each other's compliments — and once, an opinion Mirabel gave without anyone holding a hem up first, which Needle is still deciding how to file"
     },
     {
       "to": "the-emperor-who-checks-twice",
@@ -51,6 +51,12 @@
               "label": "confirming the hem is honest, and the compliment too",
               "with": "needle",
               "duration_s": 90
+            },
+            {
+              "type": "interact",
+              "label": "telling Needle, unasked, that a soldier's yearly question stopped coming this year — the first opinion she's ever given that nobody held a hem up for first",
+              "with": "needle",
+              "duration_s": 45
             }
           ]
         }
