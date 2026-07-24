@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "the-lesser-piper",
-      "kind": "pays down a fee that was never his cousin's to begin with, one short coin at a time"
+      "kind": "pays down a fee that was never his cousin's to begin with, one short coin at a time; found the original slip folded under the millstone's foot this lamplighting, the number written in a hand that wasn't his own and smaller than every coin he's carried to the stall since he settled here — folded it back under exactly where it was and decided, again, to carry the difference anyway, said to no one"
     }
   ],
   "behavior": {
@@ -50,11 +50,30 @@
       {
         "phase": "lamplighting",
         "child": {
-          "type": "wander",
-          "label": "sweeping the mill floor, keeping better count than he ever did the first time",
-          "radius": 5,
-          "min_pause_s": 2,
-          "max_pause_s": 12
+          "type": "sequence",
+          "label": "sweeping up a debt that was never quite counted right",
+          "children": [
+            {
+              "type": "idle",
+              "label": "sweeping the mill floor same as every lamplighting, keeping better count than he ever did the first time",
+              "duration_s": 20
+            },
+            {
+              "type": "idle",
+              "label": "the broom catching a fold of paper wedged under the millstone's foot — the original fee slip from the town two tales over, kept without ever meaning to",
+              "duration_s": 15
+            },
+            {
+              "type": "idle",
+              "label": "reading a number in a hand that was never his own, plainer than he's let himself read it in years, and finding it smaller than every coin he's carried to the piper's stall since he settled here",
+              "duration_s": 25
+            },
+            {
+              "type": "idle",
+              "label": "folding the slip back under the millstone's foot exactly where it was, and deciding, again, to carry the difference anyway — the piper never once asked him to",
+              "duration_s": 20
+            }
+          ]
         }
       },
       {
