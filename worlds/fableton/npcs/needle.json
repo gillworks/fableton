@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "mirabel-glass",
-      "kind": "professional courtesy between honest tradespeople"
+      "kind": "professional courtesy between honest tradespeople — though Mirabel's started volunteering opinions on more than hems lately, and Needle hasn't decided yet whether that's a service or a scope creep"
     },
     {
       "to": "master-thumbling",
@@ -61,6 +61,11 @@
               "label": "asking Mirabel, out loud, whether the hem lies",
               "with": "mirabel-glass",
               "duration_s": 90
+            },
+            {
+              "type": "idle",
+              "label": "getting an honest opinion back she never asked for, about a soldier and a question that stopped coming — filing it next to the hem, since Mirabel's never once been wrong about either",
+              "duration_s": 20
             }
           ]
         }
