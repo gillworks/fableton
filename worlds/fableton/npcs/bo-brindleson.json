@@ -18,7 +18,7 @@
     },
     {
       "to": "the-uncounted-ewe",
-      "kind": "tried a name on her for the first time last hush, right at the latch, one of the three regrets' rougher cousins — and swallowed the back half of it before the gate finished clicking, so for now she's still just weather that follows the flock, only closer"
+      "kind": "tried a name on her for the first time last hush, right at the latch, one of the three regrets' rougher cousins — and swallowed the back half of it before the gate finished clicking, so for now she's still just weather that follows the flock, only closer; tried it again this hush and let the whole word out — Rue, plain, no latch left to blame for cutting it short — and found her head already coming up at the sound of it before he'd finished saying it, the first thing she's ever answered to that wasn't just the flock deciding to move"
     }
   ],
   "behavior": {
@@ -49,7 +49,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "the wordless wage, and one word that almost wasn't",
+          "label": "the wordless wage, and a name spent whole this time",
           "children": [
             {
               "type": "move",
@@ -64,13 +64,13 @@
             },
             {
               "type": "interact",
-              "label": "trying a name on her at the latch, for the first time out loud — one of the three regrets' rougher cousins, pitched too low for Brindle to have to pretend she didn't hear it",
+              "label": "saying the whole name this time — Rue, no latch left to blame for cutting it short, pitched the same low as ever out of habit rather than need now",
               "with": "the-uncounted-ewe",
               "duration_s": 30
             },
             {
               "type": "idle",
-              "label": "swallowing the back half of the name before the latch finishes its click, and calling the count three again, same as he can still just about manage",
+              "label": "watching her head come up at the sound of it before he'd even finished saying it, and finding the count still won't go past three, though it's stopped feeling like the reason",
               "duration_s": 20
             }
           ]
@@ -80,7 +80,7 @@
         "phase": "hush",
         "child": {
           "type": "wander",
-          "label": "replaying the half-name he gave her at the latch, and still not finding a regret it fits",
+          "label": "replaying the whole name he finally gave her, and still not finding which regret it's supposed to be a rougher cousin of",
           "radius": 7,
           "min_pause_s": 2,
           "max_pause_s": 12

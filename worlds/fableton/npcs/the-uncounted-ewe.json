@@ -10,7 +10,7 @@
   "relationships": [
     {
       "to": "bo-brindleson",
-      "kind": "grazes in his circle uninvited and waits, patient as weather, on a name he got halfway to giving her at the latch last hush before he swallowed the rest of it — waiting the same as ever, only closer now"
+      "kind": "grazes in his circle uninvited and waits, patient as weather, on a name he got halfway to giving her at the latch last hush before he swallowed the rest of it — waiting the same as ever, only closer now; got the rest of it this hush — Rue, said whole, nothing left swallowed — and found her own head lifting before he'd finished the word, the first thing in this town she's ever answered to that wasn't just the flock deciding to move"
     },
     {
       "to": "the-reformed-wolf",
@@ -45,7 +45,7 @@
         "phase": "lamplighting",
         "child": {
           "type": "sequence",
-          "label": "queuing at the fold with no number to answer to — nearly one, tonight",
+          "label": "queuing at the fold with a whole name landed on her at last",
           "children": [
             {
               "type": "move",
@@ -60,13 +60,13 @@
             },
             {
               "type": "interact",
-              "label": "catching the front half of a name meant for her, pitched low at the latch, and holding still so the rest of it has room to come",
+              "label": "catching the whole of it this time — Rue, said plain, nothing left swallowed at the latch — and lifting her head before he'd even finished saying it",
               "with": "bo-brindleson",
               "duration_s": 30
             },
             {
               "type": "idle",
-              "label": "hearing the name get swallowed before the latch clicks shut, and settling for closer instead of caught",
+              "label": "settling back at the fold with a name in the air for the first time, though the count at the gate still stops at three",
               "duration_s": 20
             }
           ]
@@ -76,7 +76,7 @@
         "phase": "hush",
         "child": {
           "type": "idle",
-          "label": "sleeping just inside the gate, on a count that still stops at three — one half-name closer than it did last hush",
+          "label": "sleeping just inside the gate, on a count that still stops at three, though there's a whole name resting on her now instead of half of one",
           "duration_s": 240
         }
       }
