@@ -14,7 +14,7 @@
     },
     {
       "to": "the-miller-who-never-paid",
-      "kind": "collects on a debt he didn't earn, at his own rate, and has never once said it isn't his to collect"
+      "kind": "collects on a debt he didn't earn, at his own rate, and has never once said it isn't his to collect; tonight the chalked total ran one coin past his own posted rate, same as it has every hush the miller's paid it, and for the first time he didn't fold the extra into the tally — set it on the corner of the board instead, uncounted, not yet sure whether it's the miller's to take back or his to keep for saying nothing all this time"
     }
   ],
   "behavior": {
@@ -87,6 +87,11 @@
               "label": "chalking this month's rat count on the stall board, complaint from Tick or no complaint from Tick",
               "with": "stall",
               "duration_s": 45
+            },
+            {
+              "type": "idle",
+              "label": "finding the sum run one coin past his own posted rate again, and for the first time not folding the extra into the tally — setting it on the corner of the board instead, uncounted, not yet sure whose it is to spend",
+              "duration_s": 20
             }
           ]
         }
